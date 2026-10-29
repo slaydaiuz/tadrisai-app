@@ -140,7 +140,7 @@ header{display:flex;align-items:center;justify-content:space-between;gap:10px;ma
 .th{border:2px solid var(--line);border-radius:12px;padding:4px;background:var(--surface);text-align:left;transition:border-color .2s,transform .15s}
 .th:active{transform:scale(.97)}
 .th[aria-pressed="true"]{border-color:var(--violet);box-shadow:0 0 0 3px rgba(139,92,246,.25)}
-.th .mini{position:relative;aspect-ratio:16/9;border-radius:7px;overflow:hidden;display:flex}
+.th .mini{display:block;width:100%;aspect-ratio:16/9;object-fit:cover;border-radius:7px}
 .th .mini .l{flex:1.5;padding:9% 0 0 8%;display:flex;flex-direction:column;gap:5%}
 .th .mini .k{width:30%;height:5%;border-radius:2px}
 .th .mini .t1{width:64%;height:11%;border-radius:3px}
@@ -522,8 +522,7 @@ let theme=store.get('theme_deck')||'tadris'; if(!THEMES[theme]) theme='tadris';
 let img=store.get('img')||'art'; if(!['art','photo','premium'].includes(img)) img='art';
 function buildThemes(){
   $('themeGrid').innerHTML=Object.entries(THEMES).map(([k,t])=>`<button type="button" class="th" data-th="${k}" onclick="setTheme2('${k}')">
-    <div class="mini" style="background:#${t.title_bg}"><div class="l"><i class="k" style="background:#${t.title_kicker}"></i><i class="t1" style="background:#${t.title_text}"></i><i class="t2" style="background:#${t.title_text};opacity:.55"></i></div>
-    <i class="c" style="background:#${t.circle}"></i><div class="p" style="background:#${t.paper}"><i style="background:#${t.dots[0]}"></i><i style="background:#${t.dots[1]}"></i><i style="background:#${t.dots[2]}"></i></div></div>
+    <img class="mini" src="thumbs/${k}.jpg?v=1" alt="" loading="lazy" style="background:#${t.title_bg}">
     <b>${t.name}</b></button>`).join('');
 }
 let pick=store.get('pick')||'auto'; if(pick!=='own') pick='auto';
