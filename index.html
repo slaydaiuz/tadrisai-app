@@ -155,7 +155,9 @@ header{display:flex;align-items:center;justify-content:space-between;gap:10px;ma
 .imgs button span:not(.ie){font-size:11px;color:var(--muted);line-height:1.3}
 .imgs .ie{font-size:18px}
 .imgs button[aria-pressed="true"]{border-color:var(--violet);background:var(--chip)}
-.imgs button.off{opacity:.55}
+.img-info{display:none;margin-top:10px;padding:12px 14px;border-radius:var(--r-sm);background:var(--chip);color:var(--chip-text);font-size:13px;line-height:1.45}
+.img-info.on{display:block;animation:fadein .3s ease}
+@keyframes fadein{from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:none}}
 .seg button{display:flex;flex-direction:column;align-items:flex-start;justify-content:flex-start;padding:12px;border-radius:var(--r-md);border:1.5px solid var(--line);background:var(--surface);text-align:left;transition:border-color .2s,background .2s}
 .seg button .e{font-size:20px}
 .seg button b{display:block;font-size:14px;margin-top:4px}
@@ -275,13 +277,16 @@ nav{position:fixed;left:0;right:0;bottom:0;z-index:5;padding:8px 16px calc(10px 
     <div class="group" id="optTitle" data-i18n="optGroup"></div>
     <div class="fields" id="optFields"></div>
     <div id="designWrap">
-      <div class="group" data-i18n="design"></div>
-      <div class="themes" id="themeGrid"></div>
       <div class="group" data-i18n="images"></div>
       <div class="imgs">
         <button type="button" data-img="art" onclick="setImg('art')"><span class="ie">✏️</span><b data-i18n="imgArt"></b><span data-i18n="imgArtD"></span></button>
         <button type="button" data-img="photo" onclick="setImg('photo')"><span class="ie">📷</span><b data-i18n="imgPhoto"></b><span data-i18n="imgPhotoD"></span></button>
-        <button type="button" data-img="premium" class="off" onclick="soon()"><span class="ie">✨</span><b data-i18n="imgPrem"></b><span data-i18n="soonTag"></span></button>
+        <button type="button" data-img="premium" onclick="setImg('premium')"><span class="ie">✨</span><b data-i18n="imgPrem"></b><span data-i18n="soonTag"></span></button>
+      </div>
+      <div class="img-info" id="imgInfo"></div>
+      <div id="themeBlock">
+        <div class="group" data-i18n="design"></div>
+        <div class="themes" id="themeGrid"></div>
       </div>
     </div>
     <div id="docLangWrap">
@@ -377,7 +382,7 @@ uz:{hello:"Salom", sub:"Bugun nima tayyorlaymiz?", change:"· almashtirish",
   titul:"Titul varaq uchun", uniS:"Universitet", uniT:"O'quv muassasasi", phUni:"Masalan: Toshkent davlat iqtisodiyot universiteti",
   nameS:"Talabaning F.I.Sh.", nameT:"O'qituvchining F.I.Sh.", phName:"Masalan: Aliyev Vali Anvarovich",
   fGrp:"Guruh", phGrp:"Masalan: MF-21", fTea:"O'qituvchi F.I.Sh.", phTea:"Masalan: Karimov A.B.", uniIsh:"Universitet yoki institut", optGroup:"Qo'shimcha ma'lumotlar", opt:" (ixtiyoriy)", cityLbl:"Titulga shaharni yozish", phCity:"Masalan: Toshkent",
-  design:"Dizayn", images:"Rasmlar", imgArt:"Chizma", imgArtD:"AI chizgan sxema", imgPhoto:"Foto", imgPhotoD:"Haqiqiy fotosurat", imgPrem:"Premium AI", docLang:"Slayd qaysi tilda bo'lsin?", ctaPrez:"Prezentatsiya yaratish", ctaIsh:"Mustaqil ish yaratish", hint:"Fayl 2–4 daqiqada botga keladi",
+  design:"Dizayn", images:"Rasmlar", imgArt:"Chizma", imgArtD:"AI chizgan sxema", imgPhoto:"Foto", imgPhotoD:"Haqiqiy fotosurat", imgPrem:"Premium AI", imgPhotoInfo:"📷 Rasmlar slayd mavzusidagi so'zlardan kelib chiqib internetdan (Pexels fotobankidan) olinadi. Dizayn va joylashuvni bot o'zi tanlaydi.", imgPremInfo:"✨ AI har bir mavzu uchun premium sifatdagi aniq, 3D ko'rinishli rasmlarni o'zi yaratadi. Bu imkoniyat tez kunda qo'shiladi.", docLang:"Slayd qaysi tilda bo'lsin?", ctaPrez:"Prezentatsiya yaratish", ctaIsh:"Mustaqil ish yaratish", hint:"Fayl 2–4 daqiqada botga keladi",
   filesTitle:"Fayllarim", filesSub:"Yaratgan fayllaringiz shu yerda saqlanadi", filesEmpty:"Hali fayl yo'q. Birinchisini yarating.", filesBtn:"Yaratishni boshlash",
   profTitle:"Profil", freeLeft:"Bepul urinishlar", myRole:"Mening rolim", invite:"Do'stni taklif qilish", buy:"Kredit sotib olish", version:"Versiya",
   navHome:"Asosiy", navFiles:"Fayllarim", navProfile:"Profil",
@@ -398,7 +403,7 @@ ru:{hello:"Привет", sub:"Что подготовим сегодня?", cha
   titul:"Для титульного листа", uniS:"Университет", uniT:"Учебное заведение", phUni:"Например: ТГЭУ",
   nameS:"ФИО студента", nameT:"ФИО преподавателя", phName:"Например: Алиев Вали Анварович",
   fGrp:"Группа", phGrp:"Например: МФ-21", fTea:"ФИО преподавателя", phTea:"Например: Каримов А.Б.", uniIsh:"Университет или институт", optGroup:"Дополнительно", opt:" (необязательно)", cityLbl:"Указать город на титуле", phCity:"Например: Ташкент",
-  design:"Дизайн", images:"Изображения", imgArt:"Схемы", imgArtD:"Рисует ИИ", imgPhoto:"Фото", imgPhotoD:"Реальные фото", imgPrem:"Премиум ИИ", docLang:"На каком языке сделать слайды?", ctaPrez:"Создать презентацию", ctaIsh:"Создать работу", hint:"Файл придёт в бот через 2–4 минуты",
+  design:"Дизайн", images:"Изображения", imgArt:"Схемы", imgArtD:"Рисует ИИ", imgPhoto:"Фото", imgPhotoD:"Реальные фото", imgPrem:"Премиум ИИ", imgPhotoInfo:"📷 Изображения подбираются в интернете (фотобанк Pexels) по ключевым словам темы. Дизайн и расположение бот выбирает сам.", imgPremInfo:"✨ ИИ сам создаёт качественные, объёмные (3D) изображения по теме. Скоро будет доступно.", docLang:"На каком языке сделать слайды?", ctaPrez:"Создать презентацию", ctaIsh:"Создать работу", hint:"Файл придёт в бот через 2–4 минуты",
   filesTitle:"Мои файлы", filesSub:"Здесь хранятся созданные файлы", filesEmpty:"Файлов пока нет. Создайте первый.", filesBtn:"Начать",
   profTitle:"Профиль", freeLeft:"Бесплатные попытки", myRole:"Моя роль", invite:"Пригласить друга", buy:"Купить кредиты", version:"Версия",
   navHome:"Главная", navFiles:"Файлы", navProfile:"Профиль",
@@ -419,7 +424,7 @@ en:{hello:"Hi", sub:"What are we preparing today?", change:"· change",
   titul:"For the title page", uniS:"University", uniT:"School or university", phUni:"E.g.: Tashkent State University of Economics",
   nameS:"Student's full name", nameT:"Teacher's full name", phName:"E.g.: Aliyev Vali",
   fGrp:"Group", phGrp:"E.g.: MF-21", fTea:"Teacher's full name", phTea:"E.g.: Karimov A.B.", uniIsh:"University or institute", optGroup:"Additional details", opt:" (optional)", cityLbl:"Add the city to the title page", phCity:"E.g.: Tashkent",
-  design:"Design", images:"Images", imgArt:"Drawings", imgArtD:"Drawn by AI", imgPhoto:"Photos", imgPhotoD:"Real photos", imgPrem:"Premium AI", docLang:"Which language should the slides be in?", ctaPrez:"Create presentation", ctaIsh:"Create independent work", hint:"The file arrives in the bot in 2–4 minutes",
+  design:"Design", images:"Images", imgArt:"Drawings", imgArtD:"Drawn by AI", imgPhoto:"Photos", imgPhotoD:"Real photos", imgPrem:"Premium AI", imgPhotoInfo:"📷 Images are taken from the internet (Pexels photo bank) based on the topic keywords. The bot picks the design and layout itself.", imgPremInfo:"✨ AI creates premium, realistic 3D-style images for your topic. Coming soon.", docLang:"Which language should the slides be in?", ctaPrez:"Create presentation", ctaIsh:"Create independent work", hint:"The file arrives in the bot in 2–4 minutes",
   filesTitle:"My files", filesSub:"Your created files are kept here", filesEmpty:"No files yet. Create your first one.", filesBtn:"Start creating",
   profTitle:"Profile", freeLeft:"Free attempts", myRole:"My role", invite:"Invite a friend", buy:"Buy credits", version:"Version",
   navHome:"Home", navFiles:"Files", navProfile:"Profile",
@@ -488,7 +493,7 @@ function place(list,box,optional){
 function syncCity(){ $('fCity').style.display=$('cityOn').checked?'block':'none'; $('cityLbl').textContent=t('cityLbl'); }
 const THEMES={"tadris": {"name": "TadrisAI", "title_bg": "0F172A", "title_text": "F8FAFC", "title_kicker": "F2A65A", "circle": "1E1B4B", "paper": "F7F7FB", "dots": ["E07A5F", "F2A65A", "2A9D8F", "5B7DB1", "5D45F5"]}, "okean": {"name": "Okean", "title_bg": "0B2545", "title_text": "F1F7FB", "title_kicker": "5CE1E6", "circle": "13315C", "paper": "F2F8FB", "dots": ["1B98E0", "5CE1E6", "F4A261", "2A9D8F", "8EC9E8"]}, "zumrad": {"name": "Zumrad", "title_bg": "0F2E25", "title_text": "F3FAF6", "title_kicker": "F2C14E", "circle": "16443A", "paper": "F3F8F4", "dots": ["1F9D6B", "F2C14E", "E07A5F", "3D7EA6", "9ED9BC"]}, "terrakota": {"name": "Terrakota", "title_bg": "F4ECE4", "title_text": "3B2416", "title_kicker": "C2593A", "circle": "EAD9C8", "paper": "FBF7F2", "dots": ["C2593A", "E9A178", "6B8F71", "D9A441", "8A5A44"]}, "shafaq": {"name": "Shafaq", "title_bg": "2B1340", "title_text": "FFF4EC", "title_kicker": "FF7A59", "circle": "41205E", "paper": "FFF8F3", "dots": ["FF7A59", "FFB547", "C86FC9", "5B7DB1", "2A9D8F"]}, "minimal": {"name": "Minimal", "title_bg": "FFFFFF", "title_text": "111827", "title_kicker": "2563EB", "circle": "F1F5F9", "paper": "FFFFFF", "dots": ["2563EB", "111827", "60A5FA", "9CA3AF", "1E40AF"]}, "oltin": {"name": "Oltin", "title_bg": "1C1917", "title_text": "FAF7F0", "title_kicker": "D4A017", "circle": "2E2A25", "paper": "FAF7F0", "dots": ["D4A017", "8C7B5B", "C2593A", "4F6D7A", "F0D27A"]}, "lola": {"name": "Lola", "title_bg": "FDF2F4", "title_text": "4A1D2C", "title_kicker": "D6336C", "circle": "F8DDE5", "paper": "FFF7F8", "dots": ["D6336C", "F28AA9", "7C9A6D", "E9A178", "9D4B67"]}, "grafit": {"name": "Grafit", "title_bg": "18181B", "title_text": "FAFAFA", "title_kicker": "84CC16", "circle": "27272A", "paper": "18181B", "dots": ["65A30D", "0891B2", "F59E0B", "71717A", "84CC16"]}, "osmon": {"name": "Osmon", "title_bg": "E0F2FE", "title_text": "0C4A6E", "title_kicker": "0284C7", "circle": "C7E6FA", "paper": "F8FCFF", "dots": ["0284C7", "38BDF8", "F59E0B", "10B981", "6366F1"]}};
 let theme=store.get('theme_deck')||'tadris'; if(!THEMES[theme]) theme='tadris';
-let img=store.get('img')||'art'; if(img!=='photo') img='art';
+let img=store.get('img')||'art'; if(!['art','photo','premium'].includes(img)) img='art';
 function buildThemes(){
   $('themeGrid').innerHTML=Object.entries(THEMES).map(([k,t])=>`<button type="button" class="th" data-th="${k}" onclick="setTheme2('${k}')">
     <div class="mini" style="background:#${t.title_bg}"><div class="l"><i class="k" style="background:#${t.title_kicker}"></i><i class="t1" style="background:#${t.title_text}"></i><i class="t2" style="background:#${t.title_text};opacity:.55"></i></div>
@@ -501,6 +506,10 @@ function syncDesign(){
   document.querySelectorAll('[data-th]').forEach(b=>b.setAttribute('aria-pressed',b.dataset.th===theme));
   document.querySelectorAll('[data-img]').forEach(b=>b.setAttribute('aria-pressed',b.dataset.img===img));
   $('designWrap').style.display=mode==='prez'?'block':'none';
+  $('themeBlock').style.display=img==='art'?'block':'none';
+  const info=$('imgInfo');
+  info.textContent=img==='photo'?t('imgPhotoInfo'):img==='premium'?t('imgPremInfo'):'';
+  info.classList.toggle('on',img!=='art');
 }
 let docLang=null;
 function setDocLang(l){docLang=l;store.set('docLang',l);syncDocLang()}
@@ -520,6 +529,7 @@ function renderForm(){
 }
 const SAVE=['fUni','fName','fGrp','fTea','fCity','fFak','fYon','fCls'];
 function submitForm(){
+  if(mode==='prez'&&img==='premium'){alert(t('soonMsg'));return}
   const L=layout(), used=new Set([...L.req,...L.opt].map(x=>x[0]));
   const v=id=>used.has(id)?$(id).value.trim():'';
   const missing=L.req.filter(([id])=>id!=='size'&&!$(id).value.trim());
