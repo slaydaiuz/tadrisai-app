@@ -128,6 +128,9 @@ header{display:flex;align-items:center;justify-content:space-between;gap:10px;ma
 .form-head p{color:var(--muted);font-size:13.5px}
 .seg-label{font-size:13px;font-weight:600;color:var(--muted);margin:0 2px 8px}
 .seg{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:6px}
+.seg3{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.seg3 button{padding:12px 6px;border-radius:var(--r-sm);border:1.5px solid var(--line);background:var(--surface);font-size:13.5px;font-weight:600;transition:border-color .2s,background .2s}
+.seg3 button[aria-pressed="true"]{border-color:var(--violet);background:var(--chip);color:var(--chip-text)}
 .seg button{display:flex;flex-direction:column;align-items:flex-start;justify-content:flex-start;padding:12px;border-radius:var(--r-md);border:1.5px solid var(--line);background:var(--surface);text-align:left;transition:border-color .2s,background .2s}
 .seg button .e{font-size:20px}
 .seg button b{display:block;font-size:14px;margin-top:4px}
@@ -246,6 +249,14 @@ nav{position:fixed;left:0;right:0;bottom:0;z-index:5;padding:8px 16px calc(10px 
     <div class="fields" id="reqFields"></div>
     <div class="group" id="optTitle" data-i18n="optGroup"></div>
     <div class="fields" id="optFields"></div>
+    <div id="docLangWrap">
+      <div class="group" data-i18n="docLang"></div>
+      <div class="seg3" role="group">
+        <button type="button" data-dl="uz" onclick="setDocLang('uz')">🇺🇿 O'zbekcha</button>
+        <button type="button" data-dl="ru" onclick="setDocLang('ru')">🇷🇺 Русский</button>
+        <button type="button" data-dl="en" onclick="setDocLang('en')">🇬🇧 English</button>
+      </div>
+    </div>
     <div id="pool" hidden>
       <div class="field" id="w-fUni"><label for="fUni"></label><input id="fUni" data-ph="phUni"></div>
       <div class="field" id="w-fFak"><label for="fFak"></label><input id="fFak" data-ph="phFak"></div>
@@ -330,7 +341,7 @@ uz:{hello:"Salom", sub:"Bugun nima tayyorlaymiz?", change:"· almashtirish",
   titul:"Titul varaq uchun", uniS:"Universitet", uniT:"O'quv muassasasi", phUni:"Masalan: Toshkent davlat iqtisodiyot universiteti",
   nameS:"Talabaning F.I.Sh.", nameT:"O'qituvchining F.I.Sh.", phName:"Masalan: Aliyev Vali Anvarovich",
   fGrp:"Guruh", phGrp:"Masalan: MF-21", fTea:"O'qituvchi F.I.Sh.", phTea:"Masalan: Karimov A.B.", uniIsh:"Universitet yoki institut", optGroup:"Qo'shimcha ma'lumotlar", opt:" (ixtiyoriy)", cityLbl:"Titulga shaharni yozish", phCity:"Masalan: Toshkent",
-  ctaPrez:"Prezentatsiya yaratish", ctaIsh:"Mustaqil ish yaratish", hint:"Fayl 2–4 daqiqada botga keladi",
+  docLang:"Slayd qaysi tilda bo'lsin?", ctaPrez:"Prezentatsiya yaratish", ctaIsh:"Mustaqil ish yaratish", hint:"Fayl 2–4 daqiqada botga keladi",
   filesTitle:"Fayllarim", filesSub:"Yaratgan fayllaringiz shu yerda saqlanadi", filesEmpty:"Hali fayl yo'q. Birinchisini yarating.", filesBtn:"Yaratishni boshlash",
   profTitle:"Profil", freeLeft:"Bepul urinishlar", myRole:"Mening rolim", invite:"Do'stni taklif qilish", buy:"Kredit sotib olish", version:"Versiya",
   navHome:"Asosiy", navFiles:"Fayllarim", navProfile:"Profil",
@@ -351,7 +362,7 @@ ru:{hello:"Привет", sub:"Что подготовим сегодня?", cha
   titul:"Для титульного листа", uniS:"Университет", uniT:"Учебное заведение", phUni:"Например: ТГЭУ",
   nameS:"ФИО студента", nameT:"ФИО преподавателя", phName:"Например: Алиев Вали Анварович",
   fGrp:"Группа", phGrp:"Например: МФ-21", fTea:"ФИО преподавателя", phTea:"Например: Каримов А.Б.", uniIsh:"Университет или институт", optGroup:"Дополнительно", opt:" (необязательно)", cityLbl:"Указать город на титуле", phCity:"Например: Ташкент",
-  ctaPrez:"Создать презентацию", ctaIsh:"Создать работу", hint:"Файл придёт в бот через 2–4 минуты",
+  docLang:"На каком языке сделать слайды?", ctaPrez:"Создать презентацию", ctaIsh:"Создать работу", hint:"Файл придёт в бот через 2–4 минуты",
   filesTitle:"Мои файлы", filesSub:"Здесь хранятся созданные файлы", filesEmpty:"Файлов пока нет. Создайте первый.", filesBtn:"Начать",
   profTitle:"Профиль", freeLeft:"Бесплатные попытки", myRole:"Моя роль", invite:"Пригласить друга", buy:"Купить кредиты", version:"Версия",
   navHome:"Главная", navFiles:"Файлы", navProfile:"Профиль",
@@ -372,7 +383,7 @@ en:{hello:"Hi", sub:"What are we preparing today?", change:"· change",
   titul:"For the title page", uniS:"University", uniT:"School or university", phUni:"E.g.: Tashkent State University of Economics",
   nameS:"Student's full name", nameT:"Teacher's full name", phName:"E.g.: Aliyev Vali",
   fGrp:"Group", phGrp:"E.g.: MF-21", fTea:"Teacher's full name", phTea:"E.g.: Karimov A.B.", uniIsh:"University or institute", optGroup:"Additional details", opt:" (optional)", cityLbl:"Add the city to the title page", phCity:"E.g.: Tashkent",
-  ctaPrez:"Create presentation", ctaIsh:"Create independent work", hint:"The file arrives in the bot in 2–4 minutes",
+  docLang:"Which language should the slides be in?", ctaPrez:"Create presentation", ctaIsh:"Create independent work", hint:"The file arrives in the bot in 2–4 minutes",
   filesTitle:"My files", filesSub:"Your created files are kept here", filesEmpty:"No files yet. Create your first one.", filesBtn:"Start creating",
   profTitle:"Profile", freeLeft:"Free attempts", myRole:"My role", invite:"Invite a friend", buy:"Buy credits", version:"Version",
   navHome:"Home", navFiles:"Files", navProfile:"Profile",
@@ -439,13 +450,20 @@ function place(list,box,optional){
   });
 }
 function syncCity(){ $('fCity').style.display=$('cityOn').checked?'block':'none'; $('cityLbl').textContent=t('cityLbl'); }
+let docLang=null;
+function setDocLang(l){docLang=l;store.set('docLang',l);syncDocLang()}
+function syncDocLang(){
+  if(!docLang) docLang=store.get('docLang')||lang;
+  document.querySelectorAll('[data-dl]').forEach(b=>b.setAttribute('aria-pressed',b.dataset.dl===docLang));
+  $('docLangWrap').style.display=mode==='prez'?'block':'none';
+}
 function renderForm(){
   $('formTitle').textContent=t(mode);
   $('formIc').innerHTML=IC[mode]; $('formIc').className='tool-ic'+(mode==='ish'?' blue':'');
   const L=layout(), pool=$('pool');
   [...$('reqFields').children,...$('optFields').children].forEach(c=>pool.appendChild(c));
   place(L.req,$('reqFields'),false); place(L.opt,$('optFields'),true);
-  $('size').textContent=size; syncCity();
+  $('size').textContent=size; syncCity(); syncDocLang();
   $('cta').textContent=t(mode==='prez'?'ctaPrez':'ctaIsh');
 }
 const SAVE=['fUni','fName','fGrp','fTea','fCity','fFak','fYon','fCls'];
@@ -455,7 +473,7 @@ function submitForm(){
   const missing=L.req.filter(([id])=>id!=='size'&&!$(id).value.trim());
   if(missing.length){alert(t('fill'));$(missing[0][0]).focus();return}
   const who=mode==='ish'?'student':as;
-  const data={mode,lang,as:who,role,topic:v('fMav'),size,subject:v('fFan'),
+  const data={mode,lang,doc_lang:mode==='prez'?docLang:lang,as:who,role,topic:v('fMav'),size,subject:v('fFan'),
     university:v('fUni'),faculty:v('fFak'),direction:v('fYon'),grade:v('fCls'),group:v('fGrp'),
     student:who==='student'?v('fName'):'',teacher:who==='teacher'?v('fName'):v('fTea'),
     city:(used.has('city')&&$('cityOn').checked)?$('fCity').value.trim():''};
