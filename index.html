@@ -157,7 +157,8 @@ header{display:flex;align-items:center;justify-content:space-between;gap:10px;ma
 .pick2 button[aria-pressed="true"]{border-color:var(--violet);background:var(--chip)}
 .themes-wrap{display:grid;grid-template-rows:0fr;transition:grid-template-rows .4s ease}
 .themes-wrap.open{grid-template-rows:1fr}
-.themes-wrap>.themes{overflow:hidden;padding:3px}
+.themes-wrap>.themes{overflow:hidden;min-height:0;padding:0 3px;opacity:0;visibility:hidden;transition:opacity .3s,padding .4s,visibility 0s .4s}
+.themes-wrap.open>.themes{padding:3px;opacity:1;visibility:visible;transition:opacity .3s,padding .4s,visibility 0s}
 .imgs{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
 .imgs button{display:flex;flex-direction:column;align-items:flex-start;gap:2px;padding:10px;border-radius:var(--r-sm);border:1.5px solid var(--line);background:var(--surface);text-align:left}
 .imgs button b{font-size:13px}
@@ -204,6 +205,22 @@ header{display:flex;align-items:center;justify-content:space-between;gap:10px;ma
 /* ---------- Files / Profile ---------- */
 .page-title{font-size:24px;font-weight:700;letter-spacing:-.02em;margin-bottom:4px}
 .page-sub{color:var(--muted);margin-bottom:18px}
+.sent{position:fixed;inset:0;z-index:50;display:none;place-items:center;padding:24px;background:rgba(8,10,30,.55);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
+.sent.on{display:grid;animation:fadein .25s ease}
+.sent-card{width:100%;max-width:360px;padding:26px 22px 20px;border-radius:var(--r-lg);background:var(--surface);color:var(--text);text-align:center;box-shadow:0 30px 60px -20px rgba(0,0,0,.5)}
+.sent-ic{width:64px;height:64px;margin:0 auto 12px;border-radius:50%;display:grid;place-items:center;font-size:30px;background:var(--chip);animation:pop .5s cubic-bezier(.2,1.6,.4,1)}
+@keyframes pop{from{transform:scale(.4);opacity:0}to{transform:none;opacity:1}}
+.sent-card b{display:block;font-size:18px;margin-bottom:8px}
+.sent-card p{margin:0;color:var(--muted);font-size:14px;line-height:1.5}
+.sent-card .cta{margin-top:18px}
+.flist{display:grid;gap:10px}
+.fitem{display:flex;align-items:center;gap:12px;padding:12px;border-radius:var(--r-md);border:1.5px solid var(--line);background:var(--surface)}
+.fitem .fi{flex:none;width:42px;height:42px;border-radius:12px;display:grid;place-items:center;font-size:20px;background:var(--chip)}
+.fitem .ft{flex:1;min-width:0}
+.fitem .ft b{display:block;font-size:14px;line-height:1.3;overflow:hidden;text-overflow:ellipsis;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
+.fitem .ft i{display:block;font-style:normal;font-size:12px;color:var(--muted);margin-top:3px}
+.fitem button{flex:none;padding:9px 12px;border-radius:12px;background:var(--chip);color:var(--chip-text);font-weight:600;font-size:12.5px}
+.fnote{margin-top:14px;font-size:12px;color:var(--muted);text-align:center}
 .empty{padding:34px 22px;text-align:center;border:1.5px dashed var(--line);border-radius:var(--r-lg);color:var(--muted);background:var(--surface)}
 .empty .big{font-size:30px;margin-bottom:8px}
 .empty button{margin-top:14px;padding:10px 16px;border-radius:12px;background:var(--chip);color:var(--chip-text);font-weight:600}
@@ -350,7 +367,9 @@ nav{position:fixed;left:0;right:0;bottom:0;z-index:5;padding:8px 16px calc(10px 
   <section class="screen" id="files">
     <div class="page-title" data-i18n="filesTitle"></div>
     <div class="page-sub" data-i18n="filesSub"></div>
-    <div class="empty"><div class="big">📂</div><div data-i18n="filesEmpty"></div><button onclick="show('home')" data-i18n="filesBtn"></button></div>
+    <div class="flist" id="flist"></div>
+    <div class="fnote" id="fnote" data-i18n="filesKeep"></div>
+    <div class="empty" id="fempty"><div class="big">📂</div><div data-i18n="filesEmpty"></div><button onclick="show('home')" data-i18n="filesBtn"></button></div>
   </section>
 
   <!-- PROFILE -->
@@ -409,7 +428,7 @@ uz:{hello:"Salom", sub:"Bugun nima tayyorlaymiz?", change:"· almashtirish",
   nameS:"Talabaning F.I.Sh.", nameT:"O'qituvchining F.I.Sh.", phName:"Masalan: Aliyev Vali Anvarovich",
   fGrp:"Guruh", phGrp:"Masalan: MF-21", fTea:"O'qituvchi F.I.Sh.", phTea:"Masalan: Karimov A.B.", uniIsh:"Universitet yoki institut", optGroup:"Qo'shimcha ma'lumotlar", opt:" (ixtiyoriy)", cityLbl:"Titulga shaharni yozish", phCity:"Masalan: Toshkent",
   design:"Dizayn", pickAuto:"AI tanlasin", pickAutoD:"Har safar boshqacha, takrorlanmaydi", pickOwn:"O'zim tanlayman", pickOwnD:"10 ta dizayndan birini", images:"Rasmlar", imgArt:"Chizma", imgArtD:"AI chizgan sxema", imgPhoto:"Foto", imgPhotoD:"Haqiqiy fotosurat", imgPrem:"Premium AI", imgPhotoInfo:"📷 Rasmlar slayd mavzusidagi so'zlardan kelib chiqib internetdan (Pixabay fotobankidan) olinadi. Dizayn va joylashuvni bot o'zi tanlaydi.", imgPremInfo:"✨ AI har bir mavzu uchun premium sifatdagi aniq, 3D ko'rinishli rasmlarni o'zi yaratadi. Bu imkoniyat tez kunda qo'shiladi.", docLang:"Slayd qaysi tilda bo'lsin?", ctaPrez:"Prezentatsiya yaratish", ctaIsh:"Mustaqil ish yaratish", hint:"Fayl 2–4 daqiqada botga keladi",
-  filesTitle:"Fayllarim", filesSub:"Yaratgan fayllaringiz shu yerda saqlanadi", filesEmpty:"Hali fayl yo'q. Birinchisini yarating.", filesBtn:"Yaratishni boshlash",
+  filesTitle:"Fayllarim", filesSub:"Yaratgan fayllaringiz shu yerda saqlanadi", filesKeep:"Fayllar 30 kun saqlanadi, keyin o'chib ketadi.", fSend:"Botga yuborish", fLeft:"kun qoldi", fPrez:"Prezentatsiya", fIsh:"Mustaqil ish", sentTitle:"So'rovingiz qabul qilindi", sentText:"Sizning so'rovingiz amalga oshirilmoqda. Tayyor bo'lgach faylni botga jo'natamiz. Bu oynani yopishingiz mumkin.", sentBtn:"Tushunarli", resTitle:"Fayl yuborilmoqda", resText:"Fayl bir necha soniyada botga keladi. Bu oynani yopishingiz mumkin.", filesEmpty:"Hali fayl yo'q. Birinchisini yarating.", filesBtn:"Yaratishni boshlash",
   profTitle:"Profil", freeLeft:"Bepul urinishlar", myRole:"Mening rolim", invite:"Do'stni taklif qilish", buy:"Kredit sotib olish", version:"Versiya",
   navHome:"Asosiy", navFiles:"Fayllarim", navProfile:"Profil",
   fill:"Iltimos, majburiy maydonlarni to'ldiring.", wrongOpen:"Ma'lumot yuborilmadi. Botda /start bosing va ilovani pastdagi tugma orqali oching.", notTg:"Iltimos, ilovani Telegram botidan oching.", soonMsg:"Bu bo'lim tez kunda qo'shiladi."},
@@ -430,7 +449,7 @@ ru:{hello:"Привет", sub:"Что подготовим сегодня?", cha
   nameS:"ФИО студента", nameT:"ФИО преподавателя", phName:"Например: Алиев Вали Анварович",
   fGrp:"Группа", phGrp:"Например: МФ-21", fTea:"ФИО преподавателя", phTea:"Например: Каримов А.Б.", uniIsh:"Университет или институт", optGroup:"Дополнительно", opt:" (необязательно)", cityLbl:"Указать город на титуле", phCity:"Например: Ташкент",
   design:"Дизайн", pickAuto:"Выберет ИИ", pickAutoD:"Каждый раз новый, без повторов", pickOwn:"Выберу сам", pickOwnD:"Один из 10 дизайнов", images:"Изображения", imgArt:"Схемы", imgArtD:"Рисует ИИ", imgPhoto:"Фото", imgPhotoD:"Реальные фото", imgPrem:"Премиум ИИ", imgPhotoInfo:"📷 Изображения подбираются в интернете (фотобанк Pixabay) по ключевым словам темы. Дизайн и расположение бот выбирает сам.", imgPremInfo:"✨ ИИ сам создаёт качественные, объёмные (3D) изображения по теме. Скоро будет доступно.", docLang:"На каком языке сделать слайды?", ctaPrez:"Создать презентацию", ctaIsh:"Создать работу", hint:"Файл придёт в бот через 2–4 минуты",
-  filesTitle:"Мои файлы", filesSub:"Здесь хранятся созданные файлы", filesEmpty:"Файлов пока нет. Создайте первый.", filesBtn:"Начать",
+  filesTitle:"Мои файлы", filesSub:"Здесь хранятся созданные файлы", filesKeep:"Файлы хранятся 30 дней, затем удаляются.", fSend:"Отправить в бот", fLeft:"дн. осталось", fPrez:"Презентация", fIsh:"Сам. работа", sentTitle:"Запрос принят", sentText:"Ваш запрос выполняется. Когда файл будет готов, мы отправим его в бот. Это окно можно закрыть.", sentBtn:"Понятно", resTitle:"Файл отправляется", resText:"Файл придёт в бот через несколько секунд. Это окно можно закрыть.", filesEmpty:"Файлов пока нет. Создайте первый.", filesBtn:"Начать",
   profTitle:"Профиль", freeLeft:"Бесплатные попытки", myRole:"Моя роль", invite:"Пригласить друга", buy:"Купить кредиты", version:"Версия",
   navHome:"Главная", navFiles:"Файлы", navProfile:"Профиль",
   fill:"Пожалуйста, заполните обязательные поля.", wrongOpen:"Данные не отправлены. Нажмите /start в боте и откройте приложение кнопкой внизу.", notTg:"Пожалуйста, откройте приложение из Telegram-бота.", soonMsg:"Этот раздел скоро появится."},
@@ -451,7 +470,7 @@ en:{hello:"Hi", sub:"What are we preparing today?", change:"· change",
   nameS:"Student's full name", nameT:"Teacher's full name", phName:"E.g.: Aliyev Vali",
   fGrp:"Group", phGrp:"E.g.: MF-21", fTea:"Teacher's full name", phTea:"E.g.: Karimov A.B.", uniIsh:"University or institute", optGroup:"Additional details", opt:" (optional)", cityLbl:"Add the city to the title page", phCity:"E.g.: Tashkent",
   design:"Design", pickAuto:"Let AI choose", pickAutoD:"Different every time, no repeats", pickOwn:"I'll choose", pickOwnD:"One of 10 designs", images:"Images", imgArt:"Drawings", imgArtD:"Drawn by AI", imgPhoto:"Photos", imgPhotoD:"Real photos", imgPrem:"Premium AI", imgPhotoInfo:"📷 Images are taken from the internet (Pixabay photo bank) based on the topic keywords. The bot picks the design and layout itself.", imgPremInfo:"✨ AI creates premium, realistic 3D-style images for your topic. Coming soon.", docLang:"Which language should the slides be in?", ctaPrez:"Create presentation", ctaIsh:"Create independent work", hint:"The file arrives in the bot in 2–4 minutes",
-  filesTitle:"My files", filesSub:"Your created files are kept here", filesEmpty:"No files yet. Create your first one.", filesBtn:"Start creating",
+  filesTitle:"My files", filesSub:"Your created files are kept here", filesKeep:"Files are kept for 30 days, then deleted.", fSend:"Send to bot", fLeft:"days left", fPrez:"Presentation", fIsh:"Independent work", sentTitle:"Request received", sentText:"Your request is being processed. When the file is ready, we will send it to the bot. You can close this window.", sentBtn:"Got it", resTitle:"Sending the file", resText:"The file will arrive in the bot in a few seconds. You can close this window.", filesEmpty:"No files yet. Create your first one.", filesBtn:"Start creating",
   profTitle:"Profile", freeLeft:"Free attempts", myRole:"My role", invite:"Invite a friend", buy:"Buy credits", version:"Version",
   navHome:"Home", navFiles:"Files", navProfile:"Profile",
   fill:"Please fill in the required fields.", wrongOpen:"Data was not sent. Press /start in the bot and open the app with the button below.", notTg:"Please open the app from the Telegram bot.", soonMsg:"This section is coming soon."}
@@ -569,12 +588,50 @@ function submitForm(){
     student:who==='student'?v('fName'):'',teacher:who==='teacher'?v('fName'):v('fTea'),
     city:(used.has('city')&&$('cityOn').checked)?$('fCity').value.trim():''};
   SAVE.forEach(id=>store.set('f_'+id,$(id).value.trim())); store.set('cityOn',$('cityOn').checked?'1':'');
-  if(tg&&tg.platform&&tg.platform!=='unknown'){
-    const b=$('cta'); b.disabled=true;
-    try{tg.sendData(JSON.stringify(data))}catch(e){}
-    setTimeout(()=>{b.disabled=false;alert(t('wrongOpen'))},2500);
-  }else alert(t('notTg'));
+  sendToBot(data,'⏳',t('sentTitle'),t('sentText'));
 }
+
+/* ---------- Botga yuborish (Telegram oynani o'zi yopadi) ---------- */
+let pending=null, sendTimer=null;
+function sendToBot(data,ic,title,text){
+  if(!(tg&&tg.platform&&tg.platform!=='unknown')){alert(t('notTg'));return}
+  pending=data;
+  $('sentIc').textContent=ic; $('sentTitle').textContent=title; $('sentText').textContent=text; $('sentBtn').textContent=t('sentBtn');
+  $('sent').classList.add('on');
+  try{tg.HapticFeedback&&tg.HapticFeedback.notificationOccurred('success')}catch(e){}
+  clearTimeout(sendTimer); sendTimer=setTimeout(flushSend,2600);
+}
+function flushSend(){
+  if(!pending) return;
+  const d=pending; pending=null; clearTimeout(sendTimer);
+  try{tg.sendData(JSON.stringify(d))}catch(e){}
+  setTimeout(()=>{$('sent').classList.remove('on');show('home');alert(t('wrongOpen'))},2500);
+}
+function sentClose(){flushSend()}
+
+/* ---------- Fayllarim ---------- */
+function loadFiles(){
+  const f=qs.get('f'); if(!f) return [];
+  try{
+    const b=atob(f.replace(/-/g,'+').replace(/_/g,'/')+'==='.slice((f.length+3)%4));
+    const bytes=Uint8Array.from(b,c=>c.charCodeAt(0));
+    return JSON.parse(new TextDecoder().decode(bytes))||[];
+  }catch(e){return []}
+}
+const FILES=loadFiles();
+function esc(x){return String(x).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function renderFiles(){
+  const now=Date.now(), items=FILES.map(([id,name,kind,day])=>{
+    const left=Math.max(0,30-Math.floor((now-new Date(day+'T00:00:00').getTime())/864e5));
+    return {id,name,kind,day,left};
+  }).filter(x=>x.left>0);
+  $('fempty').style.display=items.length?'none':'';
+  $('fnote').style.display=items.length?'':'none';
+  $('flist').innerHTML=items.map(x=>`<div class="fitem"><span class="fi">${x.kind==='p'?'📊':'📄'}</span>
+    <span class="ft"><b>${esc(x.name)}</b><i>${t(x.kind==='p'?'fPrez':'fIsh')} · ${x.day.split('-').reverse().join('.')} · ${x.left} ${t('fLeft')}</i></span>
+    <button type="button" onclick="resend(${Number(x.id)})">${t('fSend')}</button></div>`).join('');
+}
+function resend(id){sendToBot({mode:'resend',id},'📁',t('resTitle'),t('resText'))}
 
 /* ---------- Profile / role ---------- */
 function setRole(r){role=r;store.set('role',r);renderAll()}
@@ -600,7 +657,7 @@ function renderAll(){
   document.querySelectorAll('[data-ph]').forEach(e=>e.placeholder=t(e.dataset.ph));
   $('langCode').textContent=lang.toUpperCase();
   document.querySelectorAll('.lang-item').forEach(b=>b.classList.toggle('active',b.dataset.l===lang));
-  renderHome(); renderForm(); renderProfile();
+  renderHome(); renderForm(); renderProfile(); renderFiles();
 }
 const menu=$('langMenu');
 Object.entries(LANGS).forEach(([k,n])=>{const b=document.createElement('button');b.className='lang-item';b.dataset.l=k;b.innerHTML=`<span>${n}</span><small>${k.toUpperCase()}</small>`;b.onclick=()=>{lang=k;store.set('lang',k);menu.classList.remove('open');renderAll()};menu.appendChild(b)});
@@ -623,5 +680,11 @@ renderAll();
 if(qs.get('screen')) show(qs.get('screen'));
 if(qs.get('form')) openForm(qs.get('form'));
 </script>
+<div class="sent" id="sent"><div class="sent-card">
+  <div class="sent-ic" id="sentIc">⏳</div>
+  <b id="sentTitle"></b>
+  <p id="sentText"></p>
+  <button class="cta" type="button" onclick="sentClose()" id="sentBtn"></button>
+</div></div>
 </body>
 </html>
