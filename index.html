@@ -129,8 +129,33 @@ header{display:flex;align-items:center;justify-content:space-between;gap:10px;ma
 .seg-label{font-size:13px;font-weight:600;color:var(--muted);margin:0 2px 8px}
 .seg{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:6px}
 .seg3{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
-.seg3 button{padding:12px 6px;border-radius:var(--r-sm);border:1.5px solid var(--line);background:var(--surface);font-size:13.5px;font-weight:600;transition:border-color .2s,background .2s}
+.seg3 button{display:flex;align-items:center;justify-content:center;gap:8px;padding:12px 6px;border-radius:var(--r-sm);border:1.5px solid var(--line);background:var(--surface);font-size:13.5px;font-weight:600;transition:border-color .2s,background .2s}
 .seg3 button[aria-pressed="true"]{border-color:var(--violet);background:var(--chip);color:var(--chip-text)}
+.flag{width:22px;height:22px;flex:none;border-radius:50%;box-shadow:0 2px 6px rgba(0,0,0,.25)}
+.flag .shine{transform-box:fill-box;transform-origin:center;animation:fshine 3.6s ease-in-out infinite;opacity:.9}
+@keyframes fshine{0%,60%{transform:translateX(-120%)}85%,100%{transform:translateX(120%)}}
+.seg3 button[aria-pressed="true"] .flag{animation:fbob 2.4s ease-in-out infinite}
+@keyframes fbob{0%,100%{transform:rotate(0) scale(1)}50%{transform:rotate(-8deg) scale(1.12)}}
+.themes{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.th{border:2px solid var(--line);border-radius:14px;padding:6px;background:var(--surface);text-align:left;transition:border-color .2s,transform .15s}
+.th:active{transform:scale(.97)}
+.th[aria-pressed="true"]{border-color:var(--violet);box-shadow:0 0 0 3px rgba(139,92,246,.25)}
+.th .mini{position:relative;aspect-ratio:16/9;border-radius:9px;overflow:hidden;display:flex}
+.th .mini .l{flex:1.5;padding:9% 0 0 8%;display:flex;flex-direction:column;gap:5%}
+.th .mini .k{width:30%;height:5%;border-radius:2px}
+.th .mini .t1{width:64%;height:11%;border-radius:3px}
+.th .mini .t2{width:44%;height:11%;border-radius:3px}
+.th .mini .c{position:absolute;right:7%;top:16%;width:30%;aspect-ratio:1;border-radius:50%}
+.th .mini .p{position:absolute;right:0;bottom:0;width:38%;height:34%;border-top-left-radius:8px;display:flex;gap:6%;padding:6% 8%;box-sizing:border-box}
+.th .mini .p i{flex:1;border-radius:3px}
+.th b{display:block;font-size:12.5px;margin:6px 2px 0}
+.imgs{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.imgs button{display:flex;flex-direction:column;align-items:flex-start;gap:2px;padding:10px;border-radius:var(--r-sm);border:1.5px solid var(--line);background:var(--surface);text-align:left}
+.imgs button b{font-size:13px}
+.imgs button span:not(.ie){font-size:11px;color:var(--muted);line-height:1.3}
+.imgs .ie{font-size:18px}
+.imgs button[aria-pressed="true"]{border-color:var(--violet);background:var(--chip)}
+.imgs button.off{opacity:.55}
 .seg button{display:flex;flex-direction:column;align-items:flex-start;justify-content:flex-start;padding:12px;border-radius:var(--r-md);border:1.5px solid var(--line);background:var(--surface);text-align:left;transition:border-color .2s,background .2s}
 .seg button .e{font-size:20px}
 .seg button b{display:block;font-size:14px;margin-top:4px}
@@ -249,12 +274,23 @@ nav{position:fixed;left:0;right:0;bottom:0;z-index:5;padding:8px 16px calc(10px 
     <div class="fields" id="reqFields"></div>
     <div class="group" id="optTitle" data-i18n="optGroup"></div>
     <div class="fields" id="optFields"></div>
+    <div id="designWrap">
+      <div class="group" data-i18n="design"></div>
+      <div class="themes" id="themeGrid"></div>
+      <div class="group" data-i18n="images"></div>
+      <div class="imgs">
+        <button type="button" data-img="art" onclick="setImg('art')"><span class="ie">✏️</span><b data-i18n="imgArt"></b><span data-i18n="imgArtD"></span></button>
+        <button type="button" data-img="photo" onclick="setImg('photo')"><span class="ie">📷</span><b data-i18n="imgPhoto"></b><span data-i18n="imgPhotoD"></span></button>
+        <button type="button" data-img="premium" class="off" onclick="soon()"><span class="ie">✨</span><b data-i18n="imgPrem"></b><span data-i18n="soonTag"></span></button>
+      </div>
+    </div>
     <div id="docLangWrap">
       <div class="group" data-i18n="docLang"></div>
       <div class="seg3" role="group">
-        <button type="button" data-dl="uz" onclick="setDocLang('uz')">🇺🇿 O'zbekcha</button>
-        <button type="button" data-dl="ru" onclick="setDocLang('ru')">🇷🇺 Русский</button>
-        <button type="button" data-dl="en" onclick="setDocLang('en')">🇬🇧 English</button>
+        <svg width="0" height="0" style="position:absolute"><defs><linearGradient id="gl" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#fff" stop-opacity="0"/><stop offset=".5" stop-color="#fff" stop-opacity=".55"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient></defs></svg>
+        <button type="button" data-dl="uz" onclick="setDocLang('uz')"><svg class="flag" viewBox="0 0 24 24"><defs><clipPath id="cu"><circle cx="12" cy="12" r="11"/></clipPath></defs><g clip-path="url(#cu)"><rect width="24" height="8" fill="#1EB5E8"/><rect y="8" width="24" height="8" fill="#fff"/><rect y="16" width="24" height="8" fill="#1EB53A"/><rect y="7.4" width="24" height="1.2" fill="#CE1126"/><rect y="15.4" width="24" height="1.2" fill="#CE1126"/><circle cx="6.5" cy="4" r="2.2" fill="#fff"/><circle cx="7.4" cy="4" r="2" fill="#1EB5E8"/></g><circle class="shine" cx="12" cy="12" r="11" fill="url(#gl)"/></svg><span>O'zbek</span></button>
+        <button type="button" data-dl="ru" onclick="setDocLang('ru')"><svg class="flag" viewBox="0 0 24 24"><defs><clipPath id="cr"><circle cx="12" cy="12" r="11"/></clipPath></defs><g clip-path="url(#cr)"><rect width="24" height="8" fill="#fff"/><rect y="8" width="24" height="8" fill="#0039A6"/><rect y="16" width="24" height="8" fill="#D52B1E"/></g><circle cx="12" cy="12" r="10.6" fill="none" stroke="#CBD5E1" stroke-width=".8"/><circle class="shine" cx="12" cy="12" r="11" fill="url(#gl)"/></svg><span>Rus</span></button>
+        <button type="button" data-dl="en" onclick="setDocLang('en')"><svg class="flag" viewBox="0 0 24 24"><defs><clipPath id="ce"><circle cx="12" cy="12" r="11"/></clipPath></defs><g clip-path="url(#ce)"><rect width="24" height="24" fill="#012169"/><path d="M0 0L24 24M24 0L0 24" stroke="#fff" stroke-width="4"/><path d="M0 0L24 24M24 0L0 24" stroke="#C8102E" stroke-width="1.5"/><path d="M12 0V24M0 12H24" stroke="#fff" stroke-width="6"/><path d="M12 0V24M0 12H24" stroke="#C8102E" stroke-width="3.4"/></g><circle class="shine" cx="12" cy="12" r="11" fill="url(#gl)"/></svg><span>Eng</span></button>
       </div>
     </div>
     <div id="pool" hidden>
@@ -341,7 +377,7 @@ uz:{hello:"Salom", sub:"Bugun nima tayyorlaymiz?", change:"· almashtirish",
   titul:"Titul varaq uchun", uniS:"Universitet", uniT:"O'quv muassasasi", phUni:"Masalan: Toshkent davlat iqtisodiyot universiteti",
   nameS:"Talabaning F.I.Sh.", nameT:"O'qituvchining F.I.Sh.", phName:"Masalan: Aliyev Vali Anvarovich",
   fGrp:"Guruh", phGrp:"Masalan: MF-21", fTea:"O'qituvchi F.I.Sh.", phTea:"Masalan: Karimov A.B.", uniIsh:"Universitet yoki institut", optGroup:"Qo'shimcha ma'lumotlar", opt:" (ixtiyoriy)", cityLbl:"Titulga shaharni yozish", phCity:"Masalan: Toshkent",
-  docLang:"Slayd qaysi tilda bo'lsin?", ctaPrez:"Prezentatsiya yaratish", ctaIsh:"Mustaqil ish yaratish", hint:"Fayl 2–4 daqiqada botga keladi",
+  design:"Dizayn", images:"Rasmlar", imgArt:"Chizma", imgArtD:"AI chizgan sxema", imgPhoto:"Foto", imgPhotoD:"Haqiqiy fotosurat", imgPrem:"Premium AI", docLang:"Slayd qaysi tilda bo'lsin?", ctaPrez:"Prezentatsiya yaratish", ctaIsh:"Mustaqil ish yaratish", hint:"Fayl 2–4 daqiqada botga keladi",
   filesTitle:"Fayllarim", filesSub:"Yaratgan fayllaringiz shu yerda saqlanadi", filesEmpty:"Hali fayl yo'q. Birinchisini yarating.", filesBtn:"Yaratishni boshlash",
   profTitle:"Profil", freeLeft:"Bepul urinishlar", myRole:"Mening rolim", invite:"Do'stni taklif qilish", buy:"Kredit sotib olish", version:"Versiya",
   navHome:"Asosiy", navFiles:"Fayllarim", navProfile:"Profil",
@@ -362,7 +398,7 @@ ru:{hello:"Привет", sub:"Что подготовим сегодня?", cha
   titul:"Для титульного листа", uniS:"Университет", uniT:"Учебное заведение", phUni:"Например: ТГЭУ",
   nameS:"ФИО студента", nameT:"ФИО преподавателя", phName:"Например: Алиев Вали Анварович",
   fGrp:"Группа", phGrp:"Например: МФ-21", fTea:"ФИО преподавателя", phTea:"Например: Каримов А.Б.", uniIsh:"Университет или институт", optGroup:"Дополнительно", opt:" (необязательно)", cityLbl:"Указать город на титуле", phCity:"Например: Ташкент",
-  docLang:"На каком языке сделать слайды?", ctaPrez:"Создать презентацию", ctaIsh:"Создать работу", hint:"Файл придёт в бот через 2–4 минуты",
+  design:"Дизайн", images:"Изображения", imgArt:"Схемы", imgArtD:"Рисует ИИ", imgPhoto:"Фото", imgPhotoD:"Реальные фото", imgPrem:"Премиум ИИ", docLang:"На каком языке сделать слайды?", ctaPrez:"Создать презентацию", ctaIsh:"Создать работу", hint:"Файл придёт в бот через 2–4 минуты",
   filesTitle:"Мои файлы", filesSub:"Здесь хранятся созданные файлы", filesEmpty:"Файлов пока нет. Создайте первый.", filesBtn:"Начать",
   profTitle:"Профиль", freeLeft:"Бесплатные попытки", myRole:"Моя роль", invite:"Пригласить друга", buy:"Купить кредиты", version:"Версия",
   navHome:"Главная", navFiles:"Файлы", navProfile:"Профиль",
@@ -383,7 +419,7 @@ en:{hello:"Hi", sub:"What are we preparing today?", change:"· change",
   titul:"For the title page", uniS:"University", uniT:"School or university", phUni:"E.g.: Tashkent State University of Economics",
   nameS:"Student's full name", nameT:"Teacher's full name", phName:"E.g.: Aliyev Vali",
   fGrp:"Group", phGrp:"E.g.: MF-21", fTea:"Teacher's full name", phTea:"E.g.: Karimov A.B.", uniIsh:"University or institute", optGroup:"Additional details", opt:" (optional)", cityLbl:"Add the city to the title page", phCity:"E.g.: Tashkent",
-  docLang:"Which language should the slides be in?", ctaPrez:"Create presentation", ctaIsh:"Create independent work", hint:"The file arrives in the bot in 2–4 minutes",
+  design:"Design", images:"Images", imgArt:"Drawings", imgArtD:"Drawn by AI", imgPhoto:"Photos", imgPhotoD:"Real photos", imgPrem:"Premium AI", docLang:"Which language should the slides be in?", ctaPrez:"Create presentation", ctaIsh:"Create independent work", hint:"The file arrives in the bot in 2–4 minutes",
   filesTitle:"My files", filesSub:"Your created files are kept here", filesEmpty:"No files yet. Create your first one.", filesBtn:"Start creating",
   profTitle:"Profile", freeLeft:"Free attempts", myRole:"My role", invite:"Invite a friend", buy:"Buy credits", version:"Version",
   navHome:"Home", navFiles:"Files", navProfile:"Profile",
@@ -450,6 +486,22 @@ function place(list,box,optional){
   });
 }
 function syncCity(){ $('fCity').style.display=$('cityOn').checked?'block':'none'; $('cityLbl').textContent=t('cityLbl'); }
+const THEMES={"tadris": {"name": "TadrisAI", "title_bg": "0F172A", "title_text": "F8FAFC", "title_kicker": "F2A65A", "circle": "1E1B4B", "paper": "F7F7FB", "dots": ["E07A5F", "F2A65A", "2A9D8F", "5B7DB1", "5D45F5"]}, "okean": {"name": "Okean", "title_bg": "0B2545", "title_text": "F1F7FB", "title_kicker": "5CE1E6", "circle": "13315C", "paper": "F2F8FB", "dots": ["1B98E0", "5CE1E6", "F4A261", "2A9D8F", "8EC9E8"]}, "zumrad": {"name": "Zumrad", "title_bg": "0F2E25", "title_text": "F3FAF6", "title_kicker": "F2C14E", "circle": "16443A", "paper": "F3F8F4", "dots": ["1F9D6B", "F2C14E", "E07A5F", "3D7EA6", "9ED9BC"]}, "terrakota": {"name": "Terrakota", "title_bg": "F4ECE4", "title_text": "3B2416", "title_kicker": "C2593A", "circle": "EAD9C8", "paper": "FBF7F2", "dots": ["C2593A", "E9A178", "6B8F71", "D9A441", "8A5A44"]}, "shafaq": {"name": "Shafaq", "title_bg": "2B1340", "title_text": "FFF4EC", "title_kicker": "FF7A59", "circle": "41205E", "paper": "FFF8F3", "dots": ["FF7A59", "FFB547", "C86FC9", "5B7DB1", "2A9D8F"]}, "minimal": {"name": "Minimal", "title_bg": "FFFFFF", "title_text": "111827", "title_kicker": "2563EB", "circle": "F1F5F9", "paper": "FFFFFF", "dots": ["2563EB", "111827", "60A5FA", "9CA3AF", "1E40AF"]}, "oltin": {"name": "Oltin", "title_bg": "1C1917", "title_text": "FAF7F0", "title_kicker": "D4A017", "circle": "2E2A25", "paper": "FAF7F0", "dots": ["D4A017", "8C7B5B", "C2593A", "4F6D7A", "F0D27A"]}, "lola": {"name": "Lola", "title_bg": "FDF2F4", "title_text": "4A1D2C", "title_kicker": "D6336C", "circle": "F8DDE5", "paper": "FFF7F8", "dots": ["D6336C", "F28AA9", "7C9A6D", "E9A178", "9D4B67"]}, "grafit": {"name": "Grafit", "title_bg": "18181B", "title_text": "FAFAFA", "title_kicker": "84CC16", "circle": "27272A", "paper": "18181B", "dots": ["65A30D", "0891B2", "F59E0B", "71717A", "84CC16"]}, "osmon": {"name": "Osmon", "title_bg": "E0F2FE", "title_text": "0C4A6E", "title_kicker": "0284C7", "circle": "C7E6FA", "paper": "F8FCFF", "dots": ["0284C7", "38BDF8", "F59E0B", "10B981", "6366F1"]}};
+let theme=store.get('theme_deck')||'tadris'; if(!THEMES[theme]) theme='tadris';
+let img=store.get('img')||'art'; if(img!=='photo') img='art';
+function buildThemes(){
+  $('themeGrid').innerHTML=Object.entries(THEMES).map(([k,t])=>`<button type="button" class="th" data-th="${k}" onclick="setTheme2('${k}')">
+    <div class="mini" style="background:#${t.title_bg}"><div class="l"><i class="k" style="background:#${t.title_kicker}"></i><i class="t1" style="background:#${t.title_text}"></i><i class="t2" style="background:#${t.title_text};opacity:.55"></i></div>
+    <i class="c" style="background:#${t.circle}"></i><div class="p" style="background:#${t.paper}"><i style="background:#${t.dots[0]}"></i><i style="background:#${t.dots[1]}"></i><i style="background:#${t.dots[2]}"></i></div></div>
+    <b>${t.name}</b></button>`).join('');
+}
+function setTheme2(k){theme=k;store.set('theme_deck',k);syncDesign()}
+function setImg(v){img=v;store.set('img',v);syncDesign()}
+function syncDesign(){
+  document.querySelectorAll('[data-th]').forEach(b=>b.setAttribute('aria-pressed',b.dataset.th===theme));
+  document.querySelectorAll('[data-img]').forEach(b=>b.setAttribute('aria-pressed',b.dataset.img===img));
+  $('designWrap').style.display=mode==='prez'?'block':'none';
+}
 let docLang=null;
 function setDocLang(l){docLang=l;store.set('docLang',l);syncDocLang()}
 function syncDocLang(){
@@ -463,7 +515,7 @@ function renderForm(){
   const L=layout(), pool=$('pool');
   [...$('reqFields').children,...$('optFields').children].forEach(c=>pool.appendChild(c));
   place(L.req,$('reqFields'),false); place(L.opt,$('optFields'),true);
-  $('size').textContent=size; syncCity(); syncDocLang();
+  $('size').textContent=size; syncCity(); syncDocLang(); syncDesign();
   $('cta').textContent=t(mode==='prez'?'ctaPrez':'ctaIsh');
 }
 const SAVE=['fUni','fName','fGrp','fTea','fCity','fFak','fYon','fCls'];
@@ -473,7 +525,7 @@ function submitForm(){
   const missing=L.req.filter(([id])=>id!=='size'&&!$(id).value.trim());
   if(missing.length){alert(t('fill'));$(missing[0][0]).focus();return}
   const who=mode==='ish'?'student':as;
-  const data={mode,lang,doc_lang:mode==='prez'?docLang:lang,as:who,role,topic:v('fMav'),size,subject:v('fFan'),
+  const data={mode,lang,doc_lang:mode==='prez'?docLang:lang,theme,img,as:who,role,topic:v('fMav'),size,subject:v('fFan'),
     university:v('fUni'),faculty:v('fFak'),direction:v('fYon'),grade:v('fCls'),group:v('fGrp'),
     student:who==='student'?v('fName'):'',teacher:who==='teacher'?v('fName'):v('fTea'),
     city:(used.has('city')&&$('cityOn').checked)?$('fCity').value.trim():''};
@@ -527,6 +579,7 @@ try{if(tg){tg.ready();tg.expand();tg.disableVerticalSwipes&&tg.disableVerticalSw
 setTheme(qs.get('theme')||store.get('theme')||'dark');
 SAVE.forEach(id=>{const x=store.get('f_'+id);if(x)$(id).value=x});
 $('cityOn').checked=!!store.get('cityOn');
+buildThemes();
 renderAll();
 if(qs.get('screen')) show(qs.get('screen'));
 if(qs.get('form')) openForm(qs.get('form'));
