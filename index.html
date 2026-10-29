@@ -165,6 +165,8 @@ header{display:flex;align-items:center;justify-content:space-between;gap:10px;ma
 .imgs button span:not(.ie){font-size:11px;color:var(--muted);line-height:1.3}
 .imgs .ie{font-size:18px}
 .imgs button{position:relative}
+.imgs .tag.pop{background:linear-gradient(120deg,#10B981,#F59E0B);animation:popglow 2.6s ease-in-out infinite}
+@keyframes popglow{0%,100%{box-shadow:0 0 0 0 rgba(16,185,129,0)}50%{box-shadow:0 0 10px 1px rgba(245,158,11,.55)}}
 .imgs .tag{position:absolute;top:7px;right:7px;font-style:normal;font-size:9.5px;font-weight:700;padding:2px 6px;border-radius:99px;background:linear-gradient(120deg,var(--blue),var(--violet));color:#fff}
 [data-img="premium"] .ie{animation:gem 2.6s ease-in-out infinite}
 @keyframes gem{0%,100%{transform:rotate(0) scale(1);filter:drop-shadow(0 0 0 rgba(139,92,246,0))}50%{transform:rotate(-10deg) scale(1.18);filter:drop-shadow(0 0 6px rgba(139,92,246,.9))}}
@@ -331,7 +333,7 @@ nav{position:fixed;left:0;right:0;bottom:0;z-index:5;padding:8px 16px calc(10px 
     <div id="designWrap">
       <div class="group" data-i18n="images"></div>
       <div class="imgs">
-        <button type="button" data-img="photo" onclick="setImg('photo')"><span class="ie">📷</span><b data-i18n="imgPhoto"></b><span data-i18n="imgPhotoD"></span></button>
+        <button type="button" data-img="photo" onclick="setImg('photo')"><span class="ie">📷</span><b data-i18n="imgPhoto"></b><span data-i18n="imgPhotoD"></span><em class="tag pop" data-i18n="popTag"></em></button>
         <button type="button" data-img="art" onclick="setImg('art')"><span class="ie">✏️</span><b data-i18n="imgArt"></b><span data-i18n="imgArtD"></span></button>
         <button type="button" data-img="premium" onclick="setImg('premium')"><span class="ie">💎</span><b data-i18n="imgPrem"></b><span data-i18n="imgPremD"></span><em class="tag" data-i18n="soonTag"></em></button>
       </div>
@@ -438,7 +440,7 @@ uz:{hello:"Salom", sub:"Bugun nima tayyorlaymiz?", change:"· almashtirish",
   more:"Yana", testS:"Testga tayyorlanish", testSDesc:"Mavzu bo'yicha savollar bilan mashq", ref:"Referat", refDesc:"Qisqa ish, kirish va xulosa bilan",
   testT:"Test generatori", testTDesc:"Savollar va javoblar kaliti, .docx",
   site:"Krossvord va interaktiv metodlar", siteDesc:"Saytda tayyorlanadi va darsda ochiladi", siteBtn:"Saytga o'tish",
-  soonTag:"Tez kunda", back:"← Orqaga", formSub:"Ma'lumotlarni to'ldiring",
+  soonTag:"Tez kunda", popTag:"Ommabop", back:"← Orqaga", formSub:"Ma'lumotlarni to'ldiring",
   asLabel:"Kim sifatida yaratasiz?", asStudent:"Talaba sifatida", asStudentDesc:"Topshirish uchun: titulda talaba ismi", asTeacher:"O'qituvchi sifatida", asTeacherDesc:"Dars uchun: titulda o'qituvchi ismi",
   fFan:"Fan", phFan:"Masalan: Iqtisodiyot nazariyasi", fMav:"Mavzu", phMav:"Masalan: Inflyatsiya va uning turlari",
   fFak:"Fakultet", phFak:"Masalan: Iqtisodiyot", fYon:"Yo'nalish", phYon:"Masalan: Moliya", fCls:"Sinf yoki kurs", phCls:"Masalan: 9-sinf yoki 2-kurs",
@@ -459,7 +461,7 @@ ru:{hello:"Привет", sub:"Что подготовим сегодня?", cha
   more:"Ещё", testS:"Подготовка к тесту", testSDesc:"Тренировка с вопросами по теме", ref:"Реферат", refDesc:"Краткая работа с введением и выводом",
   testT:"Генератор тестов", testTDesc:"Вопросы и ключ ответов, .docx",
   site:"Кроссворды и интерактивные методы", siteDesc:"Готовятся на сайте и открываются на уроке", siteBtn:"Перейти",
-  soonTag:"Скоро", back:"← Назад", formSub:"Заполните данные",
+  soonTag:"Скоро", popTag:"Популярный", back:"← Назад", formSub:"Заполните данные",
   asLabel:"В какой роли создаёте?", asStudent:"Как студент", asStudentDesc:"Для сдачи: на титуле имя студента", asTeacher:"Как преподаватель", asTeacherDesc:"Для урока: на титуле имя преподавателя",
   fFan:"Предмет", phFan:"Например: Экономическая теория", fMav:"Тема", phMav:"Например: Инфляция и её виды",
   fFak:"Факультет", phFak:"Например: Экономика", fYon:"Направление", phYon:"Например: Финансы", fCls:"Класс или курс", phCls:"Например: 9 класс или 2 курс",
@@ -480,7 +482,7 @@ en:{hello:"Hi", sub:"What are we preparing today?", change:"· change",
   more:"More", testS:"Test practice", testSDesc:"Practise with questions on a topic", ref:"Essay", refDesc:"Short paper with intro and conclusion",
   testT:"Test generator", testTDesc:"Questions with an answer key, .docx",
   site:"Crosswords and interactive methods", siteDesc:"Prepared on the website, opened in class", siteBtn:"Open site",
-  soonTag:"Soon", back:"← Back", formSub:"Fill in the details",
+  soonTag:"Soon", popTag:"Popular", back:"← Back", formSub:"Fill in the details",
   asLabel:"Who is it for?", asStudent:"As a student", asStudentDesc:"To submit: student name on the title", asTeacher:"As a teacher", asTeacherDesc:"For class: teacher name on the title",
   fFan:"Subject", phFan:"E.g.: Economic theory", fMav:"Topic", phMav:"E.g.: Inflation and its types",
   fFak:"Faculty", phFak:"E.g.: Economics", fYon:"Major", phYon:"E.g.: Finance", fCls:"Grade or year", phCls:"E.g.: Grade 9 or Year 2",
