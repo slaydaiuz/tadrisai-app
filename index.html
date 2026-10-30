@@ -570,6 +570,7 @@ function openForm(m){
 }
 const FREE=Math.max(0,parseInt(qs.get('free')||'0',10)||0);
 const UNL=qs.get('unl')==='1';          // admin: cheklovsiz
+const KNOWN=UNL||qs.has('free');        // eski tugmadan ochilsa - tekshiruvni bot o'zi qiladi
 const BALANCE=0;                        // balans tizimi qo'shilganda botdan keladi
 function sizeRange(){const [lo,hi]=mode==='prez'?[6,25]:[5,30]; return [lo,(FREE>0&&mode!=='prez')?Math.min(15,hi):hi]}
 function step(d){
@@ -655,7 +656,8 @@ function renderForm(){
 const SAVE=['fUni','fName','fGrp','fTea','fCity','fFak','fYon','fCls'];
 function submitForm(){
   if(mode==='prez'&&img==='premium'){alert(t('soonMsg'));return}
-  if(mode==='prez'&&!UNL&&!isFree(size)&&BALANCE<priceOf(size,img)){
+  saveFields();
+  if(mode==='prez'&&KNOWN&&!UNL&&!isFree(size)&&BALANCE<priceOf(size,img)){
     showInfo('💳',t('nbTitle'),t('nbText').replace('{p}',money(priceOf(size,img))));return}
   const L=layout(), used=new Set([...L.req,...L.opt].map(x=>x[0]));
   const v=id=>used.has(id)?$(id).value.trim():'';
@@ -666,7 +668,6 @@ function submitForm(){
     university:v('fUni'),faculty:v('fFak'),direction:v('fYon'),grade:v('fCls'),group:v('fGrp'),
     student:who==='student'?v('fName'):'',teacher:who==='teacher'?v('fName'):v('fTea'),
     city:(used.has('city')&&$('cityOn').checked)?$('fCity').value.trim():''};
-  SAVE.forEach(id=>store.set('f_'+id,$(id).value.trim())); store.set('cityOn',$('cityOn').checked?'1':'');
   sendToBot(data,'⏳',t('sentTitle'),t('sentText'));
 }
 
@@ -763,7 +764,20 @@ $('themeBtn').onclick=()=>setTheme(document.documentElement.dataset.theme==='dar
 /* ---------- Start ---------- */
 try{if(tg){tg.ready();tg.expand();tg.disableVerticalSwipes&&tg.disableVerticalSwipes()}}catch(e){}
 setTheme(qs.get('theme')||store.get('theme')||'dark');
+/* Forma maydonlarini eslab qolish: qurilmada (localStorage) va Telegram bulutida (CloudStorage) */
+const CS=(tg&&tg.CloudStorage&&tg.isVersionAtLeast&&tg.isVersionAtLeast('6.9'))?tg.CloudStorage:null;
+function saveFields(){
+  SAVE.forEach(id=>{const v=$(id).value.trim(); store.set('f_'+id,v); try{CS&&CS.setItem('f_'+id,v)}catch(e){}});
+  const c=$('cityOn').checked?'1':''; store.set('cityOn',c); try{CS&&CS.setItem('cityOn',c||'0')}catch(e){}
+}
 SAVE.forEach(id=>{const x=store.get('f_'+id);if(x)$(id).value=x});
+let saveT=null;
+SAVE.forEach(id=>$(id).addEventListener('input',()=>{clearTimeout(saveT);saveT=setTimeout(saveFields,800)}));
+try{CS&&CS.getItems(SAVE.map(id=>'f_'+id).concat(['cityOn']),(err,vals)=>{
+  if(err||!vals) return;
+  SAVE.forEach(id=>{const v=vals['f_'+id]; if(v&&!$(id).value.trim()){$(id).value=v; store.set('f_'+id,v)}});
+  if(vals.cityOn==='1'&&!$('cityOn').checked){$('cityOn').checked=true; syncCity()}
+})}catch(e){}
 $('cityOn').checked=!!store.get('cityOn');
 buildThemes();
 renderAll();
