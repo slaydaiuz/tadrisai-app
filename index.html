@@ -164,6 +164,24 @@ header{display:flex;align-items:center;justify-content:space-between;gap:10px;ma
 .imgs button b{font-size:13px}
 .imgs button span:not(.ie){font-size:11px;color:var(--muted);line-height:1.3}
 .imgs .ie{font-size:18px}
+.imgs .from{font-size:11px;font-weight:700;color:var(--chip-text);margin-top:3px}
+.rng{position:relative;height:74px;margin:58px 12px 0}
+.rng-track{position:absolute;left:0;right:0;top:11px;height:6px;border-radius:6px;background:var(--line)}
+.rng-fill{height:100%;border-radius:6px;background:linear-gradient(90deg,var(--blue),var(--violet))}
+.rng-tick{position:absolute;top:0;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;pointer-events:none}
+.rng-tick b{position:absolute;top:-24px;font-size:13px;color:var(--muted)}
+.rng-tick i{display:block;width:14px;height:14px;margin-top:7px;border-radius:50%;background:var(--line);border:2px solid var(--bg)}
+.rng-tick.on i{background:var(--violet)}
+.rng-tick span{margin-top:9px;font-size:11px;color:var(--muted);white-space:nowrap}
+.rng-tick.cur b{color:var(--text)} .rng-tick.cur span{color:var(--chip-text);font-weight:800;font-size:12px}
+.rng-tick .fr{color:#10B981!important;font-weight:700}
+.rng input{position:absolute;left:-12px;right:-12px;width:calc(100% + 24px);top:0;height:28px;margin:0;background:transparent;-webkit-appearance:none;appearance:none}
+.rng input::-webkit-slider-runnable-track{background:transparent;height:28px}
+.rng input::-moz-range-track{background:transparent}
+.rng input::-webkit-slider-thumb{-webkit-appearance:none;width:26px;height:26px;border-radius:50%;background:#fff;box-shadow:0 0 0 6px rgba(139,92,246,.35),0 4px 10px rgba(0,0,0,.35);cursor:pointer;margin-top:1px}
+.rng input::-moz-range-thumb{width:26px;height:26px;border:0;border-radius:50%;background:#fff;box-shadow:0 0 0 6px rgba(139,92,246,.35)}
+.rng-bub{position:absolute;top:-56px;transform:translateX(-50%);background:var(--violet);color:#fff;font-weight:800;font-size:12px;padding:3px 9px;border-radius:8px;white-space:nowrap;pointer-events:none}
+.rng-price{text-align:center;font-size:14px;color:var(--muted);margin-top:4px} .rng-price b{color:var(--chip-text);font-size:17px}
 .imgs button{position:relative}
 .imgs .tag.pop{background:linear-gradient(120deg,#10B981,#F59E0B);animation:popglow 2.6s ease-in-out infinite}
 @keyframes popglow{0%,100%{box-shadow:0 0 0 0 rgba(16,185,129,0)}50%{box-shadow:0 0 10px 1px rgba(245,158,11,.55)}}
@@ -334,11 +352,21 @@ nav{position:fixed;left:0;right:0;bottom:0;z-index:5;padding:8px 16px calc(10px 
     <div id="designWrap">
       <div class="group" data-i18n="images"></div>
       <div class="imgs">
-        <button type="button" data-img="photo" onclick="setImg('photo')"><span class="ie">📷</span><b data-i18n="imgPhoto"></b><span data-i18n="imgPhotoD"></span><em class="tag pop" data-i18n="popTag"></em></button>
-        <button type="button" data-img="art" onclick="setImg('art')"><span class="ie">✏️</span><b data-i18n="imgArt"></b><span data-i18n="imgArtD"></span></button>
-        <button type="button" data-img="premium" onclick="setImg('premium')"><span class="ie">💎</span><b data-i18n="imgPrem"></b><span data-i18n="imgPremD"></span><em class="tag" data-i18n="soonTag"></em></button>
+        <button type="button" data-img="photo" onclick="setImg('photo')"><span class="ie">📷</span><b data-i18n="imgPhoto"></b><span data-i18n="imgPhotoD"></span><span class="from" data-from="photo"></span><em class="tag pop" data-i18n="popTag"></em></button>
+        <button type="button" data-img="art" onclick="setImg('art')"><span class="ie">✏️</span><b data-i18n="imgArt"></b><span data-i18n="imgArtD"></span><span class="from" data-from="art"></span></button>
+        <button type="button" data-img="premium" onclick="setImg('premium')"><span class="ie">💎</span><b data-i18n="imgPrem"></b><span data-i18n="imgPremD"></span><span class="from" data-from="premium"></span><em class="tag" data-i18n="soonTag"></em></button>
       </div>
       <div class="img-info" id="imgInfo"></div>
+      <div id="sizeBox">
+        <div class="group" data-i18n="sizeSlides"></div>
+        <div class="rng">
+          <div class="rng-track"><div class="rng-fill" id="rngFill"></div></div>
+          <div id="rngTicks"></div>
+          <input type="range" id="rng" min="6" max="25" step="1" oninput="setSize(+this.value)" aria-label="slides">
+          <div class="rng-bub" id="rngBub"></div>
+        </div>
+        <div class="rng-price" id="rngPrice"></div>
+      </div>
       <div id="themeBlock">
         <div class="group" data-i18n="design"></div>
         <div class="pick2">
@@ -449,7 +477,7 @@ uz:{hello:"Salom", sub:"Bugun nima tayyorlaymiz?", change:"· almashtirish",
   titul:"Titul varaq uchun", uniS:"Universitet", uniT:"O'quv muassasasi", phUni:"Masalan: Toshkent davlat iqtisodiyot universiteti",
   nameS:"Talabaning F.I.Sh.", nameT:"O'qituvchining F.I.Sh.", phName:"Masalan: Aliyev Vali Anvarovich",
   fGrp:"Guruh", phGrp:"Masalan: MF-21", fTea:"O'qituvchi F.I.Sh.", phTea:"Masalan: Karimov A.B.", uniIsh:"Universitet yoki institut", optGroup:"Qo'shimcha ma'lumotlar", opt:" (ixtiyoriy)", cityLbl:"Titulga shaharni yozish", phCity:"Masalan: Toshkent",
-  design:"Dizayn", pickAuto:"AI tanlasin", pickAutoD:"Har safar boshqacha, takrorlanmaydi", pickOwn:"O'zim tanlayman", pickOwnD:"10 ta dizayndan birini", images:"Rasmlar", imgArt:"O'rtacha", imgArtD:"AI chizgan rasm va sxemalar", imgPhoto:"Standart", imgPhotoD:"Internetdagi real fotosuratlar", imgPrem:"Premium", imgPremD:"3D AI rasmlar", imgArtInfo:"✏️ Har bir slayd uchun AI mavzuga mos rasm va sxemalarni o'zi chizadi. Pastda dizaynni tanlashingiz mumkin.", freeHint:"🎁 Bepul urinishda 15 tagacha", legal:"Hujjatlar", oferta:"Ommaviy oferta", privacy:"Maxfiylik siyosati", imgPhotoInfo:"📷 Rasmlar slayd mavzusidagi so'zlardan kelib chiqib internetdan (Pixabay fotobankidan) olinadi. Dizayn va joylashuvni bot o'zi tanlaydi.", imgPremInfo:"✨ AI har bir mavzu uchun premium sifatdagi aniq, 3D ko'rinishli rasmlarni o'zi yaratadi. Bu imkoniyat tez kunda qo'shiladi.", docLang:"Slayd qaysi tilda bo'lsin?", ctaPrez:"Prezentatsiya yaratish", ctaIsh:"Mustaqil ish yaratish", hint:"Fayl 2–4 daqiqada botga keladi",
+  design:"Dizayn", pickAuto:"AI tanlasin", pickAutoD:"Har safar boshqacha, takrorlanmaydi", pickOwn:"O'zim tanlayman", pickOwnD:"10 ta dizayndan birini", images:"Rasmlar va tarif", imgArt:"O'rtacha", imgArtD:"AI chizgan rasm va sxemalar", imgPhoto:"Standart", imgPhotoD:"Internetdagi real fotosuratlar", imgPrem:"Premium", imgPremD:"3D AI rasmlar", imgArtInfo:"✏️ Har bir slayd uchun AI mavzuga mos rasm va sxemalarni o'zi chizadi. Pastda dizaynni tanlashingiz mumkin.", freeHint:"🎁 Bepul urinishda 15 tagacha", pcs:"ta", pcsSlides:"ta slayd", free:"Bepul", ctaFree:"Bepul yaratish", from:"so'mdan", legal:"Hujjatlar", oferta:"Ommaviy oferta", privacy:"Maxfiylik siyosati", imgPhotoInfo:"📷 Rasmlar slayd mavzusidagi so'zlardan kelib chiqib internetdan (Pixabay fotobankidan) olinadi. Dizayn va joylashuvni bot o'zi tanlaydi.", imgPremInfo:"✨ AI har bir mavzu uchun premium sifatdagi aniq, 3D ko'rinishli rasmlarni o'zi yaratadi. Bu imkoniyat tez kunda qo'shiladi.", docLang:"Slayd qaysi tilda bo'lsin?", ctaPrez:"Prezentatsiya yaratish", ctaIsh:"Mustaqil ish yaratish", hint:"Fayl 2–4 daqiqada botga keladi",
   filesTitle:"Fayllarim", filesSub:"Yaratgan fayllaringiz shu yerda saqlanadi", filesKeep:"Fayllar 30 kun saqlanadi, keyin o'chib ketadi.", fSend:"Botga yuborish", fLeft:"kun qoldi", fPrez:"Prezentatsiya", fIsh:"Mustaqil ish", sentTitle:"So'rovingiz qabul qilindi", sentText:"Sizning so'rovingiz amalga oshirilmoqda. Tayyor bo'lgach faylni botga jo'natamiz. Bu oynani yopishingiz mumkin.", sentBtn:"Tushunarli", resTitle:"Fayl yuborilmoqda", resText:"Fayl bir necha soniyada botga keladi. Bu oynani yopishingiz mumkin.", filesEmpty:"Hali fayl yo'q. Birinchisini yarating.", filesBtn:"Yaratishni boshlash",
   profTitle:"Profil", freeLeft:"Bepul urinishlar", myRole:"Mening rolim", invite:"Do'stni taklif qilish", buy:"Kredit sotib olish", version:"Versiya",
   navHome:"Asosiy", navFiles:"Fayllarim", navProfile:"Profil",
@@ -470,7 +498,7 @@ ru:{hello:"Привет", sub:"Что подготовим сегодня?", cha
   titul:"Для титульного листа", uniS:"Университет", uniT:"Учебное заведение", phUni:"Например: ТГЭУ",
   nameS:"ФИО студента", nameT:"ФИО преподавателя", phName:"Например: Алиев Вали Анварович",
   fGrp:"Группа", phGrp:"Например: МФ-21", fTea:"ФИО преподавателя", phTea:"Например: Каримов А.Б.", uniIsh:"Университет или институт", optGroup:"Дополнительно", opt:" (необязательно)", cityLbl:"Указать город на титуле", phCity:"Например: Ташкент",
-  design:"Дизайн", pickAuto:"Выберет ИИ", pickAutoD:"Каждый раз новый, без повторов", pickOwn:"Выберу сам", pickOwnD:"Один из 10 дизайнов", images:"Изображения", imgArt:"Средний", imgArtD:"Рисунки и схемы от ИИ", imgPhoto:"Стандарт", imgPhotoD:"Реальные фото из интернета", imgPrem:"Премиум", imgPremD:"3D-изображения ИИ", imgArtInfo:"✏️ ИИ сам рисует изображения и схемы по теме каждого слайда. Ниже можно выбрать дизайн.", freeHint:"🎁 В бесплатной попытке — до 15", legal:"Документы", oferta:"Публичная оферта", privacy:"Политика конфиденциальности", imgPhotoInfo:"📷 Изображения подбираются в интернете (фотобанк Pixabay) по ключевым словам темы. Дизайн и расположение бот выбирает сам.", imgPremInfo:"✨ ИИ сам создаёт качественные, объёмные (3D) изображения по теме. Скоро будет доступно.", docLang:"На каком языке сделать слайды?", ctaPrez:"Создать презентацию", ctaIsh:"Создать работу", hint:"Файл придёт в бот через 2–4 минуты",
+  design:"Дизайн", pickAuto:"Выберет ИИ", pickAutoD:"Каждый раз новый, без повторов", pickOwn:"Выберу сам", pickOwnD:"Один из 10 дизайнов", images:"Изображения и тариф", imgArt:"Средний", imgArtD:"Рисунки и схемы от ИИ", imgPhoto:"Стандарт", imgPhotoD:"Реальные фото из интернета", imgPrem:"Премиум", imgPremD:"3D-изображения ИИ", imgArtInfo:"✏️ ИИ сам рисует изображения и схемы по теме каждого слайда. Ниже можно выбрать дизайн.", freeHint:"🎁 В бесплатной попытке — до 15", pcs:"шт", pcsSlides:"слайдов", free:"Бесплатно", ctaFree:"Создать бесплатно", from:"сум и выше", legal:"Документы", oferta:"Публичная оферта", privacy:"Политика конфиденциальности", imgPhotoInfo:"📷 Изображения подбираются в интернете (фотобанк Pixabay) по ключевым словам темы. Дизайн и расположение бот выбирает сам.", imgPremInfo:"✨ ИИ сам создаёт качественные, объёмные (3D) изображения по теме. Скоро будет доступно.", docLang:"На каком языке сделать слайды?", ctaPrez:"Создать презентацию", ctaIsh:"Создать работу", hint:"Файл придёт в бот через 2–4 минуты",
   filesTitle:"Мои файлы", filesSub:"Здесь хранятся созданные файлы", filesKeep:"Файлы хранятся 30 дней, затем удаляются.", fSend:"Отправить в бот", fLeft:"дн. осталось", fPrez:"Презентация", fIsh:"Сам. работа", sentTitle:"Запрос принят", sentText:"Ваш запрос выполняется. Когда файл будет готов, мы отправим его в бот. Это окно можно закрыть.", sentBtn:"Понятно", resTitle:"Файл отправляется", resText:"Файл придёт в бот через несколько секунд. Это окно можно закрыть.", filesEmpty:"Файлов пока нет. Создайте первый.", filesBtn:"Начать",
   profTitle:"Профиль", freeLeft:"Бесплатные попытки", myRole:"Моя роль", invite:"Пригласить друга", buy:"Купить кредиты", version:"Версия",
   navHome:"Главная", navFiles:"Файлы", navProfile:"Профиль",
@@ -491,7 +519,7 @@ en:{hello:"Hi", sub:"What are we preparing today?", change:"· change",
   titul:"For the title page", uniS:"University", uniT:"School or university", phUni:"E.g.: Tashkent State University of Economics",
   nameS:"Student's full name", nameT:"Teacher's full name", phName:"E.g.: Aliyev Vali",
   fGrp:"Group", phGrp:"E.g.: MF-21", fTea:"Teacher's full name", phTea:"E.g.: Karimov A.B.", uniIsh:"University or institute", optGroup:"Additional details", opt:" (optional)", cityLbl:"Add the city to the title page", phCity:"E.g.: Tashkent",
-  design:"Design", pickAuto:"Let AI choose", pickAutoD:"Different every time, no repeats", pickOwn:"I'll choose", pickOwnD:"One of 10 designs", images:"Images", imgArt:"Medium", imgArtD:"AI-drawn images and diagrams", imgPhoto:"Standard", imgPhotoD:"Real photos from the internet", imgPrem:"Premium", imgPremD:"3D AI images", imgArtInfo:"✏️ AI draws images and diagrams for each slide's topic. You can choose the design below.", freeHint:"🎁 Free attempt: up to 15", legal:"Documents", oferta:"Public offer", privacy:"Privacy policy", imgPhotoInfo:"📷 Images are taken from the internet (Pixabay photo bank) based on the topic keywords. The bot picks the design and layout itself.", imgPremInfo:"✨ AI creates premium, realistic 3D-style images for your topic. Coming soon.", docLang:"Which language should the slides be in?", ctaPrez:"Create presentation", ctaIsh:"Create independent work", hint:"The file arrives in the bot in 2–4 minutes",
+  design:"Design", pickAuto:"Let AI choose", pickAutoD:"Different every time, no repeats", pickOwn:"I'll choose", pickOwnD:"One of 10 designs", images:"Images & plan", imgArt:"Medium", imgArtD:"AI-drawn images and diagrams", imgPhoto:"Standard", imgPhotoD:"Real photos from the internet", imgPrem:"Premium", imgPremD:"3D AI images", imgArtInfo:"✏️ AI draws images and diagrams for each slide's topic. You can choose the design below.", freeHint:"🎁 Free attempt: up to 15", pcs:"", pcsSlides:"slides", free:"Free", ctaFree:"Create for free", from:"UZS+", legal:"Documents", oferta:"Public offer", privacy:"Privacy policy", imgPhotoInfo:"📷 Images are taken from the internet (Pixabay photo bank) based on the topic keywords. The bot picks the design and layout itself.", imgPremInfo:"✨ AI creates premium, realistic 3D-style images for your topic. Coming soon.", docLang:"Which language should the slides be in?", ctaPrez:"Create presentation", ctaIsh:"Create independent work", hint:"The file arrives in the bot in 2–4 minutes",
   filesTitle:"My files", filesSub:"Your created files are kept here", filesKeep:"Files are kept for 30 days, then deleted.", fSend:"Send to bot", fLeft:"days left", fPrez:"Presentation", fIsh:"Independent work", sentTitle:"Request received", sentText:"Your request is being processed. When the file is ready, we will send it to the bot. You can close this window.", sentBtn:"Got it", resTitle:"Sending the file", resText:"The file will arrive in the bot in a few seconds. You can close this window.", filesEmpty:"No files yet. Create your first one.", filesBtn:"Start creating",
   profTitle:"Profile", freeLeft:"Free attempts", myRole:"My role", invite:"Invite a friend", buy:"Buy credits", version:"Version",
   navHome:"Home", navFiles:"Files", navProfile:"Profile",
@@ -541,14 +569,14 @@ function openForm(m){
   renderForm();
 }
 const FREE=Math.max(0,parseInt(qs.get('free')||'0',10)||0);
-function sizeRange(){const [lo,hi]=mode==='prez'?[6,20]:[5,30]; return [lo,FREE>0?Math.min(15,hi):hi]}
+function sizeRange(){const [lo,hi]=mode==='prez'?[6,25]:[5,30]; return [lo,(FREE>0&&mode!=='prez')?Math.min(15,hi):hi]}
 function step(d){
   const [lo,hi]=sizeRange();
   size=Math.max(lo,Math.min(hi,size+d)); $('size').textContent=size;
 }
 const LAYOUT={
-  'prez-student':{req:[['fMav','fMav'],['size'],['fName','nameS']],opt:[['fUni','uniS'],['fFak','fFak'],['fYon','fYon'],['fFan','fFan'],['fGrp','fGrp']]},
-  'prez-teacher':{req:[['fMav','fMav'],['size'],['fName','nameT']],opt:[['fUni','uniT'],['fFan','fFan'],['fCls','fCls']]},
+  'prez-student':{req:[['fMav','fMav'],['fName','nameS']],opt:[['fUni','uniS'],['fFak','fFak'],['fYon','fYon'],['fFan','fFan'],['fGrp','fGrp']]},
+  'prez-teacher':{req:[['fMav','fMav'],['fName','nameT']],opt:[['fUni','uniT'],['fFan','fFan'],['fCls','fCls']]},
   'ish-student':{req:[['fUni','uniIsh'],['fFak','fFak'],['fYon','fYon'],['fFan','fFan'],['fMav','fMav'],['size'],['fName','nameS']],opt:[['fGrp','fGrp'],['fTea','fTea'],['city']]}
 };
 const layout=()=>LAYOUT[mode+'-'+(mode==='ish'?'student':as)];
@@ -572,6 +600,26 @@ let pick=store.get('pick')||'auto'; if(pick!=='own') pick='auto';
 function setPick(v){pick=v;store.set('pick',v);syncDesign()}
 function setTheme2(k){theme=k;store.set('theme_deck',k);syncDesign()}
 function setImg(v){img=v;store.set('img',v);syncDesign()}
+/* ---------- Narxlar va slaydlar soni (surgich) ---------- */
+const PRICES={photo:[2990,3990,4990,5990],art:[4990,5990,6990,7990],premium:[7990,8990,9990,10990]};
+const MARKS=[10,15,20,25], SMIN=6, SMAX=25;
+const money=v=>v.toLocaleString('ru-RU').replace(/,/g,' ')+" so'm";
+const bucket=n=>n<=10?0:n<=15?1:n<=20?2:3;
+const isFree=n=>FREE>0&&n<=15;
+const priceOf=(n,tier)=>(PRICES[tier]||PRICES.photo)[bucket(n)];
+function setSize(n){size=Math.max(SMIN,Math.min(SMAX,n));store.set('size',size);syncSize()}
+function syncSize(){
+  if(mode!=='prez') return;
+  const pct=v=>(v-SMIN)/(SMAX-SMIN)*100;
+  $('rng').value=size; $('rngFill').style.width=pct(size)+'%';
+  $('rngBub').style.left=pct(size)+'%'; $('rngBub').textContent=size+' '+t('pcs');
+  const cur=MARKS[bucket(size)];
+  $('rngTicks').innerHTML=MARKS.map(m=>`<div class="rng-tick ${m<=size||m===cur?'on':''} ${m===cur?'cur':''}" style="left:${pct(m)}%"><b>${m}</b><i></i><span class="${isFree(m)?'fr':''}">${isFree(m)?'🎁 '+t('free'):money(priceOf(m,img)).replace(" so'm",'')}</span></div>`).join('');
+  const p=priceOf(size,img);
+  $('rngPrice').innerHTML=`${size} ${t('pcsSlides')} · <b>${isFree(size)?'🎁 '+t('free'):money(p)}</b>`;
+  $('cta').textContent=isFree(size)?'🎁 '+t('ctaFree'):t('ctaPrez')+' · '+money(p);
+  document.querySelectorAll('[data-from]').forEach(e=>e.textContent=money(PRICES[e.dataset.from][0]).replace(" so'm","")+' '+t('from'));
+}
 function syncDesign(){
   document.querySelectorAll('[data-th]').forEach(b=>b.setAttribute('aria-pressed',b.dataset.th===theme));
   document.querySelectorAll('[data-img]').forEach(b=>b.setAttribute('aria-pressed',b.dataset.img===img));
@@ -582,6 +630,8 @@ function syncDesign(){
   const info=$('imgInfo');
   info.textContent=img==='photo'?t('imgPhotoInfo'):img==='premium'?t('imgPremInfo'):t('imgArtInfo');
   info.classList.add('on');
+  $('sizeBox').style.display=mode==='prez'?'block':'none';
+  syncSize();
 }
 let docLang=null;
 function setDocLang(l){docLang=l;store.set('docLang',l);syncDocLang()}
@@ -596,8 +646,9 @@ function renderForm(){
   const L=layout(), pool=$('pool');
   [...$('reqFields').children,...$('optFields').children].forEach(c=>pool.appendChild(c));
   place(L.req,$('reqFields'),false); place(L.opt,$('optFields'),true);
-  step(0); $('freeHint').classList.toggle('on',FREE>0); syncCity(); syncDocLang(); syncDesign();
-  $('cta').textContent=t(mode==='prez'?'ctaPrez':'ctaIsh');
+  if(mode==='prez'){const sv=+store.get('size'); size=(sv>=SMIN&&sv<=SMAX)?sv:10}
+  step(0); $('freeHint').classList.toggle('on',FREE>0); syncCity(); syncDocLang();
+  $('cta').textContent=t(mode==='prez'?'ctaPrez':'ctaIsh'); syncDesign();
 }
 const SAVE=['fUni','fName','fGrp','fTea','fCity','fFak','fYon','fCls'];
 function submitForm(){
