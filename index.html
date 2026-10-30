@@ -231,6 +231,39 @@ header{display:flex;align-items:center;justify-content:space-between;gap:10px;ma
 .stepper{display:flex;align-items:center;gap:10px}
 .stepper button{width:46px;height:46px;border-radius:var(--r-sm);border:1.5px solid var(--line);background:var(--field);font-size:20px;font-weight:600}
 .stepper output{flex:1;text-align:center;font-size:20px;font-weight:700}
+.plan{margin-top:6px}
+.seg2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.seg2 button{display:grid;grid-template-columns:auto 1fr;column-gap:7px;align-items:center;padding:8px 11px;border-radius:var(--r-sm);border:1.5px solid var(--line);background:var(--surface);text-align:left;color:var(--text)}
+.seg2 .e{font-size:16px} .seg2 b{font-size:13px} .seg2 span:not(.e){grid-column:1/-1;font-size:10.5px;color:var(--muted);margin-top:2px;line-height:1.25}
+.seg2 button[aria-pressed="true"]{border-color:var(--violet);background:var(--chip)}
+[data-plan="ai"] .e{display:inline-block;animation:robot 2.8s ease-in-out infinite}
+[data-plan="own"] .e{display:inline-block;animation:pencil 2.6s ease-in-out infinite;transform-origin:20% 90%}
+.opt-toggle .chev{display:inline-block}
+.opt-toggle:not(.on) .chev{animation:nudge 2.4s ease-in-out infinite}
+@keyframes nudge{0%,70%,100%{transform:translateY(0)}80%{transform:translateY(3px)}90%{transform:translateY(0)}}
+.planown{display:grid;grid-template-rows:0fr;transition:grid-template-rows .35s ease}
+.planown>*{min-height:0;overflow:hidden}
+.planown.open{grid-template-rows:1fr}
+.planown{display:block;max-height:0;overflow:hidden;transition:max-height .4s ease}
+.planown.open{max-height:900px}
+.pl-lbl{font-size:13px;font-weight:600;color:var(--muted);margin:14px 2px 8px}
+.nchips{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
+.nchips button{padding:10px 0;border-radius:12px;border:1.5px solid var(--line);background:var(--field);font-weight:800;font-size:15px;color:var(--text)}
+.nchips button[aria-pressed="true"]{border-color:var(--violet);background:var(--chip);color:var(--chip-text)}
+.prow2{display:flex;align-items:center;gap:8px;margin-top:8px;animation:fadein .3s ease both}
+.prow2 .n{flex:none;width:30px;height:30px;border-radius:50%;display:grid;place-items:center;font-weight:800;font-size:13px;color:#fff;background:linear-gradient(135deg,var(--blue),var(--violet))}
+.prow2 input{flex:1;padding:12px 13px;border-radius:var(--r-sm);border:1.5px solid var(--line);background:var(--field);color:var(--text);font:inherit;font-size:15px;outline:none}
+.prow2 input:focus{border-color:var(--violet)}
+.pl-note{margin-top:10px;font-size:12px;color:var(--muted);line-height:1.4}
+.opt-toggle{width:100%;display:flex;align-items:center;gap:12px;margin-top:22px;padding:13px 14px;border-radius:var(--r-md);border:1.5px solid var(--line);background:var(--surface);text-align:left;color:var(--text)}
+.opt-toggle .ck{flex:none;width:24px;height:24px;border-radius:8px;border:2px solid var(--line);display:grid;place-items:center;font-size:14px;color:#fff;transition:all .2s}
+.opt-toggle.on .ck{background:linear-gradient(135deg,var(--blue),var(--violet));border-color:transparent}
+.opt-toggle.on .ck::after{content:"✓";font-weight:800}
+.opt-toggle .tx{flex:1} .opt-toggle b{display:block;font-size:14px} .opt-toggle i{display:block;font-style:normal;font-size:12px;color:var(--muted);margin-top:2px}
+.opt-toggle .chev{color:var(--muted);transition:transform .3s;font-size:16px}
+.opt-toggle.on .chev{transform:rotate(180deg)}
+.optwrap{max-height:0;overflow:hidden;transition:max-height .45s ease}
+.optwrap.open{max-height:1400px}
 .cta{margin-top:20px;width:100%;padding:16px;border-radius:var(--r-md);color:#fff;font-weight:700;font-size:16px;
   background:linear-gradient(120deg,var(--blue),var(--indigo) 50%,var(--violet));box-shadow:0 14px 30px -12px rgba(93,69,245,.8)}
 .cta:disabled{opacity:.6}
@@ -382,8 +415,25 @@ nav{position:fixed;left:0;right:0;bottom:0;z-index:5;padding:8px 16px calc(10px 
     <div class="form-head"><div class="tool-ic" id="formIc"></div><div><h1 id="formTitle"></h1><p data-i18n="formSub"></p></div></div>
 
     <div class="fields" id="reqFields"></div>
-    <div class="group" id="optTitle" data-i18n="optGroup"></div>
-    <div class="fields" id="optFields"></div>
+    <div class="plan" id="planBox">
+      <div class="group" data-i18n="planTitle"></div>
+      <div class="seg2">
+        <button type="button" data-plan="ai" onclick="setPlan('ai')"><span class="e">🤖</span><b data-i18n="planAi"></b><span data-i18n="planAiD"></span></button>
+        <button type="button" data-plan="own" onclick="setPlan('own')"><span class="e">✍️</span><b data-i18n="planOwn"></b><span data-i18n="planOwnD"></span></button>
+      </div>
+      <div class="planown" id="planOwn">
+        <div class="pl-lbl" data-i18n="planCount"></div>
+        <div class="nchips" id="nChips"></div>
+        <div id="planInputs"></div>
+        <div class="pl-note" data-i18n="planNote"></div>
+      </div>
+    </div>
+    <button type="button" class="opt-toggle" id="optToggle" onclick="toggleOpt()">
+      <span class="ck" id="optCk"></span>
+      <span class="tx"><b data-i18n="optGroup"></b><i id="optSub"></i></span>
+      <span class="chev">▾</span>
+    </button>
+    <div class="optwrap" id="optWrap"><div class="fields" id="optFields"></div></div>
     <div id="designWrap">
       <div class="group" data-i18n="images"></div>
       <div class="imgs">
@@ -534,7 +584,7 @@ uz:{hello:"Salom", sub:"Bugun nima tayyorlaymiz?", change:"· almashtirish",
   sizeSlides:"Slaydlar soni", sizePages:"Betlar soni",
   titul:"Titul varaq uchun", uniS:"Universitet", uniT:"O'quv muassasasi", phUni:"Masalan: Toshkent davlat iqtisodiyot universiteti",
   nameS:"Talabaning F.I.Sh.", nameT:"O'qituvchining F.I.Sh.", phName:"Masalan: Aliyev Vali Anvarovich",
-  fGrp:"Guruh", phGrp:"Masalan: MF-21", fTea:"O'qituvchi F.I.Sh.", phTea:"Masalan: Karimov A.B.", uniIsh:"Universitet yoki institut", optGroup:"Qo'shimcha ma'lumotlar", opt:" (ixtiyoriy)", cityLbl:"Titulga shaharni yozish", phCity:"Masalan: Toshkent",
+  fGrp:"Guruh", phGrp:"Masalan: MF-21", fTea:"O'qituvchi F.I.Sh.", phTea:"Masalan: Karimov A.B.", uniIsh:"Universitet yoki institut", optGroup:"Qo'shimcha ma'lumotlar", optSub:"Universitet, fakultet, guruh — titulga yoziladi", optFilled:"✓ {n} ta maydon to'ldirilgan", planTitle:"Slaydlar rejasi", planAi:"AI o'zi tuzsin", planAiD:"Mavzuga mos reja tuzadi", planOwn:"O'zim yozaman", planOwnD:"Reja tayyor bo'lsa", planCount:"Rejada nechta band bor?", planNote:"💡 Bot har bir band bo'yicha slaydlarni o'zi taqsimlaydi.", planPh:"{n}-band", planFill:"Reja bandlarini yozing", opt:" (ixtiyoriy)", cityLbl:"Titulga shaharni yozish", phCity:"Masalan: Toshkent",
   design:"Dizayn", pickAuto:"AI tanlasin", pickAutoD:"Har safar boshqacha, takrorlanmaydi", pickOwn:"O'zim tanlayman", pickOwnD:"10 ta dizayndan birini", images:"Rasmlar va tarif", imgArt:"O'rtacha", imgArtD:"AI chizgan rasm va sxemalar", imgPhoto:"Standart", imgPhotoD:"Internetdagi real fotosuratlar", imgPrem:"Premium", imgPremD:"3D AI rasmlar", imgArtInfo:"✏️ Har bir slayd uchun AI mavzuga mos rasm va sxemalarni o'zi chizadi. Pastda dizaynni tanlashingiz mumkin.", freeHint:"🎁 Bepul urinishda 15 tagacha", pcs:"ta", pcsSlides:"ta slayd", balance:"Balans", topupBtn:"+ To'ldirish", topupBtn2:"💳 Balansni to'ldirish", history:"Tarix", lastOps:"Oxirgi amallar", noOps:"Hali amallar yo'q", topupTitle:"Balansni to'ldirish", chooseSum:"Summani tanlang", ownSum:"Boshqa summa (kamida 5 000 so'm)", payMethod:"To'lov usuli", payBtn:"{x} to'lash", minSum:"Kamida {x}", willGet:"Balansga {x} tushadi. To'lov xavfsiz sahifada amalga oshiriladi.", bonus:"bonus", needMore:"Buyurtma uchun yana {x} kerak", payTitle:"To'lov so'rovi yuborildi", payText:"To'lov havolasi botga yuboriladi. Bu oynani yopishingiz mumkin.", fbTitle:"Fikr bildirish", fbText:"Botga o'ting va video yoki yozma fikringizni yuboring.", promo:"🎥 <b>Video fikr qoldiring</b> va balansingizga <b>+1 000 so'm</b> oling. Eng foydali taklif egasiga oyiga <b>10 000 so'm</b>!", lowBal:"💳 Balansingiz: <b>{b}</b>. Bu buyurtma uchun yana <b>{x}</b> kerak.", op_topup:"Balans to'ldirildi", op_admin:"Balans to'ldirildi", op_bonus:"Bonus", op_spend:"Prezentatsiya", op_refund:"Qaytarildi", nbTitle:"Balans yetarli emas", nbText:"Bu hajm narxi {p}. Balansni to'ldirish bo'limi tez kunda qo'shiladi. Hozircha bepul urinishingiz bilan 15 slaydgacha yaratishingiz mumkin.", free:"Bepul", ctaFree:"Bepul yaratish", from:"so'mdan", legal:"Hujjatlar", oferta:"Ommaviy oferta", privacy:"Maxfiylik siyosati", imgPhotoInfo:"📷 Rasmlar slayd mavzusidagi so'zlardan kelib chiqib internetdan (Pixabay fotobankidan) olinadi. Dizayn va joylashuvni bot o'zi tanlaydi.", imgPremInfo:"✨ AI har bir mavzu uchun premium sifatdagi aniq, 3D ko'rinishli rasmlarni o'zi yaratadi. Bu imkoniyat tez kunda qo'shiladi.", docLang:"Slayd qaysi tilda bo'lsin?", ctaPrez:"Prezentatsiya yaratish", ctaIsh:"Mustaqil ish yaratish", hint:"Fayl 2–4 daqiqada botga keladi",
   filesTitle:"Fayllarim", filesSub:"Yaratgan fayllaringiz shu yerda saqlanadi", filesKeep:"Fayllar 30 kun saqlanadi, keyin o'chib ketadi.", fSend:"Botga yuborish", fLeft:"kun qoldi", fPrez:"Prezentatsiya", fIsh:"Mustaqil ish", sentTitle:"So'rovingiz qabul qilindi", sentText:"Sizning so'rovingiz amalga oshirilmoqda. Tayyor bo'lgach faylni botga jo'natamiz. Bu oynani yopishingiz mumkin.", sentBtn:"Tushunarli", resTitle:"Fayl yuborilmoqda", resText:"Fayl bir necha soniyada botga keladi. Bu oynani yopishingiz mumkin.", filesEmpty:"Hali fayl yo'q. Birinchisini yarating.", filesBtn:"Yaratishni boshlash",
   profTitle:"Profil", freeLeft:"Bepul urinish", myRole:"Mening rolim", invite:"Do'stni taklif qilish", buy:"Kredit sotib olish", version:"Versiya",
@@ -555,7 +605,7 @@ ru:{hello:"Привет", sub:"Что подготовим сегодня?", cha
   sizeSlides:"Количество слайдов", sizePages:"Количество страниц",
   titul:"Для титульного листа", uniS:"Университет", uniT:"Учебное заведение", phUni:"Например: ТГЭУ",
   nameS:"ФИО студента", nameT:"ФИО преподавателя", phName:"Например: Алиев Вали Анварович",
-  fGrp:"Группа", phGrp:"Например: МФ-21", fTea:"ФИО преподавателя", phTea:"Например: Каримов А.Б.", uniIsh:"Университет или институт", optGroup:"Дополнительно", opt:" (необязательно)", cityLbl:"Указать город на титуле", phCity:"Например: Ташкент",
+  fGrp:"Группа", phGrp:"Например: МФ-21", fTea:"ФИО преподавателя", phTea:"Например: Каримов А.Б.", uniIsh:"Университет или институт", optGroup:"Дополнительно", optSub:"Вуз, факультет, группа — для титула", optFilled:"✓ заполнено полей: {n}", planTitle:"План слайдов", planAi:"Составит ИИ", planAiD:"План по теме", planOwn:"Напишу сам", planOwnD:"Если план готов", planCount:"Сколько пунктов в плане?", planNote:"💡 Бот сам распределит слайды по пунктам.", planPh:"Пункт {n}", planFill:"Заполните пункты плана", opt:" (необязательно)", cityLbl:"Указать город на титуле", phCity:"Например: Ташкент",
   design:"Дизайн", pickAuto:"Выберет ИИ", pickAutoD:"Каждый раз новый, без повторов", pickOwn:"Выберу сам", pickOwnD:"Один из 10 дизайнов", images:"Изображения и тариф", imgArt:"Средний", imgArtD:"Рисунки и схемы от ИИ", imgPhoto:"Стандарт", imgPhotoD:"Реальные фото из интернета", imgPrem:"Премиум", imgPremD:"3D-изображения ИИ", imgArtInfo:"✏️ ИИ сам рисует изображения и схемы по теме каждого слайда. Ниже можно выбрать дизайн.", freeHint:"🎁 В бесплатной попытке — до 15", pcs:"шт", pcsSlides:"слайдов", balance:"Баланс", topupBtn:"+ Пополнить", topupBtn2:"💳 Пополнить баланс", history:"История", lastOps:"Последние операции", noOps:"Операций пока нет", topupTitle:"Пополнение баланса", chooseSum:"Выберите сумму", ownSum:"Другая сумма (от 5 000 сум)", payMethod:"Способ оплаты", payBtn:"Оплатить {x}", minSum:"Минимум {x}", willGet:"На баланс поступит {x}. Оплата на защищённой странице.", bonus:"бонус", needMore:"Для заказа не хватает {x}", payTitle:"Запрос на оплату отправлен", payText:"Ссылка на оплату придёт в бот. Это окно можно закрыть.", fbTitle:"Отзыв", fbText:"Перейдите в бот и отправьте видео или текстовый отзыв.", promo:"🎥 <b>Оставьте видеоотзыв</b> и получите <b>+1 000 сум</b> на баланс. Автору лучшего предложения — <b>10 000 сум</b> в месяц!", lowBal:"💳 Ваш баланс: <b>{b}</b>. Для заказа не хватает <b>{x}</b>.", op_topup:"Пополнение", op_admin:"Пополнение", op_bonus:"Бонус", op_spend:"Презентация", op_refund:"Возврат", nbTitle:"Недостаточно средств", nbText:"Стоимость — {p}. Пополнение баланса скоро появится. Пока бесплатной попыткой можно создать до 15 слайдов.", free:"Бесплатно", ctaFree:"Создать бесплатно", from:"сум и выше", legal:"Документы", oferta:"Публичная оферта", privacy:"Политика конфиденциальности", imgPhotoInfo:"📷 Изображения подбираются в интернете (фотобанк Pixabay) по ключевым словам темы. Дизайн и расположение бот выбирает сам.", imgPremInfo:"✨ ИИ сам создаёт качественные, объёмные (3D) изображения по теме. Скоро будет доступно.", docLang:"На каком языке сделать слайды?", ctaPrez:"Создать презентацию", ctaIsh:"Создать работу", hint:"Файл придёт в бот через 2–4 минуты",
   filesTitle:"Мои файлы", filesSub:"Здесь хранятся созданные файлы", filesKeep:"Файлы хранятся 30 дней, затем удаляются.", fSend:"Отправить в бот", fLeft:"дн. осталось", fPrez:"Презентация", fIsh:"Сам. работа", sentTitle:"Запрос принят", sentText:"Ваш запрос выполняется. Когда файл будет готов, мы отправим его в бот. Это окно можно закрыть.", sentBtn:"Понятно", resTitle:"Файл отправляется", resText:"Файл придёт в бот через несколько секунд. Это окно можно закрыть.", filesEmpty:"Файлов пока нет. Создайте первый.", filesBtn:"Начать",
   profTitle:"Профиль", freeLeft:"Бесплатные попытки", myRole:"Моя роль", invite:"Пригласить друга", buy:"Купить кредиты", version:"Версия",
@@ -576,7 +626,7 @@ en:{hello:"Hi", sub:"What are we preparing today?", change:"· change",
   sizeSlides:"Number of slides", sizePages:"Number of pages",
   titul:"For the title page", uniS:"University", uniT:"School or university", phUni:"E.g.: Tashkent State University of Economics",
   nameS:"Student's full name", nameT:"Teacher's full name", phName:"E.g.: Aliyev Vali",
-  fGrp:"Group", phGrp:"E.g.: MF-21", fTea:"Teacher's full name", phTea:"E.g.: Karimov A.B.", uniIsh:"University or institute", optGroup:"Additional details", opt:" (optional)", cityLbl:"Add the city to the title page", phCity:"E.g.: Tashkent",
+  fGrp:"Group", phGrp:"E.g.: MF-21", fTea:"Teacher's full name", phTea:"E.g.: Karimov A.B.", uniIsh:"University or institute", optGroup:"Additional details", optSub:"University, faculty, group — for the title page", optFilled:"✓ {n} fields filled", planTitle:"Slide outline", planAi:"Let AI plan", planAiD:"Outline for the topic", planOwn:"I'll write it", planOwnD:"If you have a plan", planCount:"How many points?", planNote:"💡 The bot spreads the slides across your points.", planPh:"Point {n}", planFill:"Fill in the plan points", opt:" (optional)", cityLbl:"Add the city to the title page", phCity:"E.g.: Tashkent",
   design:"Design", pickAuto:"Let AI choose", pickAutoD:"Different every time, no repeats", pickOwn:"I'll choose", pickOwnD:"One of 10 designs", images:"Images & plan", imgArt:"Medium", imgArtD:"AI-drawn images and diagrams", imgPhoto:"Standard", imgPhotoD:"Real photos from the internet", imgPrem:"Premium", imgPremD:"3D AI images", imgArtInfo:"✏️ AI draws images and diagrams for each slide's topic. You can choose the design below.", freeHint:"🎁 Free attempt: up to 15", pcs:"", pcsSlides:"slides", balance:"Balance", topupBtn:"+ Top up", topupBtn2:"💳 Top up balance", history:"History", lastOps:"Recent operations", noOps:"No operations yet", topupTitle:"Top up balance", chooseSum:"Choose amount", ownSum:"Other amount (min 5 000 UZS)", payMethod:"Payment method", payBtn:"Pay {x}", minSum:"Minimum {x}", willGet:"{x} will be added. Payment on a secure page.", bonus:"bonus", needMore:"You need {x} more for this order", payTitle:"Payment request sent", payText:"The payment link will arrive in the bot. You can close this window.", fbTitle:"Feedback", fbText:"Go to the bot and send a video or text review.", promo:"🎥 <b>Leave a video review</b> and get <b>+1 000 UZS</b>. The most useful suggestion wins <b>10 000 UZS</b> a month!", lowBal:"💳 Your balance: <b>{b}</b>. You need <b>{x}</b> more.", op_topup:"Top up", op_admin:"Top up", op_bonus:"Bonus", op_spend:"Presentation", op_refund:"Refund", nbTitle:"Not enough balance", nbText:"This size costs {p}. Balance top-up is coming soon. For now your free attempt covers up to 15 slides.", free:"Free", ctaFree:"Create for free", from:"UZS+", legal:"Documents", oferta:"Public offer", privacy:"Privacy policy", imgPhotoInfo:"📷 Images are taken from the internet (Pixabay photo bank) based on the topic keywords. The bot picks the design and layout itself.", imgPremInfo:"✨ AI creates premium, realistic 3D-style images for your topic. Coming soon.", docLang:"Which language should the slides be in?", ctaPrez:"Create presentation", ctaIsh:"Create independent work", hint:"The file arrives in the bot in 2–4 minutes",
   filesTitle:"My files", filesSub:"Your created files are kept here", filesKeep:"Files are kept for 30 days, then deleted.", fSend:"Send to bot", fLeft:"days left", fPrez:"Presentation", fIsh:"Independent work", sentTitle:"Request received", sentText:"Your request is being processed. When the file is ready, we will send it to the bot. You can close this window.", sentBtn:"Got it", resTitle:"Sending the file", resText:"The file will arrive in the bot in a few seconds. You can close this window.", filesEmpty:"No files yet. Create your first one.", filesBtn:"Start creating",
   profTitle:"Profile", freeLeft:"Free attempts", myRole:"My role", invite:"Invite a friend", buy:"Buy credits", version:"Version",
@@ -685,6 +735,28 @@ function place(list,box,optional){
     else if(id!=='city') w.querySelector('label').textContent=t(key)+(optional?t('opt'):'');
   });
 }
+let planMode=store.get('planMode')==='own'?'own':'ai', planN=Math.min(5,Math.max(2,+store.get('planN')||3));
+function setPlan(v){planMode=v;store.set('planMode',v);renderPlan()}
+function setPlanN(n){
+  const vals=[...document.querySelectorAll('#planInputs input')].map(i=>i.value);
+  planN=n; store.set('planN',n); renderPlan(vals);
+}
+function renderPlan(vals){
+  document.querySelectorAll('[data-plan]').forEach(b=>b.setAttribute('aria-pressed',b.dataset.plan===planMode));
+  $('planOwn').classList.toggle('open',planMode==='own');
+  $('planBox').style.display=mode==='prez'?'block':'none';
+  $('nChips').innerHTML=[2,3,4,5].map(n=>`<button type="button" aria-pressed="${n===planN}" onclick="setPlanN(${n})">${n}</button>`).join('');
+  vals=vals||[...document.querySelectorAll('#planInputs input')].map(i=>i.value);
+  $('planInputs').innerHTML=Array.from({length:planN},(_,i)=>`<div class="prow2" style="animation-delay:${i*40}ms"><span class="n">${i+1}</span><input placeholder="${t('planPh').replace('{n}',i+1)}" value="${(vals[i]||'').replace(/"/g,'&quot;')}"></div>`).join('');
+}
+function syncOptSub(){
+  const L=layout(); const n=L.opt.filter(([id])=>id!=='city'&&$(id)&&$(id).value.trim()).length;
+  $('optSub').textContent=n?t('optFilled').replace('{n}',n):t('optSub');
+}
+function toggleOpt(force){
+  const on=force!==undefined?force:!$('optToggle').classList.contains('on');
+  $('optToggle').classList.toggle('on',on); $('optWrap').classList.toggle('open',on);
+}
 function syncCity(){ $('fCity').style.display=$('cityOn').checked?'block':'none'; $('cityLbl').textContent=t('cityLbl'); }
 const THEMES={"tadris": {"name": "TadrisAI", "title_bg": "0F172A", "title_text": "F8FAFC", "title_kicker": "F2A65A", "circle": "1E1B4B", "paper": "F7F7FB", "dots": ["E07A5F", "F2A65A", "2A9D8F", "5B7DB1", "5D45F5"]}, "okean": {"name": "Okean", "title_bg": "0B2545", "title_text": "F1F7FB", "title_kicker": "5CE1E6", "circle": "13315C", "paper": "F2F8FB", "dots": ["1B98E0", "5CE1E6", "F4A261", "2A9D8F", "8EC9E8"]}, "zumrad": {"name": "Zumrad", "title_bg": "0F2E25", "title_text": "F3FAF6", "title_kicker": "F2C14E", "circle": "16443A", "paper": "F3F8F4", "dots": ["1F9D6B", "F2C14E", "E07A5F", "3D7EA6", "9ED9BC"]}, "terrakota": {"name": "Terrakota", "title_bg": "F4ECE4", "title_text": "3B2416", "title_kicker": "C2593A", "circle": "EAD9C8", "paper": "FBF7F2", "dots": ["C2593A", "E9A178", "6B8F71", "D9A441", "8A5A44"]}, "shafaq": {"name": "Shafaq", "title_bg": "2B1340", "title_text": "FFF4EC", "title_kicker": "FF7A59", "circle": "41205E", "paper": "FFF8F3", "dots": ["FF7A59", "FFB547", "C86FC9", "5B7DB1", "2A9D8F"]}, "minimal": {"name": "Minimal", "title_bg": "FFFFFF", "title_text": "111827", "title_kicker": "2563EB", "circle": "F1F5F9", "paper": "FFFFFF", "dots": ["2563EB", "111827", "60A5FA", "9CA3AF", "1E40AF"]}, "oltin": {"name": "Oltin", "title_bg": "1C1917", "title_text": "FAF7F0", "title_kicker": "D4A017", "circle": "2E2A25", "paper": "FAF7F0", "dots": ["D4A017", "8C7B5B", "C2593A", "4F6D7A", "F0D27A"]}, "lola": {"name": "Lola", "title_bg": "FDF2F4", "title_text": "4A1D2C", "title_kicker": "D6336C", "circle": "F8DDE5", "paper": "FFF7F8", "dots": ["D6336C", "F28AA9", "7C9A6D", "E9A178", "9D4B67"]}, "grafit": {"name": "Grafit", "title_bg": "18181B", "title_text": "FAFAFA", "title_kicker": "84CC16", "circle": "27272A", "paper": "18181B", "dots": ["65A30D", "0891B2", "F59E0B", "71717A", "84CC16"]}, "osmon": {"name": "Osmon", "title_bg": "E0F2FE", "title_text": "0C4A6E", "title_kicker": "0284C7", "circle": "C7E6FA", "paper": "F8FCFF", "dots": ["0284C7", "38BDF8", "F59E0B", "10B981", "6366F1"]}};
 let theme=store.get('theme_deck')||'tadris'; if(!THEMES[theme]) theme='tadris';
@@ -748,7 +820,7 @@ function renderForm(){
   [...$('reqFields').children,...$('optFields').children].forEach(c=>pool.appendChild(c));
   place(L.req,$('reqFields'),false); place(L.opt,$('optFields'),true);
   if(mode==='prez'){const sv=+store.get('size'); size=(sv>=SMIN&&sv<=SMAX)?sv:10}
-  step(0); $('freeHint').classList.toggle('on',FREE>0); syncCity(); syncDocLang();
+  step(0); $('freeHint').classList.toggle('on',FREE>0); syncCity(); syncDocLang(); renderPlan(); syncOptSub();
   $('cta').textContent=t(mode==='prez'?'ctaPrez':'ctaIsh'); syncDesign();
 }
 const SAVE=['fUni','fName','fGrp','fTea','fCity','fFak','fYon','fCls'];
@@ -767,11 +839,19 @@ function submitForm(){
     toast('✍️',t('fill'));
     try{tg&&tg.HapticFeedback&&tg.HapticFeedback.notificationOccurred('error')}catch(e){}
     return}
+  let plan=[];
+  if(mode==='prez'&&planMode==='own'){
+    const inputs=[...document.querySelectorAll('#planInputs input')];
+    plan=inputs.map(i=>i.value.trim()).filter(Boolean);
+    if(plan.length<inputs.length){
+      inputs.forEach(i=>{if(!i.value.trim()){i.style.borderColor='#EF4444'}});
+      inputs.find(i=>!i.value.trim()).focus(); toast('✍️',t('planFill')); return}
+  }
   const who=mode==='ish'?'student':as;
   const data={mode,lang,doc_lang:mode==='prez'?docLang:lang,theme:(img==='art'&&pick==='own')?theme:'auto',img,as:who,role,topic:v('fMav'),size,subject:v('fFan'),
     university:v('fUni'),faculty:v('fFak'),direction:v('fYon'),grade:v('fCls'),group:v('fGrp'),
     student:who==='student'?v('fName'):'',teacher:who==='teacher'?v('fName'):v('fTea'),
-    city:(used.has('city')&&$('cityOn').checked)?$('fCity').value.trim():''};
+    city:(used.has('city')&&$('cityOn').checked)?$('fCity').value.trim():'', plan};
   sendToBot(data,'⏳',t('sentTitle'),t('sentText'));
 }
 
@@ -850,6 +930,7 @@ function toast(ic,text){
   el.classList.remove('on'); void el.offsetWidth; el.classList.add('on');
   clearTimeout(toastT); toastT=setTimeout(()=>el.classList.remove('on'),2800);
 }
+document.addEventListener('input',e=>{if(e.target.closest&&e.target.closest('#optFields'))syncOptSub()});
 document.addEventListener('input',e=>{const w=e.target.closest&&e.target.closest('.field.err'); if(w&&e.target.value.trim()) w.classList.remove('err')});
 
 /* ---------- Language & theme ---------- */
@@ -892,6 +973,7 @@ try{CS&&CS.getItems(SAVE.map(id=>'f_'+id).concat(['cityOn']),(err,vals)=>{
 $('cityOn').checked=!!store.get('cityOn');
 buildThemes();
 renderAll();
+renderPlan();
 if(qs.get('screen')) show(qs.get('screen'));
 if(qs.get('form')) openForm(qs.get('form'));
 </script>
