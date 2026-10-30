@@ -309,6 +309,27 @@ header{display:flex;align-items:center;justify-content:space-between;gap:10px;ma
 .freerow b{color:#10B981}
 .promo{width:100%;text-align:left;padding:12px 14px;border-radius:16px;background:linear-gradient(120deg,rgba(16,185,129,.16),rgba(245,158,11,.16));border:1px solid rgba(245,158,11,.4);font-size:13px;line-height:1.45;color:var(--text);margin-bottom:12px}
 .promo b{color:#F59E0B} .nw{white-space:nowrap}
+.invrow{display:flex;align-items:center;gap:10px;width:100%;text-align:left;padding:13px 14px;border-radius:16px;background:linear-gradient(120deg,rgba(93,69,245,.22),rgba(59,130,246,.14));border:1.5px solid var(--indigo);font-size:14.5px;font-weight:700;color:var(--text);margin-bottom:10px}
+.invrow .e{font-size:20px} .invrow em{margin-left:auto;font-style:normal;font-size:12px;font-weight:600;color:var(--chip-text);text-align:right}
+.ihero{border-radius:22px;padding:20px 16px;text-align:center;color:#fff;background:linear-gradient(135deg,#5D45F5,#3B82F6);box-shadow:0 18px 36px -16px rgba(93,69,245,.9)}
+.ihero .gift{font-size:46px;display:inline-block;animation:gift 2.4s ease-in-out infinite}
+@keyframes gift{0%,100%{transform:translateY(0) rotate(0)}30%{transform:translateY(-6px) rotate(-8deg)}60%{transform:translateY(0) rotate(6deg)}}
+.ihero h2{margin:6px 0 4px;font-size:19px} .ihero p{margin:0;font-size:13.5px;opacity:.92;line-height:1.45}
+.ilink{margin-top:14px;display:flex;align-items:center;gap:8px;padding:6px 6px 6px 12px;border-radius:14px;background:var(--field);border:1.5px dashed var(--indigo);font-size:13px;color:var(--chip-text)}
+.ilink span{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ilink button{flex:none;padding:9px 12px;border-radius:10px;background:var(--indigo);color:#fff;font-weight:800;font-size:13px}
+.ishare{margin-top:10px;width:100%;padding:14px;border-radius:16px;font-weight:800;font-size:15px;color:#fff;background:linear-gradient(120deg,#2AABEE,#229ED9);box-shadow:0 12px 26px -14px rgba(34,158,217,.9)}
+.istats{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:12px 0 4px}
+.istats div{padding:12px;border-radius:16px;background:var(--surface);border:1px solid var(--line);text-align:center}
+.istats b{display:block;font-size:22px} .istats span{font-size:12px;color:var(--muted)}
+.fr{display:flex;align-items:center;gap:10px;padding:10px 13px;border-bottom:1px solid var(--line);font-size:13.5px}
+.fr:last-child{border-bottom:0} .fr .av{flex:none;width:32px;height:32px;border-radius:50%;display:grid;place-items:center;color:#fff;font-weight:800;font-size:13px;background:linear-gradient(135deg,var(--blue),var(--violet))}
+.fr .t{flex:1;min-width:0} .fr .t i{display:block;font-style:normal;color:var(--muted);font-size:11.5px}
+.fr .ok{color:#10B981;font-weight:800;font-size:12.5px;white-space:nowrap} .fr .wait{color:#F59E0B;font-weight:700;font-size:12px;white-space:nowrap}
+.isteps{padding:4px 0}
+.isp{display:flex;gap:10px;align-items:flex-start;padding:10px 13px;font-size:13px;line-height:1.45}
+.isp .n{flex:none;width:24px;height:24px;border-radius:50%;display:grid;place-items:center;font-weight:800;font-size:12px;color:#fff;background:linear-gradient(135deg,var(--blue),var(--violet))}
+.irules{font-size:12px;color:var(--muted);line-height:1.6;margin:10px 4px 0}
 .txlist{border-radius:16px;background:var(--surface);border:1px solid var(--line);overflow:hidden;margin-bottom:16px}
 .txi{display:flex;align-items:center;gap:10px;padding:11px 13px;border-bottom:1px solid var(--line);font-size:13px}
 .txi:last-child{border-bottom:0} .txi .ic{width:34px;height:34px;border-radius:11px;display:grid;place-items:center;background:var(--chip);flex:none}
@@ -521,6 +542,19 @@ nav{position:fixed;left:0;right:0;bottom:0;z-index:5;padding:8px 16px calc(10px 
     <div class="topnote" id="payNote"></div>
   </section>
 
+  <!-- INVITE -->
+  <section class="screen" id="invite">
+    <button class="back" onclick="show('profile')" data-i18n="back"></button>
+    <div class="ihero"><span class="gift">💰</span><h2 data-i18n="invTitle"></h2><p id="invLead"></p></div>
+    <div class="ilink"><span id="invLink"></span><button type="button" onclick="copyInvite()" data-i18n="invCopy"></button></div>
+    <button type="button" class="ishare" onclick="shareInvite()" data-i18n="invShare"></button>
+    <div class="istats"><div><b id="invCnt">0</b><span data-i18n="invCnt"></span></div><div><b id="invSum" class="nw">0</b><span data-i18n="invSum"></span></div></div>
+    <div id="invFriends"></div>
+    <div class="seg-label" style="margin-top:16px" data-i18n="invHow"></div>
+    <div class="list isteps" id="invSteps"></div>
+    <div class="irules" id="invRules"></div>
+  </section>
+
   <!-- PROFILE -->
   <section class="screen" id="profile">
     <div class="page-title" data-i18n="profTitle"></div>
@@ -528,6 +562,7 @@ nav{position:fixed;left:0;right:0;bottom:0;z-index:5;padding:8px 16px calc(10px 
     <div class="wallet"><small data-i18n="balance"></small><div class="big" id="balBig">0</div>
       <div class="row2"><button type="button" onclick="openTopup(0)" data-i18n="topupBtn"></button><button type="button" class="ghost" onclick="$('txAnchor').scrollIntoView({behavior:'smooth'})" data-i18n="history"></button></div></div>
     <div class="freerow"><span>🎁 <span data-i18n="freeLeft"></span></span><b id="freeLeft">0</b></div>
+    <button type="button" class="invrow" onclick="openInvite()"><span class="e">👥</span><span data-i18n="invite"></span><em id="invPer"></em></button>
     <button type="button" class="promo" onclick="askFeedback()" id="promo"></button>
     <div class="seg-label" id="txAnchor" data-i18n="lastOps"></div>
     <div class="txlist" id="txList"></div>
@@ -537,7 +572,6 @@ nav{position:fixed;left:0;right:0;bottom:0;z-index:5;padding:8px 16px calc(10px 
       <button type="button" id="roleTeacher" onclick="setRole('teacher')"><span class="e">👨‍🏫</span><b data-i18n="teacher"></b><span data-i18n="teacherDesc"></span></button>
     </div>
     <div class="list">
-      <button class="prow" onclick="soon()"><span data-i18n="invite"></span><span class="soon" data-i18n="soonTag"></span></button>
       <div class="prow"><span data-i18n="version"></span><em>MVP 2</em></div>
     </div>
     <div class="seg-label" style="margin-top:18px" data-i18n="legal"></div>
@@ -587,7 +621,7 @@ uz:{hello:"Salom", sub:"Bugun nima tayyorlaymiz?", change:"· almashtirish",
   fGrp:"Guruh", phGrp:"Masalan: MF-21", fTea:"O'qituvchi F.I.Sh.", phTea:"Masalan: Karimov A.B.", uniIsh:"Universitet yoki institut", optGroup:"Qo'shimcha ma'lumotlar", optSub:"Universitet, fakultet, guruh — titulga yoziladi", optFilled:"✓ {n} ta maydon to'ldirilgan", planTitle:"Slaydlar rejasi", planAi:"AI o'zi tuzsin", planAiD:"Mavzuga mos reja tuzadi", planOwn:"O'zim yozaman", planOwnD:"Reja tayyor bo'lsa", planCount:"Rejada nechta band bor?", planNote:"💡 Bot har bir band bo'yicha slaydlarni o'zi taqsimlaydi.", planPh:"{n}-band", planFill:"Reja bandlarini yozing", opt:" (ixtiyoriy)", cityLbl:"Titulga shaharni yozish", phCity:"Masalan: Toshkent",
   design:"Dizayn", pickAuto:"AI tanlasin", pickAutoD:"Har safar boshqacha, takrorlanmaydi", pickOwn:"O'zim tanlayman", pickOwnD:"10 ta dizayndan birini", images:"Rasmlar va tarif", imgArt:"O'rtacha", imgArtD:"AI chizgan rasm va sxemalar", imgPhoto:"Standart", imgPhotoD:"Internetdagi real fotosuratlar", imgPrem:"Premium", imgPremD:"3D AI rasmlar", imgArtInfo:"✏️ Har bir slayd uchun AI mavzuga mos rasm va sxemalarni o'zi chizadi. Pastda dizaynni tanlashingiz mumkin.", freeHint:"🎁 Bepul urinishda 15 tagacha", pcs:"ta", pcsSlides:"ta slayd", balance:"Balans", topupBtn:"+ To'ldirish", topupBtn2:"💳 Balansni to'ldirish", history:"Tarix", lastOps:"Oxirgi amallar", noOps:"Hali amallar yo'q", topupTitle:"Balansni to'ldirish", chooseSum:"Summani tanlang", ownSum:"Boshqa summa (kamida 5 000 so'm)", payMethod:"To'lov usuli", payBtn:"{x} to'lash", minSum:"Kamida {x}", willGet:"Balansga {x} tushadi. To'lov xavfsiz sahifada amalga oshiriladi.", bonus:"bonus", needMore:"Buyurtma uchun yana {x} kerak", payTitle:"To'lov so'rovi yuborildi", payText:"To'lov havolasi botga yuboriladi. Bu oynani yopishingiz mumkin.", fbTitle:"Fikr bildirish", fbText:"Botga o'ting va video yoki yozma fikringizni yuboring.", promo:"🎥 <b>Video fikr qoldiring</b> va balansingizga <b class='nw'>+1&nbsp;000&nbsp;so'm</b> oling. Eng foydali taklif egasiga oyiga <b class='nw'>10&nbsp;000&nbsp;so'm</b>!", lowBal:"💳 Balansingiz: <b>{b}</b>. Bu buyurtma uchun yana <b>{x}</b> kerak.", op_topup:"Balans to'ldirildi", op_admin:"Balans to'ldirildi", op_bonus:"Bonus", op_spend:"Prezentatsiya", op_refund:"Qaytarildi", nbTitle:"Balans yetarli emas", nbText:"Bu hajm narxi {p}. Balansni to'ldirish bo'limi tez kunda qo'shiladi. Hozircha bepul urinishingiz bilan 15 slaydgacha yaratishingiz mumkin.", free:"Bepul", ctaFree:"Bepul yaratish", from:"so'mdan", legal:"Hujjatlar", oferta:"Ommaviy oferta", privacy:"Maxfiylik siyosati", imgPhotoInfo:"📷 Rasmlar slayd mavzusidagi so'zlardan kelib chiqib internetdan (Pixabay fotobankidan) olinadi. Dizayn va joylashuvni bot o'zi tanlaydi.", imgPremInfo:"✨ AI har bir mavzu uchun premium sifatdagi aniq, 3D ko'rinishli rasmlarni o'zi yaratadi. Bu imkoniyat tez kunda qo'shiladi.", docLang:"Slayd qaysi tilda bo'lsin?", ctaPrez:"Prezentatsiya yaratish", ctaIsh:"Mustaqil ish yaratish", hint:"Fayl 2–4 daqiqada botga keladi",
   filesTitle:"Fayllarim", filesSub:"Yaratgan fayllaringiz shu yerda saqlanadi", filesKeep:"Fayllar 30 kun saqlanadi, keyin o'chib ketadi.", fSend:"Botga yuborish", fLeft:"kun qoldi", fPrez:"Prezentatsiya", fIsh:"Mustaqil ish", sentTitle:"So'rovingiz qabul qilindi", sentText:"Sizning so'rovingiz amalga oshirilmoqda. Tayyor bo'lgach faylni botga jo'natamiz. Bu oynani yopishingiz mumkin.", sentBtn:"Tushunarli", resTitle:"Fayl yuborilmoqda", resText:"Fayl bir necha soniyada botga keladi. Bu oynani yopishingiz mumkin.", filesEmpty:"Hali fayl yo'q. Birinchisini yarating.", filesBtn:"Yaratishni boshlash",
-  profTitle:"Profil", freeLeft:"Bepul urinish", myRole:"Mening rolim", invite:"Do'stni taklif qilish", buy:"Kredit sotib olish", version:"Versiya",
+  profTitle:"Profil", freeLeft:"Bepul urinish", myRole:"Mening rolim", invite:"Do'stni taklif qilish",invPer:'har biriga {x}',invTitle:"Do'stingizni taklif qiling",invLead:"Har bir do'stingiz ro'yxatdan o'tib, birinchi faylini olsa — balansingizga {x}!",invCopy:'Nusxalash',invCopied:'Havola nusxalandi',invShare:"✈️ Telegram'da ulashish",invShareText:'TadrisAI — prezentatsiya va mustaqil ishni 2–4 daqiqada tayyorlab beradigan bot. Birinchisi bepul!',invCnt:'taklif qilinganlar',invSum:"ishlab olingan so'm",invFriends:"Do'stlaringiz",invWait:'fayl kutilmoqda',invHow:'Qanday ishlaydi?',invS1:"Havolani do'stingizga yuboring yoki guruhga tashlang.",invS2:"Do'stingiz havola orqali kirib, ro'yxatdan o'tadi va birinchi faylini oladi.",invS3:'Shu zahoti balansingizga {x} tushadi. Uni istalgan tarifda ishlatishingiz mumkin.',invRules:"• Har bir do'st faqat bir marta hisoblanadi.<br>• Oyiga 20 tagacha bonus (<span class='nw'>20&nbsp;000&nbsp;so'm</span>).<br>• O'zingizni yoki soxta akkauntlarni taklif qilish hisoblanmaydi.", buy:"Kredit sotib olish", version:"Versiya",
   navHome:"Asosiy", navFiles:"Fayllarim", navProfile:"Profil",
   fill:"Iltimos, majburiy maydonlarni to'ldiring.", wrongOpen:"Ma'lumot yuborilmadi. Botda /start bosing va ilovani pastdagi tugma orqali oching.", notTg:"Iltimos, ilovani Telegram botidan oching.", soonMsg:"Bu bo'lim tez kunda qo'shiladi."},
 ru:{hello:"Привет", sub:"Что подготовим сегодня?", change:"· сменить",
@@ -608,7 +642,7 @@ ru:{hello:"Привет", sub:"Что подготовим сегодня?", cha
   fGrp:"Группа", phGrp:"Например: МФ-21", fTea:"ФИО преподавателя", phTea:"Например: Каримов А.Б.", uniIsh:"Университет или институт", optGroup:"Дополнительно", optSub:"Вуз, факультет, группа — для титула", optFilled:"✓ заполнено полей: {n}", planTitle:"План слайдов", planAi:"Составит ИИ", planAiD:"План по теме", planOwn:"Напишу сам", planOwnD:"Если план готов", planCount:"Сколько пунктов в плане?", planNote:"💡 Бот сам распределит слайды по пунктам.", planPh:"Пункт {n}", planFill:"Заполните пункты плана", opt:" (необязательно)", cityLbl:"Указать город на титуле", phCity:"Например: Ташкент",
   design:"Дизайн", pickAuto:"Выберет ИИ", pickAutoD:"Каждый раз новый, без повторов", pickOwn:"Выберу сам", pickOwnD:"Один из 10 дизайнов", images:"Изображения и тариф", imgArt:"Средний", imgArtD:"Рисунки и схемы от ИИ", imgPhoto:"Стандарт", imgPhotoD:"Реальные фото из интернета", imgPrem:"Премиум", imgPremD:"3D-изображения ИИ", imgArtInfo:"✏️ ИИ сам рисует изображения и схемы по теме каждого слайда. Ниже можно выбрать дизайн.", freeHint:"🎁 В бесплатной попытке — до 15", pcs:"шт", pcsSlides:"слайдов", balance:"Баланс", topupBtn:"+ Пополнить", topupBtn2:"💳 Пополнить баланс", history:"История", lastOps:"Последние операции", noOps:"Операций пока нет", topupTitle:"Пополнение баланса", chooseSum:"Выберите сумму", ownSum:"Другая сумма (от 5 000 сум)", payMethod:"Способ оплаты", payBtn:"Оплатить {x}", minSum:"Минимум {x}", willGet:"На баланс поступит {x}. Оплата на защищённой странице.", bonus:"бонус", needMore:"Для заказа не хватает {x}", payTitle:"Запрос на оплату отправлен", payText:"Ссылка на оплату придёт в бот. Это окно можно закрыть.", fbTitle:"Отзыв", fbText:"Перейдите в бот и отправьте видео или текстовый отзыв.", promo:"🎥 <b>Оставьте видеоотзыв</b> и получите <b class='nw'>+1&nbsp;000&nbsp;сум</b> на баланс. Автору лучшего предложения — <b class='nw'>10&nbsp;000&nbsp;сум</b> в месяц!", lowBal:"💳 Ваш баланс: <b>{b}</b>. Для заказа не хватает <b>{x}</b>.", op_topup:"Пополнение", op_admin:"Пополнение", op_bonus:"Бонус", op_spend:"Презентация", op_refund:"Возврат", nbTitle:"Недостаточно средств", nbText:"Стоимость — {p}. Пополнение баланса скоро появится. Пока бесплатной попыткой можно создать до 15 слайдов.", free:"Бесплатно", ctaFree:"Создать бесплатно", from:"сум и выше", legal:"Документы", oferta:"Публичная оферта", privacy:"Политика конфиденциальности", imgPhotoInfo:"📷 Изображения подбираются в интернете (фотобанк Pixabay) по ключевым словам темы. Дизайн и расположение бот выбирает сам.", imgPremInfo:"✨ ИИ сам создаёт качественные, объёмные (3D) изображения по теме. Скоро будет доступно.", docLang:"На каком языке сделать слайды?", ctaPrez:"Создать презентацию", ctaIsh:"Создать работу", hint:"Файл придёт в бот через 2–4 минуты",
   filesTitle:"Мои файлы", filesSub:"Здесь хранятся созданные файлы", filesKeep:"Файлы хранятся 30 дней, затем удаляются.", fSend:"Отправить в бот", fLeft:"дн. осталось", fPrez:"Презентация", fIsh:"Сам. работа", sentTitle:"Запрос принят", sentText:"Ваш запрос выполняется. Когда файл будет готов, мы отправим его в бот. Это окно можно закрыть.", sentBtn:"Понятно", resTitle:"Файл отправляется", resText:"Файл придёт в бот через несколько секунд. Это окно можно закрыть.", filesEmpty:"Файлов пока нет. Создайте первый.", filesBtn:"Начать",
-  profTitle:"Профиль", freeLeft:"Бесплатные попытки", myRole:"Моя роль", invite:"Пригласить друга", buy:"Купить кредиты", version:"Версия",
+  profTitle:"Профиль", freeLeft:"Бесплатные попытки", myRole:"Моя роль", invite:"Пригласить друга",invPer:'за каждого {x}',invTitle:'Пригласите друга',invLead:'Когда друг зарегистрируется и получит первый файл — на ваш баланс {x}!',invCopy:'Копировать',invCopied:'Ссылка скопирована',invShare:'✈️ Поделиться в Telegram',invShareText:'TadrisAI — бот, который делает презентацию и самостоятельную работу за 2–4 минуты. Первая — бесплатно!',invCnt:'приглашено',invSum:'заработано, сум',invFriends:'Ваши друзья',invWait:'ждём файл',invHow:'Как это работает?',invS1:'Отправьте ссылку другу или в группу.',invS2:'Друг переходит по ссылке, регистрируется и получает первый файл.',invS3:'Сразу на ваш баланс поступает {x}. Его можно использовать в любом тарифе.',invRules:"• Каждый друг засчитывается один раз.<br>• До 20 бонусов в месяц (<span class='nw'>20&nbsp;000&nbsp;сум</span>).<br>• Приглашение себя или фейковых аккаунтов не засчитывается.", buy:"Купить кредиты", version:"Версия",
   navHome:"Главная", navFiles:"Файлы", navProfile:"Профиль",
   fill:"Пожалуйста, заполните обязательные поля.", wrongOpen:"Данные не отправлены. Нажмите /start в боте и откройте приложение кнопкой внизу.", notTg:"Пожалуйста, откройте приложение из Telegram-бота.", soonMsg:"Этот раздел скоро появится."},
 en:{hello:"Hi", sub:"What are we preparing today?", change:"· change",
@@ -629,7 +663,7 @@ en:{hello:"Hi", sub:"What are we preparing today?", change:"· change",
   fGrp:"Group", phGrp:"E.g.: MF-21", fTea:"Teacher's full name", phTea:"E.g.: Karimov A.B.", uniIsh:"University or institute", optGroup:"Additional details", optSub:"University, faculty, group — for the title page", optFilled:"✓ {n} fields filled", planTitle:"Slide outline", planAi:"Let AI plan", planAiD:"Outline for the topic", planOwn:"I'll write it", planOwnD:"If you have a plan", planCount:"How many points?", planNote:"💡 The bot spreads the slides across your points.", planPh:"Point {n}", planFill:"Fill in the plan points", opt:" (optional)", cityLbl:"Add the city to the title page", phCity:"E.g.: Tashkent",
   design:"Design", pickAuto:"Let AI choose", pickAutoD:"Different every time, no repeats", pickOwn:"I'll choose", pickOwnD:"One of 10 designs", images:"Images & plan", imgArt:"Medium", imgArtD:"AI-drawn images and diagrams", imgPhoto:"Standard", imgPhotoD:"Real photos from the internet", imgPrem:"Premium", imgPremD:"3D AI images", imgArtInfo:"✏️ AI draws images and diagrams for each slide's topic. You can choose the design below.", freeHint:"🎁 Free attempt: up to 15", pcs:"", pcsSlides:"slides", balance:"Balance", topupBtn:"+ Top up", topupBtn2:"💳 Top up balance", history:"History", lastOps:"Recent operations", noOps:"No operations yet", topupTitle:"Top up balance", chooseSum:"Choose amount", ownSum:"Other amount (min 5 000 UZS)", payMethod:"Payment method", payBtn:"Pay {x}", minSum:"Minimum {x}", willGet:"{x} will be added. Payment on a secure page.", bonus:"bonus", needMore:"You need {x} more for this order", payTitle:"Payment request sent", payText:"The payment link will arrive in the bot. You can close this window.", fbTitle:"Feedback", fbText:"Go to the bot and send a video or text review.", promo:"🎥 <b>Leave a video review</b> and get <b class='nw'>+1&nbsp;000&nbsp;UZS</b>. The most useful suggestion wins <b class='nw'>10&nbsp;000&nbsp;UZS</b> a month!", lowBal:"💳 Your balance: <b>{b}</b>. You need <b>{x}</b> more.", op_topup:"Top up", op_admin:"Top up", op_bonus:"Bonus", op_spend:"Presentation", op_refund:"Refund", nbTitle:"Not enough balance", nbText:"This size costs {p}. Balance top-up is coming soon. For now your free attempt covers up to 15 slides.", free:"Free", ctaFree:"Create for free", from:"UZS+", legal:"Documents", oferta:"Public offer", privacy:"Privacy policy", imgPhotoInfo:"📷 Images are taken from the internet (Pixabay photo bank) based on the topic keywords. The bot picks the design and layout itself.", imgPremInfo:"✨ AI creates premium, realistic 3D-style images for your topic. Coming soon.", docLang:"Which language should the slides be in?", ctaPrez:"Create presentation", ctaIsh:"Create independent work", hint:"The file arrives in the bot in 2–4 minutes",
   filesTitle:"My files", filesSub:"Your created files are kept here", filesKeep:"Files are kept for 30 days, then deleted.", fSend:"Send to bot", fLeft:"days left", fPrez:"Presentation", fIsh:"Independent work", sentTitle:"Request received", sentText:"Your request is being processed. When the file is ready, we will send it to the bot. You can close this window.", sentBtn:"Got it", resTitle:"Sending the file", resText:"The file will arrive in the bot in a few seconds. You can close this window.", filesEmpty:"No files yet. Create your first one.", filesBtn:"Start creating",
-  profTitle:"Profile", freeLeft:"Free attempts", myRole:"My role", invite:"Invite a friend", buy:"Buy credits", version:"Version",
+  profTitle:"Profile", freeLeft:"Free attempts", myRole:"My role", invite:"Invite a friend",invPer:'{x} each',invTitle:'Invite your friends',invLead:'When a friend signs up and gets their first file, you get {x}!',invCopy:'Copy',invCopied:'Link copied',invShare:'✈️ Share in Telegram',invShareText:'TadrisAI makes presentations and essays in 2–4 minutes. The first one is free!',invCnt:'invited',invSum:'earned, UZS',invFriends:'Your friends',invWait:'waiting for file',invHow:'How it works',invS1:'Send the link to a friend or a group.',invS2:'Your friend joins via the link, signs up and gets their first file.',invS3:'You instantly get {x} on your balance, usable on any plan.',invRules:"• Each friend counts once.<br>• Up to 20 bonuses a month (<span class='nw'>20&nbsp;000&nbsp;UZS</span>).<br>• Inviting yourself or fake accounts doesn't count.", buy:"Buy credits", version:"Version",
   navHome:"Home", navFiles:"Files", navProfile:"Profile",
   fill:"Please fill in the required fields.", wrongOpen:"Data was not sent. Press /start in the bot and open the app with the button below.", notTg:"Please open the app from the Telegram bot.", soonMsg:"This section is coming soon."}
 };
@@ -710,11 +744,49 @@ function payNow(){
   if(amt<MIN_TOPUP) return;
   sendToBot({mode:'topup',amount:amt,method:pm},'💳',t('payTitle'),t('payText'));
 }
+/* ---------- Do'st taklifi ---------- */
+const BOTNAME=(qs.get('bot')||'tadrisai_bot').replace(/[^A-Za-z0-9_]/g,'');
+const MYID=(tg&&tg.initDataUnsafe&&tg.initDataUnsafe.user&&tg.initDataUnsafe.user.id)||0;
+const REF_BONUS=1000;
+function loadRef(){
+  const f=qs.get('ref'); if(!f) return [0,0,[]];
+  try{const b=atob(f.replace(/-/g,'+').replace(/_/g,'/')+'==='.slice((f.length+3)%4));
+      return JSON.parse(new TextDecoder().decode(Uint8Array.from(b,c=>c.charCodeAt(0))))||[0,0,[]]}catch(e){return [0,0,[]]}
+}
+const REF=loadRef();
+const invUrl=()=>'https://t.me/'+BOTNAME+(MYID?'?start=r'+MYID:'');
+const nbMoney=x=>money(x).replace(/ /g,'\u00a0');
+function openInvite(){renderInvite(); show('invite')}
+function renderInvite(){
+  const plus='<b class="nw">+'+nbMoney(REF_BONUS)+'</b>';
+  $('invLead').innerHTML=t('invLead').replace('{x}',plus);
+  $('invLink').textContent=invUrl().replace('https://','');
+  const [cnt,earned,list]=REF;
+  $('invCnt').textContent=cnt; $('invSum').textContent=nbMoney(earned).replace(/\u00a0[^\d]+$/,'');
+  $('invFriends').innerHTML=list.length?`<div class="seg-label" style="margin-top:14px">${t('invFriends')}</div><div class="list">`+
+    list.map(([n,d,ok])=>`<div class="fr"><span class="av">${esc((n||'?').trim().charAt(0).toUpperCase())}</span><span class="t">${esc(n)}<i>${esc(d.split('-').reverse().join('.'))}</i></span>${ok?`<span class="ok">+${nbMoney(REF_BONUS).replace(/\u00a0[^\d]+$/,'')}</span>`:`<span class="wait">${t('invWait')}</span>`}</div>`).join('')+'</div>':'';
+  $('invSteps').innerHTML=[t('invS1'),t('invS2'),t('invS3').replace('{x}',plus)].map((x,i)=>`<div class="isp"><span class="n">${i+1}</span><span>${x}</span></div>`).join('');
+  $('invRules').innerHTML=t('invRules');
+}
+function copyInvite(){
+  const u=invUrl(), done=()=>toast('✅',t('invCopied'));
+  if(navigator.clipboard&&navigator.clipboard.writeText) navigator.clipboard.writeText(u).then(done,()=>fallbackCopy(u,done));
+  else fallbackCopy(u,done);
+}
+function fallbackCopy(u,done){
+  const a=document.createElement('textarea'); a.value=u; a.style.position='fixed'; a.style.opacity='0';
+  document.body.appendChild(a); a.select(); try{document.execCommand('copy'); done()}catch(e){} a.remove();
+}
+function shareInvite(){
+  const url='https://t.me/share/url?url='+encodeURIComponent(invUrl())+'&text='+encodeURIComponent(t('invShareText'));
+  if(tg&&tg.openTelegramLink) tg.openTelegramLink(url); else window.open(url,'_blank');
+}
 function askFeedback(){sendToBot({mode:'feedback'},'🎥',t('fbTitle'),t('fbText'))}
 function renderWallet(){
   $('balBig').textContent=money(BALANCE);
   $('promo').innerHTML=t('promo');
-  const kindIc={topup:'💳',admin:'💳',bonus:'🎁',spend:'📊',refund:'↩️'};
+  $('invPer').innerHTML=t('invPer').replace('{x}','<span class="nw">+'+nbMoney(REF_BONUS)+'</span>');
+  const kindIc={topup:'💳',admin:'💳',bonus:'🎁',ref:'👥',spend:'📊',refund:'↩️'};
   $('txList').innerHTML=TXS.length?TXS.map(([a,k,note,d])=>`<div class="txi"><span class="ic">${kindIc[k]||'💳'}</span><span class="tt">${esc(note||t('op_'+k)||k)}<i>${esc(d)}</i></span><span class="${a>=0?'p':'m'}">${a>=0?'+':'−'}${money(Math.abs(a)).replace(" so'm","")}</span></div>`).join(''):`<div class="txempty">${t('noOps')}</div>`;
 }
 function sizeRange(){const [lo,hi]=mode==='prez'?[6,25]:[5,30]; return [lo,(FREE>0&&mode!=='prez')?Math.min(15,hi):hi]}
@@ -919,8 +991,8 @@ function renderProfile(){
 /* ---------- Navigation ---------- */
 function show(id){
   document.querySelectorAll('.screen').forEach(s=>s.classList.toggle('on',s.id===id));
-  ['home','files','profile'].forEach(n=>$('nav-'+n).classList.toggle('on',n===id||(id==='form'&&n==='home')||(id==='topup'&&n==='profile')));
-  document.querySelector('nav').style.display=(id==='form'||id==='topup')?'none':'';
+  ['home','files','profile'].forEach(n=>$('nav-'+n).classList.toggle('on',n===id||(id==='form'&&n==='home')||((id==='topup'||id==='invite')&&n==='profile')));
+  document.querySelector('nav').style.display=(id==='form'||id==='topup'||id==='invite')?'none':'';
   window.scrollTo(0,0);
 }
 function soon(){showInfo('✨',t('soonTag'),t('soonMsg'))}
