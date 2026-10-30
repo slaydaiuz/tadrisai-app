@@ -565,7 +565,7 @@ let theme=store.get('theme_deck')||'tadris'; if(!THEMES[theme]) theme='tadris';
 let img=store.get('img')||'photo'; if(!['art','photo','premium'].includes(img)) img='photo';
 function buildThemes(){
   $('themeGrid').innerHTML=Object.entries(THEMES).map(([k,t])=>`<button type="button" class="th" data-th="${k}" onclick="setTheme2('${k}')">
-    <img class="mini" src="thumbs/${k}.jpg?v=1" alt="" loading="lazy" style="background:#${t.title_bg}">
+    <img class="mini" src="thumbs/${k}.jpg?v=2" alt="" loading="lazy" style="background:#${t.title_bg}">
     <b>${t.name}</b></button>`).join('');
 }
 let pick=store.get('pick')||'auto'; if(pick!=='own') pick='auto';
