@@ -4,7 +4,7 @@ Tahrir sanasi: 30.10.2026 · TadrisAI foydalanuvchilarining shaxsga doir ma'lumo
 ## 1. Umumiy qoidalar
 Ushbu siyosat TadrisAI xizmati (keyingi o'rinlarda — **Biz**) @tadrisai_bot Telegram boti va TadrisAI mini ilovasi foydalanuvchilarining (keyingi o'rinlarda — **Foydalanuvchi**) shaxsga doir ma'lumotlarini qanday yig'ishi, saqlashi, ishlatishi va himoya qilishini belgilaydi.
 Siyosat O'zbekiston Respublikasining «Shaxsga doir ma'lumotlar to'g'risida»gi Qonuni va boshqa qonunchilik hujjatlariga muvofiq tuzilgan.
-Botda «✅ Tasdiqlayman» tugmasini bosish orqali Foydalanuvchi o'z ma'lumotlari ushbu siyosatga muvofiq ishlanishiga rozilik beradi.
+Botda «✅ Tanishib chiqdim» tugmasini bosish orqali Foydalanuvchi o'z ma'lumotlari ushbu siyosatga muvofiq ishlanishiga rozilik beradi.
 
 ## 2. Qanday ma'lumotlarni yig'amiz
 - **Telegram ma'lumotlari:** Telegram ID raqami, ism, username (agar bo'lsa).

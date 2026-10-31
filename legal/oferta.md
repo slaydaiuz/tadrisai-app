@@ -3,7 +3,7 @@ Tahrir sanasi: 30.10.2026 · TadrisAI xizmatidan foydalanish shartlari
 
 ## 1. Umumiy qoidalar
 Ushbu hujjat O'zbekiston Respublikasi Fuqarolik kodeksining 367-moddasiga muvofiq ommaviy oferta hisoblanadi. U TadrisAI xizmati (keyingi o'rinlarda — **Ijrochi**) tomonidan istalgan shaxsga (keyingi o'rinlarda — **Foydalanuvchi**) quyidagi shartlar asosida xizmat ko'rsatish taklifidir.
-Foydalanuvchi @tadrisai_bot Telegram botida **«✅ Tasdiqlayman»** tugmasini bosgan paytdan boshlab ushbu ofertani to'liq va so'zsiz qabul qilgan (aksept qilgan) hisoblanadi (Fuqarolik kodeksining 370-moddasi). Aksept Ijrochi va Foydalanuvchi o'rtasida yozma shaklda shartnoma tuzilganiga tenglashtiriladi.
+Foydalanuvchi @tadrisai_bot Telegram botida **«✅ Tanishib chiqdim»** tugmasini bosgan paytdan boshlab ushbu ofertani to'liq va so'zsiz qabul qilgan (aksept qilgan) hisoblanadi (Fuqarolik kodeksining 370-moddasi). Aksept Ijrochi va Foydalanuvchi o'rtasida yozma shaklda shartnoma tuzilganiga tenglashtiriladi.
 Agar Foydalanuvchi ushbu shartlarning birortasiga rozi bo'lmasa, u xizmatdan foydalanmasligi kerak.
 
 ## 2. Atamalar
