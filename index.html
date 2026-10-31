@@ -807,13 +807,14 @@ function loadTx(){
       return JSON.parse(new TextDecoder().decode(Uint8Array.from(b,c=>c.charCodeAt(0))))||[]}catch(e){return []}
 }
 const TXS=loadTx();
-const AMOUNTS=[[10000,0],[20000,0],[50000,5000],[100000,15000]], MIN_TOPUP=5000;
+const AMOUNTS=[[10000,0],[20000,0],[50000,5000],[100000,15000]], MIN_TOPUP=UNL?1000:5000;   // admin sinovi uchun 1 000
 let amt=50000, pm='payme', topupBack='profile';
 function openTopup(need){
   topupBack=document.querySelector('.screen.on')?.id||'profile';
   if(need>0){amt=Math.max(MIN_TOPUP,Math.ceil(need/1000)*1000); $('amtOwn').value=amt}
   else {amt=50000; $('amtOwn').value=''}
   $('topupNeed').textContent=need>0?t('needMore').replace('{x}',money(need)):''; $('topupNeed').style.display=need>0?'':'none';
+  if(UNL) $('amtOwn').placeholder=$('amtOwn').placeholder.replace('5 000','1 000');
   show('topup'); renderTopup();
 }
 const bonusOf=a=>{let b=0;AMOUNTS.forEach(([v,bn])=>{if(a>=v)b=bn});return b};
