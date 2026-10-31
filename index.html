@@ -389,6 +389,8 @@ header{display:flex;align-items:center;justify-content:space-between;gap:10px;ma
 .acc.open .acc-b{grid-template-rows:1fr} .acc-b>div{overflow:hidden}
 .acc-in{padding:0 14px 14px} .acc-in .seg{margin:0} .acc-in .prow{padding:12px 4px}
 .acc-txt{font-size:13px;color:var(--muted);line-height:1.5;padding:0 4px}
+#topup .back{margin-bottom:6px} #topup .page-title{margin-bottom:6px} #topup .group{margin:12px 2px 8px}
+#topup .field{margin-top:8px!important} #topup .paysum{margin-top:10px} #topup .cta{margin-top:14px}
 .topnote{font-size:12px;color:var(--muted);text-align:center;margin-top:8px;line-height:1.45}
 .lowbal{display:none;margin-top:12px;padding:12px 14px;border-radius:14px;background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.4);font-size:13px;line-height:1.45}
 .lowbal.on{display:block} .lowbal b{color:#EF4444}
@@ -851,7 +853,8 @@ async function payNow(m){
   if(!d||d.error==='auth'||d.error==='off'){          // server yetmasa: eski yo'l - havola botga keladi
     sendToBot({mode:'topup',amount:amt,method:m},'💳',t('payTitle'),t('payText'));return}
   if(!d.ok){toast('⚠️',t('payErr'));return}
-  const url=(d.links&&d.links[m])||((m==='paynet'||m==='other')?d.pay_url:d.url)||d.pay_url;
+  // Paynet: inPAY sahifasida Paynet oldindan tanlangan holda ochiladi (to'g'ridan-to'g'ri havolani inPAY API bermaydi)
+  const url=(d.links&&d.links[m])||(m==='paynet'?d.pay_url.replace(/\/$/,'')+'/paynet':(m==='other'?d.pay_url:d.url))||d.pay_url;
   pay={order:d.order_id,url,m,amount:amt,bonus:d.bonus||0,start:Date.now()};
   renderWait(); show('paywait'); openPay(); pollPay();
 }
@@ -1147,6 +1150,7 @@ function show(id){
   if(id!=='paywait') stopPoll();
   ['home','files','profile'].forEach(n=>$('nav-'+n).classList.toggle('on',n===id||(id==='form'&&n==='home')||(sub&&n==='profile')));
   document.querySelector('nav').style.display=(id==='form'||sub)?'none':'';
+  document.querySelector('header').style.display=['topup','paywait','payok'].includes(id)?'none':'';   // to'lov oynalarida tepa qism kerak emas
   window.scrollTo(0,0);
 }
 function soon(){showInfo('✨',t('soonTag'),t('soonMsg'))}
