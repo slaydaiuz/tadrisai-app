@@ -65,7 +65,20 @@ header{display:flex;align-items:center;justify-content:space-between;gap:10px;ma
 .lang-item small{color:var(--muted)}
 
 /* ---------- Greeting ---------- */
-.greet h1{font-size:26px;line-height:1.15;font-weight:700;letter-spacing:-.02em}
+.greet h1{font-size:24px;line-height:1.15;font-weight:700;letter-spacing:-.02em}
+.greet-top{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.greet-top h1{min-width:0}
+.greet h1 .nm{display:inline-block;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;vertical-align:bottom}
+@media (max-width:380px){.greet h1{font-size:22px}}
+.hbal{flex:none;display:flex;align-items:center;gap:8px;padding:6px 6px 6px 11px;border-radius:16px;text-align:left;
+  background:var(--surface);border:1px solid var(--line);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+  transition:transform .15s;-webkit-tap-highlight-color:transparent}
+.hbal:active{transform:scale(.96)}
+.hbal .v{display:flex;flex-direction:column;line-height:1.15}
+.hbal .v i{font-style:normal;font-size:11px;color:var(--muted);font-weight:600}
+.hbal .v b{font-size:14px;font-weight:700;white-space:nowrap;color:var(--text)}
+.hbal .plus{width:32px;height:32px;border-radius:11px;display:grid;place-items:center;color:#fff;font-size:19px;font-weight:600;line-height:1;
+  background:linear-gradient(135deg,#5D45F5,#8B5CF6);box-shadow:0 4px 12px -4px rgba(93,69,245,.8)}
 .greet p{color:var(--muted);margin-top:6px}
 .role-sw{display:inline-flex;gap:4px;margin-top:16px;padding:4px;border-radius:999px;background:var(--surface);border:1px solid var(--line);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}
 .role-sw button{display:flex;align-items:center;gap:6px;padding:8px 14px;border-radius:999px;font-size:13.5px;color:var(--muted);transition:background .25s,color .25s}
@@ -467,7 +480,12 @@ nav{position:fixed;left:0;right:0;bottom:0;z-index:5;padding:8px 16px calc(10px 
   <!-- HOME -->
   <section class="screen on" id="home">
     <div class="greet">
-      <h1 id="hello"></h1>
+      <div class="greet-top">
+        <h1 id="hello"></h1>
+        <button type="button" class="hbal" id="homeBal" onclick="openTopup(0)" aria-label="Balans">
+          <span class="v"><i data-i18n="balance"></i><b id="homeBalV"></b></span><span class="plus">+</span>
+        </button>
+      </div>
       <p data-i18n="sub"></p>
       <div class="role-sw" role="group">
         <button type="button" id="hsStudent" onclick="setRole('student')"><span>👨‍🎓</span><b data-i18n="student"></b></button>
@@ -775,7 +793,7 @@ function row(ic,title,desc){
   return `<button class="row" onclick="soon()"><span class="row-ic">${IC[ic]}</span><span class="txt"><b>${title}</b><i>${desc}</i></span><span class="soon">${t('soonTag')}</span></button>`;
 }
 function renderHome(){
-  $('hello').textContent=t('hello')+(userName?', '+userName:'')+'!';
+  $('hello').innerHTML=esc(t('hello'))+(userName?', <span class="nm">'+esc(userName)+'!</span>':'!');
   $('hsStudent').setAttribute('aria-pressed',role==='student');
   $('hsTeacher').setAttribute('aria-pressed',role==='teacher');
   let h='<div class="tools">';
@@ -942,7 +960,7 @@ function shareInvite(){
 }
 function askFeedback(){sendToBot({mode:'feedback'},'🎥',t('fbTitle'),t('fbText'))}
 function renderWallet(){
-  $('balBig').textContent=money(BALANCE);
+  $('balBig').textContent=money(BALANCE); $('homeBalV').textContent=money(BALANCE);
   $('invPer').innerHTML=t('invPer').replace('{x}','<span class="nw">+'+nbMoney(REF_BONUS)+'</span>');
   $('fbPer').innerHTML=t('fbPer').replace('{x}','<span class="nw">+'+nbMoney(REF_BONUS)+'</span>');
   const kindIc={topup:'💳',admin:'💳',bonus:'🎁',ref:'👥',spend:'📊',refund:'↩️'};
