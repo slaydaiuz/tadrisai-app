@@ -797,7 +797,7 @@ function openForm(m){
   show('form');
   renderForm();
 }
-const FREE=Math.max(0,parseInt(qs.get('free')||'0',10)||0);
+let FREE=Math.max(0,parseInt(qs.get('free')||'0',10)||0);
 const UNL=qs.get('unl')==='1';          // admin: cheklovsiz
 const KNOWN=UNL||qs.has('free');        // eski tugmadan ochilsa - tekshiruvni bot o'zi qiladi
 let BALANCE=Math.max(0,parseInt(qs.get('bal')||'0',10)||0);   // botdan keladi
@@ -806,7 +806,7 @@ function loadTx(){
   try{const b=atob(f.replace(/-/g,'+').replace(/_/g,'/')+'==='.slice((f.length+3)%4));
       return JSON.parse(new TextDecoder().decode(Uint8Array.from(b,c=>c.charCodeAt(0))))||[]}catch(e){return []}
 }
-const TXS=loadTx();
+let TXS=loadTx();
 const AMOUNTS=[[10000,0],[20000,0],[50000,5000],[100000,15000]], MIN_TOPUP=UNL?1000:5000;   // admin sinovi uchun 1 000
 let amt=50000, pm='payme', topupBack='profile';
 function openTopup(need){
@@ -841,6 +841,20 @@ async function api(path,body){
   let d={}; try{d=await r.json()}catch(e){}
   return d;
 }
+/* Ilova ochilganda balans va amallarni serverdan yangilaymiz (tugmadagi ma'lumot eskirgan bo'lishi mumkin) */
+let meAt=0;
+async function refreshMe(){
+  if(!((tg&&tg.initData)||qs.get('sig'))||Date.now()-meAt<15000) return;
+  meAt=Date.now();
+  try{
+    const d=await api('/me',{}); if(!d||!d.ok) return;
+    if(typeof d.balance==='number') BALANCE=d.balance;
+    if(Array.isArray(d.tx)) TXS=d.tx;
+    if(typeof d.free==='number') FREE=d.free;
+    renderWallet(); renderPlan();
+  }catch(e){}
+}
+document.addEventListener('visibilitychange',()=>{if(!document.hidden) refreshMe()});
 function openMore(){$('pmSheet').classList.add('on')}
 function closeMore(){$('pmSheet').classList.remove('on')}
 async function payNow(m){
@@ -1205,6 +1219,7 @@ $('cityOn').checked=!!store.get('cityOn');
 buildThemes();
 renderAll();
 renderPlan();
+refreshMe();
 if(qs.get('screen')) show(qs.get('screen'));
 if(qs.get('form')) openForm(qs.get('form'));
 </script>
