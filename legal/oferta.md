@@ -1,9 +1,9 @@
 # Ommaviy oferta (foydalanish shartlari)
-Tahrir sanasi: 30.10.2026 · TadrisAI xizmatidan foydalanish shartlari
+Tahrir sanasi: 01.11.2026 · TadrisAI xizmatidan foydalanish shartlari
 
 ## 1. Umumiy qoidalar
 Ushbu hujjat O'zbekiston Respublikasi Fuqarolik kodeksining 367-moddasiga muvofiq ommaviy oferta hisoblanadi. U TadrisAI xizmati (keyingi o'rinlarda — **Ijrochi**) tomonidan istalgan shaxsga (keyingi o'rinlarda — **Foydalanuvchi**) quyidagi shartlar asosida xizmat ko'rsatish taklifidir.
-Foydalanuvchi @tadrisai_bot Telegram botida **«✅ Tanishib chiqdim»** tugmasini bosgan paytdan boshlab ushbu ofertani to'liq va so'zsiz qabul qilgan (aksept qilgan) hisoblanadi (Fuqarolik kodeksining 370-moddasi). Aksept Ijrochi va Foydalanuvchi o'rtasida yozma shaklda shartnoma tuzilganiga tenglashtiriladi.
+Foydalanuvchi @tadrisai_bot Telegram botida ro'yxatdan o'tgan (tilni tanlab, kanalga obuna bo'lgan) yoki Xizmat uchun to'lov qilgan paytdan boshlab ushbu ofertani to'liq va so'zsiz qabul qilgan (aksept qilgan) hisoblanadi (Fuqarolik kodeksining 370-moddasi). Aksept Ijrochi va Foydalanuvchi o'rtasida yozma shaklda shartnoma tuzilganiga tenglashtiriladi.
 Agar Foydalanuvchi ushbu shartlarning birortasiga rozi bo'lmasa, u xizmatdan foydalanmasligi kerak.
 
 ## 2. Atamalar
@@ -22,9 +22,9 @@ Fayllar AI yordamida avtomatik yaratiladi. Ular Foydalanuvchi uchun tayyor qoral
 
 ## 4. Ro'yxatdan o'tish
 Xizmatdan foydalanish uchun Foydalanuvchi Botda quyidagi qadamlarni bajaradi:
-- @tadrisai_uz Telegram kanaliga obuna bo'ladi;
-- ushbu oferta va (privacy.html){Maxfiylik siyosati}ni tasdiqlaydi;
-- o'z telefon raqamini Telegram orqali yuboradi.
+- tilni tanlaydi;
+- @tadrisai_uz Telegram kanaliga obuna bo'ladi.
+Ro'yxatdan o'tish bilan Foydalanuvchi ushbu oferta va (privacy.html){Maxfiylik siyosati} shartlarini qabul qilgan hisoblanadi. Bot telefon raqamini so'ramaydi.
 Ro'yxatdan o'tgan Foydalanuvchiga **1 (bir) marta bepul urinish** beriladi: 15 tagacha slayddan iborat prezentatsiya yoki 15 betgacha mustaqil ish.
 Foydalanuvchi kanaldan chiqib ketsa, keyingi Buyurtmadan oldin Bot qayta obuna bo'lishni so'rashi mumkin.
 

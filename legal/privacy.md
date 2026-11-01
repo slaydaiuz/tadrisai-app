@@ -1,14 +1,13 @@
 # Maxfiylik siyosati
-Tahrir sanasi: 30.10.2026 · TadrisAI foydalanuvchilarining shaxsga doir ma'lumotlarini himoya qilish tartibi
+Tahrir sanasi: 01.11.2026 · TadrisAI foydalanuvchilarining shaxsga doir ma'lumotlarini himoya qilish tartibi
 
 ## 1. Umumiy qoidalar
 Ushbu siyosat TadrisAI xizmati (keyingi o'rinlarda — **Biz**) @tadrisai_bot Telegram boti va TadrisAI mini ilovasi foydalanuvchilarining (keyingi o'rinlarda — **Foydalanuvchi**) shaxsga doir ma'lumotlarini qanday yig'ishi, saqlashi, ishlatishi va himoya qilishini belgilaydi.
 Siyosat O'zbekiston Respublikasining «Shaxsga doir ma'lumotlar to'g'risida»gi Qonuni va boshqa qonunchilik hujjatlariga muvofiq tuzilgan.
-Botda «✅ Tanishib chiqdim» tugmasini bosish orqali Foydalanuvchi o'z ma'lumotlari ushbu siyosatga muvofiq ishlanishiga rozilik beradi.
+Botda ro'yxatdan o'tish (tilni tanlab, kanalga obuna bo'lish) yoki Xizmatdan foydalanish orqali Foydalanuvchi o'z ma'lumotlari ushbu siyosatga muvofiq ishlanishiga rozilik beradi.
 
 ## 2. Qanday ma'lumotlarni yig'amiz
-- **Telegram ma'lumotlari:** Telegram ID raqami, ism, username (agar bo'lsa).
-- **Telefon raqami:** Foydalanuvchi o'zi «Kontaktni yuborish» tugmasi orqali yuboradi.
+- **Telegram ma'lumotlari:** Telegram ID raqami, ism, username (agar bo'lsa). Telefon raqami so'ralmaydi va saqlanmaydi.
 - **Sozlamalar:** tanlangan til va rol (talaba yoki o'qituvchi).
 - **Buyurtma ma'lumotlari:** mavzu, hajm, F.I.Sh., o'quv muassasasi, fakultet, yo'nalish, fan, guruh, o'qituvchi va boshqa formadagi maydonlar.
 - **Foydalanish ma'lumotlari:** buyurtmalar soni, sanasi, turi, Balans harakati, xatoliklar haqidagi texnik yozuvlar.
@@ -24,16 +23,16 @@ Botda «✅ Tanishib chiqdim» tugmasini bosish orqali Foydalanuvchi o'z ma'lumo
 
 ## 4. Ma'lumotlarni uchinchi shaxslarga berish
 Biz Foydalanuvchi ma'lumotlarini sotmaymiz va reklama maqsadida boshqalarga bermaymiz. Xizmat ishlashi uchun ma'lumotlarning bir qismi faqat quyidagi tomonlarga uzatiladi:
-- **AI xizmati (Anthropic, Claude):** Fayl tayyorlash uchun Buyurtmadagi mavzu va formaga kiritilgan ma'lumotlar yuboriladi. Telefon raqami va Telegram ID yuborilmaydi.
+- **AI xizmati (Anthropic, Claude):** Fayl tayyorlash uchun Buyurtmadagi mavzu va formaga kiritilgan ma'lumotlar yuboriladi. Telegram ID yuborilmaydi.
 - **Fotobanklar (Pixabay, Pexels):** faqat slaydlar uchun inglizcha qidiruv so'zlari yuboriladi, shaxsga doir ma'lumot yuborilmaydi.
 - **To'lov tizimlari (Payme, Click):** to'lovni amalga oshirish uchun zarur bo'lgan ma'lumotlar.
 - **Telegram:** Bot Telegram platformasi orqali ishlaydi va uning qoidalariga bo'ysunadi.
 - **Davlat organlari:** faqat qonunchilikda belgilangan hollarda va tartibda.
-AI xizmati O'zbekistondan tashqarida joylashgan. Ofertani tasdiqlash orqali Foydalanuvchi Buyurtma ma'lumotlarining Fayl tayyorlash maqsadida shu xizmatga uzatilishiga rozilik beradi.
+AI xizmati O'zbekistondan tashqarida joylashgan. Ro'yxatdan o'tish orqali Foydalanuvchi Buyurtma ma'lumotlarining Fayl tayyorlash maqsadida shu xizmatga uzatilishiga rozilik beradi.
 
 ## 5. Saqlash joyi va muddati
 O'zbekiston fuqarolarining shaxsga doir ma'lumotlari bazasi O'zbekiston Respublikasi hududida joylashgan serverlarda saqlanadi.
-- Hisob ma'lumotlari (ID, ism, telefon, til, rol) — Foydalanuvchi xizmatdan foydalanib turgan davrda va hisob o'chirilishi so'ralgunga qadar.
+- Hisob ma'lumotlari (ID, ism, til, rol) — Foydalanuvchi xizmatdan foydalanib turgan davrda va hisob o'chirilishi so'ralgunga qadar.
 - Tayyor Fayllar va ularning nomi — «Fayllarim» bo'limida **30 kun**, keyin avtomatik o'chiriladi.
 - Buyurtma formasidagi ma'lumotlar Fayl tayyorlangandan keyin alohida saqlanmaydi.
 - To'lov va Balans yozuvlari — buxgalteriya va soliq qonunchiligida belgilangan muddat davomida.
