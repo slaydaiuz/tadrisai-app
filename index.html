@@ -8,7 +8,7 @@
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600;700&family=Tinos:wght@700&display=swap" rel="stylesheet">
 <style>
 :root{
   --indigo:#5D45F5; --violet:#8B5CF6; --blue:#3B82F6;
@@ -424,6 +424,70 @@ nav{position:fixed;left:0;right:0;bottom:0;z-index:5;padding:8px 16px calc(10px 
 .nav-b.on{color:var(--chip-text);background:var(--chip)}
 
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
+/* ---------- Mustaqil ish (yangi forma) ---------- */
+.ix-sec{margin-top:22px}
+.ix-lbl{font-size:13px;font-weight:600;color:var(--muted);margin:0 2px 8px;display:flex;justify-content:space-between;align-items:baseline}
+.ix-lbl a,.ix-lbl button{font-size:13px;font-weight:600;color:var(--chip-text);background:none;border:0;padding:0}
+.ix-in{width:100%;padding:13px 14px;border-radius:var(--r-sm);border:1.5px solid var(--line);background:var(--field);color:var(--text);font:inherit;font-size:16px;outline:none}
+.ix-in:focus{border-color:var(--violet)}
+textarea.ix-in{resize:none;min-height:84px;line-height:1.4}
+.ix-scale{position:relative;height:92px;margin:58px 30px 0}
+.ix-track{position:absolute;left:0;right:0;top:11px;height:6px;border-radius:6px;background:var(--line)}
+.ix-fill{height:100%;border-radius:6px;background:linear-gradient(90deg,var(--blue),var(--violet))}
+.ix-bub{position:absolute;top:-58px;transform:translateX(-50%);background:var(--violet);color:#fff;font-weight:800;font-size:12px;padding:3px 9px;border-radius:8px;white-space:nowrap}
+.ix-tick{position:absolute;top:-26px;transform:translateX(-50%);width:76px;height:104px;background:none;border:0;padding:0;display:flex;flex-direction:column;align-items:center;color:var(--muted)}
+.ix-tick b{height:20px;font-size:13px}
+.ix-tick i{display:block;width:14px;height:14px;margin-top:10px;border-radius:50%;border:2px solid var(--bg);background:var(--line)}
+.ix-tick.on i{background:var(--violet)}
+.ix-tick.cur b{color:var(--text)}
+.ix-tick.cur i{width:22px;height:22px;margin-top:6px;background:#fff;box-shadow:0 0 0 6px rgba(139,92,246,.35),0 4px 10px rgba(0,0,0,.35)}
+.ix-tick span{margin-top:10px;font-size:12px;white-space:nowrap}
+.ix-tick.cur span{color:var(--chip-text);font-weight:800;font-size:13px}
+.ix-tiers{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.ix-tiers button{display:flex;flex-direction:column;align-items:flex-start;gap:5px;padding:12px;border-radius:var(--r-md);border:1.5px solid var(--line);background:var(--surface);text-align:left;color:var(--text);min-height:140px}
+.ix-tiers button[aria-pressed="true"]{border-color:var(--violet);background:var(--chip)}
+.ix-tiers .ic{width:34px;height:34px;border-radius:10px;display:grid;place-items:center;color:#fff;font-size:17px}
+.ix-tiers b{font-size:15.5px} .ix-tiers span{font-size:12px;color:var(--muted);line-height:1.35}
+.ix-tiers .pr{margin-top:auto;font-weight:800;font-size:14px;color:var(--chip-text)}
+.ix-info{margin-top:10px;padding:12px 14px;border-radius:var(--r-sm);background:var(--chip);color:var(--chip-text);font-size:13px;line-height:1.45}
+.ix-plan{margin-top:10px;display:grid;gap:8px}
+.ix-plan .ix-r{display:flex;align-items:center;gap:8px}
+.ix-plan .n{flex:none;width:30px;height:30px;border-radius:9px;background:var(--chip);color:var(--chip-text);display:grid;place-items:center;font-weight:700;font-size:14px}
+.ix-plan .x{flex:none;width:36px;height:36px;border-radius:10px;background:none;border:0;color:var(--muted);font-size:16px}
+.ix-add{height:46px;border-radius:12px;border:1.5px dashed var(--line);background:none;color:var(--chip-text);font:inherit;font-weight:600}
+.ix-titul{display:flex;align-items:center;gap:12px;width:100%;padding:14px;border-radius:var(--r-md);background:var(--surface);border:1.5px solid rgba(245,158,11,.5);color:var(--text);text-align:left}
+.ix-titul .ti{flex:none;width:40px;height:40px;border-radius:12px;background:rgba(245,158,11,.18);display:grid;place-items:center;font-size:19px}
+.ix-titul b{font-size:15px} .ix-titul i{display:block;font-style:normal;font-size:12px;color:var(--muted);margin-top:2px}
+.ix-badge{font-size:11px;font-weight:700;color:#1C1405;background:#FBBF24;padding:2px 7px;border-radius:6px;margin-left:6px;vertical-align:2px}
+.ix-tpanel{display:none;margin-top:10px;padding:14px;border-radius:var(--r-md);background:var(--surface);border:1px solid var(--line)}
+.ix-tpanel.on{display:block}
+.ix-live{display:flex;gap:12px;align-items:flex-start;margin-bottom:12px}
+.ix-live p{font-size:12.5px;color:var(--muted);line-height:1.45}
+.ix-tgrid{display:grid;gap:10px}
+.ix-tgrid label{display:block;font-size:12.5px;color:var(--muted);margin:0 2px 5px}
+.ix-two{display:grid;grid-template-columns:1.4fr 1fr;gap:8px}
+.ix-covers{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.ix-covers button{display:flex;flex-direction:column;align-items:center;padding:6px 6px 4px;border-radius:14px;border:1.5px solid var(--line);background:var(--surface);color:var(--text)}
+.ix-covers button[aria-pressed="true"]{border-color:var(--violet);background:var(--chip)}
+.ix-covers span{font-size:13px;font-weight:600;padding:7px 0 2px}
+.ix-cv{border-radius:5px;overflow:hidden;box-shadow:0 8px 20px -10px rgba(0,0,0,.6);background:#fff}
+.ix-page{position:absolute;left:0;top:0;width:420px;height:594px;background:#fff;transform-origin:0 0}
+.ix-page .fr{position:absolute;left:15.5px;top:15.5px;right:15.5px;bottom:15.5px}
+.ix-page .bl{position:absolute;left:60px;width:330px;font-weight:700;font-family:Tinos,'Times New Roman',serif;overflow-wrap:break-word}
+.ix-grid2{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.ix-grid2 button{min-height:48px;border-radius:12px;border:1.5px solid var(--line);background:var(--surface);color:var(--text);font:inherit;font-weight:600;font-size:14px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px}
+.ix-grid2 button small{font-size:11.5px;color:var(--muted);font-weight:500}
+.ix-grid2 button[aria-pressed="true"]{border-color:var(--violet);background:var(--chip);color:var(--chip-text)}
+.ix-sum{margin-top:22px;padding:14px;border-radius:var(--r-md);background:var(--surface);border:1px solid var(--line);display:flex;flex-direction:column;gap:4px}
+.ix-sum div{display:flex;justify-content:space-between;font-size:14px;color:var(--muted)} .ix-sum b{color:var(--text)}
+.ix-sum span{font-size:12px;color:var(--muted)}
+.ix-big{position:fixed;inset:0;z-index:60;background:rgba(6,10,22,.82);display:none;align-items:flex-end;justify-content:center}
+.ix-big.on{display:flex}
+.ix-big .sh{width:100%;max-width:480px;background:var(--surface-solid);border-radius:26px 26px 0 0;padding:12px 18px 24px;display:flex;flex-direction:column;gap:14px;align-items:center}
+.ix-big .ix-r{display:flex;align-items:center;gap:10px}
+.ix-big .arr{width:42px;height:42px;border-radius:50%;background:var(--surface);border:1px solid var(--line);color:var(--text);font-size:22px}
+.ix-big .nm{font-weight:700;font-size:18px} .ix-big .ds{font-size:13px;color:var(--muted);text-align:center;max-width:300px}
+.ix-big .ok{width:100%;height:52px;border-radius:16px;border:0;background:var(--indigo);color:#fff;font:inherit;font-weight:700;font-size:16px}
 </style>
 </head>
 <body>
@@ -587,6 +651,60 @@ nav{position:fixed;left:0;right:0;bottom:0;z-index:5;padding:8px 16px calc(10px 
     </div>
     <button class="cta" id="cta" type="button" onclick="submitForm()"></button>
     <div class="hint" data-i18n="hint"></div>
+  </section>
+
+  <!-- MUSTAQIL ISH (yangi forma) -->
+  <section class="screen" id="ish">
+    <button class="back" onclick="show('home')">← Orqaga</button>
+    <div class="form-head"><div class="tool-ic blue" id="ixIc"></div><div><h1 id="ixTitle">Mustaqil ish</h1><p>Mavzuni yozing, qolganini AI qiladi</p></div></div>
+
+    <div class="seg2" id="ixType"></div>
+
+    <div class="ix-sec"><label class="ix-lbl" for="ixTopic">Mavzu</label>
+      <textarea class="ix-in" id="ixTopic" rows="3" placeholder="Masalan: Raqamli iqtisodiyot va uning O'zbekistondagi rivoji" oninput="IX.draw()"></textarea></div>
+    <div class="ix-sec"><label class="ix-lbl" for="ixSubj">Fan</label>
+      <input class="ix-in" id="ixSubj" placeholder="Masalan: Iqtisodiyot nazariyasi" oninput="IX.draw()"></div>
+
+    <div class="ix-sec"><div class="ix-lbl">Betlar soni</div><div class="ix-scale" id="ixScale"></div></div>
+
+    <div class="ix-sec"><div class="ix-lbl">Tarif</div><div class="ix-tiers" id="ixTiers"></div><div class="ix-info" id="ixTierInfo"></div></div>
+
+    <div class="ix-sec"><div class="ix-lbl">Rejani kim tuzadi?</div><div class="seg2" id="ixPlanSw"></div><div class="ix-plan" id="ixPlan"></div></div>
+
+    <div class="ix-sec">
+      <button type="button" class="ix-titul" onclick="IX.toggleTitul()">
+        <span class="ti">📋</span>
+        <span style="flex:1"><b>Titul ma'lumotlari</b><span class="ix-badge">Muhim</span><i id="ixTitulSt"></i></span>
+        <span id="ixTitulChev" style="color:var(--muted)">▾</span>
+      </button>
+      <div class="ix-tpanel" id="ixTPanel">
+        <div class="ix-live"><div id="ixLive"></div><p><b style="color:var(--text)">Jonli ko'rinish</b><br>O'qituvchi birinchi shu betni ko'radi — xatosiz to'ldiring. Bo'sh joyga chiziq qo'yiladi.</p></div>
+        <div class="ix-tgrid" id="ixFields"></div>
+      </div>
+    </div>
+
+    <div class="ix-sec"><div class="ix-lbl"><span>Dizayn</span><button type="button" onclick="IX.big(true)">Kattaroq ko'rish ›</button></div>
+      <div class="ix-covers" id="ixCovers"></div></div>
+
+    <div class="ix-sec"><label class="ix-lbl" for="ixNotes">Qo'shimcha ma'lumotlar <span style="font-weight:500">(ixtiyoriy)</span></label>
+      <textarea class="ix-in" id="ixNotes" rows="2" maxlength="600" placeholder="Masalan: amaliy misollar ko'proq bo'lsin, 2020-yildan keyingi manbalar"></textarea></div>
+
+    <div class="ix-sec"><div class="ix-lbl">Fayl formati</div><div class="ix-grid2" id="ixFmt"></div></div>
+
+    <div class="ix-sec"><div class="ix-lbl" id="ixLangQ">Qaysi tilda bo'lsin?</div><div class="ix-grid2" id="ixLang"></div></div>
+
+    <div class="ix-sum"><div><span id="ixSumL"></span><b id="ixSumR"></b></div><span id="ixBal"></span></div>
+    <button class="cta" id="ixCta" type="button" onclick="IX.submit()"></button>
+    <div class="hint">Fayl 1–3 daqiqada botga keladi</div>
+
+    <div class="ix-big" id="ixBig" onclick="if(event.target===this)IX.big(false)">
+      <div class="sh">
+        <div class="ix-r" style="width:100%;justify-content:space-between"><b style="font-size:19px">Dizayn</b><button type="button" class="arr" style="font-size:16px" aria-label="Yopish" onclick="IX.big(false)">✕</button></div>
+        <div class="ix-r"><button type="button" class="arr" aria-label="Oldingi" onclick="IX.step(-1)">‹</button><div id="ixBigCv"></div><button type="button" class="arr" aria-label="Keyingi" onclick="IX.step(1)">›</button></div>
+        <div class="nm" id="ixBigNm"></div><div class="ds" id="ixBigDs"></div>
+        <button type="button" class="ok" onclick="IX.big(false)">Shu dizaynni tanlash</button>
+      </div>
+    </div>
   </section>
 
   <!-- FILES -->
@@ -800,7 +918,7 @@ function renderHome(){
   $('hsTeacher').setAttribute('aria-pressed',role==='teacher');
   let h='<div class="tools">';
   if(role==='student'){
-    h+=tool('prez','prez',t('prez'),t('prezDesc'))+(UNL?tool('ish','ish',t('ish'),t('ishDesc'),true)+'</div>':`<button class="tool" onclick="ishSoon()"><span class="tool-ic blue">${IC.ish}</span><span><h2>${t('ish')}</h2><p>${t('ishDesc')}</p></span><span class="soon">${t('soonTag')}</span></button></div>`);
+    h+=tool('prez','prez',t('prez'),t('prezDesc'))+(UNL?`<button class="tool" onclick="IX.open()"><span class="tool-ic blue">${IC.ish}</span><span><h2>${t('ish')}</h2><p>${t('ishDesc')}</p></span><span class="go">${IC.arrow}</span></button></div>`:`<button class="tool" onclick="ishSoon()"><span class="tool-ic blue">${IC.ish}</span><span><h2>${t('ish')}</h2><p>${t('ishDesc')}</p></span><span class="soon">${t('soonTag')}</span></button></div>`);
     h+=`<div class="sec-title">${t('more')}</div><div class="list">${row('quiz',t('testS'),t('testSDesc'))}${row('ref',t('ref'),t('refDesc'))}</div>`;
   }else{
     h+=tool('prez','prez',t('prez'),t('prezDescT'))+`<button class="tool" onclick="soon()"><span class="tool-ic blue">${IC.dars}</span><span><h2>${t('dars')}</h2><p>${t('darsDesc')}</p></span><span class="soon">${t('soonTag')}</span></button></div>`;
@@ -1178,13 +1296,132 @@ function renderProfile(){
   $('roleTeacher').setAttribute('aria-pressed',role==='teacher');
 }
 
+/* ---------- Mustaqil ish (yangi forma). Narxlar botdagi ISH_PRICES bilan bir xil ---------- */
+const IX=(()=>{
+  const PRICE={10:[3990,5990],15:[5990,8990],20:[7990,11990]};
+  const MIN={uz:"O'zbekiston Respublikasi Oliy ta'lim, fan va innovatsiyalar vazirligi",uzc:'Ўзбекистон Республикаси Олий таълим, фан ва инновациялар вазирлиги',
+    ru:'Министерство высшего образования, науки и инноваций Республики Узбекистан',en:'Ministry of Higher Education, Science and Innovation of the Republic of Uzbekistan'};
+  const CV=[{k:'klassik',n:'Klassik',d:"Ko'k ramka, matn markazda, «Bajardi» o'ng tomonda"},
+            {k:'minimal',n:'Minimal',d:"Ramkasiz, qora matn, hammasi markazda. Qat'iy talab bo'lsa"},
+            {k:'zamonaviy',n:'Zamonaviy',d:'Havorang ramka, hamma yozuv chapdan'}];
+  const ST={ // botdagi cover.py bilan bir xil joylashuv (mm) va o'lchamlar (pt)
+    klassik:{fr:'#4A6890',tx:'#365F91',ti:'#000080',sz:{min:14,uni:14,fac:12,subj:14,work:36,topic:14,by:14,chk:14,foot:14},al:{by:'right',chk:'right'},def:'center',
+      pos:{min:22.2,uni:44.4,fac:57.2,subj:100.7,work:115.2,topic:163,by:197.9,chk:233.9,foot:268}},
+    minimal:{fr:null,tx:'#000',ti:'#000',sz:{min:12,uni:16,fac:12,subj:14,work:36,topic:14,by:14,chk:14,foot:14},al:{},def:'center',
+      pos:{min:21.3,uni:41.8,fac:55.5,subj:99,work:114.3,topic:162.1,by:197,chk:232.1,foot:268}},
+    zamonaviy:{fr:'#5B9BD5',tx:'#5B9BD5',ti:'#2E74B5',sz:{min:12,uni:16,fac:12,subj:16,work:42,topic:16,by:14,chk:14,foot:14},al:{},def:'left',
+      pos:{min:22.2,uni:41.8,fac:55.5,subj:99,work:116,topic:167.2,by:223.5,chk:258.5,foot:272}}};
+  const LG=[["O'zbekcha (lotin)",'uz'],['Ўзбекча (кирилл)','uzc'],['Русский','ru'],['English','en']];
+  const FIELDS=[['ministry','Vazirlik',"O'zbekiston Respublikasi ..."],['uni','Universitet yoki institut','Masalan: Termiz davlat universiteti'],
+    ['fac','Fakultet yoki kafedra','Masalan: Axborot texnologiyalari'],['stu','Bajardi (F.I.Sh.)','Masalan: Saidov Mehriddin'],['grp','Guruh','Masalan: ATT-123'],
+    ['tea',"Tekshirdi (o'qituvchi)",'Masalan: Nosirov B.'],['city','Shahar va yil (ixtiyoriy)',"Bo'sh qolsa, muqova pastiga hech narsa yozilmaydi"]];
+  const ld=(k,d)=>{try{const v=JSON.parse(localStorage.getItem('ix_'+k));return v==null?d:v}catch(e){return d}};
+  const sv=(k,v)=>{try{localStorage.setItem('ix_'+k,JSON.stringify(v))}catch(e){}};
+  const s={type:0,pages:10,tier:0,plan:0,items:['','',''],cover:ld('cover',0),fmt:0,lang:0,titul:false,
+           info:Object.assign({ministry:'',uni:'',fac:'',stu:'',grp:'',tea:'',city:''},ld('info',{}))};
+  const sum=n=>n.toLocaleString('ru-RU').replace(/\s|,/g,' ');
+  const docName=()=>s.type?'Referat':'Mustaqil ish';
+  const $=id=>document.getElementById(id);
+  const val=id=>($(id)?$(id).value.trim():'');
+
+  function cover(variant,w){
+    const st=ST[variant], lang=LG[s.lang][1], ref=s.type===1, i=s.info;
+    const up=x=>x.replace(/[ʻ‘’]/g,"'").toUpperCase(), BL='____________________', g=k=>String(i[k]||'').trim();
+    const T={uz:{w:ref?'REFERAT':'MUSTAQIL ISH',sb:x=>'"'+up(x)+'" FANIDAN',tp:'Mavzu:',by:'Bajardi:',ck:'Tekshirdi:',gr:x=>x+' guruh talabasi'},
+      uzc:{w:ref?'РЕФЕРАТ':'МУСТАҚИЛ ИШ',sb:x=>'"'+up(x)+'" ФАНИДАН',tp:'Мавзу:',by:'Бажарди:',ck:'Текширди:',gr:x=>x+' гуруҳ талабаси'},
+      ru:{w:ref?'РЕФЕРАТ':'САМОСТОЯТЕЛЬНАЯ РАБОТА',sb:x=>'ПО ПРЕДМЕТУ «'+up(x)+'»',tp:'Тема:',by:'Выполнил(а):',ck:'Проверил(а):',gr:x=>'студент(ка) группы '+x},
+      en:{w:ref?'ESSAY':'INDEPENDENT WORK',sb:x=>'SUBJECT: "'+up(x)+'"',tp:'Topic:',by:'Prepared by:',ck:'Checked by:',gr:x=>'student of group '+x}}[lang];
+    const subj=val('ixSubj'), topic=val('ixTopic'), grp=g('grp'), stu=g('stu');
+    const L={min:[up(g('ministry')||MIN[lang])],uni:[g('uni')?up(g('uni')):BL],fac:g('fac')?[up(g('fac'))]:[],subj:subj?[T.sb(subj)]:[],work:[T.w],
+      topic:[T.tp+' '+(topic||BL)],by:grp?[T.by+' '+T.gr(grp),stu||BL]:[T.by+' '+(stu||BL)],chk:[T.ck+' '+(g('tea')||BL)],foot:g('city')?[g('city')+' – '+new Date().getFullYear()]:[]};
+    const TW=165, wmm=(x,pt)=>{let a=0;for(const c of x)a+=c===' '?.25:(c===c.toUpperCase()&&c!==c.toLowerCase()?.7:.5);return a*pt*.3528};
+    let cur=20, out='', first=true;
+    for(const k of ['min','uni','fac','subj','work','topic','by','chk','foot']){
+      if(!L[k].length) continue;
+      let pt=st.sz[k]; if(k==='work') while(pt>24&&wmm(L[k][0],pt)>TW-4) pt-=2;
+      const mm=pt*.3528, lh=mm*1.15*(k==='work'?1.15:1.5);
+      const top=Math.max(cur+(first?0:2),st.pos[k]-((lh-mm)/2+.2*mm)); first=false;
+      cur=top+L[k].reduce((a,x)=>a+Math.max(1,Math.ceil(wmm(x,pt)/(TW-2))),0)*lh;
+      out+=`<div class="bl" style="top:${(top*2).toFixed(1)}px;font-size:${(pt*.7056).toFixed(2)}px;line-height:${(lh*2).toFixed(2)}px;text-align:${st.al[k]||st.def};color:${k==='work'?st.ti:st.tx}">${L[k].map(x=>'<div>'+esc(x)+'</div>').join('')}</div>`;
+    }
+    const fr=st.fr?`<div class="fr" style="border:3.2px solid ${st.fr}"></div>`:'';
+    return `<div class="ix-cv" style="position:relative;width:${w}px;height:${Math.round(w*297/210)}px"><div class="ix-page" style="transform:scale(${w/420})">${fr}${out}</div></div>`;
+  }
+
+  function draw(){
+    $('ixTitle').textContent=docName();
+    $('ixType').innerHTML=[['Mustaqil ish','2–3 bob','📝'],['Referat','1–2 bob, qisqaroq','📄']].map((x,i)=>
+      `<button type="button" aria-pressed="${s.type===i}" onclick="IX.set('type',${i})"><span class="e">${x[2]}</span><b>${x[0]}</b><span>${x[1]}</span></button>`).join('');
+    // shkala
+    const opts=[10,15,20], idx=opts.indexOf(s.pages);
+    $('ixScale').innerHTML=`<div class="ix-track"><div class="ix-fill" style="width:${idx*50}%"></div></div><span class="ix-bub" style="left:${idx*50}%">${s.pages} bet</span>`+
+      opts.map((n,i)=>`<button type="button" class="ix-tick ${i<=idx?'on':''} ${i===idx?'cur':''}" style="left:${i*50}%" aria-label="${n} bet" onclick="IX.set('pages',${n})"><b>${n}</b><i></i><span>${sum(PRICE[n][s.tier])}</span></button>`).join('');
+    // tarif
+    const TI=[{n:'Standart',d:'Tez va aniq matn, jadvallar',ic:'⚡',c:'var(--blue)',inf:"Mavzu bo'yicha aniq matn, jadvallar va to'g'ri tartibdagi adabiyotlar ro'yxati. Taxminan 1 daqiqada tayyor."},
+              {n:"O'rtacha",d:'Kuchli AI reja tuzadi va tekshiradi',ic:'🎓',c:'var(--violet)',inf:"Eng kuchli AI rejani tuzadi va tayyor ishni o'qib chiqadi: zaif bo'limlarni o'zi qayta yozadi. Taxminan 2 daqiqa."}];
+    $('ixTiers').innerHTML=TI.map((x,i)=>`<button type="button" aria-pressed="${s.tier===i}" onclick="IX.set('tier',${i})"><span class="ic" style="background:${x.c}">${x.ic}</span><b>${x.n}</b><span>${x.d}</span><span class="pr">${sum(PRICE[s.pages][i])} so'm</span></button>`).join('');
+    $('ixTierInfo').textContent=TI[s.tier].inf;
+    // reja
+    $('ixPlanSw').innerHTML=[['AI tuzadi','mavzuga mos','🤖'],["O'zim tuzaman","reja tayyor bo'lsa",'✍️']].map((x,i)=>
+      `<button type="button" aria-pressed="${s.plan===i}" onclick="IX.set('plan',${i})"><span class="e">${x[2]}</span><b>${x[0]}</b><span>${x[1]}</span></button>`).join('');
+    $('ixPlan').innerHTML=s.plan?s.items.map((v,i)=>`<div class="ix-r"><span class="n">${i+1}</span><input class="ix-in" aria-label="${i+1}-band" placeholder="${i+1}-band nomi" value="${esc(v)}" oninput="IX.item(${i},this.value)"><button type="button" class="x" aria-label="O'chirish" onclick="IX.del(${i})">✕</button></div>`).join('')+
+      (s.items.length<6?`<button type="button" class="ix-add" onclick="IX.add()">+ Band qo'shish (6 tagacha)</button>`:'')+`<div class="pl-note">Har bir band bitta bob yoki bo'lim bo'ladi. Kirish va xulosani AI o'zi qo'shadi.</div>`:'';
+    // titul
+    const filled=['uni','fac','stu','grp','tea'].filter(k=>String(s.info[k]||'').trim()).length;
+    $('ixTitulSt').textContent=filled===5?"To'ldirildi · muqovada tekshirib chiqing":filled+" / 5 to'ldirildi · bo'sh joyga chiziq qo'yiladi";
+    $('ixTPanel').classList.toggle('on',s.titul); $('ixTitulChev').textContent=s.titul?'▴':'▾';
+    if(s.titul) $('ixLive').innerHTML=cover(CV[s.cover].k,130);
+    // dizayn
+    $('ixCovers').innerHTML=CV.map((c,i)=>`<button type="button" aria-pressed="${s.cover===i}" onclick="IX.set('cover',${i})">${cover(c.k,96)}<span>${c.n}</span></button>`).join('');
+    if($('ixBig').classList.contains('on')){$('ixBigCv').innerHTML=cover(CV[s.cover].k,230);$('ixBigNm').textContent=CV[s.cover].n;$('ixBigDs').textContent=CV[s.cover].d}
+    // format, til
+    $('ixFmt').innerHTML=[['DOCX','Word, tahrirlanadi'],['PDF','tayyor, chop etishga']].map((x,i)=>`<button type="button" aria-pressed="${s.fmt===i}" onclick="IX.set('fmt',${i})">${x[0]}<small>${x[1]}</small></button>`).join('');
+    $('ixLangQ').textContent=docName()+' qaysi tilda bo‘lsin?';
+    $('ixLang').innerHTML=LG.map((x,i)=>`<button type="button" aria-pressed="${s.lang===i}" onclick="IX.set('lang',${i})">${x[0]}</button>`).join('');
+    // jami
+    const price=PRICE[s.pages][s.tier];
+    $('ixSumL').textContent=(s.tier?"O'rtacha":'Standart')+' · '+s.pages+' bet'; $('ixSumR').textContent=sum(price)+" so'm";
+    $('ixBal').textContent=UNL?'Admin: sinov uchun bepul':'Balans: '+sum(BALANCE)+" so'm";
+    $('ixCta').textContent=docName()+' yaratish · '+sum(price)+" so'm";
+  }
+  function fields(){
+    $('ixFields').innerHTML=FIELDS.map(([k,l,ph])=>`<div><label for="ixf-${k}">${l}</label><input class="ix-in" id="ixf-${k}" placeholder="${esc(ph)}" value="${esc(s.info[k]||'')}" oninput="IX.info('${k}',this.value)"></div>`).join('');
+  }
+  return {
+    open(){ $('ixIc').innerHTML=IC.ish; fields(); draw(); show('ish'); },
+    draw,
+    set(k,v){ s[k]=v; if(k==='cover') sv('cover',v); draw(); },
+    item(i,v){ s.items[i]=v; },
+    add(){ if(s.items.length<6){ s.items.push(''); draw(); } },
+    del(i){ s.items.splice(i,1); if(!s.items.length) s.items.push(''); draw(); },
+    info(k,v){ s.info[k]=v; sv('info',s.info); clearTimeout(this._t); this._t=setTimeout(draw,120); },
+    toggleTitul(){ s.titul=!s.titul; draw(); },
+    big(on){ $('ixBig').classList.toggle('on',on); draw(); },
+    step(d){ s.cover=(s.cover+d+3)%3; sv('cover',s.cover); draw(); },
+    submit(){
+      const topic=val('ixTopic');
+      if(!topic){ $('ixTopic').focus(); toast('✍️','Mavzuni yozing'); return; }
+      const plan=s.plan?s.items.map(x=>x.trim()).filter(Boolean):[];
+      if(s.plan&&!plan.length){ toast('✍️','Reja bandlarini yozing'); return; }
+      const price=PRICE[s.pages][s.tier];
+      if(KNOWN&&!UNL&&BALANCE<price){ openTopup(price-BALANCE); return; }
+      const i=s.info;
+      const data={mode:'ish',lang,doc_lang:LG[s.lang][1],as:'student',role,topic,subject:val('ixSubj'),size:s.pages,
+        doc_type:s.type?'referat':'ish',cover:CV[s.cover].k,ish_tier:s.tier?'ortacha':'standart',fmt:s.fmt?'pdf':'docx',
+        ministry:(i.ministry||'').trim(),notes:val('ixNotes'),plan,university:(i.uni||'').trim(),faculty:(i.fac||'').trim(),
+        student:(i.stu||'').trim(),group:(i.grp||'').trim(),teacher:(i.tea||'').trim(),city:(i.city||'').trim()};
+      sendToBot(data,'⏳',t('sentTitle'),t('sentText'));
+    }
+  };
+})();
+
 /* ---------- Navigation ---------- */
 function show(id){
   document.querySelectorAll('.screen').forEach(s=>s.classList.toggle('on',s.id===id));
   const sub=['topup','invite','paywait','payok'].includes(id);
   if(id!=='paywait') stopPoll();
-  ['home','files','profile'].forEach(n=>$('nav-'+n).classList.toggle('on',n===id||(id==='form'&&n==='home')||(sub&&n==='profile')));
-  document.querySelector('nav').style.display=(id==='form'||sub)?'none':'';
+  ['home','files','profile'].forEach(n=>$('nav-'+n).classList.toggle('on',n===id||((id==='form'||id==='ish')&&n==='home')||(sub&&n==='profile')));
+  document.querySelector('nav').style.display=(id==='form'||id==='ish'||sub)?'none':'';
   document.querySelector('header').style.display=['topup','paywait','payok'].includes(id)?'none':'';   // to'lov oynalarida tepa qism kerak emas
   window.scrollTo(0,0);
 }
