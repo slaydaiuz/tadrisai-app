@@ -1371,7 +1371,7 @@ const IX=(()=>{
       f_city:'City and year (optional)',f_cityPh:'If empty, nothing is printed at the bottom of the cover',
       cv0:'Blue frame, centred text, «Prepared by» on the right',cv1:'No frame, black centred text. For strict requirements',cv2:'Light-blue frame, everything left-aligned'}};
   const L=(k,o)=>{let v=(D[lang]||D.uz)[k]; if(v==null) v=D.uz[k]; if(o) for(const x in o) v=v.replace('{'+x+'}',o[x]); return v};
-  const PRICE={10:[3990,5990],15:[5990,8990],20:[7990,11990]};
+  const PRICE={10:[3990,5990],15:[5990,8990],20:[7990,11990],25:[9990,14990]};
   const MIN={uz:"O'zbekiston Respublikasi Oliy ta'lim, fan va innovatsiyalar vazirligi",uzc:'Ўзбекистон Республикаси Олий таълим, фан ва инновациялар вазирлиги',
     ru:'Министерство высшего образования, науки и инноваций Республики Узбекистан',en:'Ministry of Higher Education, Science and Innovation of the Republic of Uzbekistan'};
   const CV=[{k:'klassik',n:'Klassik',d:'cv0'},{k:'minimal',n:'Minimal',d:'cv1'},{k:'zamonaviy',n:'Zamonaviy',d:'cv2'}];
@@ -1422,9 +1422,9 @@ const IX=(()=>{
     $('ixType').innerHTML=[[L('ish'),L('ishD'),'📝'],[L('ref'),L('refD'),'📄']].map((x,i)=>
       `<button type="button" aria-pressed="${s.type===i}" onclick="IX.set('type',${i})"><span class="e">${x[2]}</span><b>${x[0]}</b><span>${x[1]}</span></button>`).join('');
     // shkala
-    const opts=[10,15,20], idx=opts.indexOf(s.pages);
-    $('ixScale').innerHTML=`<div class="ix-track"><div class="ix-fill" style="width:${idx*50}%"></div></div><span class="ix-bub" style="left:${idx*50}%">${s.pages} ${L('bet')}</span>`+
-      opts.map((n,i)=>`<button type="button" class="ix-tick ${i<=idx?'on':''} ${i===idx?'cur':''}" style="left:${i*50}%" aria-label="${n} ${L('bet')}" onclick="IX.set('pages',${n})"><b>${n}</b><i></i><span>${sum(PRICE[n][s.tier])}</span></button>`).join('');
+    const opts=[10,15,20,25], idx=opts.indexOf(s.pages), st=100/(opts.length-1);
+    $('ixScale').innerHTML=`<div class="ix-track"><div class="ix-fill" style="width:${idx*st}%"></div></div><span class="ix-bub" style="left:${idx*st}%">${s.pages} ${L('bet')}</span>`+
+      opts.map((n,i)=>`<button type="button" class="ix-tick ${i<=idx?'on':''} ${i===idx?'cur':''}" style="left:${i*st}%" aria-label="${n} ${L('bet')}" onclick="IX.set('pages',${n})"><b>${n}</b><i></i><span>${sum(PRICE[n][s.tier])}</span></button>`).join('');
     // tarif
     const TI=[{n:L('t0'),d:L('t0d'),ic:'⚡',c:'var(--blue)',inf:L('t0i')},{n:L('t1'),d:L('t1d'),ic:'🎓',c:'var(--violet)',inf:L('t1i')}];
     $('ixTiers').innerHTML=TI.map((x,i)=>`<button type="button" aria-pressed="${s.tier===i}" onclick="IX.set('tier',${i})"><span class="ic" style="background:${x.c}">${x.ic}</span><b>${x.n}</b><span>${x.d}</span><span class="pr">${sum(PRICE[s.pages][i])} ${L('som')}</span></button>`).join('');
