@@ -661,54 +661,54 @@ textarea.ix-in{resize:none;min-height:84px;line-height:1.4}
 
   <!-- MUSTAQIL ISH (yangi forma) -->
   <section class="screen" id="ish">
-    <button class="back" onclick="show('home')">← Orqaga</button>
-    <div class="form-head"><div class="tool-ic blue" id="ixIc"></div><div><h1 id="ixTitle">Mustaqil ish</h1><p>Mavzuni yozing, qolganini AI qiladi</p></div></div>
+    <button class="back" onclick="show('home')" data-ix="back">← Orqaga</button>
+    <div class="form-head"><div class="tool-ic blue" id="ixIc"></div><div><h1 id="ixTitle">Mustaqil ish</h1><p data-ix="sub">Mavzuni yozing, qolganini AI qiladi</p></div></div>
 
     <div class="seg2" id="ixType"></div>
 
-    <div class="ix-sec"><label class="ix-lbl" for="ixTopic">Mavzu</label>
-      <textarea class="ix-in" id="ixTopic" rows="3" placeholder="Masalan: Raqamli iqtisodiyot va uning O'zbekistondagi rivoji" oninput="IX.draw()"></textarea></div>
-    <div class="ix-sec"><label class="ix-lbl" for="ixSubj">Fan</label>
-      <input class="ix-in" id="ixSubj" placeholder="Masalan: Iqtisodiyot nazariyasi" oninput="IX.draw()"></div>
+    <div class="ix-sec"><label class="ix-lbl" for="ixTopic" data-ix="topic">Mavzu</label>
+      <textarea class="ix-in" id="ixTopic" rows="3" data-ixph="topicPh" placeholder="Masalan: Raqamli iqtisodiyot va uning O'zbekistondagi rivoji" oninput="IX.draw()"></textarea></div>
+    <div class="ix-sec"><label class="ix-lbl" for="ixSubj" data-ix="subj">Fan</label>
+      <input class="ix-in" id="ixSubj" data-ixph="subjPh" placeholder="Masalan: Iqtisodiyot nazariyasi" oninput="IX.draw()"></div>
 
-    <div class="ix-sec"><div class="ix-lbl">Betlar soni</div><div class="ix-scale" id="ixScale"></div></div>
+    <div class="ix-sec"><div class="ix-lbl" data-ix="pages">Betlar soni</div><div class="ix-scale" id="ixScale"></div></div>
 
-    <div class="ix-sec"><div class="ix-lbl">Tarif</div><div class="ix-tiers" id="ixTiers"></div><div class="ix-info" id="ixTierInfo"></div></div>
+    <div class="ix-sec"><div class="ix-lbl" data-ix="tier">Tarif</div><div class="ix-tiers" id="ixTiers"></div><div class="ix-info" id="ixTierInfo"></div></div>
 
-    <div class="ix-sec"><div class="ix-lbl">Rejani kim tuzadi?</div><div class="seg2" id="ixPlanSw"></div><div class="ix-plan" id="ixPlan"></div></div>
+    <div class="ix-sec"><div class="ix-lbl" data-ix="planQ">Rejani kim tuzadi?</div><div class="seg2" id="ixPlanSw"></div><div class="ix-plan" id="ixPlan"></div></div>
 
     <div class="ix-sec">
       <button type="button" class="ix-titul" onclick="IX.toggleTitul()">
         <span class="ti">📋</span>
-        <span style="flex:1"><b>Titul ma'lumotlari</b><span class="ix-badge">Muhim</span><i id="ixTitulSt"></i></span>
+        <span style="flex:1"><b data-ix="titul">Titul ma'lumotlari</b><span class="ix-badge" data-ix="important">Muhim</span><i id="ixTitulSt"></i></span>
         <span id="ixTitulChev" style="color:var(--muted)">▾</span>
       </button>
       <div class="ix-tpanel" id="ixTPanel">
-        <div class="ix-live"><div id="ixLive"></div><p><b style="color:var(--text)">Jonli ko'rinish</b><br>O'qituvchi birinchi shu betni ko'radi — xatosiz to'ldiring. Bo'sh joyga chiziq qo'yiladi.</p></div>
+        <div class="ix-live"><div id="ixLive"></div><p data-ix="liveHtml"><b style="color:var(--text)">Jonli ko'rinish</b><br>O'qituvchi birinchi shu betni ko'radi — xatosiz to'ldiring. Bo'sh joyga chiziq qo'yiladi.</p></div>
         <div class="ix-tgrid" id="ixFields"></div>
       </div>
     </div>
 
-    <div class="ix-sec"><div class="ix-lbl"><span>Dizayn</span><button type="button" onclick="IX.big(true)">Kattaroq ko'rish ›</button></div>
+    <div class="ix-sec"><div class="ix-lbl"><span data-ix="design">Dizayn</span><button type="button" onclick="IX.big(true)" data-ix="bigger">Kattaroq ko'rish ›</button></div>
       <div class="ix-covers" id="ixCovers"></div></div>
 
-    <div class="ix-sec"><label class="ix-lbl" for="ixNotes">Qo'shimcha ma'lumotlar <span style="font-weight:500">(ixtiyoriy)</span></label>
-      <textarea class="ix-in" id="ixNotes" rows="2" maxlength="600" placeholder="Masalan: amaliy misollar ko'proq bo'lsin, 2020-yildan keyingi manbalar"></textarea></div>
+    <div class="ix-sec"><label class="ix-lbl" for="ixNotes" data-ix="notesHtml">Qo'shimcha ma'lumotlar <span style="font-weight:500">(ixtiyoriy)</span></label>
+      <textarea class="ix-in" id="ixNotes" rows="2" maxlength="600" data-ixph="notesPh" placeholder="Masalan: amaliy misollar ko'proq bo'lsin, 2020-yildan keyingi manbalar"></textarea></div>
 
-    <div class="ix-sec"><div class="ix-lbl">Fayl formati</div><div class="ix-grid2" id="ixFmt"></div></div>
+    <div class="ix-sec"><div class="ix-lbl" data-ix="fmt">Fayl formati</div><div class="ix-grid2" id="ixFmt"></div></div>
 
     <div class="ix-sec"><div class="ix-lbl" id="ixLangQ">Qaysi tilda bo'lsin?</div><div class="ix-grid2" id="ixLang"></div></div>
 
     <div class="ix-sum"><div><span id="ixSumL"></span><b id="ixSumR"></b></div><span id="ixBal"></span></div>
     <button class="cta" id="ixCta" type="button" onclick="IX.submit()"></button>
-    <div class="hint">Fayl 1–3 daqiqada botga keladi</div>
+    <div class="hint" data-ix="hint">Fayl 1–3 daqiqada botga keladi</div>
 
     <div class="ix-big" id="ixBig" onclick="if(event.target===this)IX.big(false)">
       <div class="sh">
-        <div class="ix-r" style="width:100%;justify-content:space-between"><b style="font-size:19px">Dizayn</b><button type="button" class="arr" style="font-size:16px" aria-label="Yopish" onclick="IX.big(false)">✕</button></div>
+        <div class="ix-r" style="width:100%;justify-content:space-between"><b style="font-size:19px" data-ix="design">Dizayn</b><button type="button" class="arr" style="font-size:16px" aria-label="Yopish" onclick="IX.big(false)">✕</button></div>
         <div class="ix-r"><button type="button" class="arr" aria-label="Oldingi" onclick="IX.step(-1)">‹</button><div id="ixBigCv"></div><button type="button" class="arr" aria-label="Keyingi" onclick="IX.step(1)">›</button></div>
         <div class="nm" id="ixBigNm"></div><div class="ds" id="ixBigDs"></div>
-        <button type="button" class="ok" onclick="IX.big(false)">Shu dizaynni tanlash</button>
+        <button type="button" class="ok" onclick="IX.big(false)" data-ix="pick">Shu dizaynni tanlash</button>
       </div>
     </div>
   </section>
@@ -926,7 +926,7 @@ function renderHome(){
   $('hsTeacher').setAttribute('aria-pressed',role==='teacher');
   let h='<div class="tools">';
   if(role==='student'){
-    h+=tool('prez','prez',t('prez'),t('prezDesc'))+(UNL?`<button class="tool" onclick="IX.open()"><span class="tool-ic blue">${IC.ish}</span><span><h2>${t('ish')}</h2><p>${t('ishDesc')}</p></span><span class="go">${IC.arrow}</span></button></div>`:`<button class="tool" onclick="ishSoon()"><span class="tool-ic blue">${IC.ish}</span><span><h2>${t('ish')}</h2><p>${t('ishDesc')}</p></span><span class="soon">${t('soonTag')}</span></button></div>`);
+    h+=tool('prez','prez',t('prez'),t('prezDesc'))+(ISH_LIVE||UNL?`<button class="tool" onclick="IX.open()"><span class="tool-ic blue">${IC.ish}</span><span><h2>${t('ish')}</h2><p>${t('ishDesc')}</p></span><span class="go">${IC.arrow}</span></button></div>`:`<button class="tool" onclick="ishSoon()"><span class="tool-ic blue">${IC.ish}</span><span><h2>${t('ish')}</h2><p>${t('ishDesc')}</p></span><span class="soon">${t('soonTag')}</span></button></div>`);
     h+=`<div class="sec-title">${t('more')}</div><div class="list">${row('quiz',t('testS'),t('testSDesc'))}${row('ref',t('ref'),t('refDesc'))}</div>`;
   }else{
     h+=tool('prez','prez',t('prez'),t('prezDescT'))+`<button class="tool" onclick="soon()"><span class="tool-ic blue">${IC.dars}</span><span><h2>${t('dars')}</h2><p>${t('darsDesc')}</p></span><span class="soon">${t('soonTag')}</span></button></div>`;
@@ -1316,13 +1316,65 @@ function renderProfile(){
 }
 
 /* ---------- Mustaqil ish (yangi forma). Narxlar botdagi ISH_PRICES bilan bir xil ---------- */
+var ISH_LIVE=false;   // true — mustaqil ish hamma uchun ochiq (botdagi ISH_LIVE bilan bir xil)
 const IX=(()=>{
+  const D={
+    uz:{back:'← Orqaga',sub:'Mavzuni yozing, qolganini AI qiladi',topic:'Mavzu',topicPh:"Masalan: Raqamli iqtisodiyot va uning O'zbekistondagi rivoji",subj:'Fan',subjPh:'Masalan: Iqtisodiyot nazariyasi',
+      pages:'Betlar soni',tier:'Tarif',planQ:'Rejani kim tuzadi?',titul:"Titul ma'lumotlari",important:'Muhim',
+      liveHtml:"<b style=\"color:var(--text)\">Jonli ko'rinish</b><br>O'qituvchi birinchi shu betni ko'radi — xatosiz to'ldiring. Bo'sh joyga chiziq qo'yiladi.",
+      design:'Dizayn',bigger:"Kattaroq ko'rish ›",notesHtml:"Qo'shimcha ma'lumotlar <span style=\"font-weight:500\">(ixtiyoriy)</span>",notesPh:"Masalan: amaliy misollar ko'proq bo'lsin, 2020-yildan keyingi manbalar",
+      fmt:'Fayl formati',hint:'Fayl 1–3 daqiqada botga keladi',pick:'Shu dizaynni tanlash',
+      ish:'Mustaqil ish',ref:'Referat',ishD:'2–3 bob',refD:'1–2 bob, qisqaroq',bet:'bet',som:"so'm",
+      t0:'Standart',t0d:'Tez va aniq matn, jadvallar',t0i:"Mavzu bo'yicha aniq matn, jadvallar va to'g'ri tartibdagi adabiyotlar ro'yxati. Taxminan 1 daqiqada tayyor.",
+      t1:"O'rtacha",t1d:'Kuchli AI reja tuzadi va tekshiradi',t1i:"Eng kuchli AI rejani tuzadi va tayyor ishni o'qib chiqadi: zaif bo'limlarni o'zi qayta yozadi. Taxminan 2 daqiqa.",
+      pAi:'AI tuzadi',pAiD:'mavzuga mos',pOwn:"O'zim tuzaman",pOwnD:"reja tayyor bo'lsa",item:'{n}-band nomi',itemL:'{n}-band',del:"O'chirish",add:"+ Band qo'shish (6 tagacha)",
+      planNote:"Har bir band bitta bob yoki bo'lim bo'ladi. Kirish va xulosani AI o'zi qo'shadi.",
+      tDone:"To'ldirildi · muqovada tekshirib chiqing",tPart:"{n} / 5 to'ldirildi · bo'sh joyga chiziq qo'yiladi",
+      docx:'Word, tahrirlanadi',pdf:'tayyor, chop etishga',langQ:'{d} qaysi tilda bo‘lsin?',admin:'Admin: sinov uchun bepul',bal:'Balans: {b}',
+      cta:'{d} yaratish · {p}',noTopic:'Mavzuni yozing',noPlan:'Reja bandlarini yozing',
+      f_ministry:'Vazirlik',f_uni:'Universitet yoki institut',f_uniPh:'Masalan: Termiz davlat universiteti',f_fac:'Fakultet yoki kafedra',f_facPh:'Masalan: Axborot texnologiyalari',
+      f_stu:'Bajardi (F.I.Sh.)',f_stuPh:'Masalan: Saidov Mehriddin',f_grp:'Guruh',f_grpPh:'Masalan: ATT-123',f_tea:"Tekshirdi (o'qituvchi)",f_teaPh:'Masalan: Nosirov B.',
+      f_city:'Shahar va yil (ixtiyoriy)',f_cityPh:"Bo'sh qolsa, muqova pastiga hech narsa yozilmaydi",
+      cv0:"Ko'k ramka, matn markazda, «Bajardi» o'ng tomonda",cv1:"Ramkasiz, qora matn, hammasi markazda. Qat'iy talab bo'lsa",cv2:'Havorang ramka, hamma yozuv chapdan'},
+    ru:{back:'← Назад',sub:'Напишите тему — остальное сделает ИИ',topic:'Тема',topicPh:'Например: Цифровая экономика и её развитие в Узбекистане',subj:'Предмет',subjPh:'Например: Экономическая теория',
+      pages:'Количество страниц',tier:'Тариф',planQ:'Кто составит план?',titul:'Данные для титульного листа',important:'Важно',
+      liveHtml:'<b style="color:var(--text)">Предпросмотр</b><br>Преподаватель первым увидит эту страницу — заполните без ошибок. Пустые поля останутся с чертой.',
+      design:'Дизайн',bigger:'Посмотреть крупнее ›',notesHtml:'Дополнительные пожелания <span style="font-weight:500">(необязательно)</span>',notesPh:'Например: больше практических примеров, источники после 2020 года',
+      fmt:'Формат файла',hint:'Файл придёт в бот через 1–3 минуты',pick:'Выбрать этот дизайн',
+      ish:'Самостоятельная работа',ref:'Реферат',ishD:'2–3 главы',refD:'1–2 главы, короче',bet:'стр.',som:'сум',
+      t0:'Стандарт',t0d:'Быстрый и точный текст, таблицы',t0i:'Точный текст по теме, таблицы и правильно оформленный список литературы. Готово примерно за 1 минуту.',
+      t1:'Средний',t1d:'Сильный ИИ составляет план и проверяет',t1i:'Самый сильный ИИ составляет план и вычитывает готовую работу: слабые разделы переписывает сам. Примерно 2 минуты.',
+      pAi:'Составит ИИ',pAiD:'по теме',pOwn:'Составлю сам',pOwnD:'если план готов',item:'Пункт {n}',itemL:'Пункт {n}',del:'Удалить',add:'+ Добавить пункт (до 6)',
+      planNote:'Каждый пункт станет главой или разделом. Введение и заключение ИИ добавит сам.',
+      tDone:'Заполнено · проверьте на обложке',tPart:'Заполнено {n} из 5 · пустые поля будут с чертой',
+      docx:'Word, можно редактировать',pdf:'готов к печати',langQ:'На каком языке сделать {d}?',admin:'Админ: бесплатно для теста',bal:'Баланс: {b}',
+      cta:'Создать: {d} · {p}',noTopic:'Напишите тему',noPlan:'Заполните пункты плана',
+      f_ministry:'Министерство',f_uni:'Университет или институт',f_uniPh:'Например: Термезский государственный университет',f_fac:'Факультет или кафедра',f_facPh:'Например: Информационные технологии',
+      f_stu:'Выполнил(а) (ФИО)',f_stuPh:'Например: Саидов Мехриддин',f_grp:'Группа',f_grpPh:'Например: АТТ-123',f_tea:'Проверил(а) (преподаватель)',f_teaPh:'Например: Носиров Б.',
+      f_city:'Город и год (необязательно)',f_cityPh:'Если пусто — внизу обложки ничего не будет',
+      cv0:'Синяя рамка, текст по центру, «Выполнил» справа',cv1:'Без рамки, чёрный текст по центру. Для строгих требований',cv2:'Голубая рамка, всё по левому краю'},
+    en:{back:'← Back',sub:'Write the topic — AI does the rest',topic:'Topic',topicPh:'E.g.: The digital economy and its growth in Uzbekistan',subj:'Subject',subjPh:'E.g.: Economic theory',
+      pages:'Number of pages',tier:'Plan',planQ:'Who writes the outline?',titul:'Title page details',important:'Important',
+      liveHtml:'<b style="color:var(--text)">Live preview</b><br>Your teacher sees this page first — fill it in carefully. Empty fields get a blank line.',
+      design:'Design',bigger:'View larger ›',notesHtml:'Extra wishes <span style="font-weight:500">(optional)</span>',notesPh:'E.g.: more practical examples, sources after 2020',
+      fmt:'File format',hint:'The file arrives in the bot in 1–3 minutes',pick:'Choose this design',
+      ish:'Independent work',ref:'Essay',ishD:'2–3 chapters',refD:'1–2 chapters, shorter',bet:'pages',som:'UZS',
+      t0:'Standard',t0d:'Fast, accurate text and tables',t0i:'Accurate text on the topic, tables and a properly formatted reference list. Ready in about 1 minute.',
+      t1:'Medium',t1d:'A stronger AI plans and reviews',t1i:'The strongest AI plans the work and reads the finished text, rewriting weak sections itself. About 2 minutes.',
+      pAi:'AI writes it',pAiD:'fits the topic',pOwn:"I'll write it",pOwnD:'if you have one',item:'Point {n}',itemL:'Point {n}',del:'Delete',add:'+ Add point (up to 6)',
+      planNote:'Each point becomes a chapter or section. AI adds the introduction and conclusion.',
+      tDone:'Filled in · check it on the cover',tPart:'{n} of 5 filled · empty fields get a blank line',
+      docx:'Word, editable',pdf:'ready to print',langQ:'Which language for the {d}?',admin:'Admin: free for testing',bal:'Balance: {b}',
+      cta:'Create {d} · {p}',noTopic:'Write the topic',noPlan:'Fill in the outline points',
+      f_ministry:'Ministry',f_uni:'University or institute',f_uniPh:'E.g.: Termez State University',f_fac:'Faculty or department',f_facPh:'E.g.: Information Technology',
+      f_stu:'Prepared by (full name)',f_stuPh:'E.g.: Saidov Mehriddin',f_grp:'Group',f_grpPh:'E.g.: ATT-123',f_tea:'Checked by (teacher)',f_teaPh:'E.g.: Nosirov B.',
+      f_city:'City and year (optional)',f_cityPh:'If empty, nothing is printed at the bottom of the cover',
+      cv0:'Blue frame, centred text, «Prepared by» on the right',cv1:'No frame, black centred text. For strict requirements',cv2:'Light-blue frame, everything left-aligned'}};
+  const L=(k,o)=>{let v=(D[lang]||D.uz)[k]; if(v==null) v=D.uz[k]; if(o) for(const x in o) v=v.replace('{'+x+'}',o[x]); return v};
   const PRICE={10:[3990,5990],15:[5990,8990],20:[7990,11990]};
   const MIN={uz:"O'zbekiston Respublikasi Oliy ta'lim, fan va innovatsiyalar vazirligi",uzc:'Ўзбекистон Республикаси Олий таълим, фан ва инновациялар вазирлиги',
     ru:'Министерство высшего образования, науки и инноваций Республики Узбекистан',en:'Ministry of Higher Education, Science and Innovation of the Republic of Uzbekistan'};
-  const CV=[{k:'klassik',n:'Klassik',d:"Ko'k ramka, matn markazda, «Bajardi» o'ng tomonda"},
-            {k:'minimal',n:'Minimal',d:"Ramkasiz, qora matn, hammasi markazda. Qat'iy talab bo'lsa"},
-            {k:'zamonaviy',n:'Zamonaviy',d:'Havorang ramka, hamma yozuv chapdan'}];
+  const CV=[{k:'klassik',n:'Klassik',d:'cv0'},{k:'minimal',n:'Minimal',d:'cv1'},{k:'zamonaviy',n:'Zamonaviy',d:'cv2'}];
   const ST={ // botdagi cover.py bilan bir xil joylashuv (mm) va o'lchamlar (pt)
     klassik:{fr:'#4A6890',tx:'#365F91',ti:'#000080',sz:{min:14,uni:14,fac:12,subj:14,work:36,topic:14,by:14,chk:14,foot:14},al:{by:'right',chk:'right'},def:'center',
       pos:{min:22.2,uni:44.4,fac:57.2,subj:100.7,work:115.2,topic:163,by:197.9,chk:233.9,foot:268}},
@@ -1331,15 +1383,13 @@ const IX=(()=>{
     zamonaviy:{fr:'#5B9BD5',tx:'#5B9BD5',ti:'#2E74B5',sz:{min:12,uni:16,fac:12,subj:16,work:42,topic:16,by:14,chk:14,foot:14},al:{},def:'left',
       pos:{min:22.2,uni:41.8,fac:55.5,subj:99,work:116,topic:167.2,by:223.5,chk:258.5,foot:272}}};
   const LG=[["O'zbekcha (lotin)",'uz'],['Ўзбекча (кирилл)','uzc'],['Русский','ru'],['English','en']];
-  const FIELDS=[['ministry','Vazirlik',"O'zbekiston Respublikasi ..."],['uni','Universitet yoki institut','Masalan: Termiz davlat universiteti'],
-    ['fac','Fakultet yoki kafedra','Masalan: Axborot texnologiyalari'],['stu','Bajardi (F.I.Sh.)','Masalan: Saidov Mehriddin'],['grp','Guruh','Masalan: ATT-123'],
-    ['tea',"Tekshirdi (o'qituvchi)",'Masalan: Nosirov B.'],['city','Shahar va yil (ixtiyoriy)',"Bo'sh qolsa, muqova pastiga hech narsa yozilmaydi"]];
+  const FIELDS=['ministry','uni','fac','stu','grp','tea','city'];
   const ld=(k,d)=>{try{const v=JSON.parse(localStorage.getItem('ix_'+k));return v==null?d:v}catch(e){return d}};
   const sv=(k,v)=>{try{localStorage.setItem('ix_'+k,JSON.stringify(v))}catch(e){}};
   const s={type:0,pages:10,tier:0,plan:0,items:['','',''],cover:ld('cover',0),fmt:0,lang:0,titul:false,
            info:Object.assign({ministry:'',uni:'',fac:'',stu:'',grp:'',tea:'',city:''},ld('info',{}))};
   const sum=n=>n.toLocaleString('ru-RU').replace(/\s|,/g,' ');
-  const docName=()=>s.type?'Referat':'Mustaqil ish';
+  const docName=()=>s.type?L('ref'):L('ish');
   const $=id=>document.getElementById(id);
   const val=id=>($(id)?$(id).value.trim():'');
 
@@ -1369,45 +1419,48 @@ const IX=(()=>{
 
   function draw(){
     $('ixTitle').textContent=docName();
-    $('ixType').innerHTML=[['Mustaqil ish','2–3 bob','📝'],['Referat','1–2 bob, qisqaroq','📄']].map((x,i)=>
+    $('ixType').innerHTML=[[L('ish'),L('ishD'),'📝'],[L('ref'),L('refD'),'📄']].map((x,i)=>
       `<button type="button" aria-pressed="${s.type===i}" onclick="IX.set('type',${i})"><span class="e">${x[2]}</span><b>${x[0]}</b><span>${x[1]}</span></button>`).join('');
     // shkala
     const opts=[10,15,20], idx=opts.indexOf(s.pages);
-    $('ixScale').innerHTML=`<div class="ix-track"><div class="ix-fill" style="width:${idx*50}%"></div></div><span class="ix-bub" style="left:${idx*50}%">${s.pages} bet</span>`+
-      opts.map((n,i)=>`<button type="button" class="ix-tick ${i<=idx?'on':''} ${i===idx?'cur':''}" style="left:${i*50}%" aria-label="${n} bet" onclick="IX.set('pages',${n})"><b>${n}</b><i></i><span>${sum(PRICE[n][s.tier])}</span></button>`).join('');
+    $('ixScale').innerHTML=`<div class="ix-track"><div class="ix-fill" style="width:${idx*50}%"></div></div><span class="ix-bub" style="left:${idx*50}%">${s.pages} ${L('bet')}</span>`+
+      opts.map((n,i)=>`<button type="button" class="ix-tick ${i<=idx?'on':''} ${i===idx?'cur':''}" style="left:${i*50}%" aria-label="${n} ${L('bet')}" onclick="IX.set('pages',${n})"><b>${n}</b><i></i><span>${sum(PRICE[n][s.tier])}</span></button>`).join('');
     // tarif
-    const TI=[{n:'Standart',d:'Tez va aniq matn, jadvallar',ic:'⚡',c:'var(--blue)',inf:"Mavzu bo'yicha aniq matn, jadvallar va to'g'ri tartibdagi adabiyotlar ro'yxati. Taxminan 1 daqiqada tayyor."},
-              {n:"O'rtacha",d:'Kuchli AI reja tuzadi va tekshiradi',ic:'🎓',c:'var(--violet)',inf:"Eng kuchli AI rejani tuzadi va tayyor ishni o'qib chiqadi: zaif bo'limlarni o'zi qayta yozadi. Taxminan 2 daqiqa."}];
-    $('ixTiers').innerHTML=TI.map((x,i)=>`<button type="button" aria-pressed="${s.tier===i}" onclick="IX.set('tier',${i})"><span class="ic" style="background:${x.c}">${x.ic}</span><b>${x.n}</b><span>${x.d}</span><span class="pr">${sum(PRICE[s.pages][i])} so'm</span></button>`).join('');
+    const TI=[{n:L('t0'),d:L('t0d'),ic:'⚡',c:'var(--blue)',inf:L('t0i')},{n:L('t1'),d:L('t1d'),ic:'🎓',c:'var(--violet)',inf:L('t1i')}];
+    $('ixTiers').innerHTML=TI.map((x,i)=>`<button type="button" aria-pressed="${s.tier===i}" onclick="IX.set('tier',${i})"><span class="ic" style="background:${x.c}">${x.ic}</span><b>${x.n}</b><span>${x.d}</span><span class="pr">${sum(PRICE[s.pages][i])} ${L('som')}</span></button>`).join('');
     $('ixTierInfo').textContent=TI[s.tier].inf;
     // reja
-    $('ixPlanSw').innerHTML=[['AI tuzadi','mavzuga mos','🤖'],["O'zim tuzaman","reja tayyor bo'lsa",'✍️']].map((x,i)=>
+    $('ixPlanSw').innerHTML=[[L('pAi'),L('pAiD'),'🤖'],[L('pOwn'),L('pOwnD'),'✍️']].map((x,i)=>
       `<button type="button" aria-pressed="${s.plan===i}" onclick="IX.set('plan',${i})"><span class="e">${x[2]}</span><b>${x[0]}</b><span>${x[1]}</span></button>`).join('');
-    $('ixPlan').innerHTML=s.plan?s.items.map((v,i)=>`<div class="ix-r"><span class="n">${i+1}</span><input class="ix-in" aria-label="${i+1}-band" placeholder="${i+1}-band nomi" value="${esc(v)}" oninput="IX.item(${i},this.value)"><button type="button" class="x" aria-label="O'chirish" onclick="IX.del(${i})">✕</button></div>`).join('')+
-      (s.items.length<6?`<button type="button" class="ix-add" onclick="IX.add()">+ Band qo'shish (6 tagacha)</button>`:'')+`<div class="pl-note">Har bir band bitta bob yoki bo'lim bo'ladi. Kirish va xulosani AI o'zi qo'shadi.</div>`:'';
+    $('ixPlan').innerHTML=s.plan?s.items.map((v,i)=>`<div class="ix-r"><span class="n">${i+1}</span><input class="ix-in" aria-label="${L('itemL',{n:i+1})}" placeholder="${L('item',{n:i+1})}" value="${esc(v)}" oninput="IX.item(${i},this.value)"><button type="button" class="x" aria-label="${L('del')}" onclick="IX.del(${i})">✕</button></div>`).join('')+
+      (s.items.length<6?`<button type="button" class="ix-add" onclick="IX.add()">${L('add')}</button>`:'')+`<div class="pl-note">${L('planNote')}</div>`:'';
     // titul
     const filled=['uni','fac','stu','grp','tea'].filter(k=>String(s.info[k]||'').trim()).length;
-    $('ixTitulSt').textContent=filled===5?"To'ldirildi · muqovada tekshirib chiqing":filled+" / 5 to'ldirildi · bo'sh joyga chiziq qo'yiladi";
+    $('ixTitulSt').textContent=filled===5?L('tDone'):L('tPart',{n:filled});
     $('ixTPanel').classList.toggle('on',s.titul); $('ixTitulChev').textContent=s.titul?'▴':'▾';
     if(s.titul) $('ixLive').innerHTML=cover(CV[s.cover].k,130);
     // dizayn
     $('ixCovers').innerHTML=CV.map((c,i)=>`<button type="button" aria-pressed="${s.cover===i}" onclick="IX.set('cover',${i})">${cover(c.k,96)}<span>${c.n}</span></button>`).join('');
-    if($('ixBig').classList.contains('on')){$('ixBigCv').innerHTML=cover(CV[s.cover].k,230);$('ixBigNm').textContent=CV[s.cover].n;$('ixBigDs').textContent=CV[s.cover].d}
+    if($('ixBig').classList.contains('on')){$('ixBigCv').innerHTML=cover(CV[s.cover].k,230);$('ixBigNm').textContent=CV[s.cover].n;$('ixBigDs').textContent=L(CV[s.cover].d)}
     // format, til
-    $('ixFmt').innerHTML=[['DOCX','Word, tahrirlanadi'],['PDF','tayyor, chop etishga']].map((x,i)=>`<button type="button" aria-pressed="${s.fmt===i}" onclick="IX.set('fmt',${i})">${x[0]}<small>${x[1]}</small></button>`).join('');
-    $('ixLangQ').textContent=docName()+' qaysi tilda bo‘lsin?';
+    $('ixFmt').innerHTML=[['DOCX',L('docx')],['PDF',L('pdf')]].map((x,i)=>`<button type="button" aria-pressed="${s.fmt===i}" onclick="IX.set('fmt',${i})">${x[0]}<small>${x[1]}</small></button>`).join('');
+    $('ixLangQ').textContent=L('langQ',{d:lang==='uz'?docName():docName().toLowerCase()});
     $('ixLang').innerHTML=LG.map((x,i)=>`<button type="button" aria-pressed="${s.lang===i}" onclick="IX.set('lang',${i})">${x[0]}</button>`).join('');
     // jami
     const price=PRICE[s.pages][s.tier];
-    $('ixSumL').textContent=(s.tier?"O'rtacha":'Standart')+' · '+s.pages+' bet'; $('ixSumR').textContent=sum(price)+" so'm";
-    $('ixBal').textContent=UNL?'Admin: sinov uchun bepul':'Balans: '+sum(BALANCE)+" so'm";
-    $('ixCta').textContent=docName()+' yaratish · '+sum(price)+" so'm";
+    $('ixSumL').textContent=(s.tier?L('t1'):L('t0'))+' · '+s.pages+' '+L('bet'); $('ixSumR').textContent=sum(price)+' '+L('som');
+    $('ixBal').textContent=UNL?L('admin'):L('bal',{b:sum(BALANCE)+' '+L('som')});
+    $('ixCta').textContent=L('cta',{d:lang==='uz'?docName():docName().toLowerCase(),p:sum(price)+' '+L('som')});
   }
   function fields(){
-    $('ixFields').innerHTML=FIELDS.map(([k,l,ph])=>`<div><label for="ixf-${k}">${l}</label><input class="ix-in" id="ixf-${k}" placeholder="${esc(ph)}" value="${esc(s.info[k]||'')}" oninput="IX.info('${k}',this.value)"></div>`).join('');
+    $('ixFields').innerHTML=FIELDS.map(k=>`<div><label for="ixf-${k}">${L('f_'+k)}</label><input class="ix-in" id="ixf-${k}" placeholder="${esc(k==='ministry'?MIN[LG[s.lang][1]]:L('f_'+k+'Ph'))}" value="${esc(s.info[k]||'')}" oninput="IX.info('${k}',this.value)"></div>`).join('');
   }
   return {
-    open(){ $('ixIc').innerHTML=IC.ish; fields(); draw(); show('ish'); },
+    open(){ $('ixIc').innerHTML=IC.ish;
+      document.querySelectorAll('#ish [data-ix]').forEach(e=>{const k=e.dataset.ix; if(k.endsWith('Html')) e.innerHTML=L(k); else e.textContent=L(k)});
+      document.querySelectorAll('#ish [data-ixph]').forEach(e=>e.placeholder=L(e.dataset.ixph));
+      if(!this._l){ this._l=1; s.lang=Math.max(0,LG.findIndex(x=>x[1]===lang)); }   // hujjat tili: birinchi ochilganda ilova tili
+      fields(); draw(); show('ish'); },
     draw,
     set(k,v){ s[k]=v; if(k==='cover') sv('cover',v); draw(); },
     item(i,v){ s.items[i]=v; },
@@ -1419,9 +1472,9 @@ const IX=(()=>{
     step(d){ s.cover=(s.cover+d+3)%3; sv('cover',s.cover); draw(); },
     submit(){
       const topic=val('ixTopic');
-      if(!topic){ $('ixTopic').focus(); toast('✍️','Mavzuni yozing'); return; }
+      if(!topic){ $('ixTopic').focus(); toast('✍️',L('noTopic')); return; }
       const plan=s.plan?s.items.map(x=>x.trim()).filter(Boolean):[];
-      if(s.plan&&!plan.length){ toast('✍️','Reja bandlarini yozing'); return; }
+      if(s.plan&&!plan.length){ toast('✍️',L('noPlan')); return; }
       const price=PRICE[s.pages][s.tier];
       if(KNOWN&&!UNL&&BALANCE<price){ openTopup(price-BALANCE); return; }
       const i=s.info;
