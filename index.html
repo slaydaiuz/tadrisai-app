@@ -927,7 +927,7 @@ function renderHome(){
   let h='<div class="tools">';
   if(role==='student'){
     h+=tool('prez','prez',t('prez'),t('prezDesc'))+(ISH_LIVE||UNL?`<button class="tool" onclick="IX.open()"><span class="tool-ic blue">${IC.ish}</span><span><h2>${t('ish')}</h2><p>${t('ishDesc')}</p></span><span class="go">${IC.arrow}</span></button></div>`:`<button class="tool" onclick="ishSoon()"><span class="tool-ic blue">${IC.ish}</span><span><h2>${t('ish')}</h2><p>${t('ishDesc')}</p></span><span class="soon">${t('soonTag')}</span></button></div>`);
-    h+=`<div class="sec-title">${t('more')}</div><div class="list">${row('quiz',t('testS'),t('testSDesc'))}${row('ref',t('ref'),t('refDesc'))}</div>`;
+    h+=`<div class="sec-title">${t('more')}</div><div class="list">${row('quiz',t('testS'),t('testSDesc'))}</div>`;
   }else{
     h+=tool('prez','prez',t('prez'),t('prezDescT'))+`<button class="tool" onclick="soon()"><span class="tool-ic blue">${IC.dars}</span><span><h2>${t('dars')}</h2><p>${t('darsDesc')}</p></span><span class="soon">${t('soonTag')}</span></button></div>`;
     h+=`<div class="sec-title">${t('more')}</div><div class="list">${row('test',t('testT'),t('testTDesc'))}</div>`;
