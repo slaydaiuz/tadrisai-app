@@ -371,14 +371,24 @@ header{display:flex;align-items:center;justify-content:space-between;gap:10px;ma
 .pms button::before{content:"";position:absolute;inset:-1.5px;border-radius:inherit;padding:2px;pointer-events:none;
   background:conic-gradient(from var(--pa),transparent 0 62%,currentColor 82%,#fff 88%,currentColor 92%,transparent 100%);
   -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude;
-  animation:pmspin 2.8s linear infinite;opacity:.75}
-.pms button.pm-click::before{animation-delay:-.93s}.pms button.pm-paynet::before{animation-delay:-1.86s}
-.pms button[aria-pressed="true"]::before{opacity:1;padding:2.5px;animation-duration:1.8s}
+  opacity:0;transition:opacity .25s}
+.pms button[aria-pressed="true"]::before{opacity:1;padding:2.5px;animation:pmspin 1.8s linear infinite}   /* faqat tanlangan usulda */
 @keyframes pmspin{to{--pa:360deg}}
 .paynote{font-size:12px;color:var(--muted);text-align:center;margin-top:10px;line-height:1.4}.paynote a{color:inherit;text-decoration:underline}
 .morepm{width:100%;margin-top:8px;display:flex;align-items:center;gap:10px;padding:11px 12px;border-radius:14px;border:1.5px dashed var(--line);background:var(--surface);font-size:13px;color:var(--text);text-align:left}
 .morepm .ic3{display:flex;gap:4px;flex:none} .morepm .ic3 span{width:22px;height:22px;border-radius:6px;display:grid;place-items:center;font-size:10px;font-weight:800;background:var(--chip);color:var(--chip-text)}
 .morepm .tx{flex:1;min-width:0;color:var(--text)} .morepm em{font-style:normal;color:var(--chip-text);font-weight:800;white-space:nowrap}
+/* «Boshqa usullar»: har ~6 soniyada yumshoq e'tibor tortadi (yaltirash + strelka siljishi) */
+.morepm{position:relative;overflow:hidden;isolation:isolate;animation:moreEdge 6s ease-in-out infinite 1.5s}
+@keyframes moreEdge{0%,60%,90%,100%{border-color:var(--line)}72%{border-color:var(--violet)}}
+.morepm::after{content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;
+  background:linear-gradient(105deg,transparent 35%,rgba(139,92,246,.34) 50%,transparent 65%);transform:translateX(-110%);animation:moreShine 6s ease-in-out infinite 1.5s}
+.morepm em{display:inline-block;animation:moreNudge 6s ease-in-out infinite 1.5s}
+.morepm .ic3 span{animation:moreHop 6s ease-in-out infinite 1.5s}
+.morepm .ic3 span:nth-child(2){animation-delay:1.6s}.morepm .ic3 span:nth-child(3){animation-delay:1.7s}.morepm .ic3 span:nth-child(4){animation-delay:1.8s}
+@keyframes moreShine{0%,62%{transform:translateX(-110%)}82%,100%{transform:translateX(110%)}}
+@keyframes moreNudge{0%,64%,100%{transform:translateX(0)}70%{transform:translateX(4px)}76%{transform:translateX(0)}82%{transform:translateX(3px)}88%{transform:translateX(0)}}
+@keyframes moreHop{0%,64%,82%,100%{transform:translateY(0)}70%{transform:translateY(-3px)}76%{transform:translateY(0)}}
 .paysum{margin-top:12px;padding:12px 14px;border-radius:14px;background:var(--surface);border:1px solid var(--line);font-size:13px}
 .paysum .r{display:flex;justify-content:space-between;margin:3px 0;color:var(--muted)} .paysum .r b{color:var(--text)} .paysum .r.g b{color:#10B981}
 .pw{display:flex;flex-direction:column;align-items:center;text-align:center;padding-top:36px}
@@ -1011,7 +1021,7 @@ function renderCd(){
   const s=Math.floor(left/1000), p=n=>String(n).padStart(2,'0');
   el.style.display=''; $('cdNum').textContent=p(Math.floor(s/3600))+':'+p(Math.floor(s/60)%60)+':'+p(s%60);
 }
-let amt=50000, pm='payme', topupBack='profile';
+let amt=50000, pm='click', topupBack='profile';   // boshlanishida Click tanlangan
 function openTopup(need){
   topupBack=document.querySelector('.screen.on')?.id||'profile';
   if(need>0){amt=Math.max(minTopup(),Math.ceil(need/1000)*1000); $('amtOwn').value=amt}
