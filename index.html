@@ -365,6 +365,16 @@ header{display:flex;align-items:center;justify-content:space-between;gap:10px;ma
 .pms button{padding:12px 6px;border-radius:14px;border:1.5px solid var(--line);background:var(--field);font-weight:800;font-size:14px}
 .pms button[aria-pressed="true"]{border-color:var(--violet);background:var(--chip)}
 .pm-payme{color:#22B8C8} .pm-click{color:#3B8EF0} .pm-paynet{color:#16A34A}
+/* Payme/Click/Paynet: chegara bo'ylab aylanib yuradigan nur */
+@property --pa{syntax:'<angle>';inherits:false;initial-value:0deg}
+.pms button{position:relative;isolation:isolate}
+.pms button::before{content:"";position:absolute;inset:-1.5px;border-radius:inherit;padding:2px;pointer-events:none;
+  background:conic-gradient(from var(--pa),transparent 0 62%,currentColor 82%,#fff 88%,currentColor 92%,transparent 100%);
+  -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude;
+  animation:pmspin 2.8s linear infinite;opacity:.75}
+.pms button.pm-click::before{animation-delay:-.93s}.pms button.pm-paynet::before{animation-delay:-1.86s}
+.pms button[aria-pressed="true"]::before{opacity:1;padding:2.5px;animation-duration:1.8s}
+@keyframes pmspin{to{--pa:360deg}}
 .paynote{font-size:12px;color:var(--muted);text-align:center;margin-top:10px;line-height:1.4}.paynote a{color:inherit;text-decoration:underline}
 .morepm{width:100%;margin-top:8px;display:flex;align-items:center;gap:10px;padding:11px 12px;border-radius:14px;border:1.5px dashed var(--line);background:var(--surface);font-size:13px;color:var(--text);text-align:left}
 .morepm .ic3{display:flex;gap:4px;flex:none} .morepm .ic3 span{width:22px;height:22px;border-radius:6px;display:grid;place-items:center;font-size:10px;font-weight:800;background:var(--chip);color:var(--chip-text)}
@@ -429,6 +439,42 @@ nav{position:fixed;left:0;right:0;bottom:0;z-index:5;padding:8px 16px calc(10px 
 .nav-b svg{width:22px;height:22px}
 .nav-b.on{color:var(--chip-text);background:var(--chip)}
 
+/* ---- harakatlanuvchi ikonkalar ---- */
+.nav-b svg{transform-origin:50% 90%}
+#nav-home svg{animation:icHome 3.6s ease-in-out infinite}
+#nav-files svg{animation:icFolder 3.6s ease-in-out infinite .6s}
+#nav-profile svg{animation:icNod 3.6s ease-in-out infinite 1.2s}
+.nav-b.on svg{animation-duration:2.4s}
+@keyframes icHome{0%,70%,100%{transform:translateY(0)}78%{transform:translateY(-3px) scale(1.06)}86%{transform:translateY(0) scale(.97)}92%{transform:translateY(-1px)}}
+@keyframes icFolder{0%,65%,100%{transform:rotate(0)}75%{transform:rotate(-10deg) translateY(-1px)}85%{transform:rotate(4deg)}92%{transform:rotate(0)}}
+@keyframes icNod{0%,65%,100%{transform:rotate(0)}74%{transform:rotate(8deg)}82%{transform:rotate(-6deg)}90%{transform:rotate(3deg)}}
+.tool .go svg{animation:icGo 2.2s ease-in-out infinite}
+@keyframes icGo{0%,60%,100%{transform:translateX(0)}75%{transform:translateX(3px)}88%{transform:translateX(-1px)}}
+.row-ic svg{transform-origin:50% 50%;animation:icWob 3.2s ease-in-out infinite}
+.list .row:nth-child(2) .row-ic svg{animation-delay:.8s}
+@keyframes icWob{0%,70%,100%{transform:rotate(0) scale(1)}78%{transform:rotate(-12deg) scale(1.08)}86%{transform:rotate(9deg)}93%{transform:rotate(-3deg)}}
+.site .row-ic svg{animation:icGrid 3s ease-in-out infinite}
+@keyframes icGrid{0%,100%{transform:rotate(0) scale(1)}50%{transform:rotate(90deg) scale(.9)}}
+#themeBtn svg{animation:icSun 8s linear infinite}
+@keyframes icSun{to{transform:rotate(360deg)}}
+.seg2 .e,.tile .ti,.acc-h .ai,.empty .big,.ix-titul .ti,.mrow .lg{display:inline-block}
+#ixType button:nth-child(1) .e{animation:pencil 2.6s ease-in-out infinite}
+#ixType button:nth-child(2) .e{animation:fileup 2.2s ease-in-out infinite}
+#ixPlanSw button:nth-child(1) .e{animation:robot 2.8s ease-in-out infinite}
+#ixPlanSw button:nth-child(2) .e{animation:pencil 2.6s ease-in-out infinite .4s}
+[data-dens="short"] .e{animation:sparkle 2.4s ease-in-out infinite}
+[data-dens="full"] .e{animation:fileup 2.6s ease-in-out infinite .3s}
+.ix-tiers button:nth-child(1) .ic{animation:icZap 2.6s ease-in-out infinite}
+.ix-tiers button:nth-child(2) .ic{animation:icCap 3s ease-in-out infinite .5s}
+@keyframes icZap{0%,70%,100%{transform:scale(1);filter:brightness(1)}76%{transform:scale(1.12);filter:brightness(1.5)}82%{transform:scale(.96)}88%{transform:scale(1.06);filter:brightness(1.3)}}
+@keyframes icCap{0%,65%,100%{transform:translateY(0) rotate(0)}75%{transform:translateY(-4px) rotate(-10deg)}85%{transform:translateY(0) rotate(4deg)}}
+.ix-titul .ti{animation:wave 3.2s ease-in-out infinite}
+.tile.inv .ti{animation:robot 3s ease-in-out infinite}
+.tile.fb .ti{animation:snap 3s ease-in-out infinite .6s}
+.acc-h .ai{animation:icWob 3.6s ease-in-out infinite}
+.acc:nth-of-type(2) .acc-h .ai{animation-delay:.7s}.acc:nth-of-type(3) .acc-h .ai{animation-delay:1.4s}
+.empty .big{animation:fileup 2.4s ease-in-out infinite}
+.mrow .lg{animation:icZap 3s ease-in-out infinite}
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
 /* ---------- Mustaqil ish (yangi forma) ---------- */
 .ix-sec{margin-top:22px}
