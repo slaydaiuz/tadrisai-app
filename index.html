@@ -1445,6 +1445,7 @@ const IX=(()=>{
       f_city:'City and year (optional, left out if empty)',f_cityPh:'E.g.: Urgench',
       cv0:'Blue frame, centred text, «Prepared by» on the right',cv1:'No frame, black centred text. For strict requirements',cv2:'Light-blue frame, everything left-aligned'}};
   const L=(k,o)=>{let v=(D[lang]||D.uz)[k]; if(v==null) v=D.uz[k]; if(o) for(const x in o) v=v.replace('{'+x+'}',o[x]); return v};
+  const TX=L;   // muqova ichida L boshqa ma'noda ishlatiladi
   const PRICE={10:[3990,5990],15:[5990,8990],20:[7990,11990],25:[9990,14990],30:[11990,17990]};
   const MIN={uz:"O'zbekiston Respublikasi Oliy ta'lim, fan va innovatsiyalar vazirligi",uzc:'Ўзбекистон Республикаси Олий таълим, фан ва инновациялар вазирлиги',
     ru:'Министерство высшего образования, науки и инноваций Республики Узбекистан',en:'Ministry of Higher Education, Science and Innovation of the Republic of Uzbekistan'};
@@ -1469,12 +1470,15 @@ const IX=(()=>{
 
   function cover(variant,w){
     const st=ST[variant], lang=LG[s.lang][1], ref=s.type===1, i=s.info;
-    const up=x=>x.replace(/[ʻ‘’]/g,"'").toUpperCase(), BL='____________________', g=k=>String(i[k]||'').trim();
+    const up=x=>x.replace(/[ʻ‘’]/g,"'").toUpperCase(), BL='____________________';
+    const ex=k=>String(TX(k)||'').replace(/^(Masalan|Например|E\.g\.)\s*:\s*/,'');      // namuna (faqat ko'rinish uchun)
+    const SMP={uni:'f_uniPh',fac:'f_facPh',stu:'f_stuPh',grp:'f_grpPh',tea:'f_teaPh'};
+    const g=k=>String(i[k]||'').trim()||(SMP[k]?ex(SMP[k]):'');
     const T={uz:{w:ref?'REFERAT':'MUSTAQIL ISH',sb:x=>'"'+up(x)+'" FANIDAN',tp:'Mavzu:',by:'Bajardi:',ck:'Tekshirdi:',gr:x=>x+' guruh talabasi'},
       uzc:{w:ref?'РЕФЕРАТ':'МУСТАҚИЛ ИШ',sb:x=>'"'+up(x)+'" ФАНИДАН',tp:'Мавзу:',by:'Бажарди:',ck:'Текширди:',gr:x=>x+' гуруҳ талабаси'},
       ru:{w:ref?'РЕФЕРАТ':'САМОСТОЯТЕЛЬНАЯ РАБОТА',sb:x=>'ПО ПРЕДМЕТУ «'+up(x)+'»',tp:'Тема:',by:'Выполнил(а):',ck:'Проверил(а):',gr:x=>'студент(ка) группы '+x},
       en:{w:ref?'ESSAY':'INDEPENDENT WORK',sb:x=>'SUBJECT: "'+up(x)+'"',tp:'Topic:',by:'Prepared by:',ck:'Checked by:',gr:x=>'student of group '+x}}[lang];
-    const subj=val('ixSubj'), topic=val('ixTopic'), grp=g('grp'), stu=g('stu');
+    const subj=val('ixSubj')||ex('subjPh'), topic=val('ixTopic')||ex('topicPh'), grp=g('grp'), stu=g('stu');
     const L={min:[up(g('ministry')||MIN[lang])],uni:[g('uni')?up(g('uni')):BL],fac:g('fac')?[up(g('fac'))]:[],subj:subj?[T.sb(subj)]:[],work:[T.w],
       topic:[T.tp+' '+(topic||BL)],by:grp?[T.by+' '+T.gr(grp),stu||BL]:[T.by+' '+(stu||BL)],chk:[T.ck+' '+(g('tea')||BL)],foot:g('city')?[g('city')+' – '+new Date().getFullYear()]:[]};
     const TW=165, wmm=(x,pt)=>{let a=0;for(const c of x)a+=c===' '?.25:(c===c.toUpperCase()&&c!==c.toLowerCase()?.7:.5);return a*pt*.3528};
