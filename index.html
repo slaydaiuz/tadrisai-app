@@ -695,9 +695,10 @@ textarea.ix-in{resize:none;min-height:84px;line-height:1.4}
     </div>
     <div id="docLangWrap">
       <div class="group" data-i18n="docLang"></div>
-      <div class="seg3" role="group">
+      <div class="seg3" role="group" style="grid-template-columns:repeat(2,1fr)">
         <svg width="0" height="0" style="position:absolute"><defs><linearGradient id="gl" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#fff" stop-opacity="0"/><stop offset=".5" stop-color="#fff" stop-opacity=".55"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient></defs></svg>
         <button type="button" data-dl="uz" onclick="setDocLang('uz')"><svg class="flag" viewBox="0 0 24 24"><defs><clipPath id="cu"><circle cx="12" cy="12" r="11"/></clipPath></defs><g clip-path="url(#cu)"><rect width="24" height="8" fill="#1EB5E8"/><rect y="8" width="24" height="8" fill="#fff"/><rect y="16" width="24" height="8" fill="#1EB53A"/><rect y="7.4" width="24" height="1.2" fill="#CE1126"/><rect y="15.4" width="24" height="1.2" fill="#CE1126"/><circle cx="6.5" cy="4" r="2.2" fill="#fff"/><circle cx="7.4" cy="4" r="2" fill="#1EB5E8"/></g><circle class="shine" cx="12" cy="12" r="11" fill="url(#gl)"/></svg><span>O'zbek</span></button>
+        <button type="button" data-dl="uzn" onclick="setDocLang('uzn')"><svg class="flag" viewBox="0 0 24 24"><defs><clipPath id="cun"><circle cx="12" cy="12" r="11"/></clipPath></defs><g clip-path="url(#cun)"><rect width="24" height="8" fill="#1EB5E8"/><rect y="8" width="24" height="8" fill="#fff"/><rect y="16" width="24" height="8" fill="#1EB53A"/><rect y="7.4" width="24" height="1.2" fill="#CE1126"/><rect y="15.4" width="24" height="1.2" fill="#CE1126"/><circle cx="6.5" cy="4" r="2.2" fill="#fff"/><circle cx="7.4" cy="4" r="2" fill="#1EB5E8"/></g><circle class="shine" cx="12" cy="12" r="11" fill="url(#gl)"/></svg><span>Özbek (yangi)</span></button>
         <button type="button" data-dl="ru" onclick="setDocLang('ru')"><svg class="flag" viewBox="0 0 24 24"><defs><clipPath id="cr"><circle cx="12" cy="12" r="11"/></clipPath></defs><g clip-path="url(#cr)"><rect width="24" height="8" fill="#fff"/><rect y="8" width="24" height="8" fill="#0039A6"/><rect y="16" width="24" height="8" fill="#D52B1E"/></g><circle cx="12" cy="12" r="10.6" fill="none" stroke="#CBD5E1" stroke-width=".8"/><circle class="shine" cx="12" cy="12" r="11" fill="url(#gl)"/></svg><span>Rus</span></button>
         <button type="button" data-dl="en" onclick="setDocLang('en')"><svg class="flag" viewBox="0 0 24 24"><defs><clipPath id="ce"><circle cx="12" cy="12" r="11"/></clipPath></defs><g clip-path="url(#ce)"><rect width="24" height="24" fill="#012169"/><path d="M0 0L24 24M24 0L0 24" stroke="#fff" stroke-width="4"/><path d="M0 0L24 24M24 0L0 24" stroke="#C8102E" stroke-width="1.5"/><path d="M12 0V24M0 12H24" stroke="#fff" stroke-width="6"/><path d="M12 0V24M0 12H24" stroke="#C8102E" stroke-width="3.4"/></g><circle class="shine" cx="12" cy="12" r="11" fill="url(#gl)"/></svg><span>Eng</span></button>
       </div>
@@ -963,7 +964,48 @@ en:{hello:"Hi", sub:"What are we preparing today?", change:"· change",
   navHome:"Home", navFiles:"Files", navProfile:"Profile",
   fill:"Please fill in the required fields.", wrongOpen:"Data was not sent. Press /start in the bot and open the app with the button below.", notTg:"Please open the app from the Telegram bot.", soonMsg:"This section is coming soon."}
 };
-const LANGS={uz:"O'zbekcha",ru:"Русский",en:"English"};
+/* ---------- Yangi o'zbek alifbosi (Ö, Ğ, Ş, Ç) — o'zbekcha matndan avtomatik (botdagi uzn.py bilan bir xil qoidalar) ---------- */
+const UZN=(()=>{
+  const AP="'’‘ʻʼ`";
+  const KEEP=new Set(['chatgpt','english','chrome','microsoft','shopify','youtube','github','chatbot','channel','chat','check','cash','shop','show','flash','push','fresh','chart','school','teacher']);
+  const STOP=new Set(['the','and','of','for','with','from','by','to','in','on','is','are','an','this','that','university','press','journal','edition','vol','pp','their','its','they','we','our','was','were','be','been','as','or','not','but','which','such','should','can','will','has','have','at','about','into','between','during','through','how','what','why','your','you']);
+  const PROT=/\{\w*\}|<\/?[A-Za-z][^<>]*>|&[#\w]+;|https?:\/\/\S+|www\.\S+|[\w.+-]+@[\w-]+\.[\w.]+|t\.me\/\S+|@\w+/g;
+  const WORD=/\p{L}(?:\p{L}|['’‘ʻʼ`](?=\p{L})|['’‘ʻʼ`](?!\p{L}))*/gu;
+  const isL=c=>!!c&&/\p{L}/u.test(c);
+  function foreign(w){
+    const l=w.toLowerCase(); if(KEEP.has(l.replace(/['’‘ʻʼ`]+$/,''))) return true;
+    for(const c of l) if(c.charCodeAt(0)>127&&!AP.includes(c)) return true;
+    if(/w|th|ph|ck|c(?!h)/.test(l)) return true;
+    const core=w.replace(/['’‘ʻʼ`]/g,''); return /[A-Z]/.test(core.slice(1))&&core!==core.toUpperCase();
+  }
+  function fline(t){const ws=t.match(WORD)||[]; if(ws.length<3) return false;
+    const st=ws.filter(w=>STOP.has(w.toLowerCase())).length, mk=ws.filter(foreign).length; return st>=2||mk/ws.length>=.4}
+  function tr(text){
+    if(!text||typeof text!=='string'||fline(text.replace(PROT,' '))) return text;
+    const prot=new Array(text.length).fill(false);
+    for(const m of text.matchAll(PROT)) for(let j=m.index;j<m.index+m[0].length;j++) prot[j]=true;
+    let out='', last=0;
+    for(const m of text.matchAll(WORD)){
+      const w=m[0], s0=m.index, e=s0+w.length;
+      if(foreign(w)||prot.slice(s0,e).some(Boolean)) continue;
+      if((s0>0&&/\d/.test(text[s0-1]))||(e<text.length&&/\d/.test(text[e]))) continue;   // CH4 kabi formulalar
+      let i=0;
+      while(i<w.length){
+        const c=w[i], lo=c.toLowerCase(), nx=w[i+1]||''; let n=null;
+        if(lo==='o'&&nx&&AP.includes(nx)&&isL(w[i+2])) n='ö';
+        else if(lo==='g'&&nx&&AP.includes(nx)&&(isL(w[i+2])||(i+2>=w.length&&!(i>0&&w[i-1].toLowerCase()==='n')))) n='ğ';
+        else if((lo==='s'||lo==='c')&&nx.toLowerCase()==='h') n=lo==='s'?'ş':'ç';
+        if(n){ out+=text.slice(last,s0+i)+(c!==lo?n.toUpperCase():n); last=s0+i+2; i+=2; } else i++;
+      }
+    }
+    return out+text.slice(last);
+  }
+  const deep=o=>typeof o==='string'?tr(o):Array.isArray(o)?o.map(deep):(o&&typeof o==='object')?Object.fromEntries(Object.entries(o).map(([k,v])=>[k,deep(v)])):o;
+  return {tr,deep};
+})();
+T.uzn=UZN.deep(T.uz);
+const LANGS={uz:"O'zbekcha",uzn:"Özbekça (yangi alifbo)",ru:"Русский",en:"English"};
+const LCODE=l=>l==='uzn'?'ÖZ':l.toUpperCase();
 
 /* ---------- State ---------- */
 const qs=new URLSearchParams(location.search);
@@ -1042,7 +1084,7 @@ function openTopup(need){
   if(need>0){amt=Math.max(minTopup(),Math.ceil(need/1000)*1000); $('amtOwn').value=amt}
   else {amt=promoOn()?10000:offerOn()?20000:50000; $('amtOwn').value=''}
   $('topupNeed').textContent=need>0?t('needMore').replace('{x}',money(need)):''; $('topupNeed').style.display=need>0?'':'none';
-  $('amtOwn').placeholder=t('ownSum').replace('5 000',money(minTopup()).replace(/ so'm| сум| UZS/,''));
+  $('amtOwn').placeholder=t('ownSum').replace('5 000',money(minTopup()).replace(/ so'm| söm| сум| UZS/,''));
   show('topup'); renderTopup(); renderCd(); if(!cdTimer&&(promoOn()||offerOn())) cdTimer=setInterval(renderCd,1000);
 }
 const bonusOf=a=>{let b=0;amountsNow().forEach(([v,bn])=>{if(a>=v)b=bn});return b};
@@ -1051,7 +1093,7 @@ function setPm(v){pm=v; renderTopup()}
 function needPm(){const el=$('pms'); el.classList.remove('shake'); void el.offsetWidth; el.classList.add('shake');
   el.scrollIntoView({behavior:'smooth',block:'center'}); toast('👆',t('pickPm'))}
 function renderTopup(){
-  $('amts').innerHTML=amountsNow().map(([v,b])=>`<button type="button" class="amt" aria-pressed="${amt===v&&!$('amtOwn').value}" onclick="setAmt(${v})">${money(v).replace(" so'm","")}${b?`<i>+${money(b).replace(" so'm","")} ${t('bonus')}</i>`:''}</button>`).join('');
+  $('amts').innerHTML=amountsNow().map(([v,b])=>`<button type="button" class="amt" aria-pressed="${amt===v&&!$('amtOwn').value}" onclick="setAmt(${v})">${money(v).replace(/ (so'm|söm)$/,"")}${b?`<i>+${money(b).replace(/ (so'm|söm)$/,"")} ${t('bonus')}</i>`:''}</button>`).join('');
   document.querySelectorAll('[data-pm]').forEach(b=>b.setAttribute('aria-pressed',b.dataset.pm===pm));
   const MIN=minTopup(), ok=amt>=MIN, b=bonusOf(amt);
   $('pms').classList.toggle('need',!pm); $('pmHint').style.display=pm?'none':'flex';
@@ -1179,7 +1221,7 @@ function renderWallet(){
   $('invPer').innerHTML=t('invPer').replace('{x}','<span class="nw">+'+nbMoney(REF_BONUS)+'</span>');
   $('fbPer').innerHTML=t('fbPer').replace('{x}','<span class="nw">+'+nbMoney(REF_BONUS)+'</span>');
   const kindIc={topup:'💳',admin:'💳',bonus:'🎁',ref:'👥',spend:'📊',refund:'↩️'};
-  $('txList').innerHTML=TXS.length?TXS.map(([a,k,note,d])=>`<div class="txi"><span class="ic">${kindIc[k]||'💳'}</span><span class="tt">${esc(note||t('op_'+k)||k)}<i>${esc(d)}</i></span><span class="${a>=0?'p':'m'}">${a>=0?'+':'−'}${money(Math.abs(a)).replace(" so'm","")}</span></div>`).join(''):`<div class="txempty">${t('noOps')}</div>`;
+  $('txList').innerHTML=TXS.length?TXS.map(([a,k,note,d])=>`<div class="txi"><span class="ic">${kindIc[k]||'💳'}</span><span class="tt">${esc(note||t('op_'+k)||k)}<i>${esc(d)}</i></span><span class="${a>=0?'p':'m'}">${a>=0?'+':'−'}${money(Math.abs(a)).replace(/ (so'm|söm)$/,"")}</span></div>`).join(''):`<div class="txempty">${t('noOps')}</div>`;
 }
 function sizeRange(){const [lo,hi]=mode==='prez'?[6,25]:[5,30]; return [lo,(FREE>0&&mode!=='prez')?Math.min(10,hi):hi]}
 function step(d){
@@ -1247,7 +1289,7 @@ function setImg(v){img=v;store.set('img',v);syncDesign();syncSize()}
 /* ---------- Narxlar va slaydlar soni (surgich) ---------- */
 const PRICES={photo:[2990,3990,4990,5990],art:[4990,5990,6990,7990],premium:[7990,8990,9990,10990]};
 const MARKS=[6,10,15,20,25], SMIN=6, SMAX=25;
-const money=v=>v.toLocaleString('ru-RU').replace(/,/g,' ')+" so'm";
+const money=v=>v.toLocaleString('ru-RU').replace(/,/g,' ')+(lang==='uzn'?' söm':" so'm");
 const bucket=n=>n<=10?0:n<=15?1:n<=20?2:3;
 const isFree=n=>FREE>0&&n<=6&&(mode!=='prez'||img==='photo');   // sovg'a: faqat Standart, 10 tagacha
 const priceOf=(n,tier)=>(PRICES[tier]||PRICES.photo)[bucket(n)];
@@ -1258,14 +1300,14 @@ function syncSize(){
   $('rng').value=size; $('rngFill').style.width=pct(size)+'%';
   $('rngBub').style.left=pct(size)+'%'; $('rngBub').textContent=size+' '+t('pcs');
   const cur=(size<=6&&isFree(size))?6:[10,15,20,25][bucket(size)];
-  $('rngTicks').innerHTML=MARKS.map(m=>`<div class="rng-tick ${m<=size||m===cur?'on':''} ${m===cur?'cur':''}" style="left:${pct(m)}%"><b>${m}</b><i></i><span class="${isFree(m)?'fr':''}">${isFree(m)?'🎁 '+t('free'):money(priceOf(m,img)).replace(" so'm",'')}</span></div>`).join('');
+  $('rngTicks').innerHTML=MARKS.map(m=>`<div class="rng-tick ${m<=size||m===cur?'on':''} ${m===cur?'cur':''}" style="left:${pct(m)}%"><b>${m}</b><i></i><span class="${isFree(m)?'fr':''}">${isFree(m)?'🎁 '+t('free'):money(priceOf(m,img)).replace(/ (so'm|söm)$/,'')}</span></div>`).join('');
   const p=priceOf(size,img);
   $('rngPrice').innerHTML=`${size} ${t('pcsSlides')} · <b>${isFree(size)?'🎁 '+t('free'):money(p)}</b>`;
   const low=KNOWN&&!UNL&&!isFree(size)&&BALANCE<p;
   $('lowBal').classList.toggle('on',low);
   if(low) $('lowBal').innerHTML=t('lowBal').replace('{b}',money(BALANCE)).replace('{x}',money(p-BALANCE));
   $('cta').textContent=isFree(size)?'🎁 '+t('ctaFree'):low?t('topupBtn2'):t('ctaPrez')+' · '+money(p);
-  document.querySelectorAll('[data-from]').forEach(e=>e.textContent=money(PRICES[e.dataset.from][0]).replace(" so'm","")+' '+t('from'));
+  document.querySelectorAll('[data-from]').forEach(e=>e.textContent=money(PRICES[e.dataset.from][0]).replace(/ (so'm|söm)$/,"")+' '+t('from'));
 }
 function syncDesign(){
   document.querySelectorAll('[data-th]').forEach(b=>b.setAttribute('aria-pressed',b.dataset.th===theme));
@@ -1446,6 +1488,7 @@ const IX=(()=>{
       f_stu:'Prepared by (full name)',f_stuPh:'E.g.: Saparboyev Bexzod',f_grp:'Group',f_grpPh:'E.g.: 202 Music',f_tea:'Checked by (teacher)',f_teaPh:'E.g.: Yusupova M.',
       f_city:'City and year (optional, left out if empty)',f_cityPh:'E.g.: Urgench',
       cv0:'Blue frame, centred text, «Prepared by» on the right',cv1:'No frame, black centred text. For strict requirements',cv2:'Light-blue frame, everything left-aligned'}};
+  D.uzn=UZN.deep(D.uz);
   const L=(k,o)=>{let v=(D[lang]||D.uz)[k]; if(v==null) v=D.uz[k]; if(o) for(const x in o) v=v.replace('{'+x+'}',o[x]); return v};
   const TX=L;   // muqova ichida L boshqa ma'noda ishlatiladi
   const PRICE={10:[3990,4990],15:[5990,6990],20:[7990,8990],25:[9990,10990],30:[11990,12990]};   // O'rtacha = Standart + 1 000
@@ -1459,7 +1502,7 @@ const IX=(()=>{
       pos:{min:21.3,uni:41.8,fac:55.5,subj:99,work:114.3,topic:162.1,by:197,chk:232.1,foot:268}},
     zamonaviy:{fr:'#5B9BD5',tx:'#5B9BD5',ti:'#2E74B5',sz:{min:12,uni:16,fac:12,subj:16,work:42,topic:16,by:14,chk:14,foot:14},al:{},def:'left',
       pos:{min:22.2,uni:41.8,fac:55.5,subj:99,work:116,topic:167.2,by:223.5,chk:258.5,foot:272}}};
-  const LG=[["O'zbekcha (lotin)",'uz'],['Ўзбекча (кирилл)','uzc'],['Русский','ru'],['English','en']];
+  const LG=[["O'zbekcha (lotin)",'uz'],['Özbekça (yangi alifbo)','uzn'],['Ўзбекча (кирилл)','uzc'],['Русский','ru'],['English','en']];
   const FIELDS=['ministry','uni','fac','stu','grp','tea','city'];
   const ld=(k,d)=>{try{const v=JSON.parse(localStorage.getItem('ix_'+k));return v==null?d:v}catch(e){return d}};
   const sv=(k,v)=>{try{localStorage.setItem('ix_'+k,JSON.stringify(v))}catch(e){}};
@@ -1479,10 +1522,11 @@ const IX=(()=>{
     const T={uz:{w:ref?'REFERAT':'MUSTAQIL ISH',sb:x=>'"'+up(x)+'" FANIDAN',tp:'Mavzu:',by:'Bajardi:',ck:'Tekshirdi:',gr:x=>x+' guruh talabasi'},
       uzc:{w:ref?'РЕФЕРАТ':'МУСТАҚИЛ ИШ',sb:x=>'"'+up(x)+'" ФАНИДАН',tp:'Мавзу:',by:'Бажарди:',ck:'Текширди:',gr:x=>x+' гуруҳ талабаси'},
       ru:{w:ref?'РЕФЕРАТ':'САМОСТОЯТЕЛЬНАЯ РАБОТА',sb:x=>'ПО ПРЕДМЕТУ «'+up(x)+'»',tp:'Тема:',by:'Выполнил(а):',ck:'Проверил(а):',gr:x=>'студент(ка) группы '+x},
-      en:{w:ref?'ESSAY':'INDEPENDENT WORK',sb:x=>'SUBJECT: "'+up(x)+'"',tp:'Topic:',by:'Prepared by:',ck:'Checked by:',gr:x=>'student of group '+x}}[lang];
+      en:{w:ref?'ESSAY':'INDEPENDENT WORK',sb:x=>'SUBJECT: "'+up(x)+'"',tp:'Topic:',by:'Prepared by:',ck:'Checked by:',gr:x=>'student of group '+x}}[lang==='uzn'?'uz':lang];
     const subj=val('ixSubj')||ex('subjPh'), topic=val('ixTopic')||ex('topicPh'), grp=g('grp'), stu=g('stu');
-    const L={min:[up(g('ministry')||MIN[lang])],uni:[g('uni')?up(g('uni')):BL],fac:g('fac')?[up(g('fac'))]:[],subj:subj?[T.sb(subj)]:[],work:[T.w],
+    const L={min:[up(g('ministry')||MIN[lang==='uzn'?'uz':lang])],uni:[g('uni')?up(g('uni')):BL],fac:g('fac')?[up(g('fac'))]:[],subj:subj?[T.sb(subj)]:[],work:[T.w],
       topic:[T.tp+' '+(topic||BL)],by:grp?[T.by+' '+T.gr(grp),stu||BL]:[T.by+' '+(stu||BL)],chk:[T.ck+' '+(g('tea')||BL)],foot:g('city')?[g('city')+' – '+new Date().getFullYear()]:[]};
+    if(lang==='uzn') for(const k in L) L[k]=L[k].map(UZN.tr);   // yangi alifbo
     const TW=165, wmm=(x,pt)=>{let a=0;for(const c of x)a+=c===' '?.25:(c===c.toUpperCase()&&c!==c.toLowerCase()?.7:.5);return a*pt*.3528};
     let cur=20, out='', first=true;
     for(const k of ['min','uni','fac','subj','work','topic','by','chk','foot']){
@@ -1524,13 +1568,13 @@ const IX=(()=>{
     if($('ixBig').classList.contains('on')){$('ixBigCv').innerHTML=cover(CV[s.cover].k,230);$('ixBigNm').textContent=CV[s.cover].n;$('ixBigDs').textContent=L(CV[s.cover].d)}
     // format, til
     $('ixFmt').innerHTML=[['DOCX',L('docx')],['PDF',L('pdf')]].map((x,i)=>`<button type="button" aria-pressed="${s.fmt===i}" onclick="IX.set('fmt',${i})">${x[0]}<small>${x[1]}</small></button>`).join('');
-    $('ixLangQ').textContent=L('langQ',{d:lang==='uz'?docName():docName().toLowerCase()});
+    $('ixLangQ').textContent=L('langQ',{d:(lang==='uz'||lang==='uzn')?docName():docName().toLowerCase()});
     $('ixLang').innerHTML=LG.map((x,i)=>`<button type="button" aria-pressed="${s.lang===i}" onclick="IX.set('lang',${i})">${x[0]}</button>`).join('');
     // jami
     const price=PRICE[s.pages][s.tier];
     $('ixSumL').textContent=(s.tier?L('t1'):L('t0'))+' · '+s.pages+' '+L('bet'); $('ixSumR').textContent=sum(price)+' '+L('som');
     $('ixBal').textContent=UNL?L('admin'):L('bal',{b:sum(BALANCE)+' '+L('som')});
-    $('ixCta').textContent=L('cta',{d:lang==='uz'?docName():docName().toLowerCase(),p:sum(price)+' '+L('som')});
+    $('ixCta').textContent=L('cta',{d:(lang==='uz'||lang==='uzn')?docName():docName().toLowerCase(),p:sum(price)+' '+L('som')});
   }
   function fields(){
     $('ixFields').innerHTML=FIELDS.map(k=>`<div><label for="ixf-${k}">${L('f_'+k)}</label><input class="ix-in" id="ixf-${k}" placeholder="${esc(k==='ministry'?MIN[LG[s.lang][1]]:L('f_'+k+'Ph'))}" value="${esc(s.info[k]||'')}" oninput="IX.info('${k}',this.value)"></div>`).join('');
@@ -1592,12 +1636,12 @@ function renderAll(){
   document.documentElement.lang=lang;
   document.querySelectorAll('[data-i18n]').forEach(e=>e.textContent=t(e.dataset.i18n));
   document.querySelectorAll('[data-ph]').forEach(e=>e.placeholder=t(e.dataset.ph));
-  $('langCode').textContent=lang.toUpperCase();
+  $('langCode').textContent=LCODE(lang);
   document.querySelectorAll('.lang-item').forEach(b=>b.classList.toggle('active',b.dataset.l===lang));
   renderHome(); renderForm(); renderProfile(); renderFiles();
 }
 const menu=$('langMenu');
-Object.entries(LANGS).forEach(([k,n])=>{const b=document.createElement('button');b.className='lang-item';b.dataset.l=k;b.innerHTML=`<span>${n}</span><small>${k.toUpperCase()}</small>`;b.onclick=()=>{lang=k;store.set('lang',k);menu.classList.remove('open');renderAll()};menu.appendChild(b)});
+Object.entries(LANGS).forEach(([k,n])=>{const b=document.createElement('button');b.className='lang-item';b.dataset.l=k;b.innerHTML=`<span>${n}</span><small>${LCODE(k)}</small>`;b.onclick=()=>{lang=k;store.set('lang',k);menu.classList.remove('open');renderAll()};menu.appendChild(b)});
 $('langBtn').onclick=e=>{e.stopPropagation();menu.classList.toggle('open')};
 document.addEventListener('click',e=>{if(!e.target.closest('.lang-wrap'))menu.classList.remove('open')});
 
