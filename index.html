@@ -701,6 +701,7 @@ textarea.ix-in{resize:none;min-height:84px;line-height:1.4}
         <button type="button" data-dl="uzn" onclick="setDocLang('uzn')"><svg class="flag" viewBox="0 0 24 24"><defs><clipPath id="cun"><circle cx="12" cy="12" r="11"/></clipPath></defs><g clip-path="url(#cun)"><rect width="24" height="8" fill="#1EB5E8"/><rect y="8" width="24" height="8" fill="#fff"/><rect y="16" width="24" height="8" fill="#1EB53A"/><rect y="7.4" width="24" height="1.2" fill="#CE1126"/><rect y="15.4" width="24" height="1.2" fill="#CE1126"/><circle cx="6.5" cy="4" r="2.2" fill="#fff"/><circle cx="7.4" cy="4" r="2" fill="#1EB5E8"/></g><circle class="shine" cx="12" cy="12" r="11" fill="url(#gl)"/></svg><span>Özbek (yangi)</span></button>
         <button type="button" data-dl="ru" onclick="setDocLang('ru')"><svg class="flag" viewBox="0 0 24 24"><defs><clipPath id="cr"><circle cx="12" cy="12" r="11"/></clipPath></defs><g clip-path="url(#cr)"><rect width="24" height="8" fill="#fff"/><rect y="8" width="24" height="8" fill="#0039A6"/><rect y="16" width="24" height="8" fill="#D52B1E"/></g><circle cx="12" cy="12" r="10.6" fill="none" stroke="#CBD5E1" stroke-width=".8"/><circle class="shine" cx="12" cy="12" r="11" fill="url(#gl)"/></svg><span>Rus</span></button>
         <button type="button" data-dl="en" onclick="setDocLang('en')"><svg class="flag" viewBox="0 0 24 24"><defs><clipPath id="ce"><circle cx="12" cy="12" r="11"/></clipPath></defs><g clip-path="url(#ce)"><rect width="24" height="24" fill="#012169"/><path d="M0 0L24 24M24 0L0 24" stroke="#fff" stroke-width="4"/><path d="M0 0L24 24M24 0L0 24" stroke="#C8102E" stroke-width="1.5"/><path d="M12 0V24M0 12H24" stroke="#fff" stroke-width="6"/><path d="M12 0V24M0 12H24" stroke="#C8102E" stroke-width="3.4"/></g><circle class="shine" cx="12" cy="12" r="11" fill="url(#gl)"/></svg><span>Eng</span></button>
+        <button type="button" data-dl="kaa" onclick="setDocLang('kaa')" style="display:none" class="adm-only"><svg class="flag" viewBox="0 0 24 24"><defs><clipPath id="ck"><circle cx="12" cy="12" r="11"/></clipPath></defs><g clip-path="url(#ck)"><rect width="24" height="8" fill="#0099B5"/><rect y="8" width="24" height="8" fill="#FFD100"/><rect y="16" width="24" height="8" fill="#1EB53A"/><rect y="7.4" width="24" height="1.2" fill="#CE1126"/><rect y="15.4" width="24" height="1.2" fill="#CE1126"/></g><circle class="shine" cx="12" cy="12" r="11" fill="url(#gl)"/></svg><span>Qaraqalpaq (test)</span></button>
       </div>
     </div>
     <div id="pool" hidden>
@@ -1053,7 +1054,8 @@ function openForm(m){
   renderForm();
 }
 let FREE=Math.max(0,parseInt(qs.get('free')||'0',10)||0);
-const UNL=qs.get('unl')==='1';          // admin: cheklovsiz
+const UNL=qs.get('unl')==='1';
+if(UNL) document.querySelectorAll('.adm-only').forEach(e=>e.style.display='');   // qoraqalpoqcha: hozircha faqat admin sinovi          // admin: cheklovsiz
 const KNOWN=UNL||qs.has('free');        // eski tugmadan ochilsa - tekshiruvni bot o'zi qiladi
 let BALANCE=Math.max(0,parseInt(qs.get('bal')||'0',10)||0);   // botdan keladi
 function loadTx(){
@@ -1493,6 +1495,7 @@ const IX=(()=>{
   const TX=L;   // muqova ichida L boshqa ma'noda ishlatiladi
   const PRICE={10:[3990,4990],15:[5990,6990],20:[7990,8990],25:[9990,10990],30:[11990,12990]};   // O'rtacha = Standart + 1 000
   const MIN={uz:"O'zbekiston Respublikasi Oliy ta'lim, fan va innovatsiyalar vazirligi",uzc:'Ўзбекистон Республикаси Олий таълим, фан ва инновациялар вазирлиги',
+    kaa:'Ózbekstan Respublikası Joqarı bilimlendiriw, pán hám innovaciyalar ministrligi',
     ru:'Министерство высшего образования, науки и инноваций Республики Узбекистан',en:'Ministry of Higher Education, Science and Innovation of the Republic of Uzbekistan'};
   const CV=[{k:'klassik',n:'Klassik',d:'cv0'},{k:'minimal',n:'Minimal',d:'cv1'},{k:'zamonaviy',n:'Zamonaviy',d:'cv2'}];
   const ST={ // botdagi cover.py bilan bir xil joylashuv (mm) va o'lchamlar (pt)
@@ -1502,7 +1505,7 @@ const IX=(()=>{
       pos:{min:21.3,uni:41.8,fac:55.5,subj:99,work:114.3,topic:162.1,by:197,chk:232.1,foot:268}},
     zamonaviy:{fr:'#5B9BD5',tx:'#5B9BD5',ti:'#2E74B5',sz:{min:12,uni:16,fac:12,subj:16,work:42,topic:16,by:14,chk:14,foot:14},al:{},def:'left',
       pos:{min:22.2,uni:41.8,fac:55.5,subj:99,work:116,topic:167.2,by:223.5,chk:258.5,foot:272}}};
-  const LG=[["O'zbekcha (lotin)",'uz'],['Özbekça (yangi alifbo)','uzn'],['Ўзбекча (кирилл)','uzc'],['Русский','ru'],['English','en']];
+  const LG=[["O'zbekcha (lotin)",'uz'],['Özbekça (yangi alifbo)','uzn'],['Ўзбекча (кирилл)','uzc'],['Русский','ru'],['English','en']].concat(UNL?[['Qaraqalpaqsha (test)','kaa']]:[]);
   const FIELDS=['ministry','uni','fac','stu','grp','tea','city'];
   const ld=(k,d)=>{try{const v=JSON.parse(localStorage.getItem('ix_'+k));return v==null?d:v}catch(e){return d}};
   const sv=(k,v)=>{try{localStorage.setItem('ix_'+k,JSON.stringify(v))}catch(e){}};
@@ -1515,13 +1518,14 @@ const IX=(()=>{
 
   function cover(variant,w){
     const st=ST[variant], lang=LG[s.lang][1], ref=s.type===1, i=s.info;
-    const up=x=>x.replace(/[ʻ‘’]/g,"'").toUpperCase(), BL='____________________';
+    const up=x=>x.replace(/[ʻ‘’]/g,"'").replace(/ı/g,'Í').toUpperCase(), BL='____________________';
     const ex=k=>String(TX(k)||'').replace(/^(Masalan|Например|E\.g\.)\s*:\s*/,'');      // namuna (faqat ko'rinish uchun)
     const SMP={uni:'f_uniPh',fac:'f_facPh',stu:'f_stuPh',grp:'f_grpPh',tea:'f_teaPh'};
     const g=k=>String(i[k]||'').trim()||(SMP[k]?ex(SMP[k]):'');
     const T={uz:{w:ref?'REFERAT':'MUSTAQIL ISH',sb:x=>'"'+up(x)+'" FANIDAN',tp:'Mavzu:',by:'Bajardi:',ck:'Tekshirdi:',gr:x=>x+' guruh talabasi'},
       uzc:{w:ref?'РЕФЕРАТ':'МУСТАҚИЛ ИШ',sb:x=>'"'+up(x)+'" ФАНИДАН',tp:'Мавзу:',by:'Бажарди:',ck:'Текширди:',gr:x=>x+' гуруҳ талабаси'},
       ru:{w:ref?'РЕФЕРАТ':'САМОСТОЯТЕЛЬНАЯ РАБОТА',sb:x=>'ПО ПРЕДМЕТУ «'+up(x)+'»',tp:'Тема:',by:'Выполнил(а):',ck:'Проверил(а):',gr:x=>'студент(ка) группы '+x},
+      kaa:{w:ref?'REFERAT':'ÓZ BETINSHE JUMÍS',sb:x=>'"'+up(x)+'" PÁNI BOYÍNSHA',tp:'Tema:',by:'Orınlaǵan:',ck:'Tekserdi:',gr:x=>x+'-topar studenti'},
       en:{w:ref?'ESSAY':'INDEPENDENT WORK',sb:x=>'SUBJECT: "'+up(x)+'"',tp:'Topic:',by:'Prepared by:',ck:'Checked by:',gr:x=>'student of group '+x}}[lang==='uzn'?'uz':lang];
     const subj=val('ixSubj')||ex('subjPh'), topic=val('ixTopic')||ex('topicPh'), grp=g('grp'), stu=g('stu');
     const L={min:[up(g('ministry')||MIN[lang==='uzn'?'uz':lang])],uni:[g('uni')?up(g('uni')):BL],fac:g('fac')?[up(g('fac'))]:[],subj:subj?[T.sb(subj)]:[],work:[T.w],
