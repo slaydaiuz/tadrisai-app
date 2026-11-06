@@ -678,7 +678,7 @@ textarea.ix-in{resize:none;min-height:84px;line-height:1.4}
         <div class="rng">
           <div class="rng-track"><div class="rng-fill" id="rngFill"></div></div>
           <div id="rngTicks"></div>
-          <input type="range" id="rng" min="6" max="25" step="1" oninput="setSize(+this.value)" aria-label="slides">
+          <input autocomplete="off" type="range" id="rng" min="6" max="25" step="1" oninput="setSize(+this.value)" aria-label="slides">
           <div class="rng-bub" id="rngBub"></div>
         </div>
         <div class="rng-price" id="rngPrice"></div>
@@ -705,22 +705,22 @@ textarea.ix-in{resize:none;min-height:84px;line-height:1.4}
       </div>
     </div>
     <div id="pool" hidden>
-      <div class="field" id="w-fUni"><label for="fUni"></label><input id="fUni" data-ph="phUni"></div>
-      <div class="field" id="w-fFak"><label for="fFak"></label><input id="fFak" data-ph="phFak"></div>
-      <div class="field" id="w-fYon"><label for="fYon"></label><input id="fYon" data-ph="phYon"></div>
-      <div class="field" id="w-fFan"><label for="fFan"></label><input id="fFan" data-ph="phFan"></div>
-      <div class="field" id="w-fCls"><label for="fCls"></label><input id="fCls" data-ph="phCls"></div>
-      <div class="field" id="w-fMav"><label for="fMav"></label><input id="fMav" data-ph="phMav"></div>
+      <div class="field" id="w-fUni"><label for="fUni"></label><input autocomplete="off" id="fUni" data-ph="phUni"></div>
+      <div class="field" id="w-fFak"><label for="fFak"></label><input autocomplete="off" id="fFak" data-ph="phFak"></div>
+      <div class="field" id="w-fYon"><label for="fYon"></label><input autocomplete="off" id="fYon" data-ph="phYon"></div>
+      <div class="field" id="w-fFan"><label for="fFan"></label><input autocomplete="off" id="fFan" data-ph="phFan"></div>
+      <div class="field" id="w-fCls"><label for="fCls"></label><input autocomplete="off" id="fCls" data-ph="phCls"></div>
+      <div class="field" id="w-fMav"><label for="fMav"></label><input autocomplete="off" id="fMav" data-ph="phMav"></div>
       <div class="field" id="w-size"><label></label>
         <div class="stepper"><button type="button" onclick="step(-1)" aria-label="-">−</button><output id="size"></output><button type="button" onclick="step(1)" aria-label="+">+</button></div>
         <div class="free-hint" id="freeHint" data-i18n="freeHint"></div>
       </div>
-      <div class="field" id="w-fName"><label for="fName"></label><input id="fName" data-ph="phName"></div>
-      <div class="field" id="w-fGrp"><label for="fGrp"></label><input id="fGrp" data-ph="phGrp"></div>
-      <div class="field" id="w-fTea"><label for="fTea"></label><input id="fTea" data-ph="phTea"></div>
+      <div class="field" id="w-fName"><label for="fName"></label><input autocomplete="off" id="fName" data-ph="phName"></div>
+      <div class="field" id="w-fGrp"><label for="fGrp"></label><input autocomplete="off" id="fGrp" data-ph="phGrp"></div>
+      <div class="field" id="w-fTea"><label for="fTea"></label><input autocomplete="off" id="fTea" data-ph="phTea"></div>
       <div class="field" id="w-city">
-        <label class="check"><input type="checkbox" id="cityOn" onchange="syncCity()"><span id="cityLbl"></span></label>
-        <input id="fCity" data-ph="phCity" style="margin-top:10px">
+        <label class="check"><input autocomplete="off" type="checkbox" id="cityOn" onchange="syncCity()"><span id="cityLbl"></span></label>
+        <input autocomplete="off" id="fCity" data-ph="phCity" style="margin-top:10px">
       </div>
     </div>
     <button class="cta" id="cta" type="button" onclick="submitForm()"></button>
@@ -735,9 +735,9 @@ textarea.ix-in{resize:none;min-height:84px;line-height:1.4}
     <div class="seg2" id="ixType"></div>
 
     <div class="ix-sec"><label class="ix-lbl" for="ixTopic" data-ix="topic">Mavzu</label>
-      <textarea class="ix-in" id="ixTopic" rows="3" data-ixph="topicPh" placeholder="Masalan: Raqamli iqtisodiyot va uning O'zbekistondagi rivoji" oninput="IX.draw()"></textarea></div>
+      <textarea autocomplete="off" class="ix-in" id="ixTopic" rows="3" data-ixph="topicPh" placeholder="Masalan: Raqamli iqtisodiyot va uning O'zbekistondagi rivoji" oninput="IX.draw()"></textarea></div>
     <div class="ix-sec"><label class="ix-lbl" for="ixSubj" data-ix="subj">Fan</label>
-      <input class="ix-in" id="ixSubj" data-ixph="subjPh" placeholder="Masalan: Iqtisodiyot nazariyasi" oninput="IX.draw()"></div>
+      <input autocomplete="off" class="ix-in" id="ixSubj" data-ixph="subjPh" placeholder="Masalan: Iqtisodiyot nazariyasi" oninput="IX.draw()"></div>
 
     <div class="ix-sec"><div class="ix-lbl" data-ix="pages">Betlar soni</div><div class="ix-scale" id="ixScale"></div></div>
 
@@ -761,7 +761,7 @@ textarea.ix-in{resize:none;min-height:84px;line-height:1.4}
       <div class="ix-covers" id="ixCovers"></div></div>
 
     <div class="ix-sec"><label class="ix-lbl" for="ixNotes" data-ix="notesHtml">Qo'shimcha ma'lumotlar <span style="font-weight:500">(ixtiyoriy)</span></label>
-      <textarea class="ix-in" id="ixNotes" rows="2" maxlength="600" data-ixph="notesPh" placeholder="Masalan: amaliy misollar ko'proq bo'lsin, 2020-yildan keyingi manbalar"></textarea></div>
+      <textarea autocomplete="off" class="ix-in" id="ixNotes" rows="2" maxlength="600" data-ixph="notesPh" placeholder="Masalan: amaliy misollar ko'proq bo'lsin, 2020-yildan keyingi manbalar"></textarea></div>
 
     <div class="ix-sec"><div class="ix-lbl" data-ix="fmt">Fayl formati</div><div class="ix-grid2" id="ixFmt"></div></div>
 
@@ -799,7 +799,7 @@ textarea.ix-in{resize:none;min-height:84px;line-height:1.4}
       <b id="cdNum">00:00:00</b><span class="cd-why"><i>!</i><span id="cdWhy" data-i18n="cdWhy"></span></span></div>
     <div class="group" data-i18n="sumLbl"></div>
     <div class="amts" id="amts"></div>
-    <div class="field" style="margin-top:8px"><input id="amtOwn" inputmode="numeric" data-ph="ownSum" oninput="setAmt(+this.value.replace(/\D/g,''),true)"></div>
+    <div class="field" style="margin-top:8px"><input autocomplete="off" id="amtOwn" inputmode="numeric" data-ph="ownSum" oninput="setAmt(+this.value.replace(/\D/g,''),true)"></div>
     <div class="group" data-i18n="payMethod"></div>
     <div class="pm-hint" id="pmHint"><span>👇</span><b data-i18n="pickPm"></b></div>
     <div class="pms" id="pms">
@@ -1014,6 +1014,9 @@ const LCODE=l=>l==='uzn'?'ÖZ':l==='kaa'?'QQ':l.toUpperCase();
 const qs=new URLSearchParams(location.search);
 const store={get(k){try{return localStorage.getItem('tadris_'+k)}catch(e){return null}},set(k,v){try{localStorage.setItem('tadris_'+k,v)}catch(e){}}};
 const tg=window.Telegram&&window.Telegram.WebApp;
+// Brauzer (Telegram Desktop ichidagi Edge) avval yozilganlarni «Сохраненные сведения» deb taklif qilmasin —
+// keyin JS bilan qo'shiladigan maydonlarga ham (masalan, reja bandlari) yozishdan oldin o'chiramiz.
+document.addEventListener('focusin',e=>{const el=e.target;if(el&&el.matches&&el.matches('input,textarea')&&el.getAttribute('autocomplete')!=='off'){el.setAttribute('autocomplete','off');el.setAttribute('autocorrect','off')}},true);
 let lang=store.get('lang')||qs.get('lang')||'uz'; if(!T[lang]) lang='uz';
 let role=store.get('role')||qs.get('role')||'student'; if(role!=='teacher') role='student';
 let userName=qs.get('name')||(tg&&tg.initDataUnsafe&&tg.initDataUnsafe.user&&tg.initDataUnsafe.user.first_name)||'';
@@ -1256,7 +1259,7 @@ function renderPlan(vals){
   $('planBox').style.display=mode==='prez'?'block':'none';
   $('nChips').innerHTML=[2,3,4,5].map(n=>`<button type="button" aria-pressed="${n===planN}" onclick="setPlanN(${n})">${n}</button>`).join('');
   vals=vals||[...document.querySelectorAll('#planInputs input')].map(i=>i.value);
-  $('planInputs').innerHTML=Array.from({length:planN},(_,i)=>`<div class="prow2" style="animation-delay:${i*40}ms"><span class="n">${i+1}</span><input placeholder="${t('planPh').replace('{n}',i+1)}" value="${(vals[i]||'').replace(/"/g,'&quot;')}"></div>`).join('');
+  $('planInputs').innerHTML=Array.from({length:planN},(_,i)=>`<div class="prow2" style="animation-delay:${i*40}ms"><span class="n">${i+1}</span><input autocomplete="off" placeholder="${t('planPh').replace('{n}',i+1)}" value="${(vals[i]||'').replace(/"/g,'&quot;')}"></div>`).join('');
 }
 let dens=store.get('dens')==='full'?'full':'short';   // sukut bo'yicha: qisqa va aniq
 function setDens(v){
@@ -1562,7 +1565,7 @@ const IX=(()=>{
     // reja
     $('ixPlanSw').innerHTML=[[L('pAi'),L('pAiD'),'🤖'],[L('pOwn'),L('pOwnD'),'✍️']].map((x,i)=>
       `<button type="button" aria-pressed="${s.plan===i}" onclick="IX.set('plan',${i})"><span class="e">${x[2]}</span><b>${x[0]}</b><span>${x[1]}</span></button>`).join('');
-    $('ixPlan').innerHTML=s.plan?s.items.map((v,i)=>`<div class="ix-r"><span class="n">${i+1}</span><input class="ix-in" aria-label="${L('itemL',{n:i+1})}" placeholder="${L('item',{n:i+1})}" value="${esc(v)}" oninput="IX.item(${i},this.value)"><button type="button" class="x" aria-label="${L('del')}" onclick="IX.del(${i})">✕</button></div>`).join('')+
+    $('ixPlan').innerHTML=s.plan?s.items.map((v,i)=>`<div class="ix-r"><span class="n">${i+1}</span><input autocomplete="off" class="ix-in" aria-label="${L('itemL',{n:i+1})}" placeholder="${L('item',{n:i+1})}" value="${esc(v)}" oninput="IX.item(${i},this.value)"><button type="button" class="x" aria-label="${L('del')}" onclick="IX.del(${i})">✕</button></div>`).join('')+
       (s.items.length<6?`<button type="button" class="ix-add" onclick="IX.add()">${L('add')}</button>`:'')+`<div class="pl-note">${L('planNote')}</div>`:'';
     // titul
     const filled=['uni','fac','stu','grp','tea'].filter(k=>String(s.info[k]||'').trim()).length;
@@ -1583,7 +1586,7 @@ const IX=(()=>{
     $('ixCta').textContent=L('cta',{d:(lang==='uz'||lang==='uzn'||lang==='kaa')?docName():docName().toLowerCase(),p:sum(price)+' '+L('som')});
   }
   function fields(){
-    $('ixFields').innerHTML=FIELDS.map(k=>`<div><label for="ixf-${k}">${L('f_'+k)}</label><input class="ix-in" id="ixf-${k}" placeholder="${esc(k==='ministry'?MIN[LG[s.lang][1]]:L('f_'+k+'Ph'))}" value="${esc(s.info[k]||'')}" oninput="IX.info('${k}',this.value)"></div>`).join('');
+    $('ixFields').innerHTML=FIELDS.map(k=>`<div><label for="ixf-${k}">${L('f_'+k)}</label><input autocomplete="off" class="ix-in" id="ixf-${k}" placeholder="${esc(k==='ministry'?MIN[LG[s.lang][1]]:L('f_'+k+'Ph'))}" value="${esc(s.info[k]||'')}" oninput="IX.info('${k}',this.value)"></div>`).join('');
   }
   return {
     open(){ $('ixIc').innerHTML=IC.ish;
