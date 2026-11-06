@@ -1344,7 +1344,7 @@ function renderForm(){
 }
 const SAVE=['fUni','fName','fGrp','fTea','fCity','fFak','fYon','fCls'];
 function submitForm(){
-  if(mode==='prez'&&img==='premium'){showInfo('💎',t('imgPrem'),t('soonMsg'));return}
+  if(mode==='prez'&&img==='premium'&&!UNL){showInfo('💎',t('imgPrem'),t('soonMsg'));return}   // 3D Premium: hozircha faqat admin
   saveFields();
   if(mode==='prez'&&KNOWN&&!UNL&&!isFree(size)&&BALANCE<priceOf(size,img)){
     openTopup(priceOf(size,img)-BALANCE);return}
