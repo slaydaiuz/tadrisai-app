@@ -1143,13 +1143,13 @@ async function payNow(m){
   const btn=$('payBtn'); if(btn.dataset.busy) return;
   btn.dataset.busy='1'; const old=btn.textContent; btn.textContent=t('creating');
   let d=null;
-  try{d=await api('/pay/create',{amount:amt,method:(m==='paynet'||m==='other')?'':m})}catch(e){d=null}
+  try{d=await api('/pay/create',{amount:amt,method:m==='other'?'':m})}catch(e){d=null}   // paynet ham aniq yuboriladi (inPAY Paynet ilovasi havolasini qaytaradi)
   delete btn.dataset.busy; btn.textContent=old;
   if(!d||d.error==='auth'||d.error==='off'){          // server yetmasa: eski yo'l - havola botga keladi
     sendToBot({mode:'topup',amount:amt,method:m},'💳',t('payTitle'),t('payText'));return}
   if(!d.ok){toast('⚠️',t('payErr'));return}
   // Paynet: inPAY sahifasida Paynet oldindan tanlangan holda ochiladi (to'g'ridan-to'g'ri havolani inPAY API bermaydi)
-  const url=(d.links&&d.links[m])||(m==='paynet'?d.pay_url.replace(/\/$/,'')+'/paynet':(m==='other'?d.pay_url:d.url))||d.pay_url;
+  const url=(m==='paynet'&&d.url&&/paynet\.uz/.test(d.url)?d.url:null)||(d.links&&d.links[m])||(m==='paynet'?d.pay_url.replace(/\/$/,'')+'/paynet':(m==='other'?d.pay_url:d.url))||d.pay_url;
   pay={order:d.order_id,url,m,amount:amt,bonus:d.bonus||0,start:Date.now()};
   renderWait(); show('paywait'); openPay(); pollPay();
 }
