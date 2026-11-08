@@ -1404,6 +1404,7 @@ function submitForm(){
 }
 
 /* ---------- 💎 Premium: misollar va mavzu tekshiruvi ---------- */
+var EX_VIDS=[];   // egasining ekran yozuvlari qo'yiladi: [['fayl_nomi','vid3d'], ...]
 const EXC={uz:["Titul — 3D model aylanib kiradi","Asosiy slayd — katta 3D model","Qo'shimcha slayd — model burchakda","Har bo'limda yangi model","Modeli yo'q mavzu — chiroyli chizma","Yakun — hamma modellar bir joyda"],
   ru:["Титул — 3D-модель въезжает с вращением","Основной слайд — большая 3D-модель","Доп. слайд — модель в углу","В каждом разделе новая модель","Тема без модели — красивая иллюстрация","Финал — все модели вместе"],
   en:["Title — the 3D model glides in","Main slide — a large 3D model","Extra slide — model in the corner","A new model in every section","No model for the topic — an illustration","Ending — all models together"]};
@@ -1411,8 +1412,8 @@ function openEx(){
   $('exmTitle').textContent=t('exTitle'); $('exmClose').textContent=t('exClose');
   const caps=EXC[lang]||(lang==='uzn'&&window.UZN?UZN.deep(EXC.uz):EXC.uz);
   const vid=(src,lbl)=>'<figure class="exv"><span class="exv-l">'+lbl+'</span><video src="ex/'+src+'.mp4?v=1" poster="ex/'+src+'.jpg?v=1" autoplay muted loop playsinline preload="auto"></video></figure>';
-  $('exmList').innerHTML='<p class="exm-n">'+t('vidNote')+'</p>'+vid('anim3d',t('vid3d'))+vid('animdraw',t('vidDraw'))+
-    '<p class="exm-n">'+t('picNote')+'</p>'+
+  $('exmList').innerHTML=(window.EX_VIDS&&EX_VIDS.length?'<p class="exm-n">'+t('vidNote')+'</p>'+EX_VIDS.map(([f,k])=>vid(f,t(k))).join('')+
+    '<p class="exm-n">'+t('picNote')+'</p>':'')+
     caps.map((c,i)=>i===4?'':'<figure><img loading="lazy" src="ex/'+(i+1)+'.jpg?v=1" alt=""><figcaption>'+c+'</figcaption></figure>').join('');   // 5 — chizma: endi videoda
   $('exmList').querySelectorAll('video').forEach(v=>{try{v.play()}catch(e){}});
   $('exm').classList.add('on');
