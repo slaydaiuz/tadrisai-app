@@ -1349,7 +1349,8 @@ const END_LIVE=false, END_PRICE=1000;      // hozircha faqat admin sinovida
 let ending=['none','free','paid'].includes(store.get('ending'))?store.get('ending'):'none';
 const endOn=()=>mode==='prez'&&(END_LIVE||UNL);
 const endUse=()=>endOn()&&!isFree(size)?ending:'none';
-const totalOf=(n,tier)=>priceOf(n,tier)+(endUse()==='paid'?END_PRICE:0);
+const endCost=()=>img==='premium'?0:END_PRICE;   // Premium'da yakuniy video bepul (egasi, 2026-11-09)
+const totalOf=(n,tier)=>priceOf(n,tier)+(endUse()==='paid'?endCost():0);
 function setEnd(v){ending=v;store.set('ending',v);syncSize();if(v!=='none')playEnd()}
 /* Tekin / Pullik bosilganda: tanlangan slayd tilidagi yakuniy video shu yerda ko'rinadi */
 const endSrc=()=>'ex/end/'+(['uz','uzn','kaa','ru','en'].includes(docLang)?docLang:'uz')+'-'+ending+'.mp4?v=1';
@@ -1363,7 +1364,7 @@ function syncEnd(){
   const gift=isFree(size);
   $('endSeg').classList.toggle('off',gift); $('endNote').classList.toggle('on',gift);
   document.querySelectorAll('[data-end]').forEach(b=>b.setAttribute('aria-pressed',b.dataset.end===(gift?'none':ending)));
-  $('endPrice').textContent=money(END_PRICE);
+  $('endPrice').textContent=endCost()?money(endCost()):t('free');
   const on=endUse()!=='none', v=$('endVid');
   $('endPv').classList.toggle('on',on);
   if(!on){try{v.pause()}catch(e){}}
