@@ -145,6 +145,12 @@ header{display:flex;align-items:center;justify-content:space-between;gap:10px;ma
 .seg3 button{display:flex;align-items:center;justify-content:center;gap:8px;padding:12px 6px;border-radius:var(--r-sm);border:1.5px solid var(--line);background:var(--surface);font-size:13.5px;font-weight:600;transition:border-color .2s,background .2s}
 .seg3 button[aria-pressed="true"]{border-color:var(--violet);background:var(--chip);color:var(--chip-text)}
 .end-toggle .ei{flex:none;width:24px;text-align:center;font-size:18px}
+.end-toggle .grin{display:inline-block;animation:grin 1.8s ease-in-out infinite;transform-origin:50% 70%}
+@keyframes grin{0%,55%,100%{transform:none}62%{transform:rotate(-16deg) scale(1.25)}70%{transform:rotate(14deg) scale(1.25)}78%{transform:rotate(-10deg) scale(1.15)}86%{transform:rotate(6deg)}}
+.end-toggle:not(.on){animation:endGlow 2.6s ease-in-out infinite}
+@keyframes endGlow{0%,100%{border-color:var(--line);box-shadow:none}50%{border-color:var(--violet);box-shadow:0 0 0 3px rgba(139,92,246,.18),0 6px 18px rgba(139,92,246,.25)}}
+.end-toggle:not(.on) .ei{animation:clap 2.6s ease-in-out infinite}
+@keyframes clap{0%,40%,100%{transform:none}48%{transform:translateY(-3px) rotate(-10deg)}56%{transform:none}}
 .end-toggle.has i{color:var(--chip-text)}
 .endbody{display:none;margin-top:10px} .endbody.open{display:block;animation:fadeUp .25s ease}
 @keyframes fadeUp{from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:none}}
@@ -746,7 +752,7 @@ textarea.ix-in{resize:none;min-height:84px;line-height:1.4}
     <div id="endWrap">
       <button type="button" class="opt-toggle end-toggle" id="endToggle" onclick="toggleEnd()">
         <span class="ei">🎬</span>
-        <span class="tx"><b data-i18n="endQ"></b><i id="endSub"></i></span>
+        <span class="tx"><b><span data-i18n="endQ"></span> <span class="grin">😁</span></b><i id="endSub"></i></span>
         <span class="chev">▾</span>
       </button>
       <div class="endbody" id="endBody">
