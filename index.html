@@ -157,8 +157,14 @@ header{display:flex;align-items:center;justify-content:space-between;gap:10px;ma
 .endseg button{flex-direction:column;gap:2px;line-height:1.2;text-align:center}
 .endseg button i{font-style:normal;font-size:11.5px;font-weight:700;color:var(--muted)}
 .endseg.off{opacity:.45;pointer-events:none}
-.end-pv{display:none;margin-top:10px;border-radius:14px;overflow:hidden;background:#fff;aspect-ratio:16/9;border:1px solid var(--line)}
-.end-pv.on{display:block} .end-pv video{width:100%;height:100%;display:block;object-fit:cover;background:#fff}
+.end-pv{display:none;margin-top:10px;gap:8px;grid-template-columns:1fr 1fr}
+.end-pv.on{display:grid}
+.end-tpl{position:relative;padding:0;border:2px solid var(--line);border-radius:12px;overflow:hidden;background:#fff;aspect-ratio:16/9;cursor:pointer}
+.end-tpl video{width:100%;height:100%;display:block;object-fit:cover;background:#fff;pointer-events:none}
+.end-tpl b{position:absolute;left:6px;top:6px;min-width:20px;height:20px;padding:0 6px;border-radius:10px;background:rgba(17,24,39,.65);color:#fff;font-size:11.5px;line-height:20px;text-align:center}
+.end-tpl[aria-pressed="true"]{border-color:var(--violet);box-shadow:0 0 0 3px rgba(139,92,246,.18)}
+.end-tpl[aria-pressed="true"] b{background:var(--violet)}
+.end-tpl[aria-pressed="true"] b::after{content:" ✓"}
 .end-note{display:none;margin-top:8px;font-size:12.5px;color:var(--muted)} .end-note.on{display:block}
 .flag{width:22px;height:22px;flex:none;border-radius:50%;box-shadow:0 2px 6px rgba(0,0,0,.25)}
 .flag .shine{transform-box:fill-box;transform-origin:center;animation:fshine 3.6s ease-in-out infinite;opacity:.9}
@@ -762,7 +768,10 @@ textarea.ix-in{resize:none;min-height:84px;line-height:1.4}
         <button type="button" data-end="paid" onclick="setEnd('paid')"><span data-i18n="endPaid"></span><i id="endPrice"></i></button>
       </div>
       <div class="end-note" id="endNote" data-i18n="endGift"></div>
-      <div class="end-pv" id="endPv"><video id="endVid" playsinline controls preload="none"></video></div>
+      <div class="end-pv" id="endPv">
+        <button type="button" class="end-tpl" data-tpl="1" onclick="setTpl(1)"><video id="endVid1" playsinline preload="none"></video><b>1</b></button>
+        <button type="button" class="end-tpl" data-tpl="2" onclick="setTpl(2)"><video id="endVid2" playsinline preload="none"></video><b>2</b></button>
+      </div>
       </div>
     </div>
     <div id="pool" hidden>
@@ -1368,13 +1377,20 @@ const endUse=()=>endOn()&&!isFree(size)?ending:'none';
 const endCost=()=>img==='premium'?0:END_PRICE;   // Premium'da yakuniy video bepul (egasi, 2026-11-09)
 const totalOf=(n,tier)=>priceOf(n,tier)+(endUse()==='paid'?endCost():0);
 let endOpen=false;
-function toggleEnd(){endOpen=!endOpen; syncEnd(); if(endOpen&&endUse()!=='none') playEnd(); else if(!endOpen){try{$('endVid').pause()}catch(e){}}}
+/* Ikki shablon yonma-yon (1 — jigarrang qahramon, 2 — moviy qahramon). Bosilgani tanlanadi va ovozi bilan o'ynaydi. */
+let endTpl=1;
+const endVids=()=>[$('endVid1'),$('endVid2')];
+function pauseEnd(){endVids().forEach(v=>{try{v.pause()}catch(e){}})}
+function toggleEnd(){endOpen=!endOpen; syncEnd(); if(endOpen&&endUse()!=='none') playEnd(); else if(!endOpen) pauseEnd()}
 function setEnd(v){ending=v;store.set('ending',v);syncSize();if(v!=='none')playEnd()}
-/* Tekin / Pullik bosilganda: tanlangan slayd tilidagi yakuniy video shu yerda ko'rinadi */
-const endSrc=()=>'ex/end/'+(['uz','uzn','kaa','ru','en'].includes(docLang)?docLang:'uz')+'-'+ending+'.mp4?v=1';
+function setTpl(n){endTpl=n; syncEnd(); playEnd()}
+const endSrc=n=>'ex/end/'+(n===2?'t2-':'')+(['uz','uzn','kaa','ru','en'].includes(docLang)?docLang:'uz')+'-'+ending+'.mp4?v=1';
 function playEnd(){
-  const v=$('endVid'); if(!v||endUse()==='none') return;
-  v.currentTime=0; v.muted=false; v.play().catch(()=>{v.muted=true; v.play().catch(()=>{})});
+  if(endUse()==='none') return;
+  endVids().forEach((v,i)=>{
+    if(i+1===endTpl){v.currentTime=0; v.muted=false; v.play().catch(()=>{v.muted=true; v.play().catch(()=>{})})}
+    else{try{v.pause(); v.currentTime=0}catch(e){}}
+  });
   setTimeout(()=>$('endPv').scrollIntoView({behavior:'smooth',block:'center'}),60);
 }
 function syncEnd(){
@@ -1382,15 +1398,16 @@ function syncEnd(){
   const cur=endUse();
   $('endToggle').classList.toggle('on',endOpen); $('endToggle').classList.toggle('has',cur!=='none');
   $('endBody').classList.toggle('open',endOpen);
-  $('endSub').textContent=t(cur==='free'?'endFree':cur==='paid'?'endPaid':'endNone')+(cur==='paid'&&endCost()?' · +'+money(endCost()):'');
+  $('endSub').textContent=t(cur==='free'?'endFree':cur==='paid'?'endPaid':'endNone')+(cur!=='none'?' · №'+endTpl:'')+(cur==='paid'&&endCost()?' · +'+money(endCost()):'');
   const gift=isFree(size);
   $('endSeg').classList.toggle('off',gift); $('endNote').classList.toggle('on',gift);
   document.querySelectorAll('[data-end]').forEach(b=>b.setAttribute('aria-pressed',b.dataset.end===(gift?'none':ending)));
   $('endPrice').textContent=endCost()?money(endCost()):t('free');
-  const on=endUse()!=='none', v=$('endVid');
+  const on=endUse()!=='none';
   $('endPv').classList.toggle('on',on);
-  if(!on){try{v.pause()}catch(e){}}
-  else if(v.getAttribute('data-k')!==endSrc()){v.setAttribute('data-k',endSrc()); v.poster=endSrc().replace('.mp4','.jpg'); v.src=endSrc()}
+  document.querySelectorAll('[data-tpl]').forEach(b=>b.setAttribute('aria-pressed',+b.dataset.tpl===endTpl));
+  if(!on) pauseEnd();
+  else endVids().forEach((v,i)=>{const src=endSrc(i+1); if(v.getAttribute('data-k')!==src){v.setAttribute('data-k',src); v.poster=src.replace('.mp4','.jpg'); v.src=src}});
 }
 function setSize(n){size=Math.max(SMIN,Math.min(SMAX,n));store.set('size',size);syncSize()}
 function syncSize(){
@@ -1473,7 +1490,7 @@ function submitForm(){
   const data={mode,lang,doc_lang:mode==='prez'?docLang:lang,theme:(img==='art'&&pick==='own')?theme:'auto',img,as:who,role,topic:v('fMav'),size,subject:v('fFan'),
     university:v('fUni'),faculty:v('fFak'),direction:v('fYon'),grade:v('fCls'),group:v('fGrp'),
     student:who==='student'?v('fName'):'',teacher:who==='teacher'?v('fName'):v('fTea'),
-    city:(used.has('city')&&$('cityOn').checked)?$('fCity').value.trim():'', plan, extra:optOn, dens:mode==='prez'?dens:'full', ending:mode==='prez'?endUse():'none'};
+    city:(used.has('city')&&$('cityOn').checked)?$('fCity').value.trim():'', plan, extra:optOn, dens:mode==='prez'?dens:'full', ending:mode==='prez'?endUse():'none', end_tpl:endTpl};
   if(mode==='prez'&&img==='premium'){
     const k=topicKey();
     if(!SUIT[k]){toast('💎',t('checking')); checkSuit().then(()=>submitForm()); return}
