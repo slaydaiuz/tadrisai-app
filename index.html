@@ -1519,7 +1519,7 @@ function submitForm(){
     city:(used.has('city')&&$('cityOn').checked)?$('fCity').value.trim():'', plan, extra:optOn, dens:mode==='prez'?dens:'full', ending:mode==='prez'?endUse():'none', end_tpl:endTpl};
   if(mode==='prez'&&img==='premium'){
     const k=topicKey();
-    if(!SUIT[k]){toast('💎',t('checking')); checkSuit().then(()=>submitForm()); return}
+    if(!SUIT[k]){toast('💎',t('checking')); checkSuit().then(()=>{if(!SUIT[k]) SUIT[k]='good'; submitForm()}); return}
     if(SUIT[k]==='bad'&&!SUIT_OK[k]){askLow(()=>{SUIT_OK[k]=1; submitForm()}); return}
     data._3d_ok=1; data._fit=SUIT[k];
   }
@@ -1563,9 +1563,13 @@ function closeEx(){$('exm').classList.remove('on'); $('exmList').querySelectorAl
 var SUIT={}, SUIT_OK={};
 function topicKey(){const e=$('fMav');return e?e.value.trim().toLowerCase():''}
 async function checkSuit(){
-  const k=topicKey(); if(k.length<3||!(tg&&tg.initData)) return 'good';
+  // Tuzatish (2026-11-09): pastki tugmadan ochilganda initData bo'sh bo'ladi — oldin SUIT yozilmay qolib, «Yaratish» cheksiz
+  // tekshiruvga tushib qolardi. Endi uid+sig bilan ham so'raladi va har qanday holatda natija yoziladi.
+  const k=topicKey(); if(!k) return 'good';
   if(SUIT[k]) return SUIT[k];
-  try{const d=await api('/suit3d',{topic:k}); SUIT[k]=(d&&d.ok&&d.fit)||'good'}catch(e){SUIT[k]='good'}
+  if(k.length<3||!(authBody().init||authBody().sig)){SUIT[k]='good'; return 'good'}
+  try{const d=await Promise.race([api('/suit3d',{topic:k}),new Promise(r=>setTimeout(()=>r(null),15000))]);
+      SUIT[k]=(d&&d.ok&&d.fit)||'good'}catch(e){SUIT[k]='good'}
   if(img==='premium') syncDesign();
   return SUIT[k];
 }
