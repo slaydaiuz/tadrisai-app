@@ -236,6 +236,10 @@ header{display:flex;align-items:center;justify-content:space-between;gap:10px;ma
 @keyframes popglow{0%,100%{box-shadow:0 0 0 0 rgba(16,185,129,0)}50%{box-shadow:0 0 10px 1px rgba(245,158,11,.55)}}
 .imgs .tag{position:absolute;top:7px;right:7px;font-style:normal;font-size:9.5px;font-weight:700;padding:2px 6px;border-radius:99px;background:linear-gradient(120deg,var(--blue),var(--violet));color:#fff}
 [data-img="premium"] .ie{animation:gem 2.6s ease-in-out infinite}
+#endPaidBtn .ep-gem{display:none;font-style:normal;margin-left:5px;animation:gem 2.2s ease-in-out infinite}
+#endPaidBtn.prem .ep-l>span{text-decoration:line-through;text-decoration-thickness:2px;opacity:.6}
+#endPaidBtn.prem .ep-gem{display:inline-block}
+#endPaidBtn.prem #endPrice{color:#22C55E;font-weight:800;font-style:normal}
 @keyframes gem{0%,100%{transform:rotate(0) scale(1);filter:drop-shadow(0 0 0 rgba(139,92,246,0))}50%{transform:rotate(-10deg) scale(1.18);filter:drop-shadow(0 0 6px rgba(139,92,246,.9))}}
 .sent-ic span{display:inline-block}
 .sent-ic.wait span{animation:hourglass 2.4s ease-in-out infinite}
@@ -790,7 +794,7 @@ textarea.ix-in{resize:none;min-height:84px;line-height:1.4}
       <div class="seg3 endseg" id="endSeg" role="group">
         <button type="button" data-end="none" onclick="setEnd('none')"><span data-i18n="endNone"></span></button>
         <button type="button" data-end="free" onclick="setEnd('free')"><span data-i18n="endFree"></span></button>
-        <button type="button" data-end="paid" onclick="setEnd('paid')"><span data-i18n="endPaid"></span><i id="endPrice"></i></button>
+        <button type="button" data-end="paid" id="endPaidBtn" onclick="setEnd('paid')"><span class="ep-l"><span data-i18n="endPaid"></span><em class="ep-gem">💎</em></span><i id="endPrice"></i></button>
       </div>
       <div class="end-note" id="endNote" data-i18n="endGift"></div>
       <div class="end-pv" id="endPv">
@@ -1488,6 +1492,7 @@ function syncEnd(){
   $('endSeg').classList.toggle('off',gift); $('endNote').classList.toggle('on',gift);
   document.querySelectorAll('[data-end]').forEach(b=>b.setAttribute('aria-pressed',b.dataset.end===(gift?'none':ending)));
   $('endPrice').textContent=endCost()?money(endCost()):t('free');
+  $('endPaidBtn').classList.toggle('prem',!endCost());     // Premium: «Pullik» ustidan chizilgan + 💎 + yashil «Bepul»
   const on=endUse()!=='none';
   $('endPv').classList.toggle('on',on);
   document.querySelectorAll('[data-tpl]').forEach(b=>b.setAttribute('aria-pressed',+b.dataset.tpl===endTpl));
