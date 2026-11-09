@@ -250,6 +250,17 @@ header{display:flex;align-items:center;justify-content:space-between;gap:10px;ma
 .img-info.on{display:block;animation:fadein .3s ease}
 .prem-ex{display:block;width:100%;margin-top:10px;padding:10px 12px;border:0;border-radius:12px;background:var(--violet);color:#fff;font:inherit;font-weight:700;font-size:13.5px;cursor:pointer}
 .prem-low{margin-top:8px;font-weight:600}
+.prem-disc{margin-bottom:10px;padding:11px 12px;border-radius:12px;background:linear-gradient(120deg,rgba(93,69,245,.16),rgba(252,211,77,.16));border:1px solid rgba(252,211,77,.55);animation:discGlow 2.4s ease-in-out infinite}
+.prem-disc b.h{display:block;font-size:14px;margin-bottom:3px}
+.prem-disc .pd-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin:9px 0 7px}
+.prem-disc .pd-grid div{text-align:center;padding:6px 2px;border-radius:9px;background:var(--card,rgba(255,255,255,.06))}
+.prem-disc .pd-grid i{display:block;font-style:normal;font-size:10.5px;opacity:.75}
+.prem-disc .pd-grid s{display:block;font-size:10.5px;opacity:.6}
+.prem-disc .pd-grid b{display:block;font-size:13px;color:#16A34A}
+.prem-disc em{font-style:normal;font-size:12px;font-weight:600;opacity:.85}
+.imgs .tag.disc{background:linear-gradient(120deg,#F59E0B,#EF4444)}
+.old-p{opacity:.55;font-weight:500;margin-right:4px}
+@keyframes discGlow{0%,100%{box-shadow:0 0 0 0 rgba(252,211,77,0)}50%{box-shadow:0 0 14px 1px rgba(252,211,77,.35)}}
 .prem-phone{display:flex;align-items:center;gap:10px;margin-top:10px;padding:9px 11px;border-radius:12px;background:rgba(239,68,68,.10);border:1px solid rgba(239,68,68,.35);font-weight:600;font-size:13px}
 .pp-ic{position:relative;flex:0 0 auto;font-size:22px;line-height:1}
 .pp-ic i{position:absolute;right:-6px;bottom:-4px;width:16px;height:16px;border-radius:50%;background:#ef4444;color:#fff;font-style:normal;font-size:11px;font-weight:900;display:flex;align-items:center;justify-content:center}
@@ -721,7 +732,7 @@ textarea.ix-in{resize:none;min-height:84px;line-height:1.4}
       <div class="imgs">
         <button type="button" data-img="photo" onclick="setImg('photo')"><span class="ie">📷</span><b data-i18n="imgPhoto"></b><span data-i18n="imgPhotoD"></span><span class="from" data-from="photo"></span><em class="tag pop" data-i18n="popTag"></em></button>
         <button type="button" data-img="art" onclick="setImg('art')"><span class="ie">✏️</span><b data-i18n="imgArt"></b><span data-i18n="imgArtD"></span><span class="from" data-from="art"></span></button>
-        <button type="button" data-img="premium" onclick="setImg('premium')"><span class="ie">💎</span><b data-i18n="imgPrem"></b><span data-i18n="imgPremD"></span><span class="from" data-from="premium"></span><em class="tag" data-i18n="soonTag"></em></button>
+        <button type="button" data-img="premium" onclick="setImg('premium')"><span class="ie">💎</span><b data-i18n="imgPrem"></b><span data-i18n="imgPremD"></span><span class="from" data-from="premium"></span><em class="tag" id="premTag"></em></button>
       </div>
       <div class="img-info" id="imgInfo"></div>
       <div id="sizeBox">
@@ -979,7 +990,7 @@ uz:{hello:"Salom", sub:"Bugun nima tayyorlaymiz?", change:"· almashtirish",
   more:"Yana", testS:"Testga tayyorlanish", testSDesc:"Mavzu bo'yicha savollar bilan mashq", ref:"Referat", refDesc:"Qisqa ish, kirish va xulosa bilan",
   testT:"Test generatori", testTDesc:"Savollar va javoblar kaliti, .docx",
   site:"Krossvord va interaktiv metodlar", siteDesc:"Saytda tayyorlanadi va darsda ochiladi", siteBtn:"Saytga o'tish",
-  soonTag:"Tez kunda", popTag:"Ommabop", back:"← Orqaga", formSub:"Ma'lumotlarni to'ldiring",
+  soonTag:"Tez kunda", newTag:"Yangi", discT:"🎉 Test rejimi chegirmasi", discD:"Premium 3D endi hamma uchun! Dastlabki 3 kun har bir hajmga −1 000 so'm.", discTill:"⏳ 12-noyabr, 17:00 gacha", popTag:"Ommabop", back:"← Orqaga", formSub:"Ma'lumotlarni to'ldiring",
   asLabel:"Kim sifatida yaratasiz?", asStudent:"Talaba sifatida", asStudentDesc:"Topshirish uchun: titulda talaba ismi", asTeacher:"O'qituvchi sifatida", asTeacherDesc:"Dars uchun: titulda o'qituvchi ismi",
   fFan:"Fan", phFan:"Masalan: Iqtisodiyot nazariyasi", fMav:"Mavzu", phMav:"Masalan: Inflyatsiya va uning turlari",
   fFak:"Fakultet", phFak:"Masalan: Iqtisodiyot", fYon:"Yo'nalish", phYon:"Masalan: Moliya", fCls:"Sinf yoki kurs", phCls:"Masalan: 9-sinf yoki 2-kurs",
@@ -1000,7 +1011,7 @@ ru:{hello:"Привет", sub:"Что подготовим сегодня?", cha
   more:"Ещё", testS:"Подготовка к тесту", testSDesc:"Тренировка с вопросами по теме", ref:"Реферат", refDesc:"Краткая работа с введением и выводом",
   testT:"Генератор тестов", testTDesc:"Вопросы и ключ ответов, .docx",
   site:"Кроссворды и интерактивные методы", siteDesc:"Готовятся на сайте и открываются на уроке", siteBtn:"Перейти",
-  soonTag:"Скоро", popTag:"Популярный", back:"← Назад", formSub:"Заполните данные",
+  soonTag:"Скоро", newTag:"Новинка", discT:"🎉 Скидка тестового режима", discD:"Премиум 3D теперь для всех! Первые 3 дня — −1 000 сум на каждый объём.", discTill:"⏳ до 12 ноября, 17:00", popTag:"Популярный", back:"← Назад", formSub:"Заполните данные",
   asLabel:"В какой роли создаёте?", asStudent:"Как студент", asStudentDesc:"Для сдачи: на титуле имя студента", asTeacher:"Как преподаватель", asTeacherDesc:"Для урока: на титуле имя преподавателя",
   fFan:"Предмет", phFan:"Например: Экономическая теория", fMav:"Тема", phMav:"Например: Инфляция и её виды",
   fFak:"Факультет", phFak:"Например: Экономика", fYon:"Направление", phYon:"Например: Финансы", fCls:"Класс или курс", phCls:"Например: 9 класс или 2 курс",
@@ -1021,7 +1032,7 @@ en:{hello:"Hi", sub:"What are we preparing today?", change:"· change",
   more:"More", testS:"Test practice", testSDesc:"Practise with questions on a topic", ref:"Essay", refDesc:"Short paper with intro and conclusion",
   testT:"Test generator", testTDesc:"Questions with an answer key, .docx",
   site:"Crosswords and interactive methods", siteDesc:"Prepared on the website, opened in class", siteBtn:"Open site",
-  soonTag:"Soon", popTag:"Popular", back:"← Back", formSub:"Fill in the details",
+  soonTag:"Soon", newTag:"New", discT:"🎉 Test-mode discount", discD:"Premium 3D is now open to everyone! For the first 3 days, −1 000 so'm on every size.", discTill:"⏳ until Nov 12, 17:00", popTag:"Popular", back:"← Back", formSub:"Fill in the details",
   asLabel:"Who is it for?", asStudent:"As a student", asStudentDesc:"To submit: student name on the title", asTeacher:"As a teacher", asTeacherDesc:"For class: teacher name on the title",
   fFan:"Subject", phFan:"E.g.: Economic theory", fMav:"Topic", phMav:"E.g.: Inflation and its types",
   fFak:"Faculty", phFak:"E.g.: Economics", fYon:"Major", phYon:"E.g.: Finance", fCls:"Grade or year", phCls:"E.g.: Grade 9 or Year 2",
@@ -1368,11 +1379,24 @@ const MARKS=[6,10,15,20,25], SMIN=6, SMAX=25;
 const money=v=>v.toLocaleString('ru-RU').replace(/,/g,' ')+(lang==='uzn'?' söm':lang==='kaa'?' swm':" so'm");
 const bucket=n=>n<=10?0:n<=15?1:n<=20?2:3;
 const isFree=n=>FREE>0&&n<=6&&(mode!=='prez'||img==='photo');   // sovg'a: faqat Standart, 10 tagacha
-const priceOf=(n,tier)=>(PRICES[tier]||PRICES.photo)[bucket(n)];
+// Ommaga ochilish (egasi, 2026-11-09): Premium 3D va yakuniy videolar 17:00 (Toshkent) dan hamma uchun; admin oldindan ko'radi
+const LAUNCH=Date.parse('2026-11-09T17:00:00+05:00'), live=()=>UNL||Date.now()>=LAUNCH;
+// Premium test rejimi chegirmasi: 3 kun har hajmga −1 000 so'm (bot bilan bir xil)
+const PREM_DISC=1000, DISC_END=Date.parse('2026-11-12T17:00:00+05:00'), discOn=()=>Date.now()<DISC_END;
+const fullOf=(n,tier)=>(PRICES[tier]||PRICES.photo)[bucket(n)];
+const priceOf=(n,tier)=>fullOf(n,tier)-(tier==='premium'&&discOn()?PREM_DISC:0);
+const discNow=()=>img==='premium'&&discOn();
+const nosum=v=>money(v).replace(/ (so'm|söm|swm)$/,'');
+function discCard(){
+  if(!discOn()) return '';
+  return '<div class="prem-disc"><b class="h">'+t('discT')+'</b>'+t('discD')+'<div class="pd-grid">'+
+    [10,15,20,25].map(n=>'<div><i>'+n+' '+t('pcs')+'</i><s>'+nosum(fullOf(n,'premium'))+'</s><b>'+nosum(priceOf(n,'premium'))+'</b></div>').join('')+
+    '</div><em>'+t('discTill')+'</em></div>';
+}
 /* Yakuniy video (til tanlashdan keyin): Videosiz | Tekin (TadrisAI futbolkali) | Pullik (+1 000, futbolkasiz). Sovg'ada yo'q. */
-const END_LIVE=false, END_PRICE=1000;      // hozircha faqat admin sinovida
+const END_LIVE=false, END_PRICE=1000;      // 17:00 gacha faqat admin, keyin live() bilan hamma uchun
 let ending='none';   // har safar «Yakuniy videosiz» dan boshlanadi
-const endOn=()=>mode==='prez'&&(END_LIVE||UNL);
+const endOn=()=>mode==='prez'&&(END_LIVE||live());
 const endUse=()=>endOn()&&!isFree(size)?ending:'none';
 const endCost=()=>img==='premium'?0:END_PRICE;   // Premium'da yakuniy video bepul (egasi, 2026-11-09)
 const totalOf=(n,tier)=>priceOf(n,tier)+(endUse()==='paid'?endCost():0);
@@ -1419,12 +1443,14 @@ function syncSize(){
   const cur=(size<=6&&isFree(size))?6:[10,15,20,25][bucket(size)];
   $('rngTicks').innerHTML=MARKS.map(m=>`<div class="rng-tick ${m<=size||m===cur?'on':''} ${m===cur?'cur':''}" style="left:${pct(m)}%"><b>${m}</b><i></i><span class="${isFree(m)?'fr':''}">${isFree(m)?'🎁 '+t('free'):money(priceOf(m,img)).replace(/ (so'm|söm|swm)$/,'')}</span></div>`).join('');
   const p=totalOf(size,img);
-  $('rngPrice').innerHTML=`${size} ${t('pcsSlides')} · <b>${isFree(size)?'🎁 '+t('free'):money(p)}</b>`;
+  $('rngPrice').innerHTML=`${size} ${t('pcsSlides')} · ${discNow()&&!isFree(size)?'<s class="old-p">'+nosum(fullOf(size,img)+(endUse()==='paid'?endCost():0))+'</s>':''}<b>${isFree(size)?'🎁 '+t('free'):money(p)}</b>`;
   const low=KNOWN&&!UNL&&!isFree(size)&&BALANCE<p;
   $('lowBal').classList.toggle('on',low);
   if(low) $('lowBal').innerHTML=t('lowBal').replace('{b}',money(BALANCE)).replace('{x}',money(p-BALANCE));
   $('cta').textContent=isFree(size)?'🎁 '+t('ctaFree'):low?t('topupBtn2'):t('ctaPrez')+' · '+money(p);
-  document.querySelectorAll('[data-from]').forEach(e=>e.textContent=money(PRICES[e.dataset.from][0]).replace(/ (so'm|söm|swm)$/,"")+' '+t('from'));
+  document.querySelectorAll('[data-from]').forEach(e=>{const k=e.dataset.from, d=k==='premium'&&discOn();
+    e.innerHTML=(d?'<s class="old-p">'+nosum(fullOf(10,k))+'</s>':'')+nosum(priceOf(10,k))+' '+t('from')});
+  const pt=$('premTag'); if(pt){const on=live(), d=on&&discOn(); pt.textContent=!on?t('soonTag'):d?'−'+nosum(PREM_DISC):t('newTag'); pt.classList.toggle('disc',d)}
 }
 function syncDesign(){
   document.querySelectorAll('[data-th]').forEach(b=>b.setAttribute('aria-pressed',b.dataset.th===theme));
@@ -1435,7 +1461,7 @@ function syncDesign(){
   $('themeWrap').classList.toggle('open',pick==='own');
   const info=$('imgInfo');
   if(img==='premium'){
-    info.innerHTML=t('premNote')+'<div class="prem-phone"><span class="pp-ic">📱<i>✕</i></span><span>'+t('noPhone')+'</span></div>'+
+    info.innerHTML=(live()?discCard():'')+t('premNote')+'<div class="prem-phone"><span class="pp-ic">📱<i>✕</i></span><span>'+t('noPhone')+'</span></div>'+
       (window.SUIT&&SUIT[topicKey()]==='bad'?'<div class="prem-low">'+t('lowInline')+'</div>':'')+
       '<button type="button" class="prem-ex" onclick="openEx()">'+t('premEx')+'</button>';
   } else info.textContent=img==='photo'?t('imgPhotoInfo'):t('imgArtInfo');
@@ -1464,7 +1490,7 @@ function renderForm(){
 }
 const SAVE=['fUni','fName','fGrp','fTea','fCity','fFak','fYon','fCls'];
 function submitForm(){
-  if(mode==='prez'&&img==='premium'&&!UNL){showInfo('💎',t('imgPrem'),t('soonMsg'));return}   // 3D Premium: hozircha faqat admin
+  if(mode==='prez'&&img==='premium'&&!live()){showInfo('💎',t('imgPrem'),t('soonMsg'));return}   // 3D Premium: 17:00 dan hamma uchun
   saveFields();
   if(mode==='prez'&&KNOWN&&!UNL&&!isFree(size)&&BALANCE<totalOf(size,img)){
     openTopup(totalOf(size,img)-BALANCE);return}
