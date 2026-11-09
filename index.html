@@ -1141,6 +1141,7 @@ function openForm(m){
 }
 let FREE=Math.max(0,parseInt(qs.get('free')||'0',10)||0);
 const UNL=qs.get('unl')==='1';          // admin: cheklovsiz
+const SRV={live:null,disc:null};   // /api/me dan keladi (ochilish, Premium chegirmasi); kelmaguncha telefon soati
 const KNOWN=UNL||qs.has('free');        // eski tugmadan ochilsa - tekshiruvni bot o'zi qiladi
 let BALANCE=Math.max(0,parseInt(qs.get('bal')||'0',10)||0);   // botdan keladi
 function loadTx(){
@@ -1196,8 +1197,10 @@ const API='https://91-107-229-30.sslip.io/api';
 const PM_NAME={payme:'Payme',click:'Click',paynet:'Paynet',plum:'Plum',other:'inPAY'};
 let pay=null, payTimer=null;
 function authBody(){return {init:(tg&&tg.initData)||'',uid:qs.get('uid')||'',sig:qs.get('sig')||''}}
-async function api(path,body){
-  const r=await fetch(API+path,{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify(Object.assign(authBody(),body))});
+async function api(path,body,ms){
+  const ac=window.AbortController?new AbortController():null, tm=ac&&ms?setTimeout(()=>ac.abort(),ms):0;
+  const r=await fetch(API+path,{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify(Object.assign(authBody(),body)),signal:ac?ac.signal:undefined})
+    .finally(()=>{if(tm) clearTimeout(tm)});
   let d={}; try{d=await r.json()}catch(e){}
   return d;
 }
@@ -1211,7 +1214,9 @@ async function refreshMe(){
     if(typeof d.balance==='number') BALANCE=d.balance;
     if(Array.isArray(d.tx)) TXS=d.tx;
     if(typeof d.free==='number') FREE=d.free;
-    renderWallet(); renderPlan();
+    if(typeof d.live==='boolean') SRV.live=d.live;               // ochilish va chegirma — server soati bo'yicha
+    if(typeof d.prem_disc==='number') SRV.disc=d.prem_disc;
+    renderWallet(); renderPlan(); try{if(mode==='prez') syncDesign()}catch(e){}
   }catch(e){}
 }
 document.addEventListener('visibilitychange',()=>{if(!document.hidden) refreshMe()});
@@ -1380,9 +1385,9 @@ const money=v=>v.toLocaleString('ru-RU').replace(/,/g,' ')+(lang==='uzn'?' söm'
 const bucket=n=>n<=10?0:n<=15?1:n<=20?2:3;
 const isFree=n=>FREE>0&&n<=6&&(mode!=='prez'||img==='photo');   // sovg'a: faqat Standart, 10 tagacha
 // Ommaga ochilish (egasi, 2026-11-09): Premium 3D va yakuniy videolar 17:00 (Toshkent) dan hamma uchun; admin oldindan ko'radi
-const LAUNCH=Date.parse('2026-11-09T17:00:00+05:00'), live=()=>UNL||Date.now()>=LAUNCH;
+const LAUNCH=Date.parse('2026-11-09T17:00:00+05:00'), live=()=>UNL||(SRV.live!==null?SRV.live:Date.now()>=LAUNCH);
 // Premium test rejimi chegirmasi: 3 kun har hajmga −1 000 so'm (bot bilan bir xil)
-const PREM_DISC=1000, DISC_END=Date.parse('2026-11-12T17:00:00+05:00'), discOn=()=>Date.now()<DISC_END;
+const PREM_DISC=1000, DISC_END=Date.parse('2026-11-12T17:00:00+05:00'), discOn=()=>SRV.disc!==null?SRV.disc>0:Date.now()<DISC_END;
 const fullOf=(n,tier)=>(PRICES[tier]||PRICES.photo)[bucket(n)];
 const priceOf=(n,tier)=>fullOf(n,tier)-(tier==='premium'&&discOn()?PREM_DISC:0);
 const discNow=()=>img==='premium'&&discOn();
@@ -1606,7 +1611,7 @@ function sendOrder(data){
   $('sentIc').innerHTML='<span>⏳</span>'; $('sentIc').className='sent-ic wait'; $('sentTitle').textContent=t('sentTitle'); $('sentText').textContent=t('sentText'); $('sentBtn').textContent=t('sentBtn');
   $('sent').classList.add('on');
   try{tg.HapticFeedback&&tg.HapticFeedback.notificationOccurred('success')}catch(e){}
-  orderReq=api('/order',{data}).then(d=>{
+  orderReq=api('/order',{data},10000).then(d=>{     // 10 s: server javob bermasa — zaxira (sendData) ishlaydi
     if(d&&d.ok){orderReq='done'; return}
     throw 0;
   }).catch(()=>{orderReq=null; pending=data;            // server javob bermadi — zaxira: «Tushunarli» bosilganda sendData
