@@ -640,6 +640,27 @@ textarea.ix-in{resize:none;min-height:84px;line-height:1.4}
 .ix-big .arr{width:42px;height:42px;border-radius:50%;background:var(--surface);border:1px solid var(--line);color:var(--text);font-size:22px}
 .ix-big .nm{font-weight:700;font-size:18px} .ix-big .ds{font-size:13px;color:var(--muted);text-align:center;max-width:300px}
 .ix-big .ok{width:100%;height:52px;border-radius:16px;border:0;background:var(--indigo);color:#fff;font:inherit;font-weight:700;font-size:16px}
+
+/* ---------- Kompyuter: keng oyna (Telegram Desktop'da oyna kattalashtirilganda). Hozircha FAQAT ADMIN — html.desk ---------- */
+html.desk .wrap{max-width:none;margin:0;padding:22px 40px 60px 290px}
+html.desk .wrap>header,html.desk .wrap>.screen{max-width:880px;margin-left:auto;margin-right:auto}
+html.desk nav{display:block!important;left:0;top:0;bottom:0;right:auto;width:250px;padding:16px 0 16px 16px}
+html.desk .nav-in{max-width:none;height:100%;flex-direction:column;justify-content:flex-start;gap:4px;padding:16px 12px;border-radius:24px}
+html.desk .nav-b{flex:none;flex-direction:row;justify-content:flex-start;gap:12px;padding:11px 14px;font-size:14.5px;font-weight:600;text-align:left}
+html.desk .nav-b svg{width:20px;height:20px}
+.desk-only{display:none}
+html.desk .desk-only{display:flex}
+.dk-brand{align-items:center;gap:10px;padding:4px 10px 16px;font-size:19px;font-weight:700;letter-spacing:-.01em}
+.dk-brand i{width:34px;height:34px;border-radius:11px;display:grid;place-items:center;font-style:normal;color:#fff;font-weight:800;background:linear-gradient(135deg,var(--blue),var(--indigo) 55%,var(--violet))}
+.dk-sec{padding:16px 14px 6px;font-size:11.5px;font-weight:700;letter-spacing:.06em;color:var(--muted);text-transform:uppercase}
+.dk-bal{margin-top:auto;flex-direction:column;gap:2px;padding:14px;border-radius:16px;background:var(--chip);text-align:left}
+.dk-bal small{font-size:12px;color:var(--muted)}.dk-bal b{font-size:17px}
+html.desk .tools{grid-template-columns:1fr 1fr}
+html.desk .list{display:grid;grid-template-columns:1fr 1fr}
+html.desk .greet h1{font-size:30px}
+html.desk .qz-opts{display:grid;grid-template-columns:1fr 1fr}
+html.desk .qz-stats{grid-template-columns:repeat(3,1fr)}
+html.desk .hbal{display:none}
 </style>
 </head>
 <body>
@@ -982,9 +1003,13 @@ textarea.ix-in{resize:none;min-height:84px;line-height:1.4}
 </div></div>
 
 <nav><div class="nav-in">
+  <div class="desk-only dk-brand"><i>T</i>TadrisAI</div>
+  <div class="desk-only dk-sec">Menyu</div>
   <button class="nav-b on" id="nav-home" onclick="show('home')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.5 12 3l9 7.5V20a1 1 0 0 1-1 1h-5v-6h-6v6H4a1 1 0 0 1-1-1z"/></svg><span data-i18n="navHome"></span></button>
   <button class="nav-b" id="nav-files" onclick="show('files')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg><span data-i18n="navFiles"></span></button>
   <button class="nav-b" id="nav-profile" onclick="show('profile')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c1.5-4 4.5-6 8-6s6.5 2 8 6"/></svg><span data-i18n="navProfile"></span></button>
+  <button class="nav-b desk-only" type="button" onclick="QZ.open()" id="dkQuiz"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="3" width="16" height="18" rx="2"/><path d="M8 8h8M8 12h8M8 16h5"/></svg><span>Test quiz</span></button>
+  <button class="desk-only dk-bal" type="button" onclick="openTopup(0)"><small>Balans</small><b id="dkBal"></b></button>
 </div></nav>
 
 <script>
@@ -1139,6 +1164,13 @@ function row(ic,title,desc){
   return `<button class="row" onclick="soon()"><span class="row-ic">${IC[ic]}</span><span class="txt"><b>${title}</b><i>${desc}</i></span><span class="soon">${t('soonTag')}</span></button>`;
 }
 const isAdmin=()=>UNL||SRV.admin===true;
+/* Kompyuter ko'rinishi: keng oynada chap menyu (faqat admin; boshqalarda hech narsa o'zgarmaydi) */
+function syncDesk(){
+  const on=isAdmin()&&window.innerWidth>=900;
+  document.documentElement.classList.toggle('desk',on);
+  if(on){const b=$('dkBal'); if(b) b.textContent=money(BALANCE)}
+}
+window.addEventListener('resize',()=>{clearTimeout(window._dkT);window._dkT=setTimeout(syncDesk,120)});
 function renderHome(){
   $('hello').innerHTML=esc(t('hello'))+(userName?', <span class="nm">'+esc(userName)+'!</span>':'!');
   $('hsStudent').setAttribute('aria-pressed',role==='student');
@@ -1240,6 +1272,7 @@ async function refreshMe(){
     if(typeof d.live==='boolean') SRV.live=d.live;               // ochilish va chegirma — server soati bo'yicha
     if(typeof d.prem_disc==='number') SRV.disc=d.prem_disc;
     if(typeof d.admin==='boolean'&&d.admin!==SRV.admin){SRV.admin=d.admin; renderHome()}
+    syncDesk();
     renderWallet(); renderPlan(); try{if(mode==='prez') syncDesign()}catch(e){}
   }catch(e){}
 }
@@ -1984,6 +2017,7 @@ try{CS&&CS.getItems(SAVE.map(id=>'f_'+id).concat(['cityOn']),(err,vals)=>{
 $('cityOn').checked=!!store.get('cityOn');
 buildThemes();
 renderAll();
+syncDesk();
 renderPlan();
 refreshMe();
 if(qs.get('screen')) show(qs.get('screen'));
