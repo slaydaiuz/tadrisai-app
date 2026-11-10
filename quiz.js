@@ -1,0 +1,403 @@
+/* Test quiz va Krossvord (2026-11-11). Hozircha yaratish FAQAT ADMIN uchun; havola orqali kelgan har kim yechadi.
+   index.html dagi $, esc, api, tg, qs, show, toast, userName, lang dan foydalanadi. Ekran: <section id="qz">. */
+(function(){
+const st=document.createElement('style');
+st.textContent=`
+.qz-head{display:flex;align-items:center;gap:10px;margin:2px 0 14px}
+.qz-head h1{font-size:24px;font-weight:700;letter-spacing:-.01em}
+.qz-tag{font-size:10.5px;font-weight:700;letter-spacing:.06em;padding:4px 8px;border-radius:999px;background:var(--chip);color:var(--chip-text)}
+.qz-tabs{display:grid;grid-template-columns:1fr 1fr;gap:6px;padding:5px;border-radius:16px;background:var(--surface);border:1px solid var(--line)}
+.qz-tabs button{padding:11px;border-radius:12px;font-weight:600;color:var(--muted)}
+.qz-tabs button[aria-pressed="true"]{background:linear-gradient(120deg,var(--blue),var(--indigo));color:#fff;font-weight:700}
+.qz-ta{width:100%;min-height:78px;resize:vertical;padding:13px 14px;border-radius:var(--r-sm);border:1.5px solid var(--line);background:var(--field);color:var(--text);font:inherit;font-size:16px;outline:none}
+.qz-ta:focus{border-color:var(--violet)}
+.qz-in{width:100%;padding:13px 14px;border-radius:var(--r-sm);border:1.5px solid var(--line);background:var(--field);color:var(--text);font:inherit;font-size:16px;outline:none}
+.qz-in:focus{border-color:var(--violet)}
+.qz-seg{display:grid;grid-auto-flow:column;grid-auto-columns:1fr;gap:6px}
+.qz-seg button{padding:11px 4px;border-radius:12px;border:1.5px solid var(--line);background:var(--field);font-weight:600;font-size:14px;color:var(--text)}
+.qz-seg button[aria-pressed="true"]{border-color:var(--violet);background:var(--chip);color:var(--chip-text);font-weight:700}
+.qz-langs{display:flex;flex-wrap:wrap;gap:6px}
+.qz-langs button{padding:8px 12px;border-radius:999px;border:1.5px solid var(--line);background:var(--field);font-size:13px;font-weight:600;color:var(--text)}
+.qz-langs button[aria-pressed="true"]{border-color:var(--violet);background:var(--chip);color:var(--chip-text)}
+.qz-card{padding:14px 16px;border-radius:18px;background:var(--surface);border:1px solid var(--line);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}
+.qz-get{display:flex;flex-direction:column;gap:8px;margin-top:18px}
+.qz-get div{display:flex;gap:9px;align-items:center;font-size:13.5px}
+.qz-get i{font-style:normal;color:#10B981;font-weight:800}
+.qz-hint{text-align:center;font-size:12px;color:var(--muted);margin-top:8px}
+.qz-list{display:flex;flex-direction:column;gap:8px}
+.qz-item{display:flex;align-items:center;gap:12px;width:100%;text-align:left;padding:12px 14px;border-radius:16px;background:var(--surface);border:1px solid var(--line)}
+.qz-item .ic{width:38px;height:38px;border-radius:12px;display:grid;place-items:center;background:var(--chip);font-size:18px;flex:none}
+.qz-item .tx{flex:1;min-width:0}.qz-item b{display:block;font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.qz-item small{color:var(--muted);font-size:12px}
+.qz-load{min-height:60vh;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;text-align:center}
+.qz-spin{width:56px;height:56px;border-radius:50%;border:4px solid var(--line);border-top-color:var(--violet);animation:qzs 1s linear infinite}
+@keyframes qzs{to{transform:rotate(360deg)}}
+.qz-ok{width:64px;height:64px;border-radius:20px;display:grid;place-items:center;font-size:30px;background:rgba(16,185,129,.16);margin:6px auto 12px}
+.qz-title{font-size:21px;font-weight:700;text-align:center;line-height:1.25}
+.qz-chips{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin:10px 0 18px}
+.qz-chips span{font-size:12px;font-weight:600;padding:5px 10px;border-radius:999px;background:var(--surface);border:1px solid var(--line);color:var(--muted)}
+.qz-link{display:flex;align-items:center;gap:10px;padding:12px 14px;border-radius:14px;background:var(--field);border:1.5px dashed var(--violet);font-size:13.5px;font-weight:600;word-break:break-all}
+.qz-link span{flex:1}.qz-link button{flex:none;padding:7px 11px;border-radius:10px;background:var(--chip);color:var(--chip-text);font-weight:700;font-size:12.5px}
+.qz-2{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}
+.qz-btn{padding:14px;border-radius:14px;font-weight:700;font-size:15px;border:1.5px solid var(--line);background:var(--surface);color:var(--text)}
+.qz-btn.pri{border:0;color:#fff;background:linear-gradient(120deg,var(--blue),var(--indigo) 50%,var(--violet))}
+.qz-btn:disabled{opacity:.5}
+.qz-top{display:flex;align-items:center;gap:12px;margin-bottom:14px}
+.qz-x{width:42px;height:42px;border-radius:14px;background:var(--surface);border:1px solid var(--line);display:grid;place-items:center;font-size:16px;flex:none}
+.qz-prog{flex:1}.qz-prog b{font-size:14px}.qz-prog small{display:block;color:var(--muted);font-size:12px}
+.qz-bar{height:6px;border-radius:9px;background:var(--line);overflow:hidden;margin-top:6px}.qz-bar i{display:block;height:100%;background:linear-gradient(90deg,var(--blue),var(--violet));border-radius:9px;transition:width .3s}
+.qz-tm{width:46px;height:46px;border-radius:50%;display:grid;place-items:center;font-weight:800;font-size:15px;flex:none;background:conic-gradient(var(--violet) var(--p,100%),var(--line) 0)}
+.qz-tm span{width:38px;height:38px;border-radius:50%;background:var(--bg);display:grid;place-items:center}
+.qz-tm.low{background:conic-gradient(#F59E0B var(--p,100%),var(--line) 0)}
+.qz-q{padding:20px 18px;border-radius:22px;background:var(--surface);border:1px solid var(--line);margin-bottom:14px}
+.qz-q small{font-size:12px;font-weight:800;letter-spacing:.06em;color:var(--chip-text)}
+.qz-q h2{font-size:19px;font-weight:700;line-height:1.35;margin-top:8px}
+.qz-opts{display:flex;flex-direction:column;gap:9px}
+.qz-opt{display:flex;align-items:center;gap:12px;width:100%;text-align:left;padding:14px;border-radius:16px;border:1.5px solid var(--line);background:var(--surface);font-size:15.5px;font-weight:600;color:var(--text)}
+.qz-opt .k{width:32px;height:32px;border-radius:10px;display:grid;place-items:center;background:var(--chip);color:var(--chip-text);font-weight:800;flex:none}
+.qz-opt .lb{margin-left:auto;font-size:11.5px;font-weight:700}
+.qz-opt.good{border-color:#10B981;background:rgba(16,185,129,.14)}.qz-opt.good .k{background:#10B981;color:#fff}.qz-opt.good .lb{color:#10B981}
+.qz-opt.bad{border-color:#EF4444;background:rgba(239,68,68,.12)}.qz-opt.bad .k{background:#EF4444;color:#fff}.qz-opt.bad .lb{color:#EF4444}
+.qz-opt.dim{opacity:.55}
+.qz-why{margin-top:12px;padding:14px 16px;border-radius:18px;background:rgba(59,130,246,.12);border:1px solid rgba(59,130,246,.35)}
+.qz-why b{font-size:13px;color:#60A5FA}.qz-why p{font-size:14.5px;line-height:1.5;margin-top:4px}
+.qz-note{text-align:center;font-size:12.5px;color:var(--muted);margin-top:12px}
+.qz-ring{width:150px;height:150px;border-radius:50%;margin:8px auto 12px;display:grid;place-items:center;background:conic-gradient(#10B981 var(--p),var(--line) 0)}
+.qz-ring div{width:124px;height:124px;border-radius:50%;background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center}
+.qz-ring b{font-size:34px;font-weight:800}.qz-ring small{color:var(--muted);font-size:13px}
+.qz-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:16px 0}
+.qz-stats div{padding:12px 6px;border-radius:16px;background:var(--surface);border:1px solid var(--line);text-align:center}
+.qz-stats b{display:block;font-size:18px;font-weight:800}.qz-stats small{font-size:11.5px;color:var(--muted)}
+.qz-row{display:flex;align-items:center;gap:10px;padding:10px 14px;border-bottom:1px solid var(--line);font-size:14px}
+.qz-row:last-child{border-bottom:0}
+.qz-av{width:32px;height:32px;border-radius:50%;display:grid;place-items:center;background:var(--chip);color:var(--chip-text);font-weight:800;font-size:13px;flex:none}
+.qz-warn{padding:14px 16px;border-radius:18px;background:rgba(245,158,11,.12);border:1px solid rgba(245,158,11,.45);margin:12px 0}
+.qz-warn b{color:#F59E0B;font-size:13px}.qz-warn p{font-size:14px;margin-top:4px;line-height:1.45}
+.qz-qi{padding:14px;border-radius:16px;background:var(--surface);border:1px solid var(--line);margin-bottom:8px}
+.qz-qi h3{font-size:14.5px;font-weight:700;line-height:1.35}
+.qz-qi ol{margin:8px 0 0 18px;font-size:13.5px;color:var(--muted)}.qz-qi li.ok{color:#10B981;font-weight:700}
+.qz-qi .del{margin-top:8px;font-size:12.5px;font-weight:700;color:#EF4444}
+/* krossvord */
+.qz-grid{display:grid;gap:3px;margin:0 auto;user-select:none;-webkit-user-select:none}
+.qz-cell{position:relative;border-radius:6px;display:grid;place-items:center;font-weight:800;text-transform:uppercase}
+.qz-cell.on{background:#F8FAFC;color:#0F172A;cursor:pointer}
+:root[data-theme="light"] .qz-cell.on{background:#fff;box-shadow:inset 0 0 0 1.5px #CBD5E1}
+.qz-cell.word{background:#DDD6FE!important;color:#1E1B4B}
+.qz-cell.cur{background:#FCD34D!important;color:#0F172A;box-shadow:inset 0 0 0 2px #F59E0B!important}
+.qz-cell.wrong{background:#FECACA!important;color:#B91C1C}
+.qz-cell.done{background:#BBF7D0!important;color:#065F46}
+.qz-cell em{position:absolute;left:2px;top:0;font-size:8.5px;font-weight:700;font-style:normal;color:#64748B;line-height:1.1}
+.qz-gwrap{padding:14px 8px;border-radius:22px;background:var(--surface);border:1px solid var(--line);overflow-x:auto}
+.qz-clue{margin:12px 0;padding:13px 15px;border-radius:18px;background:rgba(252,211,77,.12);border:1.5px solid rgba(252,211,77,.6)}
+.qz-clue small{font-size:11.5px;font-weight:800;color:#F59E0B;letter-spacing:.05em}.qz-clue p{font-size:15px;font-weight:600;margin-top:3px;line-height:1.4}
+.qz-cl{display:flex;gap:10px;padding:9px 14px;border-bottom:1px solid var(--line);font-size:13.5px;width:100%;text-align:left;color:var(--text)}
+.qz-cl b{flex:none;width:38px;color:var(--chip-text)}.qz-cl.f{color:var(--muted);text-decoration:line-through}
+#qzKey{position:fixed;left:-200px;top:40%;width:40px;height:30px;opacity:0;font-size:16px}
+`;
+document.head.appendChild(st);
+
+const LNAME={uz:"O'zbek",uzn:'Yangi lotin',kaa:'Qoraqalpoq',ru:'Rus',en:'Ingliz'};
+const LVL={easy:'Oson',mid:"O'rtacha",hard:'Qiyin'};
+const S={kind:'test',n:20,level:'mid',aud:'class',qlang:(['uz','uzn','kaa','ru','en'].includes(lang)?lang:'uz'),quiz:null,code:''};
+const box=()=>$('qz');
+const hap=k=>{try{tg&&tg.HapticFeedback&&(k==='ok'||k==='err'?tg.HapticFeedback.notificationOccurred(k==='ok'?'success':'error'):tg.HapticFeedback.impactOccurred('light'))}catch(e){}};
+const linkOf=c=>'https://t.me/'+(qs.get('bot')||'tadrisai_bot')+'?start=q_'+c;
+const mmss=s=>Math.floor(s/60)+':'+String(s%60).padStart(2,'0');
+let timer=0; const stopT=()=>{if(timer){clearInterval(timer);timer=0}};
+function view(h){stopT(); box().innerHTML=h; show('qz'); window.scrollTo(0,0)}
+
+/* ---------- Yaratish ---------- */
+function open(){
+  const ns=S.kind==='cross'?[8,12,16]:[10,20,30,50];
+  if(!ns.includes(S.n)) S.n=ns[1];
+  const pr=(a,b)=>' aria-pressed="'+(a===b)+'"';
+  view(`<button class="back" onclick="show('home')">← Orqaga</button>
+  <div class="qz-head"><h1>Test quiz</h1><span class="qz-tag">ADMIN · SINOV</span></div>
+  <div class="qz-tabs"><button type="button"${pr(S.kind,'test')} onclick="QZ.set('kind','test')">Test</button><button type="button"${pr(S.kind,'cross')} onclick="QZ.set('kind','cross')">Krossvord</button></div>
+  <div class="group">Mavzu</div>
+  <textarea class="qz-ta" id="qzTopic" placeholder="Masalan: Inson organizmi: qon aylanish tizimi">${esc(S.topic||'')}</textarea>
+  <div class="group">${S.kind==='cross'?"So'zlar soni":'Savollar soni'}</div>
+  <div class="nchips" style="grid-template-columns:repeat(${ns.length},1fr)">${ns.map(n=>`<button type="button"${pr(S.n,n)} onclick="QZ.set('n',${n})">${n}</button>`).join('')}</div>
+  <div class="group">Qiyinlik</div>
+  <div class="qz-seg">${Object.entries(LVL).map(([k,v])=>`<button type="button"${pr(S.level,k)} onclick="QZ.set('level','${k}')">${v}</button>`).join('')}</div>
+  ${S.kind==='test'?`<div class="group">Kim uchun?</div>
+  <div class="seg2"><button type="button"${pr(S.aud,'self')} onclick="QZ.set('aud','self')"><span class="e">🙋</span><b>O'zim uchun</b><span>mashq qilaman</span></button>
+  <button type="button"${pr(S.aud,'class')} onclick="QZ.set('aud','class')"><span class="e">👩‍🏫</span><b>Sinf uchun</b><span>natijalarni ko'raman</span></button></div>`:''}
+  <div class="group">Til</div>
+  <div class="qz-langs">${Object.entries(LNAME).map(([k,v])=>`<button type="button"${pr(S.qlang,k)} onclick="QZ.set('qlang','${k}')">${v}</button>`).join('')}</div>
+  <div class="qz-card qz-get"><b style="font-size:14px">Siz olasiz</b>
+    <div><i>✓</i>${S.kind==='cross'?'Ilovada yechiladigan krossvord havolasi':"Havola — o'quvchilar ilovada yechadi, darhol javob va izoh ko'radi"}</div>
+    <div><i>✓</i>${S.kind==='cross'?"Kim nechta so'z topgani":"Natijalar: kim qancha to'pladi, eng ko'p xato qilingan savol"}</div></div>
+  <button type="button" class="cta" id="qzGo" onclick="QZ.create()">${S.kind==='cross'?'Krossvord':'Test'} yaratish · admin sinovi</button>
+  <div class="qz-hint">Taxminan ${S.kind==='cross'?'20–40':'30–90'} soniyada tayyor bo'ladi</div>
+  <div class="group">Mening testlarim</div><div class="qz-list" id="qzMine"><div class="qz-hint">Yuklanmoqda…</div></div>`);
+  $('qzTopic').addEventListener('input',e=>S.topic=e.target.value);
+  mine();
+}
+function set(k,v){S.topic=($('qzTopic')||{}).value||S.topic; S[k]=v; hap(); open()}
+async function mine(){
+  let d={}; try{d=await api('/quiz/mine',{},15000)}catch(e){}
+  const el=$('qzMine'); if(!el) return;
+  if(!d.ok||!d.list||!d.list.length){el.innerHTML='<div class="qz-hint">Hali test yaratilmagan</div>';return}
+  el.innerHTML=d.list.map(r=>`<button type="button" class="qz-item" onclick="QZ.ready('${r[0]}')"><span class="ic">${r[1]==='cross'?'🧩':'📝'}</span><span class="tx"><b>${esc(r[2])}</b><small>${esc(r[3])} · ${r[4]} kishi yechdi</small></span><span>›</span></button>`).join('');
+}
+async function create(){
+  const topic=($('qzTopic').value||'').trim();
+  if(topic.length<3){toast('✏️','Mavzuni yozing');$('qzTopic').focus();return}
+  S.topic=topic; hap();
+  const t0=Date.now();
+  view(`<div class="qz-load"><div class="qz-spin"></div><b style="font-size:17px">AI ${S.kind==='cross'?'krossvord':'test'} tuzmoqda…</b>
+    <div style="color:var(--muted);font-size:14px">«${esc(topic)}»<br><span id="qzSec">0</span> s</div></div>`);
+  timer=setInterval(()=>{const e=$('qzSec'); if(e) e.textContent=Math.round((Date.now()-t0)/1000)},1000);
+  let d={}; try{d=await api('/quiz/create',{kind:S.kind,topic,n:S.n,level:S.level,aud:S.aud,qlang:S.qlang},180000)}catch(e){d={error:'net'}}
+  stopT();
+  if(!d.ok){toast('⚠️',d.error==='admin'?'Hozircha faqat admin uchun':"Tuzib bo'lmadi, qayta urinib ko'ring");open();return}
+  hap('ok'); ready(d.code);
+}
+
+/* ---------- Tayyor (muallif) ---------- */
+async function load(code){
+  let d={}; try{d=await api('/quiz/get',{code},20000)}catch(e){}
+  if(!d.ok){toast('⚠️',d.error==='notfound'?'Test topilmadi':"Yuklab bo'lmadi");return null}
+  S.quiz=d.quiz; S.code=code; return d.quiz;
+}
+async function ready(code){
+  const q=await load(code); if(!q) return open();
+  const n=q.kind==='cross'?q.data.words.length:q.data.questions.length, link=linkOf(code);
+  view(`<button class="back" onclick="QZ.open()">← Orqaga</button>
+  <div class="qz-ok">✓</div>
+  <div class="qz-title">${esc(q.data.title||q.topic)}</div>
+  <div class="qz-chips"><span>${n} ${q.kind==='cross'?"so'z":'savol'}</span><span>${LVL[q.level]||''}</span><span>${LNAME[q.lang]||''}</span>${q.kind==='test'?`<span>${q.aud==='class'?'Sinf uchun':"O'zim uchun"}</span>`:''}</div>
+  <div class="group" style="margin-top:0">${q.kind==='cross'?'Krossvord':'Test'} havolasi</div>
+  <div class="qz-link"><span>${esc(link.replace('https://',''))}</span><button type="button" onclick="QZ.copy()">Nusxa</button></div>
+  <div class="qz-hint" style="text-align:left">Havolani bosgan har kim TadrisAI ilovasida yechadi. Natijalari sizga keladi.</div>
+  <div class="qz-2"><button type="button" class="qz-btn pri" onclick="QZ.share()">📤 Ulashish</button><button type="button" class="qz-btn" onclick="QZ.start()">▶️ O'zim yechaman</button></div>
+  <div class="qz-list" style="margin-top:14px">
+    ${q.kind==='test'?`<button type="button" class="qz-item" onclick="QZ.questions()"><span class="ic">✏️</span><span class="tx"><b>Savollarni ko'rish va tahrirlash</b><small>keraksiz savolni o'chiring</small></span><span>›</span></button>`:''}
+    <button type="button" class="qz-item" onclick="QZ.results()"><span class="ic">📊</span><span class="tx"><b>Natijalar</b><small>${q.done?q.done+' kishi yechdi':'hali hech kim yechmadi'}</small></span><span>›</span></button>
+    <div class="qz-item" style="opacity:.55"><span class="ic">📄</span><span class="tx"><b>PDF yuklab olish</b><small>javoblar kaliti bilan — keyingi bosqichda</small></span></div>
+  </div>`);
+}
+function copy(){
+  const l=linkOf(S.code);
+  try{navigator.clipboard.writeText(l).then(()=>toast('📋','Havola nusxalandi'),()=>toast('📋',l))}catch(e){toast('📋',l)}
+}
+function share(){
+  const q=S.quiz, l=linkOf(S.code);
+  const txt=(q.kind==='cross'?'🧩 Krossvord: ':'📝 Test: ')+(q.data.title||q.topic)+' — yechib ko\'ring!';
+  const u='https://t.me/share/url?url='+encodeURIComponent(l)+'&text='+encodeURIComponent(txt);
+  try{tg&&tg.openTelegramLink?tg.openTelegramLink(u):window.open(u,'_blank')}catch(e){window.open(u,'_blank')}
+}
+function questions(){
+  const q=S.quiz;
+  view(`<button class="back" onclick="QZ.ready('${S.code}')">← Orqaga</button>
+  <div class="qz-head"><h1 style="font-size:20px">Savollar (${q.data.questions.length})</h1></div>
+  ${q.data.questions.map((x,i)=>`<div class="qz-qi"><h3>${i+1}. ${esc(x.q)}</h3><ol type="A">${x.o.map((o,j)=>`<li class="${j===x.a?'ok':''}">${esc(o)}</li>`).join('')}</ol>
+  <button type="button" class="del" onclick="QZ.del(${i},this)">🗑 O'chirish</button></div>`).join('')}`);
+}
+async function del(i,btn){
+  if(!btn.dataset.sure){btn.dataset.sure=1;btn.textContent='Rostdan o\'chirilsinmi? Yana bosing';return}
+  const d=await api('/quiz/edit',{code:S.code,del:i},15000).catch(()=>({}));
+  if(!d.ok){toast('⚠️',"O'chirib bo'lmadi");return}
+  await load(S.code); questions(); toast('🗑',"Savol o'chirildi");
+}
+
+/* ---------- Taklif (havola orqali kelgan) ---------- */
+async function join(code){
+  view('<div class="qz-load"><div class="qz-spin"></div></div>');
+  const q=await load(code); if(!q){show('home');return}
+  const n=q.kind==='cross'?q.data.words.length:q.data.questions.length;
+  const nm=userName||(tg&&tg.initDataUnsafe&&tg.initDataUnsafe.user&&tg.initDataUnsafe.user.first_name)||'';
+  view(`<div style="text-align:center;margin:10px 0 18px"><div class="qz-tag" style="display:inline-block">TadrisAI</div></div>
+  <div style="text-align:center;color:var(--muted);font-size:14px">Sizni ${q.kind==='cross'?'krossvordga':'testga'} taklif qilishdi</div>
+  <div class="qz-title" style="margin:8px 0 18px">${esc(q.data.title||q.topic)}</div>
+  <div class="qz-stats">${q.kind==='cross'?`<div><b>${n}</b><small>so'z</small></div><div><b>~${Math.max(3,Math.round(n*0.8))}</b><small>daqiqa</small></div><div><b>💡</b><small>yordam bor</small></div>`
+    :`<div><b>${n}</b><small>savol</small></div><div><b>~${Math.max(2,Math.round(n*0.5))}</b><small>daqiqa</small></div><div><b>30 s</b><small>har savolga</small></div>`}</div>
+  ${q.author?`<div class="qz-item" style="margin-bottom:14px"><span class="qz-av">${esc(q.author[0]||'?')}</span><span class="tx"><small>Test muallifi</small><b>${esc(q.author)}</b></span></div>`:''}
+  <div class="group" style="margin-top:4px">Ismingiz</div>
+  <input class="qz-in" id="qzName" maxlength="40" value="${esc(nm)}" placeholder="Ism va familiya">
+  <div class="qz-hint" style="text-align:left">Telegram'dagi ismingiz qo'yildi, o'zgartirsangiz bo'ladi</div>
+  <button type="button" class="cta" onclick="QZ.start(1)">Boshlash</button>
+  <div class="qz-hint">Bepul · ro'yxatdan o'tish shart emas</div>`);
+}
+
+/* ---------- Test yechish ---------- */
+let P=null;
+function start(fromJoin){
+  const q=S.quiz; if(!q) return;
+  const name=fromJoin&&$('qzName')?($('qzName').value||'').trim():(userName||'');
+  if(q.kind==='cross') return crossStart(name);
+  const all=q.data.questions.map((x,i)=>i);
+  P={name,order:all,i:0,score:0,wrong:[],streak:0,best:0,t0:Date.now(),retry:false};
+  ask();
+}
+function ask(){
+  const q=S.quiz, k=P.order[P.i], x=q.data.questions[k], tot=P.order.length;
+  view(`<div class="qz-top"><button type="button" class="qz-x" onclick="QZ.quit()" aria-label="Yopish">✕</button>
+    <div class="qz-prog"><b>${P.i+1} / ${tot}</b><small>${P.streak>=2?'🔥 '+P.streak+' tasi ketma-ket to\'g\'ri':(P.retry?'Xatolar ustida ishlash':'&nbsp;')}</small><div class="qz-bar"><i style="width:${P.i/tot*100}%"></i></div></div>
+    <div class="qz-tm" id="qzTm"><span id="qzTs">30</span></div></div>
+  <div class="qz-q"><small>${k+1}-SAVOL</small><h2>${esc(x.q)}</h2></div>
+  <div class="qz-opts">${x.o.map((o,j)=>`<button type="button" class="qz-opt" data-j="${j}" onclick="QZ.pick(${j})"><span class="k">${'ABCD'[j]}</span><span>${esc(o)}</span><span class="lb"></span></button>`).join('')}</div>
+  <div id="qzAfter"><div class="qz-note">Javobni tanlang — darhol to'g'ri yoki xatoligini ko'rasiz</div></div>`);
+  let left=30; const tm=$('qzTm');
+  timer=setInterval(()=>{left--; const s=$('qzTs'); if(!s){stopT();return}
+    s.textContent=left; tm.style.setProperty('--p',(left/30*100)+'%'); tm.classList.toggle('low',left<=10);
+    if(left<=0){stopT(); pick(-1)}},1000);
+}
+function pick(j){
+  if(P.locked===P.i) return; P.locked=P.i; stopT();
+  const q=S.quiz, k=P.order[P.i], x=q.data.questions[k], ok=j===x.a;
+  document.querySelectorAll('.qz-opt').forEach(b=>{const n=+b.dataset.j; b.disabled=true;
+    if(n===x.a){b.classList.add('good');b.querySelector('.lb').textContent="to'g'ri javob"}
+    else if(n===j){b.classList.add('bad');b.querySelector('.lb').textContent='sizning javobingiz'}
+    else b.classList.add('dim')});
+  if(ok){P.score++;P.streak++;P.best=Math.max(P.best,P.streak);hap('ok')}
+  else{if(!P.wrong.includes(k)) P.wrong.push(k); P.streak=0; hap('err')}
+  const last=P.i+1>=P.order.length;
+  $('qzAfter').innerHTML=`${x.e?`<div class="qz-why"><b>${j<0?'⏱ Vaqt tugadi. ':''}Nima uchun?</b><p>${esc(x.e)}</p></div>`:(j<0?'<div class="qz-note">⏱ Vaqt tugadi</div>':'')}
+    <button type="button" class="cta" onclick="QZ.next()">${last?'Natijani ko\'rish':'Keyingi savol'}</button>`;
+  setTimeout(()=>{const b=document.querySelector('#qzAfter .cta'); b&&b.scrollIntoView({behavior:'smooth',block:'nearest'})},60);
+}
+function next(){P.i++; if(P.i>=P.order.length) finish(); else ask()}
+function quit(){
+  if(!P||!P.i){S.quiz&&S.quiz.mine?ready(S.code):show('home');return}
+  askQuit(()=>finish(true));
+}
+function askQuit(cb){                       // Telegram'ning o'z oynasi (brauzer confirm Telegram ichida bloklanishi mumkin)
+  const m='Tugatasizmi? Natija hozirgi holatda saqlanadi.';
+  try{if(tg&&tg.showConfirm&&tg.isVersionAtLeast&&tg.isVersionAtLeast('6.2')){tg.showConfirm(m,ok=>{if(ok)cb()});return}}catch(e){}
+  cb();
+}
+async function finish(early){
+  stopT();
+  const q=S.quiz, tot=P.retry?P.order.length:q.data.questions.length, secs=Math.round((Date.now()-P.t0)/1000);
+  let rank=null;
+  if(!P.retry){
+    const d=await api('/quiz/submit',{code:S.code,name:P.name,score:P.score,total:tot,secs,wrong:P.wrong},15000).catch(()=>({}));
+    if(d.ok) rank=[d.rank,d.of];
+  }
+  const pct=Math.round(P.score/tot*100);
+  const msg=pct>=85?"Zo'r natija!":pct>=60?'Yaxshi natija!':pct>=40?'Yomon emas, yana mashq qiling':'Mavzuni yana bir takrorlang';
+  view(`<div class="qz-ring" style="--p:${pct}%"><div><b>${pct}%</b><small>${P.score} / ${tot}</small></div></div>
+  <div class="qz-title">${msg}</div>
+  <div style="text-align:center;color:var(--muted);font-size:14px;margin-top:4px">${esc(q.data.title||q.topic)}</div>
+  <div class="qz-stats"><div><b>${mmss(secs)}</b><small>vaqt</small></div><div><b>${P.best}</b><small>ketma-ket to'g'ri</small></div>
+    <div><b>${rank?rank[0]+'-o\'rin':'—'}</b><small>${rank?rank[1]+' kishidan':(P.retry?'qayta yechish':'')}</small></div></div>
+  ${P.wrong.length?`<button type="button" class="cta" onclick="QZ.retry()">${P.wrong.length} ta xatoni qayta yechish</button>`:''}
+  <div class="qz-2"><button type="button" class="qz-btn" onclick="QZ.shareRes(${pct})">Natijani ulashish</button>
+  <button type="button" class="qz-btn" onclick="${q.mine?`QZ.results()`:`show('home')`}">${q.mine?'Natijalar':'TadrisAI\'ni ochish'}</button></div>
+  ${q.mine?'':`<div class="qz-card" style="margin-top:14px;text-align:center"><b>O'z testingizni yarating</b><div class="qz-hint">Mavzuni yozing — AI 30 soniyada test tuzadi (tez orada)</div></div>`}`);
+}
+function retry(){
+  const w=P.wrong.slice(); P={name:P.name,order:w,i:0,score:0,wrong:[],streak:0,best:0,t0:Date.now(),retry:true}; ask();
+}
+function shareRes(pct){
+  const q=S.quiz, l=linkOf(S.code);
+  const u='https://t.me/share/url?url='+encodeURIComponent(l)+'&text='+encodeURIComponent('Men «'+(q.data.title||q.topic)+'» testidan '+pct+'% to\'pladim! Siz ham sinab ko\'ring 👇');
+  try{tg&&tg.openTelegramLink?tg.openTelegramLink(u):window.open(u,'_blank')}catch(e){}
+}
+
+/* ---------- Natijalar (muallif) ---------- */
+async function results(){
+  const q=S.quiz;
+  view('<div class="qz-load"><div class="qz-spin"></div></div>');
+  const d=await api('/quiz/results',{code:S.code},20000).catch(()=>({}));
+  if(!d.ok){toast('⚠️',"Yuklab bo'lmadi");return ready(S.code)}
+  const rows=d.rows||[], n=rows.length;
+  const avg=n?Math.round(rows.reduce((a,r)=>a+(r[2]?r[1]/r[2]:0),0)/n*100):0;
+  const avgT=n?Math.round(rows.reduce((a,r)=>a+r[3],0)/n):0;
+  const top=(d.miss||[])[0];
+  let warn='';
+  if(top&&q.kind==='test'&&q.data.questions[top[0]]){
+    warn=`<div class="qz-warn"><b>Eng ko'p xato: ${top[0]+1}-savol</b><p>«${esc(q.data.questions[top[0]].q)}» — ${n} kishidan ${top[1]} tasi xato qildi. Darsda qayta tushuntirish kerak.</p></div>`;
+  }
+  view(`<button class="back" onclick="QZ.ready('${S.code}')">← Orqaga</button>
+  <div class="qz-head" style="flex-direction:column;align-items:flex-start;gap:2px"><h1 style="font-size:22px">Natijalar</h1><small style="color:var(--muted)">${esc(q.data.title||q.topic)}</small></div>
+  <div class="qz-stats"><div><b>${n}</b><small>yechdi</small></div><div><b>${avg}%</b><small>o'rtacha</small></div><div><b>${mmss(avgT)}</b><small>o'rtacha vaqt</small></div></div>
+  ${warn}
+  <div class="group">${q.kind==='cross'?'Qatnashchilar':"O'quvchilar"}</div>
+  <div class="qz-card" style="padding:0">${n?rows.map((r,i)=>`<div class="qz-row"><span style="width:18px;color:var(--muted);font-weight:700">${i+1}</span><span class="qz-av">${esc((r[0]||'?')[0])}</span>
+    <span style="flex:1;min-width:0"><b style="display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(r[0])}</b><small style="color:var(--muted)">${mmss(r[3])} · ${esc(r[4])}</small></span>
+    <b style="color:${r[2]&&r[1]/r[2]>=.75?'#10B981':'#F59E0B'}">${r[1]}/${r[2]}</b></div>`).join(''):'<div class="qz-hint" style="padding:16px">Hali hech kim yechmadi. Havolani ulashing.</div>'}</div>`);
+}
+
+/* ---------- Krossvord ---------- */
+let C=null;
+const norm=ch=>String(ch||'').normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/ı/g,'I').replace(/Ё/g,'Е').replace(/Й/g,'И').toUpperCase();
+const showCh=ch=>(S.quiz&&S.quiz.lang==='uz')?(ch==='Ö'?'O‘':ch==='Ğ'?'G‘':ch):ch;
+function crossStart(name){
+  const g=S.quiz.data, cells={};
+  g.words.forEach((w,wi)=>{for(let i=0;i<w.w.length;i++){const r=w.d==='a'?w.r:w.r+i, x=w.d==='a'?w.x+i:w.x, k=r+','+x;
+    (cells[k]=cells[k]||{ch:w.w[i],v:'',ws:[],n:''}).ws.push(wi); if(i===0) cells[k].n=w.n}});
+  C={name,cells,cur:0,pos:0,t0:Date.now(),hints:0,checked:false};
+  crossView();
+}
+function wordCells(wi){const w=S.quiz.data.words[wi], a=[];for(let i=0;i<w.w.length;i++) a.push(w.d==='a'?w.r+','+(w.x+i):(w.r+i)+','+w.x);return a}
+function found(wi){return wordCells(wi).every(k=>norm(C.cells[k].v)===norm(C.cells[k].ch))}
+function crossView(){
+  const g=S.quiz.data, W=Math.min(window.innerWidth,480)-58, sz=Math.max(20,Math.min(36,Math.floor((W-(g.w-1)*3)/g.w)));
+  const cur=wordCells(C.cur), act=cur[C.pos], nf=g.words.filter((w,i)=>found(i)).length, w=g.words[C.cur];
+  let h='';
+  for(let r=0;r<g.h;r++) for(let x=0;x<g.w;x++){const k=r+','+x, c=C.cells[k];
+    if(!c){h+=`<div style="width:${sz}px;height:${sz}px"></div>`;continue}
+    const cls=['qz-cell','on']; if(cur.includes(k)) cls.push('word'); if(k===act) cls.push('cur');
+    if(C.checked&&c.v&&norm(c.v)!==norm(c.ch)) cls.push('wrong');
+    if(c.ws.every(found)) cls.push('done');
+    h+=`<div class="${cls.join(' ')}" style="width:${sz}px;height:${sz}px;font-size:${Math.round(sz*.5)}px" onclick="QZ.tap('${k}')">${c.n?`<em>${c.n}</em>`:''}${esc(showCh(c.v))}</div>`}
+  view(`<div class="qz-top"><button type="button" class="qz-x" onclick="QZ.crossQuit()" aria-label="Yopish">✕</button>
+    <div class="qz-prog"><b>${esc(g.title||S.quiz.topic)}</b><small>${nf} / ${g.words.length} so'z topildi · <span id="qzCt">${mmss(Math.round((Date.now()-C.t0)/1000))}</span></small></div></div>
+  <div class="qz-gwrap"><div class="qz-grid" style="grid-template-columns:repeat(${g.w},${sz}px)">${h}</div></div>
+  <div class="qz-clue"><small>${w.n} · ${w.d==='a'?'GORIZONTAL':'VERTIKAL'} · ${w.w.length} HARF</small><p>${esc(w.c)}</p></div>
+  <div class="qz-2" style="margin-top:0"><button type="button" class="qz-btn" onclick="QZ.hint()">💡 Bitta harf ochish</button><button type="button" class="qz-btn pri" onclick="QZ.check()">Tekshirish</button></div>
+  <div class="qz-card" style="padding:0;margin-top:12px;overflow:hidden">${g.words.map((x,i)=>`<button type="button" class="qz-cl${found(i)?' f':''}" onclick="QZ.sel(${i})"><b>${x.n} ${x.d==='a'?'→':'↓'}</b><span>${esc(x.c)} (${x.w.length})</span></button>`).join('')}</div>
+  <input id="qzKey" autocomplete="off" autocorrect="off" autocapitalize="characters" spellcheck="false">`);
+  const key=$('qzKey');
+  key.addEventListener('input',e=>{const v=(key.value||'').replace(/['’‘ʻ`\s]/g,''); key.value=''; if(v) type(v.slice(-1))});
+  key.addEventListener('keydown',e=>{if(e.key==='Backspace'){e.preventDefault();back()}else if(e.key==='ArrowRight'||e.key==='ArrowDown'){move(1)}else if(e.key==='ArrowLeft'||e.key==='ArrowUp'){move(-1)}});
+  timer=setInterval(()=>{const e=$('qzCt'); if(e) e.textContent=mmss(Math.round((Date.now()-C.t0)/1000))},1000);
+  if(C.focus){try{key.focus({preventScroll:true})}catch(e){key.focus()}}
+}
+function tap(k){
+  const c=C.cells[k], cur=wordCells(C.cur);
+  if(cur.includes(k)&&cur[C.pos]===k&&c.ws.length>1){C.cur=c.ws.find(w=>w!==C.cur)}       // ikkinchi bosish — yo'nalishni almashtirish
+  else if(!cur.includes(k)) C.cur=c.ws[0];
+  C.pos=wordCells(C.cur).indexOf(k); C.focus=true; hap(); crossView();
+}
+function sel(i){C.cur=i; const ws=wordCells(i); C.pos=Math.max(0,ws.findIndex(k=>!C.cells[k].v)); C.focus=true; crossView(); window.scrollTo(0,0)}
+function type(ch){
+  const ws=wordCells(C.cur); C.cells[ws[C.pos]].v=ch.toUpperCase(); C.checked=false;
+  if(C.pos<ws.length-1) C.pos++;
+  if(found(C.cur)){hap('ok'); const nx=S.quiz.data.words.findIndex((w,i)=>!found(i)); if(nx<0){crossDone();return} }
+  C.focus=true; crossView();
+}
+function back(){const ws=wordCells(C.cur); if(!C.cells[ws[C.pos]].v&&C.pos>0) C.pos--; C.cells[ws[C.pos]].v=''; C.focus=true; crossView()}
+function move(d){const ws=wordCells(C.cur); C.pos=Math.min(ws.length-1,Math.max(0,C.pos+d)); C.focus=true; crossView()}
+function hint(){
+  const ws=wordCells(C.cur), k=ws.find(k=>norm(C.cells[k].v)!==norm(C.cells[k].ch)); if(!k) return;
+  C.cells[k].v=C.cells[k].ch; C.hints++; C.pos=ws.indexOf(k); hap();
+  if(S.quiz.data.words.every((w,i)=>found(i))) return crossDone();
+  C.focus=false; crossView();
+}
+function check(){C.checked=true; hap(); C.focus=false; crossView();
+  const n=S.quiz.data.words.filter((w,i)=>found(i)).length; toast(n===S.quiz.data.words.length?'🎉':'🔎',n+' / '+S.quiz.data.words.length+" so'z to'g'ri");
+  if(n===S.quiz.data.words.length) crossDone()}
+function crossQuit(){
+  if(!Object.values(C.cells).some(c=>c.v)){S.quiz.mine?ready(S.code):show('home');return}
+  askQuit(crossDone);
+}
+async function crossDone(){
+  stopT();
+  const g=S.quiz.data, n=g.words.filter((w,i)=>found(i)).length, tot=g.words.length, secs=Math.round((Date.now()-C.t0)/1000);
+  const wrong=g.words.map((w,i)=>found(i)?-1:i).filter(i=>i>=0);
+  const d=await api('/quiz/submit',{code:S.code,name:C.name,score:n,total:tot,secs,wrong},15000).catch(()=>({}));
+  const pct=Math.round(n/tot*100);
+  view(`<div class="qz-ring" style="--p:${pct}%"><div><b>${n}/${tot}</b><small>so'z</small></div></div>
+  <div class="qz-title">${n===tot?'Barcha so\'zlar topildi! 🎉':'Krossvord yakunlandi'}</div>
+  <div class="qz-stats"><div><b>${mmss(secs)}</b><small>vaqt</small></div><div><b>${C.hints}</b><small>yordam</small></div><div><b>${d.ok?d.rank+'-o\'rin':'—'}</b><small>${d.ok?d.of+' kishidan':''}</small></div></div>
+  <div class="group">Javoblar</div><div class="qz-card" style="padding:0">${g.words.map((w,i)=>`<div class="qz-row"><b style="width:38px;color:var(--chip-text)">${w.n} ${w.d==='a'?'→':'↓'}</b><span style="flex:1">${esc(w.w.split('').map(showCh).join(''))}</span><span>${found(i)?'✅':'❌'}</span></div>`).join('')}</div>
+  <div class="qz-2"><button type="button" class="qz-btn" onclick="QZ.shareRes(${pct})">Ulashish</button><button type="button" class="qz-btn" onclick="${S.quiz.mine?'QZ.results()':`show('home')`}">${S.quiz.mine?'Natijalar':'TadrisAI\'ni ochish'}</button></div>`);
+}
+
+window.QZ={open,set,create,ready,copy,share,questions,del,join,start,pick,next,quit,retry,shareRes,results,tap,sel,hint,check,crossQuit};
+if(qs.get('quiz')) join(qs.get('quiz'));
+})();

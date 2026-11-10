@@ -943,6 +943,7 @@ textarea.ix-in{resize:none;min-height:84px;line-height:1.4}
   </section>
 
   <!-- PROFILE -->
+  <section class="screen" id="qz"></section>
   <section class="screen" id="profile">
     <div class="page-title" data-i18n="profTitle"></div>
     <div class="page-sub" id="profName"></div>
@@ -1133,8 +1134,11 @@ function ishSoon(){
   showInfo('📝',t('ish'),t('ishSoonMsg'));
 }
 function row(ic,title,desc){
+  if(isAdmin()&&(ic==='quiz'||ic==='test'))     // Test quiz / Krossvord — hozircha faqat admin sinovi
+    return `<button class="row" onclick="QZ.open()"><span class="row-ic">${IC[ic]}</span><span class="txt"><b>Test quiz · Krossvord</b><i>Admin sinovi: test va krossvord, havola bilan ulashish</i></span><span class="soon" style="background:rgba(16,185,129,.18);color:#10B981">ADMIN</span></button>`;
   return `<button class="row" onclick="soon()"><span class="row-ic">${IC[ic]}</span><span class="txt"><b>${title}</b><i>${desc}</i></span><span class="soon">${t('soonTag')}</span></button>`;
 }
+const isAdmin=()=>UNL||SRV.admin===true;
 function renderHome(){
   $('hello').innerHTML=esc(t('hello'))+(userName?', <span class="nm">'+esc(userName)+'!</span>':'!');
   $('hsStudent').setAttribute('aria-pressed',role==='student');
@@ -1160,7 +1164,7 @@ function openForm(m){
 }
 let FREE=Math.max(0,parseInt(qs.get('free')||'0',10)||0);
 const UNL=qs.get('unl')==='1';          // admin: cheklovsiz
-const SRV={live:null,disc:null};   // /api/me dan keladi (ochilish, Premium chegirmasi); kelmaguncha telefon soati
+const SRV={live:null,disc:null,admin:null};   // /api/me dan keladi (ochilish, Premium chegirmasi); kelmaguncha telefon soati
 const KNOWN=UNL||qs.has('free');        // eski tugmadan ochilsa - tekshiruvni bot o'zi qiladi
 let BALANCE=Math.max(0,parseInt(qs.get('bal')||'0',10)||0);   // botdan keladi
 function loadTx(){
@@ -1235,6 +1239,7 @@ async function refreshMe(){
     if(typeof d.free==='number') FREE=d.free;
     if(typeof d.live==='boolean') SRV.live=d.live;               // ochilish va chegirma — server soati bo'yicha
     if(typeof d.prem_disc==='number') SRV.disc=d.prem_disc;
+    if(typeof d.admin==='boolean'&&d.admin!==SRV.admin){SRV.admin=d.admin; renderHome()}
     renderWallet(); renderPlan(); try{if(mode==='prez') syncDesign()}catch(e){}
   }catch(e){}
 }
@@ -1925,8 +1930,8 @@ function show(id){
   const sub=['topup','invite','paywait','payok'].includes(id);
   if(id!=='paywait') stopPoll();
   ['home','files','profile'].forEach(n=>$('nav-'+n).classList.toggle('on',n===id||((id==='form'||id==='ish')&&n==='home')||(sub&&n==='profile')));
-  document.querySelector('nav').style.display=(id==='form'||id==='ish'||sub)?'none':'';
-  document.querySelector('header').style.display=['topup','paywait','payok'].includes(id)?'none':'';   // to'lov oynalarida tepa qism kerak emas
+  document.querySelector('nav').style.display=(id==='form'||id==='ish'||id==='qz'||sub)?'none':'';
+  document.querySelector('header').style.display=['topup','paywait','payok','qz'].includes(id)?'none':'';   // to'lov oynalarida tepa qism kerak emas
   window.scrollTo(0,0);
 }
 function soon(){showInfo('✨',t('soonTag'),t('soonMsg'))}
@@ -1984,6 +1989,7 @@ refreshMe();
 if(qs.get('screen')) show(qs.get('screen'));
 if(qs.get('form')) openForm(qs.get('form'));
 </script>
+<script src="quiz.js?v=1"></script>
 <div class="toast" id="toast"></div>
 <div class="end-ov" id="endOv" onclick="if(event.target===this)closeEndFull()">
   <div class="end-ov-box"><button type="button" class="end-ov-x" onclick="closeEndFull()">✕</button>
