@@ -800,6 +800,7 @@ textarea.ix-in{resize:none;min-height:84px;line-height:1.4}
       <div class="end-pv" id="endPv">
         <button type="button" class="end-tpl" data-tpl="1" onclick="setTpl(1)"><video id="endVid1" playsinline preload="none"></video><b>1</b><span class="end-load" id="endLoad1"><i><s id="endBar1"></s></i><em id="endPct1"></em></span><span class="end-full" role="button" onclick="event.stopPropagation();openEndFull(1)" aria-label="full">⛶</span></button>
         <button type="button" class="end-tpl" data-tpl="2" onclick="setTpl(2)"><video id="endVid2" playsinline preload="none"></video><b>2</b><span class="end-load" id="endLoad2"><i><s id="endBar2"></s></i><em id="endPct2"></em></span><span class="end-full" role="button" onclick="event.stopPropagation();openEndFull(2)" aria-label="full">⛶</span></button>
+        <button type="button" class="end-tpl" data-tpl="3" onclick="setTpl(3)"><video id="endVid3" playsinline preload="none"></video><b>3</b><span class="end-load" id="endLoad3"><i><s id="endBar3"></s></i><em id="endPct3"></em></span><span class="end-full" role="button" onclick="event.stopPropagation();openEndFull(3)" aria-label="full">⛶</span></button>
       </div>
       </div>
     </div>
@@ -1424,14 +1425,14 @@ const endUse=()=>endOn()&&!isFree(size)?ending:'none';
 const endCost=()=>img==='premium'?0:END_PRICE;   // Premium'da yakuniy video bepul (egasi, 2026-11-09)
 const totalOf=(n,tier)=>priceOf(n,tier)+(endUse()==='paid'?endCost():0);
 let endOpen=false;
-/* Ikki shablon yonma-yon (1 — jigarrang qahramon, 2 — moviy qahramon). Bosilgani tanlanadi va ovozi bilan o'ynaydi. */
+/* Uch shablon (1 — jigarrang qahramon, 2 — moviy qahramon, 3 — raqqosa). Bosilgani tanlanadi va ovozi bilan o'ynaydi. */
 let endTpl=1;
-const endVids=()=>[$('endVid1'),$('endVid2')];
+const endVids=()=>[$('endVid1'),$('endVid2'),$('endVid3')];
 function pauseEnd(){endVids().forEach(v=>{try{v.pause()}catch(e){}})}
 function toggleEnd(){endOpen=!endOpen; syncEnd(); if(endOpen&&endUse()!=='none') playEnd(); else if(!endOpen) pauseEnd()}
 function setEnd(v){ending=v;store.set('ending',v);syncSize();if(v!=='none')playEnd()}
 function setTpl(n){endTpl=n; syncEnd(); playEnd()}
-const endSrc=n=>'ex/end/'+(n===2?'t2-':'')+(['uz','uzn','kaa','ru','en'].includes(docLang)?docLang:'uz')+'-'+ending+'.mp4?v=1';
+const endSrc=n=>'ex/end/'+(n===2?'t2-':n===3?'t3-':'')+(['uz','uzn','kaa','ru','en'].includes(docLang)?docLang:'uz')+'-'+ending+'.mp4?v=1';
 /* Yuklash foiz bilan: fayl to'liq yuklanib (blob), keyin o'ynaydi. Bir marta yuklangani keshda qoladi. */
 const END_BLOB={}, END_LOADING={};
 function endProg(id,p){const l=$('endLoad'+id); if(!l) return;
