@@ -1313,7 +1313,7 @@ function renderWait(paid){
 }
 function waitNote(){       // inPAY havolasi 15 daqiqada eskiradi (2026-11-11: Click eskirgan sahifada ham pul yechgan holat bo'ldi)
   const el=$('waitNoteEl'); if(!el||!pay) return;
-  const left=Math.ceil((15*60*1000-(Date.now()-pay.start))/60000);
+  const left=Math.ceil((10*60*1000-(Date.now()-pay.start))/60000);   // inPAY 15 daqiqada yopadi; egasi: bizda 10 daqiqa (zaxira bilan)
   el.textContent=left>0?t('waitNote').replace('{m}',left):t('waitExp');
   el.style.color=left>0?(left<=3?'#F59E0B':''):'#EF4444'; el.style.fontWeight=left<=3?'700':'';
   const rb=$('reopenBtn'); if(rb) rb.style.display=left>0?'':'none';   // eskirgan havolani qayta ochtirmaymiz
