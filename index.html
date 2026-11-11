@@ -1009,6 +1009,7 @@ html.desk .hbal{display:none}
   <button class="nav-b" id="nav-files" onclick="show('files')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg><span data-i18n="navFiles"></span></button>
   <button class="nav-b" id="nav-profile" onclick="show('profile')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c1.5-4 4.5-6 8-6s6.5 2 8 6"/></svg><span data-i18n="navProfile"></span></button>
   <button class="nav-b desk-only" type="button" onclick="QZ.open()" id="dkQuiz"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="3" width="16" height="18" rx="2"/><path d="M8 8h8M8 12h8M8 16h5"/></svg><span>Test quiz</span></button>
+  <button class="nav-b desk-only" type="button" onclick="QZ.openCross()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg><span>Krossvord</span></button>
   <button class="desk-only dk-bal" type="button" onclick="openTopup(0)"><small>Balans</small><b id="dkBal"></b></button>
 </div></nav>
 
@@ -1159,8 +1160,11 @@ function ishSoon(){
   showInfo('📝',t('ish'),t('ishSoonMsg'));
 }
 function row(ic,title,desc){
-  if(isAdmin()&&(ic==='quiz'||ic==='test'))     // Test quiz / Krossvord — hozircha faqat admin sinovi
-    return `<button class="row" onclick="QZ.open()"><span class="row-ic">${IC[ic]}</span><span class="txt"><b>Test quiz · Krossvord</b><i>Admin sinovi: test va krossvord, havola bilan ulashish</i></span><span class="soon" style="background:rgba(16,185,129,.18);color:#10B981">ADMIN</span></button>`;
+  if(isAdmin()&&(ic==='quiz'||ic==='test')){    // Test quiz va Krossvord — alohida bo'limlar, hozircha faqat admin sinovi
+    const tag='<span class="soon" style="background:rgba(16,185,129,.18);color:#10B981">ADMIN</span>';
+    return `<button class="row" onclick="QZ.open()"><span class="row-ic">${IC.test}</span><span class="txt"><b>Test quiz</b><i>Mavzu yoki darslik sahifasidan test · havola bilan ulashish</i></span>${tag}</button>`+
+      `<button class="row" onclick="QZ.openCross()"><span class="row-ic">${IC.quiz}</span><span class="txt"><b>Krossvord</b><i>Mavzu bo'yicha krossvord · ilovada yechiladi</i></span>${tag}</button>`;
+  }
   return `<button class="row" onclick="soon()"><span class="row-ic">${IC[ic]}</span><span class="txt"><b>${title}</b><i>${desc}</i></span><span class="soon">${t('soonTag')}</span></button>`;
 }
 const isAdmin=()=>UNL||SRV.admin===true;
@@ -2035,7 +2039,7 @@ refreshMe();
 if(qs.get('screen')) show(qs.get('screen'));
 if(qs.get('form')) openForm(qs.get('form'));
 </script>
-<script src="quiz.js?v=1"></script>
+<script src="quiz.js?v=2"></script>
 <div class="toast" id="toast"></div>
 <div class="end-ov" id="endOv" onclick="if(event.target===this)closeEndFull()">
   <div class="end-ov-box"><button type="button" class="end-ov-x" onclick="closeEndFull()">✕</button>
