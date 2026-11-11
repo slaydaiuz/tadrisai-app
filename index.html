@@ -959,10 +959,7 @@ html.desk .hbal{display:none}
   <!-- TO'LOV BO'LDI -->
   <section class="screen" id="payok">
     <div class="pw" style="padding-top:64px"><div class="okring">✅</div><h3 data-i18n="okTitle"></h3><div class="okbig" id="okBig"></div><p id="okSub" style="margin-top:6px"></p>
-      <button type="button" class="cta" style="margin-top:26px" id="okResume" onclick="show(topupBack)" data-i18n="okBack"></button>
-      <div id="okNew"><p style="margin-top:22px;font-weight:600" data-i18n="okNext"></p>
-      <button type="button" class="cta" style="margin-top:12px" onclick="openForm('prez')" data-i18n="okPrez"></button>
-      <button type="button" class="cta" style="margin-top:10px;background:var(--surface);border:1.5px solid var(--violet);color:var(--text);box-shadow:none" onclick="openForm('ish')" data-i18n="okIsh"></button></div>
+      <button type="button" class="cta" style="margin-top:26px" id="okResume" onclick="show(['form','ish'].includes(topupBack)?topupBack:'home')" data-i18n="okBack"></button>
       <button type="button" class="gbtn dim" onclick="show('home')" data-i18n="backApp"></button></div>
   </section>
 
@@ -1328,8 +1325,6 @@ async function pollPay(){
     $('okSub').innerHTML=(d.bonus?esc(t('okSub').replace('{a}',money(d.amount)).replace('{b}',money(d.bonus)))+'<br>':'')+
       esc(t('okBal'))+' <b>'+esc(money(d.balance))+'</b>';
     if(PMS.includes(pay.m)){try{localStorage.setItem('tadris_pm',pay.m)}catch(e){}; pm=pay.m}   // keyingi safar shu usul tanlangan turadi
-    const resume=['form','ish'].includes(topupBack);       // buyurtma formasidan kelgan bo'lsa — o'sha formaga qaytadi
-    $('okResume').style.display=resume?'':'none'; $('okNew').style.display=resume?'none':'';
     pay=null; setTimeout(()=>show('payok'),400);
     try{tg.HapticFeedback&&tg.HapticFeedback.notificationOccurred('success')}catch(e){}
     return}
