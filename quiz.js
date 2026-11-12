@@ -127,7 +127,8 @@ document.head.appendChild(st);
 const LNAME={uz:"O'zbek",uzn:'Yangi lotin',kaa:'Qoraqalpoq',ru:'Rus',en:'Ingliz'};
 const LVL={easy:'Oson',mid:"O'rtacha",hard:'Qiyin'};
 const S={kind:'test',n:20,cn:12,level:'mid',aud:'class',qtype:'mc',grade:'',subject:'',src:null,qlang:(['uz','uzn','kaa','ru','en'].includes(lang)?lang:'uz'),quiz:null,code:''};
-const QT={mc:['Variantli','A B C D'],tf:["To'g'ri / Noto'g'ri",'tasdiq — ha yoki yo\'q'],open:['Ochiq savollar','javobni yozadi'],mix:['Aralash','hammasidan']};
+const QT={mc:['Variantli','A B C D'],tf:["To'g'ri / Noto'g'ri",'tasdiq — ha yoki yo\'q']};   // egasi (2026-11-12): faqat shu ikkisi
+const QTN={mc:'Variantli',tf:"To'g'ri / Noto'g'ri",open:'Ochiq',mix:'Aralash'};                  // eski testlardagi nomlar uchun
 const GRADES=['5-sinf','6-sinf','7-sinf','8-sinf','9-sinf','10-sinf','11-sinf','1-kurs','2-kurs','3-kurs','4-kurs'];
 const SUBJ=['Matematika','Algebra','Geometriya','Fizika','Kimyo','Biologiya','Geografiya','Tarix','Ona tili','Adabiyot','O\'zbek tili','Rus tili','Ingliz tili','Nemis tili','Informatika','Huquq','Iqtisodiyot','Boshlang\'ich ta\'lim','Texnologiya','Tasviriy san\'at','Musiqa','Jismoniy tarbiya','Tarbiya'];
 const TMIN=10,TMAX=50,TMARKS=[10,20,30,40,50];
@@ -149,7 +150,7 @@ function selBox(id,label,list,val,ph){
   <input class="qz-in" id="${id}O" style="margin-top:8px;display:${other?'block':'none'}" maxlength="40" placeholder="O'zingiz yozing" value="${other?esc(val):''}" oninput="QZ.setQ('${id==='qzGrade'?'grade':'subject'}',this.value)"></div>`;
 }
 function open(){
-  S.kind='test';
+  S.kind='test'; if(!QT[S.qtype]) S.qtype='mc';
   view(`<button class="back" onclick="show('home')">← Orqaga</button>
   <div class="qz-head"><h1>Test quiz</h1><span class="qz-tag">ADMIN · SINOV</span></div>
   <div class="group" style="margin-top:0">Mavzu</div>
@@ -285,7 +286,7 @@ async function ready(code){
   view(`<button class="back" onclick="${q.kind==='cross'?'QZ.openCross()':'QZ.open()'}">← Orqaga</button>
   <div class="qz-ok">✓</div>
   <div class="qz-title">${esc(q.data.title||q.topic)}</div>
-  <div class="qz-chips"><span>${n} ${q.kind==='cross'?"so'z":'savol'}</span><span>${LVL[q.level]||''}</span><span>${LNAME[q.lang]||''}</span>${q.kind==='test'?`<span>${q.aud==='class'?'Sinf uchun':"O'zim uchun"}</span>`:''}${m.qtype?`<span>${QT[m.qtype][0]}</span>`:''}${m.grade?`<span>${esc(m.grade)}</span>`:''}${m.subject?`<span>${esc(m.subject)}</span>`:''}${m.src?`<span>📎 ${esc(m.src)}</span>`:''}</div>
+  <div class="qz-chips"><span>${n} ${q.kind==='cross'?"so'z":'savol'}</span><span>${LVL[q.level]||''}</span><span>${LNAME[q.lang]||''}</span>${q.kind==='test'?`<span>${q.aud==='class'?'Sinf uchun':"O'zim uchun"}</span>`:''}${m.qtype?`<span>${QTN[m.qtype]||''}</span>`:''}${m.grade?`<span>${esc(m.grade)}</span>`:''}${m.subject?`<span>${esc(m.subject)}</span>`:''}${m.src?`<span>📎 ${esc(m.src)}</span>`:''}</div>
   <div class="group" style="margin-top:0">${q.kind==='cross'?'Krossvord':'Test'} havolasi</div>
   <div class="qz-link"><span>${esc(link.replace('https://',''))}</span><button type="button" onclick="QZ.copy()">Nusxa</button></div>
   <div class="qz-hint" style="text-align:left">Havolani bosgan har kim TadrisAI ilovasida yechadi. Natijalari sizga keladi.</div>
@@ -310,7 +311,7 @@ function questions(){
   const q=S.quiz;
   view(`<button class="back" onclick="QZ.ready('${S.code}')">← Orqaga</button>
   <div class="qz-head"><h1 style="font-size:20px">Savollar (${q.data.questions.length})</h1></div>
-  ${q.data.questions.map((x,i)=>`<div class="qz-qi"><small style="color:var(--muted);font-size:11.5px;font-weight:700">${QT[x.t||'mc'][0].toUpperCase()}</small><h3>${i+1}. ${esc(x.q)}</h3>${x.t==='open'?`<ol><li class="ok">${x.ans.map(esc).join(' / ')}</li></ol>`:`<ol type="A">${x.o.map((o,j)=>`<li class="${j===x.a?'ok':''}">${esc(o)}</li>`).join('')}</ol>`}
+  ${q.data.questions.map((x,i)=>`<div class="qz-qi"><small style="color:var(--muted);font-size:11.5px;font-weight:700">${(QTN[x.t||'mc']||'').toUpperCase()}</small><h3>${i+1}. ${esc(x.q)}</h3>${x.t==='open'?`<ol><li class="ok">${x.ans.map(esc).join(' / ')}</li></ol>`:`<ol type="A">${x.o.map((o,j)=>`<li class="${j===x.a?'ok':''}">${esc(o)}</li>`).join('')}</ol>`}
   <button type="button" class="del" onclick="QZ.del(${i},this)">🗑 O'chirish</button></div>`).join('')}`);
 }
 async function del(i,btn){
