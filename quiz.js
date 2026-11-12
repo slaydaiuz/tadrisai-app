@@ -170,7 +170,7 @@ function selBox(id,label,list,val,ph){
 function open(){
   S.kind='test'; if(!QT[S.qtype]) S.qtype='mc';
   view(`<button class="back" onclick="show('home')">← Orqaga</button>
-  <div class="qz-head"><h1>Test quiz</h1><span class="qz-tag">ADMIN · SINOV</span></div>
+  <div class="qz-head"><h1>Test quiz</h1><span class="qz-tag">SINOV</span></div>
   <div class="group" style="margin-top:0">Mavzu</div>
   <textarea class="qz-ta" id="qzTopic" placeholder="Masalan: Fotosintez">${esc(S.topic||'')}</textarea>
   <div class="qz-src" id="qzSrc">${srcBox()}</div>
@@ -189,7 +189,7 @@ function open(){
   <div class="qz-card qz-get"><b style="font-size:14px">Siz olasiz</b>
     <div><i>✓</i>Havola — o'quvchilar ilovada yechadi, darhol javob va izoh ko'radi</div>
     <div><i>✓</i>Natijalar: kim qancha to'pladi, eng ko'p xato qilingan savol</div></div>
-  <button type="button" class="cta" id="qzGo" onclick="QZ.create()">Test yaratish · admin sinovi</button>
+  <button type="button" class="cta" id="qzGo" onclick="QZ.create()">Test yaratish · sinov (bepul)</button>
   <div class="qz-hint">Taxminan ${S.n<=20?'20–40':S.n<=35?'40–70':'60–100'} soniyada tayyor bo'ladi</div>
   <div class="group">Mening testlarim</div><div class="qz-list" id="qzMine"><div class="qz-hint">Yuklanmoqda…</div></div>`);
   $('qzTopic').addEventListener('input',e=>S.topic=e.target.value);
@@ -284,7 +284,7 @@ function example(k){
 function openCross(){
   S.kind='cross';
   view(`<button class="back" onclick="show('home')">← Orqaga</button>
-  <div class="qz-head"><h1>Krossvord</h1><span class="qz-tag">ADMIN · SINOV</span></div>
+  <div class="qz-head"><h1>Krossvord</h1><span class="qz-tag">SINOV</span></div>
   <div class="group" style="margin-top:0">Mavzu</div>
   <textarea class="qz-ta" id="qzTopic" placeholder="Masalan: Qon aylanish tizimi">${esc(S.topic||'')}</textarea>
   <div class="group">So'zlar soni</div>
@@ -293,7 +293,7 @@ function openCross(){
   <div class="qz-card qz-get"><b style="font-size:14px">Siz olasiz</b>
     <div><i>✓</i>Ilovada yechiladigan krossvord havolasi — harf ochish va tekshirish bilan</div>
     <div><i>✓</i>Kim nechta so'z topgani va qancha vaqt ketgani</div></div>
-  <button type="button" class="cta" id="qzGo" onclick="QZ.create()">Krossvord yaratish · admin sinovi</button>
+  <button type="button" class="cta" id="qzGo" onclick="QZ.create()">Krossvord yaratish · sinov (bepul)</button>
   <div class="qz-hint">Taxminan 15–40 soniyada tayyor bo'ladi</div>
   <div class="group">Mening krossvordlarim</div><div class="qz-list" id="qzMine"><div class="qz-hint">Yuklanmoqda…</div></div>`);
   $('qzTopic').addEventListener('input',e=>S.topic=e.target.value);
