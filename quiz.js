@@ -108,6 +108,18 @@ st.textContent=`
 .qz-2c{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 select.qz-in{-webkit-appearance:none;appearance:none;background-image:linear-gradient(45deg,transparent 50%,var(--muted) 50%),linear-gradient(135deg,var(--muted) 50%,transparent 50%);background-position:calc(100% - 18px) 55%,calc(100% - 13px) 55%;background-size:5px 5px;background-repeat:no-repeat;padding-right:30px;font-size:14.5px}
 .qz-opts.tf{display:grid;grid-template-columns:1fr 1fr}.qz-opts.tf .qz-opt{flex-direction:column;justify-content:center;text-align:center;padding:18px 10px}.qz-opts.tf .qz-opt .lb{margin:0}
+
+.qz-types button{position:relative}
+.qz-ex{position:absolute;right:9px;top:9px;font-style:normal;font-size:11px;font-weight:700;padding:3px 8px;border-radius:999px;background:var(--chip);color:var(--chip-text);border:1px solid rgba(139,92,246,.35)}
+.qz-types b{padding-right:62px}
+.qz-exov{position:fixed;inset:0;z-index:60;background:rgba(2,6,23,.72);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);display:flex;align-items:flex-end;justify-content:center;padding:16px}
+.qz-exbox{width:100%;max-width:460px;max-height:88vh;overflow:auto;background:var(--bg);border:1px solid var(--line);border-radius:24px;padding:16px;box-shadow:0 30px 60px -20px rgba(0,0,0,.6);animation:qzup .22s ease}
+@keyframes qzup{from{transform:translateY(30px);opacity:0}}
+@media(min-width:700px){.qz-exov{align-items:center}}
+.qz-exhead{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}.qz-exhead b{font-size:16px}
+.qz-exhead button{width:34px;height:34px;border-radius:11px;background:var(--surface);border:1px solid var(--line);color:var(--text)}
+.qz-exbody{pointer-events:none}.qz-exbody .qz-q h2{font-size:17px}.qz-exbody .qz-opt{padding:11px 12px;font-size:14.5px}
+.qz-mini{padding:10px;border-radius:18px;border:1px dashed var(--line);margin-bottom:10px}.qz-mini .qz-q{padding:14px}.qz-mini .qz-q h2{font-size:15px}
 #qzKey{position:fixed;left:-200px;top:40%;width:40px;height:30px;opacity:0;font-size:16px}
 `;
 document.head.appendChild(st);
@@ -149,7 +161,7 @@ function open(){
   <div class="rng-price" id="qzNPrice"></div>
   ${levels()}
   <div class="group">Savol turi</div>
-  <div class="qz-types">${Object.entries(QT).map(([k,v])=>`<button type="button"${pr(S.qtype,k)} onclick="QZ.set('qtype','${k}')"><b>${v[0]}</b><span>${v[1]}</span></button>`).join('')}</div>
+  <div class="qz-types">${Object.entries(QT).map(([k,v])=>`<button type="button"${pr(S.qtype,k)} onclick="QZ.set('qtype','${k}')"><b>${v[0]}</b><span>${v[1]}</span><em class="qz-ex" role="button" onclick="event.stopPropagation();QZ.example('${k}')">Misol ›</em></button>`).join('')}</div>
   <div class="qz-2c">${selBox('qzGrade','Sinf / kurs',GRADES,S.grade,'Tanlang (ixtiyoriy)')}${selBox('qzSubj','Fan',SUBJ,S.subject,'Tanlang (ixtiyoriy)')}</div>
   ${langs()}
   <div class="group">Kim uchun?</div>
@@ -201,6 +213,30 @@ async function mine(kind){
   if(!d.ok||!list.length){el.innerHTML=`<div class="qz-hint">Hali ${kind==='cross'?'krossvord':'test'} yaratilmagan</div>`;return}
   el.innerHTML=list.map(r=>`<button type="button" class="qz-item" onclick="QZ.ready('${r[0]}')"><span class="ic">${r[1]==='cross'?'🧩':'📝'}</span><span class="tx"><b>${esc(r[2])}</b><small>${esc(r[3])} · ${r[4]} kishi yechdi</small></span><span>›</span></button>`).join('');
 }
+/* Savol turi misollari (2026-11-12, egasi): «Misol» bosilganda o'quvchi ko'radigan ko'rinish */
+const EXQ={
+  mc:()=>`<div class="qz-q"><small>1-SAVOL</small><h2>Fotosintez qaysi organoidda boradi?</h2></div>
+    <div class="qz-opts">${['Mitoxondriya','Xloroplast','Yadro','Ribosoma'].map((o,j)=>`<div class="qz-opt ${j===1?'good':j===0?'bad':'dim'}"><span class="k">${'ABCD'[j]}</span><span>${o}</span><span class="lb">${j===1?"to'g'ri javob":j===0?'sizning javobingiz':''}</span></div>`).join('')}</div>
+    <div class="qz-why"><b>Nima uchun?</b><p>Xloroplastda xlorofill bor — u yorug'likni yutadi.</p></div>`,
+  tf:()=>`<div class="qz-q"><small>2-SAVOL · TO'G'RIMI?</small><h2>Fotosintez jarayonida kislorod ajralib chiqadi.</h2></div>
+    <div class="qz-opts tf"><div class="qz-opt good"><span class="k">✓</span><span>To'g'ri</span><span class="lb">to'g'ri javob</span></div><div class="qz-opt dim"><span class="k">✕</span><span>Noto'g'ri</span><span class="lb"></span></div></div>
+    <div class="qz-why"><b>Nima uchun?</b><p>Suv parchalanganda kislorod hosil bo'ladi va havoga chiqadi.</p></div>`,
+  open:()=>`<div class="qz-q"><small>3-SAVOL · JAVOBNI YOZING</small><h2>Barglarga yashil rang beruvchi pigment nima deb ataladi?</h2></div>
+    <div class="qz-in" style="border-color:#10B981">xlorafill</div>
+    <div class="qz-why" style="background:rgba(16,185,129,.12);border-color:rgba(16,185,129,.4)"><b style="color:#10B981">✓ To'g'ri!</b><p>Kichik imlo xatosi bo'lsa ham qabul qilinadi. Xlorofill yorug'likni yutadi.</p></div>`,
+};
+EXQ.mix=()=>`<div class="qz-hint" style="text-align:left;margin:0 0 10px">Bitta testda uch xil savol aralash keladi: yarmi variantli, choragi to'g'ri/noto'g'ri, choragi ochiq.</div>
+  <div class="qz-mini">${EXQ.mc()}</div><div class="qz-mini">${EXQ.tf()}</div><div class="qz-mini">${EXQ.open()}</div>`;
+function example(k){
+  hap();
+  let ov=$('qzExOv');
+  if(!ov){ov=document.createElement('div'); ov.id='qzExOv'; ov.className='qz-exov'; document.body.appendChild(ov);
+    ov.addEventListener('click',e=>{if(e.target===ov) ov.remove()})}
+  ov.innerHTML=`<div class="qz-exbox" role="dialog" aria-label="Misol"><div class="qz-exhead"><b>Misol: ${QT[k][0]}</b><button type="button" onclick="document.getElementById('qzExOv').remove()" aria-label="Yopish">✕</button></div>
+    <div class="qz-exbody">${EXQ[k]()}</div>
+    <button type="button" class="cta" style="margin-top:14px" onclick="document.getElementById('qzExOv').remove();QZ.set('qtype','${k}')">Shuni tanlash</button></div>`;
+}
+
 /* Krossvord — alohida bo'lim (2026-11-12, egasi) */
 function openCross(){
   S.kind='cross';
@@ -503,6 +539,6 @@ async function crossDone(){
   <div class="qz-2"><button type="button" class="qz-btn" onclick="QZ.shareRes(${pct})">Ulashish</button><button type="button" class="qz-btn" onclick="${S.quiz.mine?'QZ.results()':`show('home')`}">${S.quiz.mine?'Natijalar':'TadrisAI\'ni ochish'}</button></div>`);
 }
 
-window.QZ={open,openCross,setN,srcUp,srcDel,pickSel,setQ,answer,set,create,ready,copy,share,questions,del,join,start,pick,next,quit,retry,shareRes,results,tap,sel,hint,check,crossQuit};
+window.QZ={example,open,openCross,setN,srcUp,srcDel,pickSel,setQ,answer,set,create,ready,copy,share,questions,del,join,start,pick,next,quit,retry,shareRes,results,tap,sel,hint,check,crossQuit};
 if(qs.get('quiz')) join(qs.get('quiz'));
 })();
