@@ -249,8 +249,26 @@ EXQ.mix=()=>`<div class="qz-hint" style="text-align:left;margin:0 0 10px">Bitta 
 const PAPER={
   mc:{q:'Fotosintez qaysi organoidda boradi?',o:['Mitoxondriya','Xloroplast','Yadro','Ribosoma'],a:'B',why:'Xloroplastda xlorofill bor — u yorug\'likni yutadi.'},
   tf:{q:'Fotosintez jarayonida kislorod ajralib chiqadi.',a:'T',why:'Suv parchalanganda kislorod hosil bo\'ladi.'},
-  open:{q:'Barglarga yashil rang beruvchi pigment nima deb ataladi?',a:'✎',why:'Xlorofill yorug\'likni yutadi.'}};
+  open:{q:'Barglarga yashil rang beruvchi pigment nima deb ataladi?',a:'✎',why:'Xlorofill yorug\'likni yutadi.'},
+  mix:{}};
+function paperMix(key){                      // aralash test varaqasi: uch tur bitta varaqda
+  const head=`<div class="pp-t">Fotosintez</div><div class="pp-s">Biologiya · 7-sinf · ${key?'Javoblar kaliti — o\'qituvchi uchun':'20 ta savol'}</div>`, f='<div class="pp-f">TadrisAI · t.me/tadrisai_bot</div>';
+  if(key) return `<div class="pp">${head}<div class="pp-h">Tez tekshirish</div>
+    <div class="pp-grid">${['B','T','✎','D','N','A','✎','C','T','B'].map((v,i)=>`<div><i>${i+1}</i><b>${v}</b></div>`).join('')}</div>
+    <div class="pp-h">Izohlar</div>
+    <div class="pp-q"><span>1.</span> ${PAPER.mc.q}</div><div class="pp-a">To'g'ri javob: <b>B) Xloroplast</b></div>
+    <div class="pp-q"><span>2.</span> ${PAPER.tf.q}</div><div class="pp-a">To'g'ri javob: <b>T) To'g'ri</b></div>
+    <div class="pp-q"><span>3.</span> ${PAPER.open.q}</div><div class="pp-a">To'g'ri javob: <b>xlorofill</b></div>${f}</div>`;
+  return `<div class="pp">${head}<div class="pp-l"><span>Ism, familiya: __________</span><span>Sinf: ____</span><span>Sana: _____</span></div>
+    <div class="pp-n">Har bir savolda bitta to'g'ri javobni belgilang. To'g'ri bo'lsa «T», noto'g'ri bo'lsa «N». Ochiq savolga qisqa javob yozing.</div>
+    <div class="pp-q"><span>1.</span> ${PAPER.mc.q}</div><div class="pp-o g">${PAPER.mc.o.map((o,j)=>`<span><b>${'ABCD'[j]})</b> ${o}</span>`).join('')}</div>
+    <div class="pp-q"><span>2.</span> ${PAPER.tf.q}</div><div class="pp-o"><span>○ T — To'g'ri</span><span>○ N — Noto'g'ri</span></div>
+    <div class="pp-q"><span>3.</span> ${PAPER.open.q}</div><div class="pp-o"><span>Javob: ________________________</span></div>
+    <div class="pp-h">Javoblar varaqasi</div><div class="pp-grid">${[1,2,3,4,5,6,7,8,9,10].map(n=>`<div><i>${n}</i><b></b></div>`).join('')}</div>
+    <div class="pp-sc">Ball: ____ / 20</div>${f}</div>`;
+}
 function paperView(k,key){
+  if(k==='mix') return paperMix(key);
   const x=PAPER[k], nm=k==='open'?'Har bir savolga qisqa javob yozing.':k==='tf'?'To\'g\'ri bo\'lsa «T», noto\'g\'ri bo\'lsa «N» ni belgilang.':'Har bir savolda bitta to\'g\'ri javobni belgilang.';
   const head=`<div class="pp-t">Fotosintez</div><div class="pp-s">Biologiya · 7-sinf · ${key?'Javoblar kaliti — o\'qituvchi uchun':'20 ta savol'}</div>`;
   if(key) return `<div class="pp">${head}<div class="pp-h">Tez tekshirish</div>
