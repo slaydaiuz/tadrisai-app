@@ -145,7 +145,7 @@ document.head.appendChild(st);
 const LNAME={uz:"O'zbek",uzn:'Yangi lotin',kaa:'Qoraqalpoq',ru:'Rus',en:'Ingliz'};
 const LVL={easy:'Oson',mid:"O'rtacha",hard:'Qiyin'};
 const S={kind:'test',n:20,cn:12,level:'mid',aud:'class',qtype:'mc',grade:'',subject:'',src:null,qlang:(['uz','uzn','kaa','ru','en'].includes(lang)?lang:'uz'),quiz:null,code:''};
-const QT={mc:['Variantli','A B C D'],tf:["To'g'ri / Noto'g'ri",'tasdiq — ha yoki yo\'q']};   // egasi (2026-11-12): faqat shu ikkisi
+const QT={mc:['Variantli','A B C D'],tf:["To'g'ri / Noto'g'ri",'tasdiq — ha yoki yo\'q'],open:['Ochiq savollar','javobni o\'zi yozadi'],mix:['Aralash','uchala tur birga']};   // 2026-11-13: egasi ochiq va aralashni qaytardi
 const QTN={mc:'Variantli',tf:"To'g'ri / Noto'g'ri",open:'Ochiq',mix:'Aralash'};                  // eski testlardagi nomlar uchun
 const GRADES=['5-sinf','6-sinf','7-sinf','8-sinf','9-sinf','10-sinf','11-sinf','1-kurs','2-kurs','3-kurs','4-kurs'];
 const SUBJ=['Matematika','Algebra','Geometriya','Fizika','Kimyo','Biologiya','Geografiya','Tarix','Ona tili','Adabiyot','O\'zbek tili','Rus tili','Ingliz tili','Nemis tili','Informatika','Huquq','Iqtisodiyot','Boshlang\'ich ta\'lim','Texnologiya','Tasviriy san\'at','Musiqa','Jismoniy tarbiya','Tarbiya'];
@@ -248,17 +248,18 @@ EXQ.mix=()=>`<div class="qz-hint" style="text-align:left;margin:0 0 10px">Bitta 
   <div class="qz-mini">${EXQ.mc()}</div><div class="qz-mini">${EXQ.tf()}</div><div class="qz-mini">${EXQ.open()}</div>`;
 const PAPER={
   mc:{q:'Fotosintez qaysi organoidda boradi?',o:['Mitoxondriya','Xloroplast','Yadro','Ribosoma'],a:'B',why:'Xloroplastda xlorofill bor — u yorug\'likni yutadi.'},
-  tf:{q:'Fotosintez jarayonida kislorod ajralib chiqadi.',a:'T',why:'Suv parchalanganda kislorod hosil bo\'ladi.'}};
+  tf:{q:'Fotosintez jarayonida kislorod ajralib chiqadi.',a:'T',why:'Suv parchalanganda kislorod hosil bo\'ladi.'},
+  open:{q:'Barglarga yashil rang beruvchi pigment nima deb ataladi?',a:'✎',why:'Xlorofill yorug\'likni yutadi.'}};
 function paperView(k,key){
-  const x=PAPER[k], nm=k==='tf'?'To\'g\'ri bo\'lsa «T», noto\'g\'ri bo\'lsa «N» ni belgilang.':'Har bir savolda bitta to\'g\'ri javobni belgilang.';
+  const x=PAPER[k], nm=k==='open'?'Har bir savolga qisqa javob yozing.':k==='tf'?'To\'g\'ri bo\'lsa «T», noto\'g\'ri bo\'lsa «N» ni belgilang.':'Har bir savolda bitta to\'g\'ri javobni belgilang.';
   const head=`<div class="pp-t">Fotosintez</div><div class="pp-s">Biologiya · 7-sinf · ${key?'Javoblar kaliti — o\'qituvchi uchun':'20 ta savol'}</div>`;
   if(key) return `<div class="pp">${head}<div class="pp-h">Tez tekshirish</div>
     <div class="pp-grid">${[1,2,3,4,5,6,7,8,9,10].map((n,i)=>`<div><i>${n}</i><b>${i===0?x.a:(k==='tf'?'TN'[(i*3)%2]:'ABCD'[(i*7)%4])}</b></div>`).join('')}</div>
-    <div class="pp-h">Izohlar</div><div class="pp-q"><span>1.</span> ${x.q}</div><div class="pp-a">To'g'ri javob: <b>${k==='tf'?'T) To\'g\'ri':'B) Xloroplast'}</b></div><div class="pp-e">${x.why}</div>
+    <div class="pp-h">Izohlar</div><div class="pp-q"><span>1.</span> ${x.q}</div><div class="pp-a">To'g'ri javob: <b>${k==='tf'?'T) To\'g\'ri':k==='open'?'xlorofill':'B) Xloroplast'}</b></div><div class="pp-e">${x.why}</div>
     <div class="pp-f">TadrisAI · t.me/tadrisai_bot</div></div>`;
   return `<div class="pp">${head}<div class="pp-l"><span>Ism, familiya: __________</span><span>Sinf: ____</span><span>Sana: _____</span></div>
     <div class="pp-n">${nm}</div><div class="pp-q"><span>1.</span> ${x.q}</div>
-    ${k==='tf'?`<div class="pp-o"><span>○ T — To'g'ri</span><span>○ N — Noto'g'ri</span></div>`:`<div class="pp-o g">${x.o.map((o,j)=>`<span><b>${'ABCD'[j]})</b> ${o}</span>`).join('')}</div>`}
+    ${k==='open'?`<div class="pp-o"><span>Javob: ________________________</span></div>`:k==='tf'?`<div class="pp-o"><span>○ T — To'g'ri</span><span>○ N — Noto'g'ri</span></div>`:`<div class="pp-o g">${x.o.map((o,j)=>`<span><b>${'ABCD'[j]})</b> ${o}</span>`).join('')}</div>`}
     <div class="pp-q"><span>2.</span> …</div>
     <div class="pp-h">Javoblar varaqasi</div><div class="pp-grid">${[1,2,3,4,5,6,7,8,9,10].map(n=>`<div><i>${n}</i><b></b></div>`).join('')}</div>
     <div class="pp-sc">Ball: ____ / 20</div><div class="pp-f">TadrisAI · t.me/tadrisai_bot</div></div>`;
@@ -418,7 +419,7 @@ function ask(){
     <div class="qz-tm" id="qzTm"><span id="qzTs">${T}</span></div></div>
   <div class="qz-q"><small>${k+1}-SAVOL${x.t==='tf'?' · TO\'G\'RIMI?':x.t==='open'?' · JAVOBNI YOZING':''}</small><h2>${esc(x.q)}</h2></div>
   ${body}
-  <div id="qzAfter"><div class="qz-note">${P.exam?'Javobni tanlang — keyin o\'zgartirib bo\'lmaydi':x.t==='open'?'Qisqa javob yozing — imlo xatosi kichik bo\'lsa ham qabul qilinadi':'Javobni tanlang — darhol to\'g\'ri yoki xatoligini ko\'rasiz'}</div></div>`);
+  <div id="qzAfter"><div class="qz-note">${P.exam?(x.t==='open'?'Javobni yozing — keyin o\'zgartirib bo\'lmaydi':'Javobni tanlang — keyin o\'zgartirib bo\'lmaydi'):x.t==='open'?'Qisqa javob yozing — imlo xatosi kichik bo\'lsa ham qabul qilinadi':'Javobni tanlang — darhol to\'g\'ri yoki xatoligini ko\'rasiz'}</div></div>`);
   if(x.t==='open') setTimeout(()=>{const i=$('qzAns'); i&&i.focus()},150);
   let left=T; const tm=$('qzTm');
   timer=setInterval(()=>{left--; const s=$('qzTs'); if(!s){stopT();return}
@@ -432,6 +433,14 @@ function okOpen(v,ans){const a=nrm(v); if(!a) return false;
   return ans.some(x=>{const b=nrm(x); if(!b) return false; if(a===b) return true; const d=lev(a,b); return (b.length>=5&&d<=1)||(b.length>=9&&d<=2)})}
 function answer(skip){
   if(P.locked===P.i) return; P.locked=P.i; stopT();
+  if(P.exam){                                  // sinf testi: javob yoziladi, to'g'riligi ko'rsatilmaydi (server baholaydi)
+    const k=P.order[P.i], inp=$('qzAns'); P.ans[k]=skip?'':(inp?inp.value.trim():''); hap();
+    if(inp) inp.disabled=true; document.querySelectorAll('#qz .qz-2 .qz-btn').forEach(b=>b.disabled=true);
+    const last=P.i+1>=P.order.length;
+    if(last){$('qzAfter').innerHTML=`<div class="qz-note">${skip===2?'⏱ Vaqt tugadi. ':''}Bu oxirgi savol edi</div><button type="button" class="cta" onclick="QZ.finish()">Yakunlash</button>`; return}
+    $('qzAfter').innerHTML=`<div class="qz-note">${skip===2?'⏱ Vaqt tugadi — keyingi savol':'✓ Javob qabul qilindi'}</div>`;
+    setTimeout(next, skip===2?900:550); return;
+  }
   const q=S.quiz, k=P.order[P.i], x=q.data.questions[k], inp=$('qzAns'), v=inp?inp.value:'';
   const ok=!skip&&okOpen(v,x.ans);
   if(inp){inp.disabled=true; inp.style.borderColor=ok?'#10B981':'#EF4444'}
@@ -499,7 +508,7 @@ async function finish(early){
 async function finishExam(){
   const q=S.quiz, n=q.data.questions.length, secs=Math.round((Date.now()-P.t0)/1000);
   view('<div class="qz-load"><div class="qz-spin"></div><b>Natija hisoblanmoqda…</b></div>');
-  const answers=[...Array(n)].map((_,i)=>P.ans[i]===undefined?-1:P.ans[i]);
+  const answers=[...Array(n)].map((_,i)=>P.ans[i]===undefined?(q.data.questions[i].t==='open'?'':-1):P.ans[i]);
   let d={}; for(let t=0;t<3&&!d.ok&&d.error!=='done';t++){d=await api('/quiz/submit',{code:S.code,name:P.name,secs,answers},20000).catch(()=>({}))}
   if(d.error==='done'){toast('ℹ️','Siz bu testni oldin yechgansiz');return join(S.code)}
   if(!d.ok){view(`<div class="qz-load"><b>Natija yuborilmadi</b><div class="qz-hint">Internetni tekshirib, qayta urinib ko'ring</div><button type="button" class="cta" onclick="QZ.finish()">Qayta yuborish</button></div>`);return}
