@@ -120,6 +120,23 @@ select.qz-in{-webkit-appearance:none;appearance:none;background-image:linear-gra
 .qz-exhead button{width:34px;height:34px;border-radius:11px;background:var(--surface);border:1px solid var(--line);color:var(--text)}
 .qz-exbody{pointer-events:none}.qz-exbody .qz-q h2{font-size:17px}.qz-exbody .qz-opt{padding:11px 12px;font-size:14.5px}
 .qz-mini{padding:10px;border-radius:18px;border:1px dashed var(--line);margin-bottom:10px}.qz-mini .qz-q{padding:14px}.qz-mini .qz-q h2{font-size:15px}
+
+.qz-extabs{display:grid;grid-template-columns:repeat(3,1fr);gap:5px;padding:4px;border-radius:14px;background:var(--surface);border:1px solid var(--line);margin-bottom:10px}
+.qz-extabs button{padding:9px 4px;border-radius:10px;font-size:12.5px;font-weight:600;color:var(--muted)}
+.qz-extabs button[aria-pressed="true"]{background:linear-gradient(120deg,var(--blue),var(--indigo));color:#fff;font-weight:700}
+.pp{background:#fff;color:#0F172A;border-radius:6px;padding:18px 18px 12px;font-family:Arial,'Liberation Sans',sans-serif;box-shadow:0 14px 30px -14px rgba(0,0,0,.6);font-size:12px}
+.pp-t{font-size:17px;font-weight:800}.pp-s{font-size:10.5px;color:#64748B;margin:2px 0 10px}
+.pp-l{display:flex;justify-content:space-between;gap:6px;font-size:9.5px;color:#64748B;margin-bottom:8px;flex-wrap:wrap}
+.pp-n{font-size:10px;font-style:italic;color:#64748B;margin-bottom:8px}
+.pp-q{font-weight:700;font-size:12px;margin:8px 0 4px}.pp-q span{color:#5D45F5}
+.pp-o{display:flex;gap:18px;padding-left:12px;font-size:11.5px}.pp-o.g{display:grid;grid-template-columns:1fr 1fr;gap:3px 12px}.pp-o b{color:#5D45F5}
+.pp-h{font-weight:800;font-size:12.5px;margin:12px 0 6px}
+.pp-grid{display:grid;grid-template-columns:repeat(10,1fr);border:1px solid #CBD5E1}
+.pp-grid div{border-right:1px solid #CBD5E1;text-align:center}.pp-grid div:last-child{border-right:0}
+.pp-grid i{display:block;font-style:normal;font-size:8.5px;color:#64748B;border-bottom:1px solid #CBD5E1;padding:1px 0}
+.pp-grid b{display:block;height:18px;line-height:18px;color:#059669;font-size:12px}
+.pp-a{padding-left:12px;font-size:11px;color:#64748B}.pp-a b{color:#059669}.pp-e{padding-left:12px;font-size:10.5px;color:#64748B;margin-top:2px}
+.pp-sc{text-align:right;font-weight:700;margin-top:8px}.pp-f{text-align:right;font-size:8px;color:#94A3B8;margin-top:10px}
 #qzKey{position:fixed;left:-200px;top:40%;width:40px;height:30px;opacity:0;font-size:16px}
 `;
 document.head.appendChild(st);
@@ -228,13 +245,37 @@ const EXQ={
 };
 EXQ.mix=()=>`<div class="qz-hint" style="text-align:left;margin:0 0 10px">Bitta testda uch xil savol aralash keladi: yarmi variantli, choragi to'g'ri/noto'g'ri, choragi ochiq.</div>
   <div class="qz-mini">${EXQ.mc()}</div><div class="qz-mini">${EXQ.tf()}</div><div class="qz-mini">${EXQ.open()}</div>`;
+const PAPER={
+  mc:{q:'Fotosintez qaysi organoidda boradi?',o:['Mitoxondriya','Xloroplast','Yadro','Ribosoma'],a:'B',why:'Xloroplastda xlorofill bor — u yorug\'likni yutadi.'},
+  tf:{q:'Fotosintez jarayonida kislorod ajralib chiqadi.',a:'T',why:'Suv parchalanganda kislorod hosil bo\'ladi.'}};
+function paperView(k,key){
+  const x=PAPER[k], nm=k==='tf'?'To\'g\'ri bo\'lsa «T», noto\'g\'ri bo\'lsa «N» ni belgilang.':'Har bir savolda bitta to\'g\'ri javobni belgilang.';
+  const head=`<div class="pp-t">Fotosintez</div><div class="pp-s">Biologiya · 7-sinf · ${key?'Javoblar kaliti — o\'qituvchi uchun':'20 ta savol'}</div>`;
+  if(key) return `<div class="pp">${head}<div class="pp-h">Tez tekshirish</div>
+    <div class="pp-grid">${[1,2,3,4,5,6,7,8,9,10].map((n,i)=>`<div><i>${n}</i><b>${i===0?x.a:(k==='tf'?'TN'[(i*3)%2]:'ABCD'[(i*7)%4])}</b></div>`).join('')}</div>
+    <div class="pp-h">Izohlar</div><div class="pp-q"><span>1.</span> ${x.q}</div><div class="pp-a">To'g'ri javob: <b>${k==='tf'?'T) To\'g\'ri':'B) Xloroplast'}</b></div><div class="pp-e">${x.why}</div>
+    <div class="pp-f">TadrisAI · t.me/tadrisai_bot</div></div>`;
+  return `<div class="pp">${head}<div class="pp-l"><span>Ism, familiya: __________</span><span>Sinf: ____</span><span>Sana: _____</span></div>
+    <div class="pp-n">${nm}</div><div class="pp-q"><span>1.</span> ${x.q}</div>
+    ${k==='tf'?`<div class="pp-o"><span>○ T — To'g'ri</span><span>○ N — Noto'g'ri</span></div>`:`<div class="pp-o g">${x.o.map((o,j)=>`<span><b>${'ABCD'[j]})</b> ${o}</span>`).join('')}</div>`}
+    <div class="pp-q"><span>2.</span> …</div>
+    <div class="pp-h">Javoblar varaqasi</div><div class="pp-grid">${[1,2,3,4,5,6,7,8,9,10].map(n=>`<div><i>${n}</i><b></b></div>`).join('')}</div>
+    <div class="pp-sc">Ball: ____ / 20</div><div class="pp-f">TadrisAI · t.me/tadrisai_bot</div></div>`;
+}
+function exTab(k,tab){
+  document.querySelectorAll('#qzExOv .qz-extabs button').forEach(b=>b.setAttribute('aria-pressed',b.dataset.t===tab));
+  $('qzExBody').innerHTML=tab==='tg'?EXQ[k]():paperView(k,tab==='key');
+  $('qzExNote').textContent={tg:'O\'quvchi havolani bosib, Telegram ichida yechadi — javob darhol tekshiriladi.',paper:'«Qog\'ozga chiqarish» bosilsa, shu varaqa PDF holida botga keladi — chop etib tarqatasiz.',key:'O\'qituvchi uchun alohida fayl: to\'g\'ri javoblar jadvali va izohlar. O\'quvchilarga berilmaydi.'}[tab];
+}
 function example(k){
   hap();
   let ov=$('qzExOv');
   if(!ov){ov=document.createElement('div'); ov.id='qzExOv'; ov.className='qz-exov'; document.body.appendChild(ov);
     ov.addEventListener('click',e=>{if(e.target===ov) ov.remove()})}
   ov.innerHTML=`<div class="qz-exbox" role="dialog" aria-label="Misol"><div class="qz-exhead"><b>Misol: ${QT[k][0]}</b><button type="button" onclick="document.getElementById('qzExOv').remove()" aria-label="Yopish">✕</button></div>
-    <div class="qz-exbody">${EXQ[k]()}</div>
+    ${PAPER[k]?`<div class="qz-extabs"><button type="button" data-t="tg" aria-pressed="true" onclick="QZ.exTab('${k}','tg')">📱 Telegramda</button><button type="button" data-t="paper" aria-pressed="false" onclick="QZ.exTab('${k}','paper')">🖨 Qog'ozda</button><button type="button" data-t="key" aria-pressed="false" onclick="QZ.exTab('${k}','key')">🔑 Javoblar kaliti</button></div>`:''}
+    <div class="qz-hint" id="qzExNote" style="text-align:left;margin:0 0 10px">O'quvchi havolani bosib, Telegram ichida yechadi — javob darhol tekshiriladi.</div>
+    <div class="qz-exbody" id="qzExBody">${EXQ[k]()}</div>
     <button type="button" class="cta" style="margin-top:14px" onclick="document.getElementById('qzExOv').remove();QZ.set('qtype','${k}')">Shuni tanlash</button></div>`;
 }
 
@@ -294,7 +335,8 @@ async function ready(code){
   <div class="qz-list" style="margin-top:14px">
     ${q.kind==='test'?`<button type="button" class="qz-item" onclick="QZ.questions()"><span class="ic">✏️</span><span class="tx"><b>Savollarni ko'rish va tahrirlash</b><small>keraksiz savolni o'chiring</small></span><span>›</span></button>`:''}
     <button type="button" class="qz-item" onclick="QZ.results()"><span class="ic">📊</span><span class="tx"><b>Natijalar</b><small>${q.done?q.done+' kishi yechdi':'hali hech kim yechmadi'}</small></span><span>›</span></button>
-    <div class="qz-item" style="opacity:.55"><span class="ic">📄</span><span class="tx"><b>PDF yuklab olish</b><small>javoblar kaliti bilan — keyingi bosqichda</small></span></div>
+    ${q.kind==='test'?`<button type="button" class="qz-item" id="qzPrint" onclick="QZ.print()"><span class="ic">🖨</span><span class="tx"><b>Qog'ozga chiqarish (PDF)</b><small>o'quvchilar uchun varaqa + o'qituvchi uchun javoblar kaliti — botga keladi</small></span><span>›</span></button>`
+      :`<div class="qz-item" style="opacity:.55"><span class="ic">🖨</span><span class="tx"><b>Qog'ozga chiqarish</b><small>krossvord uchun — keyingi bosqichda</small></span></div>`}
   </div>`);
 }
 function copy(){
@@ -319,6 +361,15 @@ async function del(i,btn){
   const d=await api('/quiz/edit',{code:S.code,del:i},15000).catch(()=>({}));
   if(!d.ok){toast('⚠️',"O'chirib bo'lmadi");return}
   await load(S.code); questions(); toast('🗑',"Savol o'chirildi");
+}
+
+async function print(){
+  const b=$('qzPrint'); if(b.dataset.busy) return; b.dataset.busy=1; hap();
+  b.querySelector('small').textContent='Tayyorlanmoqda… (10–20 soniya)';
+  const d=await api('/quiz/print',{code:S.code},120000).catch(()=>({}));
+  delete b.dataset.busy;
+  b.querySelector('small').textContent=d.ok?'✅ 2 ta PDF bot chatiga yuborildi':"o'quvchilar uchun varaqa + o'qituvchi uchun javoblar kaliti — botga keladi";
+  toast(d.ok?'🖨':'⚠️',d.ok?'Test varaqasi va javoblar kaliti botga yuborildi':"Tayyorlab bo'lmadi, qayta urinib ko'ring");
 }
 
 /* ---------- Taklif (havola orqali kelgan) ---------- */
@@ -540,6 +591,6 @@ async function crossDone(){
   <div class="qz-2"><button type="button" class="qz-btn" onclick="QZ.shareRes(${pct})">Ulashish</button><button type="button" class="qz-btn" onclick="${S.quiz.mine?'QZ.results()':`show('home')`}">${S.quiz.mine?'Natijalar':'TadrisAI\'ni ochish'}</button></div>`);
 }
 
-window.QZ={example,open,openCross,setN,srcUp,srcDel,pickSel,setQ,answer,set,create,ready,copy,share,questions,del,join,start,pick,next,quit,retry,shareRes,results,tap,sel,hint,check,crossQuit};
+window.QZ={example,exTab,print,open,openCross,setN,srcUp,srcDel,pickSel,setQ,answer,set,create,ready,copy,share,questions,del,join,start,pick,next,quit,retry,shareRes,results,tap,sel,hint,check,crossQuit};
 if(qs.get('quiz')) join(qs.get('quiz'));
 })();
