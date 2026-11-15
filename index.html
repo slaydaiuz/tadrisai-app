@@ -1278,6 +1278,7 @@ async function refreshMe(){
     if(typeof d.prem_disc==='number') SRV.disc=d.prem_disc;
     if(typeof d.admin==='boolean'&&d.admin!==SRV.admin){SRV.admin=d.admin; renderHome()}
     if(typeof d.quiz==='boolean'&&d.quiz!==SRV.quiz){SRV.quiz=d.quiz; renderHome()}
+    SRV.quiz_left=(typeof d.quiz_left==='number')?d.quiz_left:null;
     syncDesk();
     renderWallet(); renderPlan(); try{if(mode==='prez') syncDesign()}catch(e){}
   }catch(e){}
@@ -2041,7 +2042,7 @@ refreshMe();
 if(qs.get('screen')) show(qs.get('screen'));
 if(qs.get('form')) openForm(qs.get('form'));
 </script>
-<script src="quiz.js?v=9"></script>
+<script src="quiz.js?v=10"></script>
 <div class="toast" id="toast"></div>
 <div class="end-ov" id="endOv" onclick="if(event.target===this)closeEndFull()">
   <div class="end-ov-box"><button type="button" class="end-ov-x" onclick="closeEndFull()">✕</button>
