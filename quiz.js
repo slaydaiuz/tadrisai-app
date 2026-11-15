@@ -330,7 +330,7 @@ async function create(){
     :{kind:'test',topic,n:S.n,level:S.level,aud:S.aud,qlang:S.qlang,qtype:S.qtype,grade:S.grade,subject:S.subject,src:S.src&&S.src.src};
   let d={}; try{d=await api('/quiz/create',body,240000)}catch(e){d={error:'net'}}
   stopT();
-  if(!d.ok){toast('⚠️',d.error==='limit'?"Sinov urinishlaringiz tugadi (12 ta). Rahmat!":d.error==='admin'?'Sinov muddati tugagan':"Tuzib bo'lmadi, qayta urinib ko'ring");(cross?openCross:open)();return}
+  if(!d.ok){toast('⚠️',d.error==='limit'?"Sinov urinishlaringiz tugadi. Rahmat!":d.error==='admin'?'Sinov muddati tugagan':"Tuzib bo'lmadi, qayta urinib ko'ring");(cross?openCross:open)();return}
   if(typeof SRV!=='undefined'&&SRV&&SRV.quiz_left!=null){SRV.quiz_left=Math.max(0,SRV.quiz_left-1);toast('🧪',"Sinov: yana "+SRV.quiz_left+" ta urinish qoldi")}
   hap('ok'); S.src=null; ready(d.code);
 }
