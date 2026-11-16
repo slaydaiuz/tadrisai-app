@@ -1162,8 +1162,10 @@ function ishSoon(){
 function row(ic,title,desc){
   if(isQuiz()&&(ic==='quiz'||ic==='test')){    // Test quiz va Krossvord — alohida bo'limlar, hozircha faqat admin sinovi
     const tag='<span class="soon" style="background:rgba(16,185,129,.18);color:#10B981">SINOV</span>';
-    return `<button class="row" onclick="QZ.open()"><span class="row-ic">${IC.test}</span><span class="txt"><b>Test quiz</b><i>Mavzu yoki darslik sahifasidan test · havola bilan ulashish</i></span>${tag}</button>`+
-      `<button class="row" onclick="QZ.openCross()"><span class="row-ic">${IC.quiz}</span><span class="txt"><b>Krossvord</b><i>Mavzu bo'yicha krossvord · ilovada yechiladi</i></span>${tag}</button>`;
+    const cross=isAdmin()||SRV.quiz_cross!==false;      // krossvord hozircha faqat sinovchilarga
+    const ttag=SRV.quiz_free||isAdmin()?tag:'<span class="soon" style="background:rgba(16,185,129,.18);color:#10B981">YANGI</span>';
+    return `<button class="row" onclick="QZ.open()"><span class="row-ic">${IC.test}</span><span class="txt"><b>Test quiz</b><i>Mavzu yoki darslik sahifasidan test · havola bilan ulashish</i></span>${ttag}</button>`+
+      (cross?`<button class="row" onclick="QZ.openCross()"><span class="row-ic">${IC.quiz}</span><span class="txt"><b>Krossvord</b><i>Mavzu bo'yicha krossvord · ilovada yechiladi</i></span>${tag}</button>`:'');
   }
   return `<button class="row" onclick="soon()"><span class="row-ic">${IC[ic]}</span><span class="txt"><b>${title}</b><i>${desc}</i></span><span class="soon">${t('soonTag')}</span></button>`;
 }
@@ -1279,6 +1281,7 @@ async function refreshMe(){
     if(typeof d.admin==='boolean'&&d.admin!==SRV.admin){SRV.admin=d.admin; renderHome()}
     if(typeof d.quiz==='boolean'&&d.quiz!==SRV.quiz){SRV.quiz=d.quiz; renderHome()}
     SRV.quiz_left=(typeof d.quiz_left==='number')?d.quiz_left:null;
+    SRV.quiz_free=d.quiz_free===true; if(typeof d.quiz_cross==='boolean'&&d.quiz_cross!==SRV.quiz_cross){SRV.quiz_cross=d.quiz_cross; renderHome()}
     syncDesk();
     renderWallet(); renderPlan(); try{if(mode==='prez') syncDesign()}catch(e){}
   }catch(e){}
@@ -2042,7 +2045,7 @@ refreshMe();
 if(qs.get('screen')) show(qs.get('screen'));
 if(qs.get('form')) openForm(qs.get('form'));
 </script>
-<script src="quiz.js?v=11"></script>
+<script src="quiz.js?v=12"></script>
 <div class="toast" id="toast"></div>
 <div class="end-ov" id="endOv" onclick="if(event.target===this)closeEndFull()">
   <div class="end-ov-box"><button type="button" class="end-ov-x" onclick="closeEndFull()">✕</button>

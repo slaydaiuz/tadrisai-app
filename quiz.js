@@ -150,6 +150,10 @@ const QTN={mc:'Variantli',tf:"To'g'ri / Noto'g'ri",open:'Ochiq',mix:'Aralash'}; 
 const GRADES=['5-sinf','6-sinf','7-sinf','8-sinf','9-sinf','10-sinf','11-sinf','1-kurs','2-kurs','3-kurs','4-kurs'];
 const SUBJ=['Matematika','Algebra','Geometriya','Fizika','Kimyo','Biologiya','Geografiya','Tarix','Ona tili','Adabiyot','O\'zbek tili','Rus tili','Ingliz tili','Nemis tili','Informatika','Huquq','Iqtisodiyot','Boshlang\'ich ta\'lim','Texnologiya','Tasviriy san\'at','Musiqa','Jismoniy tarbiya','Tarbiya'];
 const TMIN=10,TMAX=50,TMARKS=[10,20,30,40,50];
+/* 2026-11-16, egasi: narxlar (botdagi quiz.TEST_PRICES bilan bir xil) — savollar soni shu chegaragacha */
+const QPR=[[10,2990],[20,3990],[30,4990],[40,5990],[50,6990]];
+const qPrice=n=>(QPR.find(([l])=>n<=l)||QPR[QPR.length-1])[1];
+const qFree=()=>(typeof isAdmin==='function'&&isAdmin())||(typeof SRV!=='undefined'&&SRV&&SRV.quiz_free===true);
 const box=()=>$('qz');
 const hap=k=>{try{tg&&tg.HapticFeedback&&(k==='ok'||k==='err'?tg.HapticFeedback.notificationOccurred(k==='ok'?'success':'error'):tg.HapticFeedback.impactOccurred('light'))}catch(e){}};
 const linkOf=c=>'https://t.me/'+(qs.get('bot')||'tadrisai_bot')+'?start=q_'+c;
@@ -170,7 +174,7 @@ function selBox(id,label,list,val,ph){
 function open(){
   S.kind='test'; if(!QT[S.qtype]) S.qtype='mc';
   view(`<button class="back" onclick="show('home')">← Orqaga</button>
-  <div class="qz-head"><h1>Test quiz</h1><span class="qz-tag">SINOV</span></div>
+  <div class="qz-head"><h1>Test quiz</h1>${qFree()?'<span class="qz-tag">SINOV</span>':''}</div>
   <div class="group" style="margin-top:0">Mavzu</div>
   <textarea class="qz-ta" id="qzTopic" placeholder="Masalan: Fotosintez">${esc(S.topic||'')}</textarea>
   <div class="qz-src" id="qzSrc">${srcBox()}</div>
@@ -189,7 +193,7 @@ function open(){
   <div class="qz-card qz-get"><b style="font-size:14px">Siz olasiz</b>
     <div><i>✓</i>Havola — o'quvchilar ilovada yechadi, darhol javob va izoh ko'radi</div>
     <div><i>✓</i>Natijalar: kim qancha to'pladi, eng ko'p xato qilingan savol</div></div>
-  <button type="button" class="cta" id="qzGo" onclick="QZ.create()">Test yaratish · sinov (bepul)</button>
+  <button type="button" class="cta" id="qzGo" onclick="QZ.create()">Test yaratish</button>
   <div class="qz-hint">Taxminan ${S.n<=20?'20–40':S.n<=35?'40–70':'60–100'} soniyada tayyor bo'ladi</div>
   <div class="group">Mening testlarim</div><div class="qz-list" id="qzMine"><div class="qz-hint">Yuklanmoqda…</div></div>`);
   $('qzTopic').addEventListener('input',e=>S.topic=e.target.value);
@@ -200,7 +204,9 @@ function setN(v,silent){
   const p=v=>(v-TMIN)/(TMAX-TMIN)*100;
   $('qzRng').value=S.n; $('qzFill').style.width=p(S.n)+'%'; $('qzBub').style.left=p(S.n)+'%'; $('qzBub').textContent=S.n+' ta savol';
   $('qzTicks').innerHTML=TMARKS.map(m=>`<div class="rng-tick ${m<=S.n?'on':''} ${m===S.n?'cur':''}" style="left:${p(m)}%"><b>${m}</b><i></i><span></span></div>`).join('');
-  $('qzNPrice').innerHTML=`${S.n} ta savol · <b style="font-size:14px">narx keyin qo'yiladi</b>`;
+  const pr=qPrice(S.n), fr=qFree();
+  $('qzNPrice').innerHTML=`${S.n} ta savol · <b style="font-size:14px">${fr?'bepul (sinov)':money(pr)}</b>`;
+  const go=$('qzGo'); if(go) go.textContent='Test yaratish · '+(fr?'bepul':money(pr));
   if(!silent) hap();
 }
 function srcBox(){
@@ -330,8 +336,11 @@ async function create(){
     :{kind:'test',topic,n:S.n,level:S.level,aud:S.aud,qlang:S.qlang,qtype:S.qtype,grade:S.grade,subject:S.subject,src:S.src&&S.src.src};
   let d={}; try{d=await api('/quiz/create',body,240000)}catch(e){d={error:'net'}}
   stopT();
-  if(!d.ok){toast('⚠️',d.error==='limit'?"Sinov urinishlaringiz tugadi. Rahmat!":d.error==='admin'?'Sinov muddati tugagan':"Tuzib bo'lmadi, qayta urinib ko'ring");(cross?openCross:open)();return}
-  if(typeof SRV!=='undefined'&&SRV&&SRV.quiz_left!=null){SRV.quiz_left=Math.max(0,SRV.quiz_left-1);toast('🧪',"Sinov: yana "+SRV.quiz_left+" ta urinish qoldi")}
+  if(d.error==='balance'){(cross?openCross:open)(); toast('💳',"Balans yetarli emas: "+money(d.price)+" kerak"); if(typeof openTopup==='function') openTopup(d.need||d.price); return}
+  if(!d.ok){toast('⚠️',d.error==='limit'?"Sinov urinishlaringiz tugadi. Rahmat!":d.error==='admin'?'Sinov muddati tugagan':d.refund?"Tuzib bo'lmadi — "+money(d.refund)+" balansga qaytarildi. Qayta urinib ko'ring":"Tuzib bo'lmadi, qayta urinib ko'ring");(cross?openCross:open)();return}
+  if(typeof d.balance==='number'&&typeof BALANCE!=='undefined'){BALANCE=d.balance; try{renderWallet()}catch(e){}}
+  if(d.price>0) toast('✅',"Test tayyor · balansdan "+money(d.price)+" yechildi");
+  else if(typeof SRV!=='undefined'&&SRV&&SRV.quiz_left!=null){SRV.quiz_left=Math.max(0,SRV.quiz_left-1);toast('🧪',"Sinov: yana "+SRV.quiz_left+" ta urinish qoldi")}
   hap('ok'); S.src=null; ready(d.code);
 }
 
