@@ -142,13 +142,349 @@ select.qz-in{-webkit-appearance:none;appearance:none;background-image:linear-gra
 `;
 document.head.appendChild(st);
 
-const LNAME={uz:"O'zbek",uzn:'Yangi lotin',kaa:'Qoraqalpoq',ru:'Rus',en:'Ingliz'};
-const LVL={easy:'Oson',mid:"O'rtacha",hard:'Qiyin'};
+/* ---------- Tarjimalar (2026-11-16, egasi: «hammaga o'z tilida ko'rinsin») — uz / ru / en / kaa, uzn uz'dan avtomatik ---------- */
+const QD={
+uz:{
+  back:"← Orqaga", title:"Test quiz", trial:"SINOV", topic:"Mavzu", topicPh:"Masalan: Fotosintez", crossPh:"Masalan: Qon aylanish tizimi",
+  nQ:"Savollar soni", level:"Qiyinlik", qtype:"Savol turi", example:"Misol ›", grade:"Sinf / kurs", subject:"Fan",
+  pickOpt:"Tanlang (ixtiyoriy)", other:"Boshqa…", ownPh:"O'zingiz yozing", qlang:"Til", forWhom:"Kim uchun?",
+  self:"O'zim uchun", selfD:"mashq: javob va izoh darhol, qayta yechsa bo'ladi",
+  cls:"Sinf uchun", clsD:"imtihon: bir marta, javobni o'zgartirib bo'lmaydi",
+  youGet:"Siz olasiz", get1:"Havola — o'quvchilar ilovada yechadi, darhol javob va izoh ko'radi",
+  get2:"Natijalar: kim qancha to'pladi, eng ko'p xato qilingan savol",
+  createT:"Test yaratish", readyIn:"Taxminan {x} soniyada tayyor bo'ladi", myTests:"Mening testlarim", loading:"Yuklanmoqda…",
+  nq:"{n} ta savol", free:"bepul", freeTrial:"bepul (sinov)",
+  srcImg:"Rasm — savollar shu rasmdagi matndan tuziladi", chars:"{n} belgi", cut:" (boshidagi 30 000 tasi olinadi)",
+  srcText:" — savollar shu matndan tuziladi", del:"O'chirish", upload:"Manba yuklash", optional:"(ixtiyoriy)",
+  uploadD:"Darslik sahifasi, konspekt yoki rasm — savollar aynan shu matndan tuziladi · PDF, DOCX, JPG, PNG", file:"Fayl",
+  big8:"Fayl 8 MB dan katta", noText:"Faylda matn topilmadi — skaner bo'lsa, rasm qilib yuklang",
+  badType:"Bu turdagi fayl qabul qilinmaydi", tooBig:"Fayl juda katta", readErr:"Faylni o'qib bo'lmadi",
+  noTests:"Hali test yaratilmagan", noCross:"Hali krossvord yaratilmagan", solvedN:"{n} kishi yechdi",
+  qN:"{n}-SAVOL", tfQ:" · TO'G'RIMI?", openQ:" · JAVOBNI YOZING", right:"to'g'ri javob", yours:"sizning javobingiz", why:"Nima uchun?",
+  ex1q:"Fotosintez qaysi organoidda boradi?", ex1o:["Mitoxondriya","Xloroplast","Yadro","Ribosoma"],
+  ex1w:"Xloroplastda xlorofill bor — u yorug'likni yutadi.",
+  ex2q:"Fotosintez jarayonida kislorod ajralib chiqadi.", tTrue:"To'g'ri", tFalse:"Noto'g'ri",
+  ex2w:"Suv parchalanganda kislorod hosil bo'ladi va havoga chiqadi.",
+  ex3q:"Barglarga yashil rang beruvchi pigment nima deb ataladi?", ex3typo:"xlorafill", ex3a:"xlorofill", okBang:"✓ To'g'ri!",
+  ex3w:"Kichik imlo xatosi bo'lsa ham qabul qilinadi. Xlorofill yorug'likni yutadi.", ex3w2:"Xlorofill yorug'likni yutadi.",
+  mixD:"Bitta testda uch xil savol aralash keladi: yarmi variantli, choragi to'g'ri/noto'g'ri, choragi ochiq.",
+  ppTitle:"Fotosintez", ppSub:"Biologiya · 7-sinf", keyFor:"Javoblar kaliti — o'qituvchi uchun", quick:"Tez tekshirish",
+  expl:"Izohlar", correctC:"To'g'ri javob:", tfL:["T","N"], ppName:"Ism, familiya", ppCls:"Sinf", ppDate:"Sana",
+  mixRule:"Har bir savolda bitta to'g'ri javobni belgilang. To'g'ri bo'lsa «T», noto'g'ri bo'lsa «N». Ochiq savolga qisqa javob yozing.",
+  ansLine:"Javob", sheet:"Javoblar varaqasi", score:"Ball", openRule:"Har bir savolga qisqa javob yozing.",
+  tfRule:"To'g'ri bo'lsa «T», noto'g'ri bo'lsa «N» ni belgilang.", mcRule:"Har bir savolda bitta to'g'ri javobni belgilang.",
+  noteTg:"O'quvchi havolani bosib, Telegram ichida yechadi — javob darhol tekshiriladi.",
+  notePaper:"«Qog'ozga chiqarish» bosilsa, shu varaqa PDF holida botga keladi — chop etib tarqatasiz.",
+  noteKey:"O'qituvchi uchun alohida fayl: to'g'ri javoblar jadvali va izohlar. O'quvchilarga berilmaydi.",
+  exTitle:"Misol: {x}", close:"Yopish", tabTg:"📱 Telegramda", tabPaper:"🖨 Qog'ozda", tabKey:"🔑 Javoblar kaliti", pickThis:"Shuni tanlash",
+  crossT:"Krossvord", nWords:"So'zlar soni", cget1:"Ilovada yechiladigan krossvord havolasi — harf ochish va tekshirish bilan",
+  cget2:"Kim nechta so'z topgani va qancha vaqt ketgani", createC:"Krossvord yaratish", myCross:"Mening krossvordlarim",
+  writeTopic:"Mavzuni yozing", aiTest:"AI test tuzmoqda…", aiCross:"AI krossvord tuzmoqda…", noBal:"Balans yetarli emas: {x} kerak",
+  limit:"Sinov urinishlaringiz tugadi. Rahmat!", expired:"Sinov muddati tugagan",
+  failRef:"Tuzib bo'lmadi — {x} balansga qaytarildi. Qayta urinib ko'ring", fail:"Tuzib bo'lmadi, qayta urinib ko'ring",
+  paid:"Test tayyor · balansdan {x} yechildi", trialLeft:"Sinov: yana {n} ta urinish qoldi",
+  notFound:"Test topilmadi", loadErr:"Yuklab bo'lmadi", nW:"{n} so'z", linkT:"Test havolasi", linkC:"Krossvord havolasi", copy:"Nusxa",
+  linkHint:"Havolani bosgan har kim TadrisAI ilovasida yechadi. Natijalari sizga keladi.", share:"📤 Ulashish", selfSolve:"▶️ O'zim yechaman",
+  editQ:"Savollarni ko'rish va tahrirlash", editQD:"keraksiz savolni o'chiring", results:"Natijalar", noOne:"hali hech kim yechmadi",
+  printT:"Qog'ozga chiqarish (PDF)", printD:"o'quvchilar uchun varaqa + o'qituvchi uchun javoblar kaliti — botga keladi",
+  printC:"Qog'ozga chiqarish", printCD:"krossvord uchun — keyingi bosqichda", copied:"Havola nusxalandi",
+  shareT:"📝 Test: {t} — yechib ko'ring!", shareC:"🧩 Krossvord: {t} — yechib ko'ring!", qsTitle:"Savollar ({n})", delQ:"🗑 O'chirish",
+  sure:"Rostdan o'chirilsinmi? Yana bosing", delErr:"O'chirib bo'lmadi", deleted:"Savol o'chirildi",
+  preparing:"Tayyorlanmoqda… (10–20 soniya)", printed:"✅ 2 ta PDF bot chatiga yuborildi",
+  printedT:"Test varaqasi va javoblar kaliti botga yuborildi", prepErr:"Tayyorlab bo'lmadi, qayta urinib ko'ring",
+  invT:"Sizni testga taklif qilishdi", invC:"Sizni krossvordga taklif qilishdi", words:"so'z", minutes:"daqiqa", hintAv:"yordam bor",
+  qs:"savol", perQ:"har savolga", author:"Test muallifi", examT:"📋 Sinf testi",
+  examD:"Faqat bir marta yechiladi. Har savolga bitta javob berasiz — keyin o'zgartirib bo'lmaydi. Natija o'qituvchiga boradi.",
+  prevSolved:"Siz bu testni {at} da yechgansiz", noRetake:"Sinf testini qayta yechib bo'lmaydi", openApp:"TadrisAI'ni ochish",
+  yourName:"Ismingiz", namePh:"Ism va familiya", nameHint:"Telegram'dagi ismingiz qo'yildi, o'zgartirsangiz bo'ladi",
+  start:"Boshlash", freeNoReg:"Bepul · ro'yxatdan o'tish shart emas",
+  ansPh:"Javobni yozing", dunno:"Bilmayman", answer:"Javob berish", streak:"🔥 {n} tasi ketma-ket to'g'ri", retryMode:"Xatolar ustida ishlash",
+  noteExamOpen:"Javobni yozing — keyin o'zgartirib bo'lmaydi", noteExamPick:"Javobni tanlang — keyin o'zgartirib bo'lmaydi",
+  noteOpen:"Qisqa javob yozing — imlo xatosi kichik bo'lsa ham qabul qilinadi", notePick:"Javobni tanlang — darhol to'g'ri yoki xatoligini ko'rasiz",
+  timeUp:"⏱ Vaqt tugadi. ", lastQ:"Bu oxirgi savol edi", finish:"Yakunlash", timeNext:"⏱ Vaqt tugadi — keyingi savol",
+  accepted:"✓ Javob qabul qilindi", correctIs:"To'g'ri javob: ", wrongIs:"✕ Xato. To'g'ri javob: ", timeIs:"⏱ Vaqt tugadi. To'g'ri javob: ",
+  seeRes:"Natijani ko'rish", nextQ:"Keyingi savol", timeOnly:"⏱ Vaqt tugadi",
+  quitExam:"Testni yakunlaysizmi? Javob berilmagan savollar xato hisoblanadi va qayta yechib bo'lmaydi.",
+  quitAsk:"Tugatasizmi? Natija hozirgi holatda saqlanadi.",
+  great:"Zo'r natija!", good:"Yaxshi natija!", okRes:"Yomon emas, yana mashq qiling", badRes:"Mavzuni yana bir takrorlang",
+  time:"vaqt", streakS:"ketma-ket to'g'ri", place:"{n}-o'rin", ofN:"{n} kishidan", retryS:"qayta yechish", retryN:"{n} ta xatoni qayta yechish",
+  shareRes:"Natijani ulashish", ownT:"O'z testingizni yarating", ownD:"Mavzuni yozing — AI bir daqiqada test tuzadi",
+  calc:"Natija hisoblanmoqda…", already:"Siz bu testni oldin yechgansiz", notSent:"Natija yuborilmadi",
+  checkNet:"Internetni tekshirib, qayta urinib ko'ring", resend:"Qayta yuborish", done:"Test yakunlandi", correctN:"to'g'ri javob",
+  sentT:"✅ Natijangiz o'qituvchiga yuborildi", teacherAnn:"To'g'ri javoblarni o'qituvchingiz e'lon qiladi",
+  shareMsg:"Men «{t}» testidan {p}% to'pladim! Siz ham sinab ko'ring 👇",
+  mostWrong:"Eng ko'p xato: {n}-savol", mostWrongD:"«{q}» — {n} kishidan {m} tasi xato qildi. Darsda qayta tushuntirish kerak.",
+  solved:"yechdi", avg:"o'rtacha", avgT:"o'rtacha vaqt", partic:"Qatnashchilar", students:"O'quvchilar",
+  nobody:"Hali hech kim yechmadi. Havolani ulashing.",
+  foundW:"{n} / {m} so'z topildi", across:"GORIZONTAL", down:"VERTIKAL", letters:"{n} HARF", hint1:"💡 Bitta harf ochish",
+  check:"Tekshirish", wordsOk:"{n} / {m} so'z to'g'ri", allFound:"Barcha so'zlar topildi! 🎉", crossDone:"Krossvord yakunlandi",
+  hints:"yordam", answers:"Javoblar", shareS:"Ulashish", sec:"s",
+  LNAME:{uz:"O'zbek",uzn:"Yangi lotin",kaa:"Qoraqalpoq",ru:"Rus",en:"Ingliz"},
+  LVL:{easy:"Oson",mid:"O'rtacha",hard:"Qiyin"},
+  QT:{mc:["Variantli","A B C D"],tf:["To'g'ri / Noto'g'ri","tasdiq — ha yoki yo'q"],open:["Ochiq savollar","javobni o'zi yozadi"],mix:["Aralash","uchala tur birga"]},
+  QTN:{mc:"Variantli",tf:"To'g'ri / Noto'g'ri",open:"Ochiq",mix:"Aralash"},
+  gradeF:["{n}-sinf","{n}-kurs"],
+  SUBJ:["Matematika","Algebra","Geometriya","Fizika","Kimyo","Biologiya","Geografiya","Tarix","Ona tili","Adabiyot","O'zbek tili","Rus tili","Ingliz tili","Nemis tili","Informatika","Huquq","Iqtisodiyot","Boshlang'ich ta'lim","Texnologiya","Tasviriy san'at","Musiqa","Jismoniy tarbiya","Tarbiya"]
+},
+ru:{
+  back:"← Назад", title:"Тест-квиз", trial:"ТЕСТ", topic:"Тема", topicPh:"Например: Фотосинтез", crossPh:"Например: Кровеносная система",
+  nQ:"Количество вопросов", level:"Сложность", qtype:"Тип вопросов", example:"Пример ›", grade:"Класс / курс", subject:"Предмет",
+  pickOpt:"Не выбрано", other:"Другое…", ownPh:"Напишите сами", qlang:"Язык", forWhom:"Для кого?",
+  self:"Для себя", selfD:"практика: ответ и пояснение сразу, можно пройти заново",
+  cls:"Для класса", clsD:"экзамен: один раз, ответ нельзя изменить",
+  youGet:"Вы получите", get1:"Ссылку — ученики решают в приложении и сразу видят ответ и пояснение",
+  get2:"Результаты: кто сколько набрал и в каком вопросе больше всего ошибок",
+  createT:"Создать тест", readyIn:"Будет готово примерно за {x} секунд", myTests:"Мои тесты", loading:"Загрузка…",
+  nq:["{n} вопрос","{n} вопроса","{n} вопросов"], free:"бесплатно", freeTrial:"бесплатно (тест)",
+  srcImg:"Изображение — вопросы составляются по тексту на нём", chars:["{n} символ","{n} символа","{n} символов"], cut:" (берутся первые 30 000)",
+  srcText:" — вопросы составляются по этому тексту", del:"Удалить", upload:"Загрузить материал", optional:"(необязательно)",
+  uploadD:"Страница учебника, конспект или фото — вопросы составляются именно по этому тексту · PDF, DOCX, JPG, PNG", file:"Файл",
+  big8:"Файл больше 8 МБ", noText:"В файле не найден текст — если это скан, загрузите его как изображение",
+  badType:"Этот тип файла не поддерживается", tooBig:"Файл слишком большой", readErr:"Не удалось прочитать файл",
+  noTests:"Тестов пока нет", noCross:"Кроссвордов пока нет", solvedN:"решили: {n}",
+  qN:"ВОПРОС {n}", tfQ:" · ВЕРНО?", openQ:" · НАПИШИТЕ ОТВЕТ", right:"правильный ответ", yours:"ваш ответ", why:"Почему?",
+  ex1q:"В каком органоиде происходит фотосинтез?", ex1o:["Митохондрия","Хлоропласт","Ядро","Рибосома"],
+  ex1w:"В хлоропласте есть хлорофилл — он поглощает свет.",
+  ex2q:"В процессе фотосинтеза выделяется кислород.", tTrue:"Верно", tFalse:"Неверно",
+  ex2w:"При расщеплении воды образуется кислород и выходит в воздух.",
+  ex3q:"Как называется пигмент, придающий листьям зелёный цвет?", ex3typo:"хлорофил", ex3a:"хлорофилл", okBang:"✓ Верно!",
+  ex3w:"Принимается даже с небольшой опечаткой. Хлорофилл поглощает свет.", ex3w2:"Хлорофилл поглощает свет.",
+  mixD:"В одном тесте три типа вопросов вперемешку: половина с вариантами, четверть «верно/неверно», четверть открытых.",
+  ppTitle:"Фотосинтез", ppSub:"Биология · 7 класс", keyFor:"Ключ ответов — для учителя", quick:"Быстрая проверка",
+  expl:"Пояснения", correctC:"Правильный ответ:", tfL:["В","Н"], ppName:"Фамилия, имя", ppCls:"Класс", ppDate:"Дата",
+  mixRule:"В каждом вопросе отметьте один правильный ответ. Если верно — «В», если неверно — «Н». На открытый вопрос дайте краткий ответ.",
+  ansLine:"Ответ", sheet:"Бланк ответов", score:"Баллы", openRule:"На каждый вопрос дайте краткий ответ.",
+  tfRule:"Отметьте «В», если верно, и «Н», если неверно.", mcRule:"В каждом вопросе отметьте один правильный ответ.",
+  noteTg:"Ученик переходит по ссылке и решает прямо в Telegram — ответ проверяется сразу.",
+  notePaper:"Нажмите «Распечатать» — этот бланк придёт в бот в PDF, останется распечатать и раздать.",
+  noteKey:"Отдельный файл для учителя: таблица правильных ответов и пояснения. Ученикам не выдаётся.",
+  exTitle:"Пример: {x}", close:"Закрыть", tabTg:"📱 В Telegram", tabPaper:"🖨 На бумаге", tabKey:"🔑 Ключ ответов", pickThis:"Выбрать этот",
+  crossT:"Кроссворд", nWords:"Количество слов", cget1:"Ссылку на кроссворд в приложении — с подсказками и проверкой",
+  cget2:"Кто сколько слов нашёл и за какое время", createC:"Создать кроссворд", myCross:"Мои кроссворды",
+  writeTopic:"Напишите тему", aiTest:"ИИ составляет тест…", aiCross:"ИИ составляет кроссворд…", noBal:"Недостаточно средств: нужно {x}",
+  limit:"Пробные попытки закончились. Спасибо!", expired:"Срок теста истёк",
+  failRef:"Не удалось составить — {x} возвращено на баланс. Попробуйте ещё раз", fail:"Не удалось составить, попробуйте ещё раз",
+  paid:"Тест готов · с баланса списано {x}", trialLeft:"Тест: осталось попыток — {n}",
+  notFound:"Тест не найден", loadErr:"Не удалось загрузить", nW:["{n} слово","{n} слова","{n} слов"], linkT:"Ссылка на тест", linkC:"Ссылка на кроссворд", copy:"Копировать",
+  linkHint:"Любой, кто откроет ссылку, решит его в приложении TadrisAI. Результаты придут вам.", share:"📤 Поделиться", selfSolve:"▶️ Решить самому",
+  editQ:"Просмотр и редактирование вопросов", editQD:"удалите лишние вопросы", results:"Результаты", noOne:"пока никто не решил",
+  printT:"Распечатать (PDF)", printD:"бланк для учеников + ключ ответов для учителя — придут в бот",
+  printC:"Распечатать", printCD:"для кроссворда — на следующем этапе", copied:"Ссылка скопирована",
+  shareT:"📝 Тест: {t} — попробуйте решить!", shareC:"🧩 Кроссворд: {t} — попробуйте решить!", qsTitle:"Вопросы ({n})", delQ:"🗑 Удалить",
+  sure:"Точно удалить? Нажмите ещё раз", delErr:"Не удалось удалить", deleted:"Вопрос удалён",
+  preparing:"Готовим… (10–20 секунд)", printed:"✅ 2 PDF отправлены в чат бота",
+  printedT:"Бланк теста и ключ ответов отправлены в бот", prepErr:"Не удалось подготовить, попробуйте ещё раз",
+  invT:"Вас пригласили пройти тест", invC:"Вас пригласили решить кроссворд", words:"слов", minutes:"минут", hintAv:"есть подсказки",
+  qs:"вопросов", perQ:"на вопрос", author:"Автор теста", examT:"📋 Тест для класса",
+  examD:"Решается только один раз. На каждый вопрос — один ответ, изменить его нельзя. Результат получит учитель.",
+  prevSolved:"Вы уже решали этот тест {at}", noRetake:"Тест для класса нельзя пройти повторно", openApp:"Открыть TadrisAI",
+  yourName:"Ваше имя", namePh:"Имя и фамилия", nameHint:"Подставлено ваше имя из Telegram, можно изменить",
+  start:"Начать", freeNoReg:"Бесплатно · регистрация не нужна",
+  ansPh:"Напишите ответ", dunno:"Не знаю", answer:"Ответить", streak:"🔥 {n} подряд верно", retryMode:"Работа над ошибками",
+  noteExamOpen:"Напишите ответ — изменить его будет нельзя", noteExamPick:"Выберите ответ — изменить его будет нельзя",
+  noteOpen:"Напишите краткий ответ — небольшая опечатка допускается", notePick:"Выберите ответ — сразу увидите, верно или нет",
+  timeUp:"⏱ Время вышло. ", lastQ:"Это был последний вопрос", finish:"Завершить", timeNext:"⏱ Время вышло — следующий вопрос",
+  accepted:"✓ Ответ принят", correctIs:"Правильный ответ: ", wrongIs:"✕ Неверно. Правильный ответ: ", timeIs:"⏱ Время вышло. Правильный ответ: ",
+  seeRes:"Посмотреть результат", nextQ:"Следующий вопрос", timeOnly:"⏱ Время вышло",
+  quitExam:"Завершить тест? Вопросы без ответа засчитаются как ошибки, пройти заново будет нельзя.",
+  quitAsk:"Завершить? Результат сохранится как есть.",
+  great:"Отличный результат!", good:"Хороший результат!", okRes:"Неплохо, потренируйтесь ещё", badRes:"Повторите тему ещё раз",
+  time:"время", streakS:"подряд верно", place:"{n}-е место", ofN:"из {n}", retryS:"повтор", retryN:"Перерешать ошибки: {n}",
+  shareRes:"Поделиться результатом", ownT:"Создайте свой тест", ownD:"Напишите тему — ИИ составит тест за минуту",
+  calc:"Подсчитываем результат…", already:"Вы уже решали этот тест", notSent:"Результат не отправлен",
+  checkNet:"Проверьте интернет и попробуйте ещё раз", resend:"Отправить снова", done:"Тест завершён", correctN:"верных ответов",
+  sentT:"✅ Ваш результат отправлен учителю", teacherAnn:"Правильные ответы объявит учитель",
+  shareMsg:"Я набрал {p}% в тесте «{t}»! Попробуйте и вы 👇",
+  mostWrong:"Больше всего ошибок: вопрос {n}", mostWrongD:"«{q}» — ошиблись {m} из {n}. Стоит объяснить это на уроке ещё раз.",
+  solved:"решили", avg:"в среднем", avgT:"среднее время", partic:"Участники", students:"Ученики",
+  nobody:"Пока никто не решил. Поделитесь ссылкой.",
+  foundW:"Найдено слов: {n} / {m}", across:"ПО ГОРИЗОНТАЛИ", down:"ПО ВЕРТИКАЛИ", letters:["{n} БУКВА","{n} БУКВЫ","{n} БУКВ"], hint1:"💡 Открыть одну букву",
+  check:"Проверить", wordsOk:"Верно: {n} / {m} слов", allFound:"Все слова найдены! 🎉", crossDone:"Кроссворд завершён",
+  hints:"подсказки", answers:"Ответы", shareS:"Поделиться", sec:"с",
+  LNAME:{uz:"Узбекский",uzn:"Новая латиница",kaa:"Каракалпакский",ru:"Русский",en:"Английский"},
+  LVL:{easy:"Лёгкий",mid:"Средний",hard:"Сложный"},
+  QT:{mc:["С вариантами","A B C D"],tf:["Верно / Неверно","утверждение — да или нет"],open:["Открытые","ответ пишут сами"],mix:["Смешанный","все три типа"]},
+  QTN:{mc:"С вариантами",tf:"Верно / Неверно",open:"Открытые",mix:"Смешанный"},
+  gradeF:["{n} класс","{n} курс"],
+  SUBJ:["Математика","Алгебра","Геометрия","Физика","Химия","Биология","География","История","Родной язык","Литература","Узбекский язык","Русский язык","Английский язык","Немецкий язык","Информатика","Право","Экономика","Начальное образование","Технология","Изобразительное искусство","Музыка","Физкультура","Воспитание"]
+},
+en:{
+  back:"← Back", title:"Test quiz", trial:"TRIAL", topic:"Topic", topicPh:"E.g. Photosynthesis", crossPh:"E.g. The circulatory system",
+  nQ:"Number of questions", level:"Difficulty", qtype:"Question type", example:"Example ›", grade:"Grade / year", subject:"Subject",
+  pickOpt:"Choose (optional)", other:"Other…", ownPh:"Type your own", qlang:"Language", forWhom:"Who is it for?",
+  self:"For myself", selfD:"practice: answer and explanation right away, can retake",
+  cls:"For a class", clsD:"exam: once only, answers can't be changed",
+  youGet:"You get", get1:"A link — students solve it in the app and instantly see the answer and explanation",
+  get2:"Results: who scored what and the most-missed question",
+  createT:"Create test", readyIn:"Ready in about {x} seconds", myTests:"My tests", loading:"Loading…",
+  nq:"{n} questions", free:"free", freeTrial:"free (trial)",
+  srcImg:"Image — questions are based on the text in it", chars:"{n} characters", cut:" (first 30,000 are used)",
+  srcText:" — questions are based on this text", del:"Remove", upload:"Upload material", optional:"(optional)",
+  uploadD:"Textbook page, notes or a photo — questions are based on exactly this text · PDF, DOCX, JPG, PNG", file:"File",
+  big8:"The file is larger than 8 MB", noText:"No text found in the file — if it's a scan, upload it as an image",
+  badType:"This file type isn't supported", tooBig:"The file is too large", readErr:"Couldn't read the file",
+  noTests:"No tests yet", noCross:"No crosswords yet", solvedN:"{n} solved",
+  qN:"QUESTION {n}", tfQ:" · TRUE?", openQ:" · TYPE THE ANSWER", right:"correct answer", yours:"your answer", why:"Why?",
+  ex1q:"In which organelle does photosynthesis take place?", ex1o:["Mitochondrion","Chloroplast","Nucleus","Ribosome"],
+  ex1w:"The chloroplast contains chlorophyll, which absorbs light.",
+  ex2q:"Oxygen is released during photosynthesis.", tTrue:"True", tFalse:"False",
+  ex2w:"When water is split, oxygen forms and is released into the air.",
+  ex3q:"What is the pigment that makes leaves green called?", ex3typo:"chlorofyll", ex3a:"chlorophyll", okBang:"✓ Correct!",
+  ex3w:"Accepted even with a small typo. Chlorophyll absorbs light.", ex3w2:"Chlorophyll absorbs light.",
+  mixD:"One test mixes three question types: half multiple choice, a quarter true/false, a quarter open.",
+  ppTitle:"Photosynthesis", ppSub:"Biology · Grade 7", keyFor:"Answer key — for the teacher", quick:"Quick check",
+  expl:"Explanations", correctC:"Correct answer:", tfL:["T","F"], ppName:"Name", ppCls:"Class", ppDate:"Date",
+  mixRule:"Choose one correct answer for each question. Mark «T» if true and «F» if false. Give a short answer to open questions.",
+  ansLine:"Answer", sheet:"Answer sheet", score:"Score", openRule:"Give a short answer to each question.",
+  tfRule:"Mark «T» if the statement is true and «F» if it is false.", mcRule:"Choose one correct answer for each question.",
+  noteTg:"The student taps the link and solves it inside Telegram — answers are checked instantly.",
+  notePaper:"Tap «Print» and this sheet arrives in the bot as a PDF — just print and hand out.",
+  noteKey:"A separate file for the teacher: the answer table and explanations. Not given to students.",
+  exTitle:"Example: {x}", close:"Close", tabTg:"📱 In Telegram", tabPaper:"🖨 On paper", tabKey:"🔑 Answer key", pickThis:"Choose this",
+  crossT:"Crossword", nWords:"Number of words", cget1:"A link to a crossword solved in the app — with letter hints and checking",
+  cget2:"Who found how many words and how long it took", createC:"Create crossword", myCross:"My crosswords",
+  writeTopic:"Type a topic", aiTest:"AI is creating the test…", aiCross:"AI is creating the crossword…", noBal:"Not enough balance: {x} needed",
+  limit:"Your trial attempts are used up. Thank you!", expired:"The trial has ended",
+  failRef:"Couldn't create it — {x} returned to your balance. Please try again", fail:"Couldn't create it, please try again",
+  paid:"Test ready · {x} charged from your balance", trialLeft:"Trial: {n} attempts left",
+  notFound:"Test not found", loadErr:"Couldn't load", nW:"{n} words", linkT:"Test link", linkC:"Crossword link", copy:"Copy",
+  linkHint:"Anyone who opens the link solves it in the TadrisAI app. You get the results.", share:"📤 Share", selfSolve:"▶️ Try it myself",
+  editQ:"View and edit questions", editQD:"remove questions you don't need", results:"Results", noOne:"no one has solved it yet",
+  printT:"Print (PDF)", printD:"student sheet + teacher's answer key — sent to the bot",
+  printC:"Print", printCD:"for crosswords — coming later", copied:"Link copied",
+  shareT:"📝 Test: {t} — give it a try!", shareC:"🧩 Crossword: {t} — give it a try!", qsTitle:"Questions ({n})", delQ:"🗑 Delete",
+  sure:"Delete it? Tap again", delErr:"Couldn't delete", deleted:"Question deleted",
+  preparing:"Preparing… (10–20 seconds)", printed:"✅ 2 PDFs sent to the bot chat",
+  printedT:"Test sheet and answer key sent to the bot", prepErr:"Couldn't prepare it, please try again",
+  invT:"You've been invited to a test", invC:"You've been invited to a crossword", words:"words", minutes:"minutes", hintAv:"hints available",
+  qs:"questions", perQ:"per question", author:"Test author", examT:"📋 Class test",
+  examD:"Can be taken only once. One answer per question — it can't be changed. The result goes to the teacher.",
+  prevSolved:"You took this test on {at}", noRetake:"A class test can't be retaken", openApp:"Open TadrisAI",
+  yourName:"Your name", namePh:"First and last name", nameHint:"Your Telegram name is filled in — you can change it",
+  start:"Start", freeNoReg:"Free · no sign-up needed",
+  ansPh:"Type your answer", dunno:"I don't know", answer:"Answer", streak:"🔥 {n} correct in a row", retryMode:"Working on mistakes",
+  noteExamOpen:"Type your answer — it can't be changed later", noteExamPick:"Choose an answer — it can't be changed later",
+  noteOpen:"Type a short answer — small typos are accepted", notePick:"Choose an answer — you'll see right away if it's correct",
+  timeUp:"⏱ Time's up. ", lastQ:"That was the last question", finish:"Finish", timeNext:"⏱ Time's up — next question",
+  accepted:"✓ Answer saved", correctIs:"Correct answer: ", wrongIs:"✕ Wrong. Correct answer: ", timeIs:"⏱ Time's up. Correct answer: ",
+  seeRes:"See result", nextQ:"Next question", timeOnly:"⏱ Time's up",
+  quitExam:"Finish the test? Unanswered questions count as wrong and you can't retake it.",
+  quitAsk:"Finish now? Your result will be saved as it is.",
+  great:"Excellent result!", good:"Good result!", okRes:"Not bad — keep practising", badRes:"Review the topic once more",
+  time:"time", streakS:"correct in a row", place:"#{n}", ofN:"of {n}", retryS:"retake", retryN:"Retry {n} mistakes",
+  shareRes:"Share result", ownT:"Create your own test", ownD:"Type a topic — AI builds a test in a minute",
+  calc:"Calculating your result…", already:"You've already taken this test", notSent:"Result not sent",
+  checkNet:"Check your internet and try again", resend:"Send again", done:"Test finished", correctN:"correct answers",
+  sentT:"✅ Your result was sent to the teacher", teacherAnn:"Your teacher will announce the correct answers",
+  shareMsg:"I scored {p}% on the «{t}» test! Give it a try 👇",
+  mostWrong:"Most missed: question {n}", mostWrongD:"«{q}» — {m} of {n} got it wrong. Worth explaining again in class.",
+  solved:"solved", avg:"average", avgT:"average time", partic:"Participants", students:"Students",
+  nobody:"No one has solved it yet. Share the link.",
+  foundW:"{n} / {m} words found", across:"ACROSS", down:"DOWN", letters:"{n} LETTERS", hint1:"💡 Reveal a letter",
+  check:"Check", wordsOk:"{n} / {m} words correct", allFound:"All words found! 🎉", crossDone:"Crossword finished",
+  hints:"hints", answers:"Answers", shareS:"Share", sec:"s",
+  LNAME:{uz:"Uzbek",uzn:"New Latin",kaa:"Karakalpak",ru:"Russian",en:"English"},
+  LVL:{easy:"Easy",mid:"Medium",hard:"Hard"},
+  QT:{mc:["Multiple choice","A B C D"],tf:["True / False","a statement — yes or no"],open:["Open questions","students type the answer"],mix:["Mixed","all three types"]},
+  QTN:{mc:"Multiple choice",tf:"True / False",open:"Open",mix:"Mixed"},
+  gradeF:["Grade {n}","Year {n}"],
+  SUBJ:["Mathematics","Algebra","Geometry","Physics","Chemistry","Biology","Geography","History","Native language","Literature","Uzbek language","Russian language","English","German","Computer science","Law","Economics","Primary education","Technology","Fine arts","Music","Physical education","Upbringing"]
+},
+kaa:{
+  back:"← Artqa", title:"Test quiz", trial:"SINAQ", topic:"Tema", topicPh:"Mısalı: Fotosintez", crossPh:"Mısalı: Qan aylanıw sisteması",
+  nQ:"Sorawlar sanı", level:"Qıyınlıǵı", qtype:"Soraw túri", example:"Mısal ›", grade:"Klass / kurs", subject:"Pán",
+  pickOpt:"Tańlań (ıqtıyarıy)", other:"Basqa…", ownPh:"Ózińiz jazıń", qlang:"Til", forWhom:"Kim ushın?",
+  self:"Ózim ushın", selfD:"shınıǵıw: juwap hám túsindirme birden, qayta sheshiwge boladı",
+  cls:"Klass ushın", clsD:"imtixan: bir ret, juwaptı ózgertip bolmaydı",
+  youGet:"Siz alasız", get1:"Siltewish — oqıwshılar qosımshada sheshedi, juwap hám túsindirmeni birden kóredi",
+  get2:"Nátiyjeler: kim qansha ball aldı, eń kóp qáte jiberilgen soraw",
+  createT:"Test jaratıw", readyIn:"Shama menen {x} sekundta tayın boladı", myTests:"Meniń testlerim", loading:"Júklenbekte…",
+  nq:"{n} soraw", free:"biypul", freeTrial:"biypul (sınaq)",
+  srcImg:"Súwret — sorawlar usı súwrettegi tekstten dúziledi", chars:"{n} belgi", cut:" (basındaǵı 30 000 ı alınadı)",
+  srcText:" — sorawlar usı tekstten dúziledi", del:"Óshiriw", upload:"Derek júklew", optional:"(májbúriy emes)",
+  uploadD:"Sabaqlıq beti, konspekt yamasa súwret — sorawlar dál usı tekstten dúziledi · PDF, DOCX, JPG, PNG", file:"Fayl",
+  big8:"Fayl 8 MB tan úlken", noText:"Faylda tekst tabılmadı — skaner bolsa, súwret etip júkleń",
+  badType:"Bul túrdegi fayl qabıl etilmeydi", tooBig:"Fayl júdá úlken", readErr:"Fayldı oqıp bolmadı",
+  noTests:"Ele test jaratılmaǵan", noCross:"Ele krossvord jaratılmaǵan", solvedN:"{n} adam sheshti",
+  qN:"{n}-SORAW", tfQ:" · DURÍS PA?", openQ:" · JUWAPTÍ JAZÍŃ", right:"durıs juwap", yours:"sizdiń juwabıńız", why:"Nege?",
+  ex1q:"Fotosintez qaysı organoidte júredi?", ex1o:["Mitoxondriya","Xloroplast","Yadro","Ribosoma"],
+  ex1w:"Xloroplastta xlorofill bar — ol jaqtılıqtı sińiredi.",
+  ex2q:"Fotosintez processinde kislorod bólinip shıǵadı.", tTrue:"Durıs", tFalse:"Nadurıs",
+  ex2w:"Suw ıdıraǵanda kislorod payda boladı hám hawaǵa shıǵadı.",
+  ex3q:"Japıraqlarǵa jasıl reń beretuǵın pigment qalay ataladı?", ex3typo:"xlorafill", ex3a:"xlorofill", okBang:"✓ Durıs!",
+  ex3w:"Kishkene imla qátesi bolsa da qabıl etiledi. Xlorofill jaqtılıqtı sińiredi.", ex3w2:"Xlorofill jaqtılıqtı sińiredi.",
+  mixD:"Bir testte úsh túrli soraw aralas keledi: yarımı variantlı, sheregi durıs/nadurıs, sheregi ashıq.",
+  ppTitle:"Fotosintez", ppSub:"Biologiya · 7-klass", keyFor:"Juwaplar gilti — muǵallim ushın", quick:"Tez tekseriw",
+  expl:"Túsindirmeler", correctC:"Durıs juwap:", tfL:["D","N"], ppName:"Atı, familiyası", ppCls:"Klass", ppDate:"Sáne",
+  mixRule:"Hár bir sorawda bir durıs juwaptı belgileń. Durıs bolsa «D», nadurıs bolsa «N». Ashıq sorawǵa qısqa juwap jazıń.",
+  ansLine:"Juwap", sheet:"Juwaplar betı", score:"Ball", openRule:"Hár bir sorawǵa qısqa juwap jazıń.",
+  tfRule:"Tastıyıq durıs bolsa «D», nadurıs bolsa «N» di belgileń.", mcRule:"Hár bir sorawda bir durıs juwaptı belgileń.",
+  noteTg:"Oqıwshı siltewishti basıp, Telegram ishinde sheshedi — juwap birden tekseriledi.",
+  notePaper:"«Qaǵazǵa shıǵarıw» basılsa, usı bet PDF túrinde botqa keledi — basıp shıǵarıp tarqatasız.",
+  noteKey:"Muǵallim ushın bólek fayl: durıs juwaplar kestesi hám túsindirmeler. Oqıwshılarǵa berilmeydi.",
+  exTitle:"Mısal: {x}", close:"Jabıw", tabTg:"📱 Telegramda", tabPaper:"🖨 Qaǵazda", tabKey:"🔑 Juwaplar gilti", pickThis:"Usını tańlaw",
+  crossT:"Krossvord", nWords:"Sózler sanı", cget1:"Qosımshada sheshiletuǵın krossvord siltewishi — hárip ashıw hám tekseriw menen",
+  cget2:"Kim neshe sóz tapqanı hám qansha waqıt ketkeni", createC:"Krossvord jaratıw", myCross:"Meniń krossvordlarım",
+  writeTopic:"Temanı jazıń", aiTest:"AI test dúzbekte…", aiCross:"AI krossvord dúzbekte…", noBal:"Balans jetkiliksiz: {x} kerek",
+  limit:"Sınaq urınıwlarıńız tawsıldı. Raxmet!", expired:"Sınaq múddeti tamamlandı",
+  failRef:"Dúzip bolmadı — {x} balansqa qaytarıldı. Qayta urınıp kóriń", fail:"Dúzip bolmadı, qayta urınıp kóriń",
+  paid:"Test tayın · balanstan {x} alındı", trialLeft:"Sınaq: jáne {n} urınıw qaldı",
+  notFound:"Test tabılmadı", loadErr:"Júklep bolmadı", nW:"{n} sóz", linkT:"Test siltewishi", linkC:"Krossvord siltewishi", copy:"Nusqa",
+  linkHint:"Siltewishti basqan hár kim TadrisAI qosımshasında sheshedi. Nátiyjeleri sizge keledi.", share:"📤 Bólisiw", selfSolve:"▶️ Ózim sheshemen",
+  editQ:"Sorawlardı kóriw hám dúzetiw", editQD:"keregi joq sorawdı óshiriń", results:"Nátiyjeler", noOne:"ele hesh kim sheshpedi",
+  printT:"Qaǵazǵa shıǵarıw (PDF)", printD:"oqıwshılar ushın bet + muǵallim ushın juwaplar gilti — botqa keledi",
+  printC:"Qaǵazǵa shıǵarıw", printCD:"krossvord ushın — keyingi basqıshta", copied:"Siltewish nusqalandı",
+  shareT:"📝 Test: {t} — sheship kóriń!", shareC:"🧩 Krossvord: {t} — sheship kóriń!", qsTitle:"Sorawlar ({n})", delQ:"🗑 Óshiriw",
+  sure:"Haqıyqatan óshirilsin be? Jáne basıń", delErr:"Óshirip bolmadı", deleted:"Soraw óshirildi",
+  preparing:"Tayarlanbaqta… (10–20 sekund)", printed:"✅ 2 PDF bot chatına jiberildi",
+  printedT:"Test betı hám juwaplar gilti botqa jiberildi", prepErr:"Tayarlap bolmadı, qayta urınıp kóriń",
+  invT:"Sizdi testke shaqırdı", invC:"Sizdi krossvordqa shaqırdı", words:"sóz", minutes:"minut", hintAv:"járdem bar",
+  qs:"soraw", perQ:"hár sorawǵa", author:"Test avtorı", examT:"📋 Klass testi",
+  examD:"Tek bir ret sheshiledi. Hár sorawǵa bir juwap beresiz — keyin ózgertip bolmaydı. Nátiyje muǵallimge baradı.",
+  prevSolved:"Siz bul testti {at} da sheshkensiz", noRetake:"Klass testin qayta sheship bolmaydı", openApp:"TadrisAI dı ashıw",
+  yourName:"Atıńız", namePh:"Atı hám familiyası", nameHint:"Telegramdaǵı atıńız qoyıldı, ózgertiwińizge boladı",
+  start:"Baslaw", freeNoReg:"Biypul · dizimnen ótiw shárt emes",
+  ansPh:"Juwaptı jazıń", dunno:"Bilmeymen", answer:"Juwap beriw", streak:"🔥 {n} izbe-iz durıs", retryMode:"Qáteler ústinde islew",
+  noteExamOpen:"Juwaptı jazıń — keyin ózgertip bolmaydı", noteExamPick:"Juwaptı tańlań — keyin ózgertip bolmaydı",
+  noteOpen:"Qısqa juwap jazıń — kishkene imla qátesi bolsa da qabıl etiledi", notePick:"Juwaptı tańlań — durıs yamasa qáteligin birden kóresiz",
+  timeUp:"⏱ Waqıt tawsıldı. ", lastQ:"Bul aqırǵı soraw edi", finish:"Juwmaqlaw", timeNext:"⏱ Waqıt tawsıldı — keyingi soraw",
+  accepted:"✓ Juwap qabıl etildi", correctIs:"Durıs juwap: ", wrongIs:"✕ Qáte. Durıs juwap: ", timeIs:"⏱ Waqıt tawsıldı. Durıs juwap: ",
+  seeRes:"Nátiyjeni kóriw", nextQ:"Keyingi soraw", timeOnly:"⏱ Waqıt tawsıldı",
+  quitExam:"Testti juwmaqlaysız ba? Juwap berilmegen sorawlar qáte esaplanadı hám qayta sheship bolmaydı.",
+  quitAsk:"Juwmaqlaysız ba? Nátiyje házirgi halında saqlanadı.",
+  great:"Ájayıp nátiyje!", good:"Jaqsı nátiyje!", okRes:"Jaman emes, jáne shınıǵıń", badRes:"Temanı jáne bir ret tákirarlań",
+  time:"waqıt", streakS:"izbe-iz durıs", place:"{n}-orın", ofN:"{n} adamnan", retryS:"qayta sheshiw", retryN:"{n} qáteni qayta sheshiw",
+  shareRes:"Nátiyjeni bólisiw", ownT:"Óz testińizdi jaratıń", ownD:"Temanı jazıń — AI bir minutta test dúzedi",
+  calc:"Nátiyje esaplanbaqta…", already:"Siz bul testti aldın sheshkensiz", notSent:"Nátiyje jiberilmedi",
+  checkNet:"Internetti tekserip, qayta urınıp kóriń", resend:"Qayta jiberiw", done:"Test juwmaqlandı", correctN:"durıs juwap",
+  sentT:"✅ Nátiyjeńiz muǵallimge jiberildi", teacherAnn:"Durıs juwaplardı muǵallimińiz járiyalaydı",
+  shareMsg:"Men «{t}» testinen {p}% ball aldım! Siz de sınap kóriń 👇",
+  mostWrong:"Eń kóp qáte: {n}-soraw", mostWrongD:"«{q}» — {n} adamnan {m} qáte jiberdi. Sabaqta qayta túsindiriw kerek.",
+  solved:"sheshti", avg:"ortasha", avgT:"ortasha waqıt", partic:"Qatnasıwshılar", students:"Oqıwshılar",
+  nobody:"Ele hesh kim sheshpedi. Siltewishti bólisiń.",
+  foundW:"{n} / {m} sóz tabıldı", across:"GORIZONTAL", down:"VERTIKAL", letters:"{n} HÁRIP", hint1:"💡 Bir hárip ashıw",
+  check:"Tekseriw", wordsOk:"{n} / {m} sóz durıs", allFound:"Barlıq sózler tabıldı! 🎉", crossDone:"Krossvord juwmaqlandı",
+  hints:"járdem", answers:"Juwaplar", shareS:"Bólisiw", sec:"s",
+  LNAME:{uz:"Ózbek",uzn:"Jańa latın",kaa:"Qaraqalpaq",ru:"Orıs",en:"Inglis"},
+  LVL:{easy:"Ańsat",mid:"Ortasha",hard:"Qıyın"},
+  QT:{mc:["Variantlı","A B C D"],tf:["Durıs / Nadurıs","tastıyıq — awa yamasa yaq"],open:["Ashıq sorawlar","juwaptı ózi jazadı"],mix:["Aralas","úsh túri birge"]},
+  QTN:{mc:"Variantlı",tf:"Durıs / Nadurıs",open:"Ashıq",mix:"Aralas"},
+  gradeF:["{n}-klass","{n}-kurs"],
+  SUBJ:["Matematika","Algebra","Geometriya","Fizika","Ximiya","Biologiya","Geografiya","Tariyx","Ana tili","Ádebiyat","Ózbek tili","Orıs tili","Inglis tili","Nemis tili","Informatika","Huqıq","Ekonomika","Baslawısh tálim","Texnologiya","Súwretlew óneri","Muzıka","Dene tárbiyası","Tárbiya"]
+}};
+function ql(){const l=['ru','en','kaa','uzn'].includes(lang)?lang:'uz';     // ilova tili o'zgarsa ham darhol
+  if(l==='uzn'&&!QD.uzn) QD.uzn=(typeof UZN!=='undefined')?UZN.deep(QD.uz):QD.uz; return l}
+function L(k,v){const q=ql(); let s=QD[q]&&QD[q][k]; if(s==null) s=QD.uz[k]; if(s==null) return k;
+  if(Array.isArray(s)&&s.length===3&&v&&v.n!=null&&typeof s[0]==='string'&&s[0].includes('{n}')){   // ruscha ko'plik: 1 / 2–4 / 5+
+    const n=Math.abs(parseInt(String(v.n).replace(/\s/g,''))||0), a=n%10, b=n%100;
+    s=s[a===1&&b!==11?0:a>=2&&a<=4&&(b<12||b>14)?1:2]}
+  if(v&&typeof s==='string') s=s.replace(/\{(\w+)\}/g,(m,a)=>v[a]!=null?v[a]:m); return s}
+
+const LKEYS=['uz','uzn','kaa','ru','en'];
+const LN=k=>L('LNAME')[k]||'', LV=k=>L('LVL')[k]||'', QTx=k=>L('QT')[k], QTNx=k=>L('QTN')[k]||'';
+const GRADES=()=>{const [c,k]=L('gradeF'); return [5,6,7,8,9,10,11].map(n=>c.replace('{n}',n)).concat([1,2,3,4].map(n=>k.replace('{n}',n)))};
 const S={kind:'test',n:20,cn:12,level:'mid',aud:'class',qtype:'mc',grade:'',subject:'',src:null,qlang:(['uz','uzn','kaa','ru','en'].includes(lang)?lang:'uz'),quiz:null,code:''};
-const QT={mc:['Variantli','A B C D'],tf:["To'g'ri / Noto'g'ri",'tasdiq — ha yoki yo\'q'],open:['Ochiq savollar','javobni o\'zi yozadi'],mix:['Aralash','uchala tur birga']};   // 2026-11-13: egasi ochiq va aralashni qaytardi
-const QTN={mc:'Variantli',tf:"To'g'ri / Noto'g'ri",open:'Ochiq',mix:'Aralash'};                  // eski testlardagi nomlar uchun
-const GRADES=['5-sinf','6-sinf','7-sinf','8-sinf','9-sinf','10-sinf','11-sinf','1-kurs','2-kurs','3-kurs','4-kurs'];
-const SUBJ=['Matematika','Algebra','Geometriya','Fizika','Kimyo','Biologiya','Geografiya','Tarix','Ona tili','Adabiyot','O\'zbek tili','Rus tili','Ingliz tili','Nemis tili','Informatika','Huquq','Iqtisodiyot','Boshlang\'ich ta\'lim','Texnologiya','Tasviriy san\'at','Musiqa','Jismoniy tarbiya','Tarbiya'];
+const QT={mc:1,tf:1,open:1,mix:1};                     // savol turlari (nomlari — L('QT'))
 const TMIN=10,TMAX=50,TMARKS=[10,20,30,40,50];
 /* 2026-11-16, egasi: narxlar (botdagi quiz.TEST_PRICES bilan bir xil) — savollar soni shu chegaragacha */
 const QPR=[[10,2990],[20,3990],[30,4990],[40,5990],[50,6990]];
@@ -163,65 +499,66 @@ function view(h){stopT(); box().innerHTML=h; show('qz'); window.scrollTo(0,0)}
 
 /* ---------- Yaratish: Test (krossvord — alohida bo'lim, pastda) ---------- */
 const pr=(a,b)=>' aria-pressed="'+(a===b)+'"';
-const langs=()=>`<div class="group">Til</div><div class="qz-langs">${Object.entries(LNAME).map(([k,v])=>`<button type="button"${pr(S.qlang,k)} onclick="QZ.set('qlang','${k}')">${v}</button>`).join('')}</div>`;
-const levels=()=>`<div class="group">Qiyinlik</div><div class="qz-seg">${Object.entries(LVL).map(([k,v])=>`<button type="button"${pr(S.level,k)} onclick="QZ.set('level','${k}')">${v}</button>`).join('')}</div>`;
+const langs=()=>`<div class="group">${L('qlang')}</div><div class="qz-langs">${LKEYS.map(k=>`<button type="button"${pr(S.qlang,k)} onclick="QZ.set('qlang','${k}')">${LN(k)}</button>`).join('')}</div>`;
+const levels=()=>`<div class="group">${L('level')}</div><div class="qz-seg">${['easy','mid','hard'].map(k=>`<button type="button"${pr(S.level,k)} onclick="QZ.set('level','${k}')">${LV(k)}</button>`).join('')}</div>`;
 function selBox(id,label,list,val,ph){
   const other=val&&!list.includes(val);
   return `<div><div class="group" style="margin-top:14px">${label}</div>
-  <select class="qz-in" id="${id}" onchange="QZ.pickSel('${id}',this.value)"><option value="">${ph}</option>${list.map(x=>`<option${x===val?' selected':''}>${esc(x)}</option>`).join('')}<option value="__o"${other?' selected':''}>Boshqa…</option></select>
-  <input class="qz-in" id="${id}O" style="margin-top:8px;display:${other?'block':'none'}" maxlength="40" placeholder="O'zingiz yozing" value="${other?esc(val):''}" oninput="QZ.setQ('${id==='qzGrade'?'grade':'subject'}',this.value)"></div>`;
+  <select class="qz-in" id="${id}" onchange="QZ.pickSel('${id}',this.value)"><option value="">${ph}</option>${list.map(x=>`<option${x===val?' selected':''}>${esc(x)}</option>`).join('')}<option value="__o"${other?' selected':''}>${L('other')}</option></select>
+  <input class="qz-in" id="${id}O" style="margin-top:8px;display:${other?'block':'none'}" maxlength="40" placeholder="${L('ownPh')}" value="${other?esc(val):''}" oninput="QZ.setQ('${id==='qzGrade'?'grade':'subject'}',this.value)"></div>`;
 }
 function open(){
   S.kind='test'; if(!QT[S.qtype]) S.qtype='mc';
-  view(`<button class="back" onclick="show('home')">← Orqaga</button>
-  <div class="qz-head"><h1>Test quiz</h1>${qFree()?'<span class="qz-tag">SINOV</span>':''}</div>
-  <div class="group" style="margin-top:0">Mavzu</div>
-  <textarea class="qz-ta" id="qzTopic" placeholder="Masalan: Fotosintez">${esc(S.topic||'')}</textarea>
+  view(`<button class="back" onclick="show('home')">${L('back')}</button>
+  <div class="qz-head"><h1>${L('title')}</h1>${qFree()?`<span class="qz-tag">${L('trial')}</span>`:''}</div>
+  <div class="group" style="margin-top:0">${L('topic')}</div>
+  <textarea class="qz-ta" id="qzTopic" placeholder="${L('topicPh')}">${esc(S.topic||'')}</textarea>
   <div class="qz-src" id="qzSrc">${srcBox()}</div>
-  <div class="group">Savollar soni</div>
+  <div class="group">${L('nQ')}</div>
   <div class="rng" style="margin-top:62px"><div class="rng-track"><div class="rng-fill" id="qzFill"></div></div><div id="qzTicks"></div>
-    <input type="range" id="qzRng" min="${TMIN}" max="${TMAX}" step="1" value="${S.n}" aria-label="Savollar soni" oninput="QZ.setN(this.value)"><div class="rng-bub" id="qzBub"></div></div>
+    <input type="range" id="qzRng" min="${TMIN}" max="${TMAX}" step="1" value="${S.n}" aria-label="${L('nQ')}" oninput="QZ.setN(this.value)"><div class="rng-bub" id="qzBub"></div></div>
   <div class="rng-price" id="qzNPrice"></div>
   ${levels()}
-  <div class="group">Savol turi</div>
-  <div class="qz-types">${Object.entries(QT).map(([k,v])=>`<button type="button"${pr(S.qtype,k)} onclick="QZ.set('qtype','${k}')"><b>${v[0]}</b><span>${v[1]}</span><em class="qz-ex" role="button" onclick="event.stopPropagation();QZ.example('${k}')">Misol ›</em></button>`).join('')}</div>
-  <div class="qz-2c">${selBox('qzGrade','Sinf / kurs',GRADES,S.grade,'Tanlang (ixtiyoriy)')}${selBox('qzSubj','Fan',SUBJ,S.subject,'Tanlang (ixtiyoriy)')}</div>
+  <div class="group">${L('qtype')}</div>
+  <div class="qz-types">${Object.keys(QT).map(k=>`<button type="button"${pr(S.qtype,k)} onclick="QZ.set('qtype','${k}')"><b>${QTx(k)[0]}</b><span>${QTx(k)[1]}</span><em class="qz-ex" role="button" onclick="event.stopPropagation();QZ.example('${k}')">${L('example')}</em></button>`).join('')}</div>
+  <div class="qz-2c">${selBox('qzGrade',L('grade'),GRADES(),S.grade,L('pickOpt'))}${selBox('qzSubj',L('subject'),L('SUBJ'),S.subject,L('pickOpt'))}</div>
   ${langs()}
-  <div class="group">Kim uchun?</div>
-  <div class="seg2"><button type="button"${pr(S.aud,'self')} onclick="QZ.set('aud','self')"><span class="e">🙋</span><b>O'zim uchun</b><span>mashq: javob va izoh darhol, qayta yechsa bo'ladi</span></button>
-  <button type="button"${pr(S.aud,'class')} onclick="QZ.set('aud','class')"><span class="e">👩‍🏫</span><b>Sinf uchun</b><span>imtihon: bir marta, javobni o'zgartirib bo'lmaydi</span></button></div>
-  <div class="qz-card qz-get"><b style="font-size:14px">Siz olasiz</b>
-    <div><i>✓</i>Havola — o'quvchilar ilovada yechadi, darhol javob va izoh ko'radi</div>
-    <div><i>✓</i>Natijalar: kim qancha to'pladi, eng ko'p xato qilingan savol</div></div>
-  <button type="button" class="cta" id="qzGo" onclick="QZ.create()">Test yaratish</button>
-  <div class="qz-hint">Taxminan ${S.n<=20?'20–40':S.n<=35?'40–70':'60–100'} soniyada tayyor bo'ladi</div>
-  <div class="group">Mening testlarim</div><div class="qz-list" id="qzMine"><div class="qz-hint">Yuklanmoqda…</div></div>`);
+  <div class="group">${L('forWhom')}</div>
+  <div class="seg2"><button type="button"${pr(S.aud,'self')} onclick="QZ.set('aud','self')"><span class="e">🙋</span><b>${L('self')}</b><span>${L('selfD')}</span></button>
+  <button type="button"${pr(S.aud,'class')} onclick="QZ.set('aud','class')"><span class="e">👩‍🏫</span><b>${L('cls')}</b><span>${L('clsD')}</span></button></div>
+  <div class="qz-card qz-get"><b style="font-size:14px">${L('youGet')}</b>
+    <div><i>✓</i>${L('get1')}</div>
+    <div><i>✓</i>${L('get2')}</div></div>
+  <button type="button" class="cta" id="qzGo" onclick="QZ.create()">${L('createT')}</button>
+  <div class="qz-hint" id="qzEta"></div>
+  <div class="group">${L('myTests')}</div><div class="qz-list" id="qzMine"><div class="qz-hint">${L('loading')}</div></div>`);
   $('qzTopic').addEventListener('input',e=>S.topic=e.target.value);
   setN(S.n,1); mine('test');
 }
 function setN(v,silent){
   S.n=Math.max(TMIN,Math.min(TMAX,parseInt(v)||20));
   const p=v=>(v-TMIN)/(TMAX-TMIN)*100;
-  $('qzRng').value=S.n; $('qzFill').style.width=p(S.n)+'%'; $('qzBub').style.left=p(S.n)+'%'; $('qzBub').textContent=S.n+' ta savol';
+  $('qzRng').value=S.n; $('qzFill').style.width=p(S.n)+'%'; $('qzBub').style.left=p(S.n)+'%'; $('qzBub').textContent=L('nq',{n:S.n});
   $('qzTicks').innerHTML=TMARKS.map(m=>`<div class="rng-tick ${m<=S.n?'on':''} ${m===S.n?'cur':''}" style="left:${p(m)}%"><b>${m}</b><i></i><span></span></div>`).join('');
   const pr=qPrice(S.n), fr=qFree();
-  $('qzNPrice').innerHTML=`${S.n} ta savol · <b style="font-size:14px">${fr?'bepul (sinov)':money(pr)}</b>`;
-  const go=$('qzGo'); if(go) go.textContent='Test yaratish · '+(fr?'bepul':money(pr));
+  $('qzNPrice').innerHTML=`${L('nq',{n:S.n})} · <b style="font-size:14px">${fr?L('freeTrial'):money(pr)}</b>`;
+  const go=$('qzGo'); if(go) go.textContent=L('createT')+' · '+(fr?L('free'):money(pr));
+  const eta=$('qzEta'); if(eta) eta.textContent=L('readyIn',{x:S.n<=20?'20–40':S.n<=35?'40–70':'60–100'});
   if(!silent) hap();
 }
 function srcBox(){
-  if(S.src) return `<div class="qz-srcf"><span class="ic">${S.src.kind==='img'?'🖼':'📄'}</span><span class="tx"><b>${esc(S.src.name)}</b><small>${S.src.kind==='img'?'Rasm — savollar shu rasmdagi matndan tuziladi':(S.src.chars||0).toLocaleString('ru')+' belgi'+(S.src.cut?' (boshidagi 30 000 tasi olinadi)':'')+' — savollar shu matndan tuziladi'}</small></span><button type="button" onclick="QZ.srcDel()" aria-label="O'chirish">✕</button></div>`;
+  if(S.src) return `<div class="qz-srcf"><span class="ic">${S.src.kind==='img'?'🖼':'📄'}</span><span class="tx"><b>${esc(S.src.name)}</b><small>${S.src.kind==='img'?L('srcImg'):L('chars',{n:(S.src.chars||0).toLocaleString('ru')})+(S.src.cut?L('cut'):'')+L('srcText')}</small></span><button type="button" onclick="QZ.srcDel()" aria-label="${L('del')}">✕</button></div>`;
   return `<label class="qz-up"><input type="file" accept=".pdf,.docx,.txt,image/*" onchange="QZ.srcUp(this)" hidden>
-    <span class="ic">📎</span><span class="tx"><b>Manba yuklash <i>(ixtiyoriy)</i></b><small>Darslik sahifasi, konspekt yoki rasm — savollar aynan shu matndan tuziladi · PDF, DOCX, JPG, PNG</small></span><span class="btn">Fayl</span></label>`;
+    <span class="ic">📎</span><span class="tx"><b>${L('upload')} <i>${L('optional')}</i></b><small>${L('uploadD')}</small></span><span class="btn">${L('file')}</span></label>`;
 }
 async function srcUp(inp){
   const f=inp.files&&inp.files[0]; if(!f) return;
-  if(f.size>8*1024*1024){toast('⚠️','Fayl 8 MB dan katta');return}
-  $('qzSrc').innerHTML='<div class="qz-srcf"><span class="qz-spin" style="width:26px;height:26px;border-width:3px"></span><span class="tx"><b>Yuklanmoqda…</b><small>'+esc(f.name)+'</small></span></div>';
+  if(f.size>8*1024*1024){toast('⚠️',L('big8'));return}
+  $('qzSrc').innerHTML='<div class="qz-srcf"><span class="qz-spin" style="width:26px;height:26px;border-width:3px"></span><span class="tx"><b>'+L('loading')+'</b><small>'+esc(f.name)+'</small></span></div>';
   const b64=await new Promise((ok,no)=>{const r=new FileReader(); r.onload=()=>ok(r.result); r.onerror=no; r.readAsDataURL(f)}).catch(()=>null);
   let d={}; try{d=b64?await api('/quiz/source',{name:f.name,mime:f.type,data:b64},90000):{}}catch(e){}
   if(!d.ok){S.src=null; $('qzSrc').innerHTML=srcBox();
-    toast('⚠️',{notext:"Faylda matn topilmadi — skaner bo'lsa, rasm qilib yuklang",type:'Bu turdagi fayl qabul qilinmaydi',big:'Fayl juda katta'}[d.error]||"Faylni o'qib bo'lmadi");return}
+    toast('⚠️',{notext:L('noText'),type:L('badType'),big:L('tooBig')}[d.error]||L('readErr'));return}
   S.src={src:d.src,name:d.name,kind:d.kind,chars:d.chars,cut:d.cut}; $('qzSrc').innerHTML=srcBox(); hap('ok');
 }
 function srcDel(){S.src=null; $('qzSrc').innerHTML=srcBox()}
@@ -235,171 +572,171 @@ async function mine(kind){
   let d={}; try{d=await api('/quiz/mine',{},15000)}catch(e){}
   const el=$('qzMine'); if(!el) return;
   const list=(d.list||[]).filter(r=>(r[1]==='cross')===(kind==='cross'));
-  if(!d.ok||!list.length){el.innerHTML=`<div class="qz-hint">Hali ${kind==='cross'?'krossvord':'test'} yaratilmagan</div>`;return}
-  el.innerHTML=list.map(r=>`<button type="button" class="qz-item" onclick="QZ.ready('${r[0]}')"><span class="ic">${r[1]==='cross'?'🧩':'📝'}</span><span class="tx"><b>${esc(r[2])}</b><small>${esc(r[3])} · ${r[4]} kishi yechdi</small></span><span>›</span></button>`).join('');
+  if(!d.ok||!list.length){el.innerHTML=`<div class="qz-hint">${L(kind==='cross'?'noCross':'noTests')}</div>`;return}
+  el.innerHTML=list.map(r=>`<button type="button" class="qz-item" onclick="QZ.ready('${r[0]}')"><span class="ic">${r[1]==='cross'?'🧩':'📝'}</span><span class="tx"><b>${esc(r[2])}</b><small>${esc(r[3])} · ${L('solvedN',{n:r[4]})}</small></span><span>›</span></button>`).join('');
 }
 /* Savol turi misollari (2026-11-12, egasi): «Misol» bosilganda o'quvchi ko'radigan ko'rinish */
 const EXQ={
-  mc:()=>`<div class="qz-q"><small>1-SAVOL</small><h2>Fotosintez qaysi organoidda boradi?</h2></div>
-    <div class="qz-opts">${['Mitoxondriya','Xloroplast','Yadro','Ribosoma'].map((o,j)=>`<div class="qz-opt ${j===1?'good':j===0?'bad':'dim'}"><span class="k">${'ABCD'[j]}</span><span>${o}</span><span class="lb">${j===1?"to'g'ri javob":j===0?'sizning javobingiz':''}</span></div>`).join('')}</div>
-    <div class="qz-why"><b>Nima uchun?</b><p>Xloroplastda xlorofill bor — u yorug'likni yutadi.</p></div>`,
-  tf:()=>`<div class="qz-q"><small>2-SAVOL · TO'G'RIMI?</small><h2>Fotosintez jarayonida kislorod ajralib chiqadi.</h2></div>
-    <div class="qz-opts tf"><div class="qz-opt good"><span class="k">✓</span><span>To'g'ri</span><span class="lb">to'g'ri javob</span></div><div class="qz-opt dim"><span class="k">✕</span><span>Noto'g'ri</span><span class="lb"></span></div></div>
-    <div class="qz-why"><b>Nima uchun?</b><p>Suv parchalanganda kislorod hosil bo'ladi va havoga chiqadi.</p></div>`,
-  open:()=>`<div class="qz-q"><small>3-SAVOL · JAVOBNI YOZING</small><h2>Barglarga yashil rang beruvchi pigment nima deb ataladi?</h2></div>
-    <div class="qz-in" style="border-color:#10B981">xlorafill</div>
-    <div class="qz-why" style="background:rgba(16,185,129,.12);border-color:rgba(16,185,129,.4)"><b style="color:#10B981">✓ To'g'ri!</b><p>Kichik imlo xatosi bo'lsa ham qabul qilinadi. Xlorofill yorug'likni yutadi.</p></div>`,
+  mc:()=>`<div class="qz-q"><small>${L('qN',{n:1})}</small><h2>${L('ex1q')}</h2></div>
+    <div class="qz-opts">${L('ex1o').map((o,j)=>`<div class="qz-opt ${j===1?'good':j===0?'bad':'dim'}"><span class="k">${'ABCD'[j]}</span><span>${o}</span><span class="lb">${j===1?L('right'):j===0?L('yours'):''}</span></div>`).join('')}</div>
+    <div class="qz-why"><b>${L('why')}</b><p>${L('ex1w')}</p></div>`,
+  tf:()=>`<div class="qz-q"><small>${L('qN',{n:2})}${L('tfQ')}</small><h2>${L('ex2q')}</h2></div>
+    <div class="qz-opts tf"><div class="qz-opt good"><span class="k">✓</span><span>${L('tTrue')}</span><span class="lb">${L('right')}</span></div><div class="qz-opt dim"><span class="k">✕</span><span>${L('tFalse')}</span><span class="lb"></span></div></div>
+    <div class="qz-why"><b>${L('why')}</b><p>${L('ex2w')}</p></div>`,
+  open:()=>`<div class="qz-q"><small>${L('qN',{n:3})}${L('openQ')}</small><h2>${L('ex3q')}</h2></div>
+    <div class="qz-in" style="border-color:#10B981">${L('ex3typo')}</div>
+    <div class="qz-why" style="background:rgba(16,185,129,.12);border-color:rgba(16,185,129,.4)"><b style="color:#10B981">${L('okBang')}</b><p>${L('ex3w')}</p></div>`,
 };
-EXQ.mix=()=>`<div class="qz-hint" style="text-align:left;margin:0 0 10px">Bitta testda uch xil savol aralash keladi: yarmi variantli, choragi to'g'ri/noto'g'ri, choragi ochiq.</div>
+EXQ.mix=()=>`<div class="qz-hint" style="text-align:left;margin:0 0 10px">${L('mixD')}</div>
   <div class="qz-mini">${EXQ.mc()}</div><div class="qz-mini">${EXQ.tf()}</div><div class="qz-mini">${EXQ.open()}</div>`;
-const PAPER={
-  mc:{q:'Fotosintez qaysi organoidda boradi?',o:['Mitoxondriya','Xloroplast','Yadro','Ribosoma'],a:'B',why:'Xloroplastda xlorofill bor — u yorug\'likni yutadi.'},
-  tf:{q:'Fotosintez jarayonida kislorod ajralib chiqadi.',a:'T',why:'Suv parchalanganda kislorod hosil bo\'ladi.'},
-  open:{q:'Barglarga yashil rang beruvchi pigment nima deb ataladi?',a:'✎',why:'Xlorofill yorug\'likni yutadi.'},
-  mix:{}};
+const PAPER=()=>({
+  mc:{q:L('ex1q'),o:L('ex1o'),a:'B',why:L('ex1w')},
+  tf:{q:L('ex2q'),a:L('tfL')[0],why:L('ex2w')},
+  open:{q:L('ex3q'),a:'✎',why:L('ex3w2')},
+  mix:{}});
+const ppHead=key=>`<div class="pp-t">${L('ppTitle')}</div><div class="pp-s">${L('ppSub')} · ${key?L('keyFor'):L('nq',{n:20})}</div>`;
+const ppLine=()=>`<div class="pp-l"><span>${L('ppName')}: __________</span><span>${L('ppCls')}: ____</span><span>${L('ppDate')}: _____</span></div>`;
+const ppTF=()=>{const [t,f]=L('tfL'); return `<div class="pp-o"><span>○ ${t} — ${L('tTrue')}</span><span>○ ${f} — ${L('tFalse')}</span></div>`};
+const ppSheet=()=>`<div class="pp-h">${L('sheet')}</div><div class="pp-grid">${[1,2,3,4,5,6,7,8,9,10].map(n=>`<div><i>${n}</i><b></b></div>`).join('')}</div><div class="pp-sc">${L('score')}: ____ / 20</div>`;
 function paperMix(key){                      // aralash test varaqasi: uch tur bitta varaqda
-  const head=`<div class="pp-t">Fotosintez</div><div class="pp-s">Biologiya · 7-sinf · ${key?'Javoblar kaliti — o\'qituvchi uchun':'20 ta savol'}</div>`, f='<div class="pp-f">TadrisAI · t.me/tadrisai_bot</div>';
-  if(key) return `<div class="pp">${head}<div class="pp-h">Tez tekshirish</div>
-    <div class="pp-grid">${['B','T','✎','D','N','A','✎','C','T','B'].map((v,i)=>`<div><i>${i+1}</i><b>${v}</b></div>`).join('')}</div>
-    <div class="pp-h">Izohlar</div>
-    <div class="pp-q"><span>1.</span> ${PAPER.mc.q}</div><div class="pp-a">To'g'ri javob: <b>B) Xloroplast</b></div>
-    <div class="pp-q"><span>2.</span> ${PAPER.tf.q}</div><div class="pp-a">To'g'ri javob: <b>T) To'g'ri</b></div>
-    <div class="pp-q"><span>3.</span> ${PAPER.open.q}</div><div class="pp-a">To'g'ri javob: <b>xlorofill</b></div>${f}</div>`;
-  return `<div class="pp">${head}<div class="pp-l"><span>Ism, familiya: __________</span><span>Sinf: ____</span><span>Sana: _____</span></div>
-    <div class="pp-n">Har bir savolda bitta to'g'ri javobni belgilang. To'g'ri bo'lsa «T», noto'g'ri bo'lsa «N». Ochiq savolga qisqa javob yozing.</div>
-    <div class="pp-q"><span>1.</span> ${PAPER.mc.q}</div><div class="pp-o g">${PAPER.mc.o.map((o,j)=>`<span><b>${'ABCD'[j]})</b> ${o}</span>`).join('')}</div>
-    <div class="pp-q"><span>2.</span> ${PAPER.tf.q}</div><div class="pp-o"><span>○ T — To'g'ri</span><span>○ N — Noto'g'ri</span></div>
-    <div class="pp-q"><span>3.</span> ${PAPER.open.q}</div><div class="pp-o"><span>Javob: ________________________</span></div>
-    <div class="pp-h">Javoblar varaqasi</div><div class="pp-grid">${[1,2,3,4,5,6,7,8,9,10].map(n=>`<div><i>${n}</i><b></b></div>`).join('')}</div>
-    <div class="pp-sc">Ball: ____ / 20</div>${f}</div>`;
+  const P_=PAPER(), [t,f]=L('tfL');
+  if(key) return `<div class="pp">${ppHead(1)}<div class="pp-h">${L('quick')}</div>
+    <div class="pp-grid">${['B',t,'✎','D',f,'A','✎','C',t,'B'].map((v,i)=>`<div><i>${i+1}</i><b>${v}</b></div>`).join('')}</div>
+    <div class="pp-h">${L('expl')}</div>
+    <div class="pp-q"><span>1.</span> ${P_.mc.q}</div><div class="pp-a">${L('correctC')} <b>B) ${P_.mc.o[1]}</b></div>
+    <div class="pp-q"><span>2.</span> ${P_.tf.q}</div><div class="pp-a">${L('correctC')} <b>${t}) ${L('tTrue')}</b></div>
+    <div class="pp-q"><span>3.</span> ${P_.open.q}</div><div class="pp-a">${L('correctC')} <b>${L('ex3a')}</b></div></div>`;
+  return `<div class="pp">${ppHead(0)}${ppLine()}
+    <div class="pp-n">${L('mixRule')}</div>
+    <div class="pp-q"><span>1.</span> ${P_.mc.q}</div><div class="pp-o g">${P_.mc.o.map((o,j)=>`<span><b>${'ABCD'[j]})</b> ${o}</span>`).join('')}</div>
+    <div class="pp-q"><span>2.</span> ${P_.tf.q}</div>${ppTF()}
+    <div class="pp-q"><span>3.</span> ${P_.open.q}</div><div class="pp-o"><span>${L('ansLine')}: ________________________</span></div>
+    ${ppSheet()}</div>`;
 }
 function paperView(k,key){
   if(k==='mix') return paperMix(key);
-  const x=PAPER[k], nm=k==='open'?'Har bir savolga qisqa javob yozing.':k==='tf'?'To\'g\'ri bo\'lsa «T», noto\'g\'ri bo\'lsa «N» ni belgilang.':'Har bir savolda bitta to\'g\'ri javobni belgilang.';
-  const head=`<div class="pp-t">Fotosintez</div><div class="pp-s">Biologiya · 7-sinf · ${key?'Javoblar kaliti — o\'qituvchi uchun':'20 ta savol'}</div>`;
-  if(key) return `<div class="pp">${head}<div class="pp-h">Tez tekshirish</div>
-    <div class="pp-grid">${[1,2,3,4,5,6,7,8,9,10].map((n,i)=>`<div><i>${n}</i><b>${i===0?x.a:(k==='tf'?'TN'[(i*3)%2]:'ABCD'[(i*7)%4])}</b></div>`).join('')}</div>
-    <div class="pp-h">Izohlar</div><div class="pp-q"><span>1.</span> ${x.q}</div><div class="pp-a">To'g'ri javob: <b>${k==='tf'?'T) To\'g\'ri':k==='open'?'xlorofill':'B) Xloroplast'}</b></div><div class="pp-e">${x.why}</div>
-    <div class="pp-f">TadrisAI · t.me/tadrisai_bot</div></div>`;
-  return `<div class="pp">${head}<div class="pp-l"><span>Ism, familiya: __________</span><span>Sinf: ____</span><span>Sana: _____</span></div>
+  const x=PAPER()[k], [t,f]=L('tfL'), nm=k==='open'?L('openRule'):k==='tf'?L('tfRule'):L('mcRule');
+  if(key) return `<div class="pp">${ppHead(1)}<div class="pp-h">${L('quick')}</div>
+    <div class="pp-grid">${[1,2,3,4,5,6,7,8,9,10].map((n,i)=>`<div><i>${n}</i><b>${i===0?x.a:(k==='tf'?[t,f][(i*3)%2]:'ABCD'[(i*7)%4])}</b></div>`).join('')}</div>
+    <div class="pp-h">${L('expl')}</div><div class="pp-q"><span>1.</span> ${x.q}</div><div class="pp-a">${L('correctC')} <b>${k==='tf'?t+') '+L('tTrue'):k==='open'?L('ex3a'):'B) '+x.o[1]}</b></div><div class="pp-e">${x.why}</div></div>`;
+  return `<div class="pp">${ppHead(0)}${ppLine()}
     <div class="pp-n">${nm}</div><div class="pp-q"><span>1.</span> ${x.q}</div>
-    ${k==='open'?`<div class="pp-o"><span>Javob: ________________________</span></div>`:k==='tf'?`<div class="pp-o"><span>○ T — To'g'ri</span><span>○ N — Noto'g'ri</span></div>`:`<div class="pp-o g">${x.o.map((o,j)=>`<span><b>${'ABCD'[j]})</b> ${o}</span>`).join('')}</div>`}
+    ${k==='open'?`<div class="pp-o"><span>${L('ansLine')}: ________________________</span></div>`:k==='tf'?ppTF():`<div class="pp-o g">${x.o.map((o,j)=>`<span><b>${'ABCD'[j]})</b> ${o}</span>`).join('')}</div>`}
     <div class="pp-q"><span>2.</span> …</div>
-    <div class="pp-h">Javoblar varaqasi</div><div class="pp-grid">${[1,2,3,4,5,6,7,8,9,10].map(n=>`<div><i>${n}</i><b></b></div>`).join('')}</div>
-    <div class="pp-sc">Ball: ____ / 20</div><div class="pp-f">TadrisAI · t.me/tadrisai_bot</div></div>`;
+    ${ppSheet()}</div>`;
 }
 function exTab(k,tab){
   document.querySelectorAll('#qzExOv .qz-extabs button').forEach(b=>b.setAttribute('aria-pressed',b.dataset.t===tab));
   $('qzExBody').innerHTML=tab==='tg'?EXQ[k]():paperView(k,tab==='key');
-  $('qzExNote').textContent={tg:'O\'quvchi havolani bosib, Telegram ichida yechadi — javob darhol tekshiriladi.',paper:'«Qog\'ozga chiqarish» bosilsa, shu varaqa PDF holida botga keladi — chop etib tarqatasiz.',key:'O\'qituvchi uchun alohida fayl: to\'g\'ri javoblar jadvali va izohlar. O\'quvchilarga berilmaydi.'}[tab];
+  $('qzExNote').textContent={tg:L('noteTg'),paper:L('notePaper'),key:L('noteKey')}[tab];
 }
 function example(k){
   hap();
   let ov=$('qzExOv');
   if(!ov){ov=document.createElement('div'); ov.id='qzExOv'; ov.className='qz-exov'; document.body.appendChild(ov);
     ov.addEventListener('click',e=>{if(e.target===ov) ov.remove()})}
-  ov.innerHTML=`<div class="qz-exbox" role="dialog" aria-label="Misol"><div class="qz-exhead"><b>Misol: ${QT[k][0]}</b><button type="button" onclick="document.getElementById('qzExOv').remove()" aria-label="Yopish">✕</button></div>
-    ${PAPER[k]?`<div class="qz-extabs"><button type="button" data-t="tg" aria-pressed="true" onclick="QZ.exTab('${k}','tg')">📱 Telegramda</button><button type="button" data-t="paper" aria-pressed="false" onclick="QZ.exTab('${k}','paper')">🖨 Qog'ozda</button><button type="button" data-t="key" aria-pressed="false" onclick="QZ.exTab('${k}','key')">🔑 Javoblar kaliti</button></div>`:''}
-    <div class="qz-hint" id="qzExNote" style="text-align:left;margin:0 0 10px">O'quvchi havolani bosib, Telegram ichida yechadi — javob darhol tekshiriladi.</div>
+  ov.innerHTML=`<div class="qz-exbox" role="dialog" aria-label="${L('exTitle',{x:QTx(k)[0]})}"><div class="qz-exhead"><b>${L('exTitle',{x:QTx(k)[0]})}</b><button type="button" onclick="document.getElementById('qzExOv').remove()" aria-label="${L('close')}">✕</button></div>
+    ${PAPER()[k]?`<div class="qz-extabs"><button type="button" data-t="tg" aria-pressed="true" onclick="QZ.exTab('${k}','tg')">${L('tabTg')}</button><button type="button" data-t="paper" aria-pressed="false" onclick="QZ.exTab('${k}','paper')">${L('tabPaper')}</button><button type="button" data-t="key" aria-pressed="false" onclick="QZ.exTab('${k}','key')">${L('tabKey')}</button></div>`:''}
+    <div class="qz-hint" id="qzExNote" style="text-align:left;margin:0 0 10px">${L('noteTg')}</div>
     <div class="qz-exbody" id="qzExBody">${EXQ[k]()}</div>
-    <button type="button" class="cta" style="margin-top:14px" onclick="document.getElementById('qzExOv').remove();QZ.set('qtype','${k}')">Shuni tanlash</button></div>`;
+    <button type="button" class="cta" style="margin-top:14px" onclick="document.getElementById('qzExOv').remove();QZ.set('qtype','${k}')">${L('pickThis')}</button></div>`;
 }
 
 /* Krossvord — alohida bo'lim (2026-11-12, egasi) */
 function openCross(){
   S.kind='cross';
-  view(`<button class="back" onclick="show('home')">← Orqaga</button>
-  <div class="qz-head"><h1>Krossvord</h1><span class="qz-tag">SINOV</span></div>
-  <div class="group" style="margin-top:0">Mavzu</div>
-  <textarea class="qz-ta" id="qzTopic" placeholder="Masalan: Qon aylanish tizimi">${esc(S.topic||'')}</textarea>
-  <div class="group">So'zlar soni</div>
+  view(`<button class="back" onclick="show('home')">${L('back')}</button>
+  <div class="qz-head"><h1>${L('crossT')}</h1><span class="qz-tag">${L('trial')}</span></div>
+  <div class="group" style="margin-top:0">${L('topic')}</div>
+  <textarea class="qz-ta" id="qzTopic" placeholder="${L('crossPh')}">${esc(S.topic||'')}</textarea>
+  <div class="group">${L('nWords')}</div>
   <div class="nchips" style="grid-template-columns:repeat(3,1fr)">${[8,12,16].map(n=>`<button type="button"${pr(S.cn,n)} onclick="QZ.set('cn',${n})">${n}</button>`).join('')}</div>
   ${levels()}${langs()}
-  <div class="qz-card qz-get"><b style="font-size:14px">Siz olasiz</b>
-    <div><i>✓</i>Ilovada yechiladigan krossvord havolasi — harf ochish va tekshirish bilan</div>
-    <div><i>✓</i>Kim nechta so'z topgani va qancha vaqt ketgani</div></div>
-  <button type="button" class="cta" id="qzGo" onclick="QZ.create()">Krossvord yaratish · sinov (bepul)</button>
-  <div class="qz-hint">Taxminan 15–40 soniyada tayyor bo'ladi</div>
-  <div class="group">Mening krossvordlarim</div><div class="qz-list" id="qzMine"><div class="qz-hint">Yuklanmoqda…</div></div>`);
+  <div class="qz-card qz-get"><b style="font-size:14px">${L('youGet')}</b>
+    <div><i>✓</i>${L('cget1')}</div>
+    <div><i>✓</i>${L('cget2')}</div></div>
+  <button type="button" class="cta" id="qzGo" onclick="QZ.create()">${L('createC')} · ${L('free')}</button>
+  <div class="qz-hint">${L('readyIn',{x:'15–40'})}</div>
+  <div class="group">${L('myCross')}</div><div class="qz-list" id="qzMine"><div class="qz-hint">${L('loading')}</div></div>`);
   $('qzTopic').addEventListener('input',e=>S.topic=e.target.value);
   mine('cross');
 }
 async function create(){
   const topic=($('qzTopic').value||'').trim(), cross=S.kind==='cross';
-  if(topic.length<3){toast('✏️','Mavzuni yozing');$('qzTopic').focus();return}
+  if(topic.length<3){toast('✏️',L('writeTopic'));$('qzTopic').focus();return}
   S.topic=topic; hap();
   const t0=Date.now();
-  view(`<div class="qz-load"><div class="qz-spin"></div><b style="font-size:17px">AI ${cross?'krossvord':'test'} tuzmoqda…</b>
-    <div style="color:var(--muted);font-size:14px">«${esc(topic)}»${!cross&&S.src?'<br>📎 '+esc(S.src.name):''}<br><span id="qzSec">0</span> s</div></div>`);
+  view(`<div class="qz-load"><div class="qz-spin"></div><b style="font-size:17px">${L(cross?'aiCross':'aiTest')}</b>
+    <div style="color:var(--muted);font-size:14px">«${esc(topic)}»${!cross&&S.src?'<br>📎 '+esc(S.src.name):''}<br><span id="qzSec">0</span> ${L('sec')}</div></div>`);
   timer=setInterval(()=>{const e=$('qzSec'); if(e) e.textContent=Math.round((Date.now()-t0)/1000)},1000);
   const body=cross?{kind:'cross',topic,n:S.cn,level:S.level,qlang:S.qlang}
     :{kind:'test',topic,n:S.n,level:S.level,aud:S.aud,qlang:S.qlang,qtype:S.qtype,grade:S.grade,subject:S.subject,src:S.src&&S.src.src};
   let d={}; try{d=await api('/quiz/create',body,240000)}catch(e){d={error:'net'}}
   stopT();
-  if(d.error==='balance'){(cross?openCross:open)(); toast('💳',"Balans yetarli emas: "+money(d.price)+" kerak"); if(typeof openTopup==='function') openTopup(d.need||d.price); return}
-  if(!d.ok){toast('⚠️',d.error==='limit'?"Sinov urinishlaringiz tugadi. Rahmat!":d.error==='admin'?'Sinov muddati tugagan':d.refund?"Tuzib bo'lmadi — "+money(d.refund)+" balansga qaytarildi. Qayta urinib ko'ring":"Tuzib bo'lmadi, qayta urinib ko'ring");(cross?openCross:open)();return}
+  if(d.error==='balance'){(cross?openCross:open)(); toast('💳',L('noBal',{x:money(d.price)})); if(typeof openTopup==='function') openTopup(d.need||d.price); return}
+  if(!d.ok){toast('⚠️',d.error==='limit'?L('limit'):d.error==='admin'?L('expired'):d.refund?L('failRef',{x:money(d.refund)}):L('fail'));(cross?openCross:open)();return}
   if(typeof d.balance==='number'&&typeof BALANCE!=='undefined'){BALANCE=d.balance; try{renderWallet()}catch(e){}}
-  if(d.price>0) toast('✅',"Test tayyor · balansdan "+money(d.price)+" yechildi");
-  else if(typeof SRV!=='undefined'&&SRV&&SRV.quiz_left!=null){SRV.quiz_left=Math.max(0,SRV.quiz_left-1);toast('🧪',"Sinov: yana "+SRV.quiz_left+" ta urinish qoldi")}
+  if(d.price>0) toast('✅',L('paid',{x:money(d.price)}));
+  else if(typeof SRV!=='undefined'&&SRV&&SRV.quiz_left!=null){SRV.quiz_left=Math.max(0,SRV.quiz_left-1);toast('🧪',L('trialLeft',{n:SRV.quiz_left}))}
   hap('ok'); S.src=null; ready(d.code);
 }
 
 /* ---------- Tayyor (muallif) ---------- */
 async function load(code){
   let d={}; try{d=await api('/quiz/get',{code},20000)}catch(e){}
-  if(!d.ok){toast('⚠️',d.error==='notfound'?'Test topilmadi':"Yuklab bo'lmadi");return null}
+  if(!d.ok){toast('⚠️',d.error==='notfound'?L('notFound'):L('loadErr'));return null}
   S.quiz=d.quiz; S.code=code; return d.quiz;
 }
 async function ready(code){
   const q=await load(code); if(!q) return open();
   const n=q.kind==='cross'?q.data.words.length:q.data.questions.length, link=linkOf(code);
   const m=(q.data.meta||{});
-  view(`<button class="back" onclick="${q.kind==='cross'?'QZ.openCross()':'QZ.open()'}">← Orqaga</button>
+  view(`<button class="back" onclick="${q.kind==='cross'?'QZ.openCross()':'QZ.open()'}">${L('back')}</button>
   <div class="qz-ok">✓</div>
   <div class="qz-title">${esc(q.data.title||q.topic)}</div>
-  <div class="qz-chips"><span>${n} ${q.kind==='cross'?"so'z":'savol'}</span><span>${LVL[q.level]||''}</span><span>${LNAME[q.lang]||''}</span>${q.kind==='test'?`<span>${q.aud==='class'?'Sinf uchun':"O'zim uchun"}</span>`:''}${m.qtype?`<span>${QTN[m.qtype]||''}</span>`:''}${m.grade?`<span>${esc(m.grade)}</span>`:''}${m.subject?`<span>${esc(m.subject)}</span>`:''}${m.src?`<span>📎 ${esc(m.src)}</span>`:''}</div>
-  <div class="group" style="margin-top:0">${q.kind==='cross'?'Krossvord':'Test'} havolasi</div>
-  <div class="qz-link"><span>${esc(link.replace('https://',''))}</span><button type="button" onclick="QZ.copy()">Nusxa</button></div>
-  <div class="qz-hint" style="text-align:left">Havolani bosgan har kim TadrisAI ilovasida yechadi. Natijalari sizga keladi.</div>
-  <div class="qz-2"><button type="button" class="qz-btn pri" onclick="QZ.share()">📤 Ulashish</button><button type="button" class="qz-btn" onclick="QZ.start()">▶️ O'zim yechaman</button></div>
+  <div class="qz-chips"><span>${L(q.kind==='cross'?'nW':'nq',{n})}</span><span>${LV(q.level)}</span><span>${LN(q.lang)}</span>${q.kind==='test'?`<span>${L(q.aud==='class'?'cls':'self')}</span>`:''}${m.qtype?`<span>${QTNx(m.qtype)}</span>`:''}${m.grade?`<span>${esc(m.grade)}</span>`:''}${m.subject?`<span>${esc(m.subject)}</span>`:''}${m.src?`<span>📎 ${esc(m.src)}</span>`:''}</div>
+  <div class="group" style="margin-top:0">${L(q.kind==='cross'?'linkC':'linkT')}</div>
+  <div class="qz-link"><span>${esc(link.replace('https://',''))}</span><button type="button" onclick="QZ.copy()">${L('copy')}</button></div>
+  <div class="qz-hint" style="text-align:left">${L('linkHint')}</div>
+  <div class="qz-2"><button type="button" class="qz-btn pri" onclick="QZ.share()">${L('share')}</button><button type="button" class="qz-btn" onclick="QZ.start()">${L('selfSolve')}</button></div>
   <div class="qz-list" style="margin-top:14px">
-    ${q.kind==='test'?`<button type="button" class="qz-item" onclick="QZ.questions()"><span class="ic">✏️</span><span class="tx"><b>Savollarni ko'rish va tahrirlash</b><small>keraksiz savolni o'chiring</small></span><span>›</span></button>`:''}
-    <button type="button" class="qz-item" onclick="QZ.results()"><span class="ic">📊</span><span class="tx"><b>Natijalar</b><small>${q.done?q.done+' kishi yechdi':'hali hech kim yechmadi'}</small></span><span>›</span></button>
-    ${q.kind==='test'?`<button type="button" class="qz-item" id="qzPrint" onclick="QZ.print()"><span class="ic">🖨</span><span class="tx"><b>Qog'ozga chiqarish (PDF)</b><small>o'quvchilar uchun varaqa + o'qituvchi uchun javoblar kaliti — botga keladi</small></span><span>›</span></button>`
-      :`<div class="qz-item" style="opacity:.55"><span class="ic">🖨</span><span class="tx"><b>Qog'ozga chiqarish</b><small>krossvord uchun — keyingi bosqichda</small></span></div>`}
+    ${q.kind==='test'?`<button type="button" class="qz-item" onclick="QZ.questions()"><span class="ic">✏️</span><span class="tx"><b>${L('editQ')}</b><small>${L('editQD')}</small></span><span>›</span></button>`:''}
+    <button type="button" class="qz-item" onclick="QZ.results()"><span class="ic">📊</span><span class="tx"><b>${L('results')}</b><small>${q.done?L('solvedN',{n:q.done}):L('noOne')}</small></span><span>›</span></button>
+    ${q.kind==='test'?`<button type="button" class="qz-item" id="qzPrint" onclick="QZ.print()"><span class="ic">🖨</span><span class="tx"><b>${L('printT')}</b><small>${L('printD')}</small></span><span>›</span></button>`
+      :`<div class="qz-item" style="opacity:.55"><span class="ic">🖨</span><span class="tx"><b>${L('printC')}</b><small>${L('printCD')}</small></span></div>`}
   </div>`);
 }
 function copy(){
   const l=linkOf(S.code);
-  try{navigator.clipboard.writeText(l).then(()=>toast('📋','Havola nusxalandi'),()=>toast('📋',l))}catch(e){toast('📋',l)}
+  try{navigator.clipboard.writeText(l).then(()=>toast('📋',L('copied')),()=>toast('📋',l))}catch(e){toast('📋',l)}
 }
 function share(){
   const q=S.quiz, l=linkOf(S.code);
-  const txt=(q.kind==='cross'?'🧩 Krossvord: ':'📝 Test: ')+(q.data.title||q.topic)+' — yechib ko\'ring!';
+  const txt=L(q.kind==='cross'?'shareC':'shareT',{t:q.data.title||q.topic});
   const u='https://t.me/share/url?url='+encodeURIComponent(l)+'&text='+encodeURIComponent(txt);
   try{tg&&tg.openTelegramLink?tg.openTelegramLink(u):window.open(u,'_blank')}catch(e){window.open(u,'_blank')}
 }
 function questions(){
   const q=S.quiz;
-  view(`<button class="back" onclick="QZ.ready('${S.code}')">← Orqaga</button>
-  <div class="qz-head"><h1 style="font-size:20px">Savollar (${q.data.questions.length})</h1></div>
-  ${q.data.questions.map((x,i)=>`<div class="qz-qi"><small style="color:var(--muted);font-size:11.5px;font-weight:700">${(QTN[x.t||'mc']||'').toUpperCase()}</small><h3>${i+1}. ${esc(x.q)}</h3>${x.t==='open'?`<ol><li class="ok">${x.ans.map(esc).join(' / ')}</li></ol>`:`<ol type="A">${x.o.map((o,j)=>`<li class="${j===x.a?'ok':''}">${esc(o)}</li>`).join('')}</ol>`}
-  <button type="button" class="del" onclick="QZ.del(${i},this)">🗑 O'chirish</button></div>`).join('')}`);
+  view(`<button class="back" onclick="QZ.ready('${S.code}')">${L('back')}</button>
+  <div class="qz-head"><h1 style="font-size:20px">${L('qsTitle',{n:q.data.questions.length})}</h1></div>
+  ${q.data.questions.map((x,i)=>`<div class="qz-qi"><small style="color:var(--muted);font-size:11.5px;font-weight:700">${QTNx(x.t||'mc').toUpperCase()}</small><h3>${i+1}. ${esc(x.q)}</h3>${x.t==='open'?`<ol><li class="ok">${x.ans.map(esc).join(' / ')}</li></ol>`:`<ol type="A">${x.o.map((o,j)=>`<li class="${j===x.a?'ok':''}">${esc(o)}</li>`).join('')}</ol>`}
+  <button type="button" class="del" onclick="QZ.del(${i},this)">${L('delQ')}</button></div>`).join('')}`);
 }
 async function del(i,btn){
-  if(!btn.dataset.sure){btn.dataset.sure=1;btn.textContent='Rostdan o\'chirilsinmi? Yana bosing';return}
+  if(!btn.dataset.sure){btn.dataset.sure=1;btn.textContent=L('sure');return}
   const d=await api('/quiz/edit',{code:S.code,del:i},15000).catch(()=>({}));
-  if(!d.ok){toast('⚠️',"O'chirib bo'lmadi");return}
-  await load(S.code); questions(); toast('🗑',"Savol o'chirildi");
+  if(!d.ok){toast('⚠️',L('delErr'));return}
+  await load(S.code); questions(); toast('🗑',L('deleted'));
 }
 
 async function print(){
   const b=$('qzPrint'); if(b.dataset.busy) return; b.dataset.busy=1; hap();
-  b.querySelector('small').textContent='Tayyorlanmoqda… (10–20 soniya)';
+  b.querySelector('small').textContent=L('preparing');
   const d=await api('/quiz/print',{code:S.code},120000).catch(()=>({}));
   delete b.dataset.busy;
-  b.querySelector('small').textContent=d.ok?'✅ 2 ta PDF bot chatiga yuborildi':"o'quvchilar uchun varaqa + o'qituvchi uchun javoblar kaliti — botga keladi";
-  toast(d.ok?'🖨':'⚠️',d.ok?'Test varaqasi va javoblar kaliti botga yuborildi':"Tayyorlab bo'lmadi, qayta urinib ko'ring");
+  b.querySelector('small').textContent=d.ok?L('printed'):L('printD');
+  toast(d.ok?'🖨':'⚠️',d.ok?L('printedT'):L('prepErr'));
 }
 
 /* ---------- Taklif (havola orqali kelgan) ---------- */
@@ -409,19 +746,19 @@ async function join(code){
   const n=q.kind==='cross'?q.data.words.length:q.data.questions.length;
   const nm=userName||(tg&&tg.initDataUnsafe&&tg.initDataUnsafe.user&&tg.initDataUnsafe.user.first_name)||'';
   view(`<div style="text-align:center;margin:10px 0 18px"><div class="qz-tag" style="display:inline-block">TadrisAI</div></div>
-  <div style="text-align:center;color:var(--muted);font-size:14px">Sizni ${q.kind==='cross'?'krossvordga':'testga'} taklif qilishdi</div>
+  <div style="text-align:center;color:var(--muted);font-size:14px">${L(q.kind==='cross'?'invC':'invT')}</div>
   <div class="qz-title" style="margin:8px 0 18px">${esc(q.data.title||q.topic)}</div>
-  <div class="qz-stats">${q.kind==='cross'?`<div><b>${n}</b><small>so'z</small></div><div><b>~${Math.max(3,Math.round(n*0.8))}</b><small>daqiqa</small></div><div><b>💡</b><small>yordam bor</small></div>`
-    :`<div><b>${n}</b><small>savol</small></div><div><b>~${Math.max(2,Math.round(n*0.5))}</b><small>daqiqa</small></div><div><b>30 s</b><small>har savolga</small></div>`}</div>
-  ${q.author?`<div class="qz-item" style="margin-bottom:14px"><span class="qz-av">${esc(q.author[0]||'?')}</span><span class="tx"><small>Test muallifi</small><b>${esc(q.author)}</b></span></div>`:''}
-  ${q.exam?`<div class="qz-warn" style="margin-top:0"><b>📋 Sinf testi</b><p>Faqat bir marta yechiladi. Har savolga bitta javob berasiz — keyin o'zgartirib bo'lmaydi. Natija o'qituvchiga boradi.</p></div>`:''}
-  ${q.prev?`<div class="qz-card" style="text-align:center"><b>Siz bu testni ${esc(q.prev.at)} da yechgansiz</b><div class="qz-title" style="margin-top:6px">${q.prev.score} / ${q.prev.total}</div><div class="qz-hint">Sinf testini qayta yechib bo'lmaydi</div></div>
-  <button type="button" class="cta" onclick="show('home')">TadrisAI'ni ochish</button>`:`
-  <div class="group" style="margin-top:4px">Ismingiz</div>
-  <input class="qz-in" id="qzName" maxlength="40" value="${esc(nm)}" placeholder="Ism va familiya">
-  <div class="qz-hint" style="text-align:left">Telegram'dagi ismingiz qo'yildi, o'zgartirsangiz bo'ladi</div>
-  <button type="button" class="cta" onclick="QZ.start(1)">Boshlash</button>
-  <div class="qz-hint">Bepul · ro'yxatdan o'tish shart emas</div>`}`);
+  <div class="qz-stats">${q.kind==='cross'?`<div><b>${n}</b><small>${L('words')}</small></div><div><b>~${Math.max(3,Math.round(n*0.8))}</b><small>${L('minutes')}</small></div><div><b>💡</b><small>${L('hintAv')}</small></div>`
+    :`<div><b>${n}</b><small>${L('qs')}</small></div><div><b>~${Math.max(2,Math.round(n*0.5))}</b><small>${L('minutes')}</small></div><div><b>30 ${L('sec')}</b><small>${L('perQ')}</small></div>`}</div>
+  ${q.author?`<div class="qz-item" style="margin-bottom:14px"><span class="qz-av">${esc(q.author[0]||'?')}</span><span class="tx"><small>${L('author')}</small><b>${esc(q.author)}</b></span></div>`:''}
+  ${q.exam?`<div class="qz-warn" style="margin-top:0"><b>${L('examT')}</b><p>${L('examD')}</p></div>`:''}
+  ${q.prev?`<div class="qz-card" style="text-align:center"><b>${L('prevSolved',{at:esc(q.prev.at)})}</b><div class="qz-title" style="margin-top:6px">${q.prev.score} / ${q.prev.total}</div><div class="qz-hint">${L('noRetake')}</div></div>
+  <button type="button" class="cta" onclick="show('home')">${L('openApp')}</button>`:`
+  <div class="group" style="margin-top:4px">${L('yourName')}</div>
+  <input class="qz-in" id="qzName" maxlength="40" value="${esc(nm)}" placeholder="${L('namePh')}">
+  <div class="qz-hint" style="text-align:left">${L('nameHint')}</div>
+  <button type="button" class="cta" onclick="QZ.start(1)">${L('start')}</button>
+  <div class="qz-hint">${L('freeNoReg')}</div>`}`);
 }
 
 /* ---------- Test yechish ---------- */
@@ -439,15 +776,15 @@ const OPEN_T=45;
 function ask(){
   const q=S.quiz, k=P.order[P.i], x=q.data.questions[k], tot=P.order.length, T=x.t==='open'?OPEN_T:30;
   let body;
-  if(x.t==='open') body=`<input class="qz-in" id="qzAns" maxlength="80" autocomplete="off" placeholder="Javobni yozing" onkeydown="if(event.key==='Enter')QZ.answer()">
-    <div class="qz-2"><button type="button" class="qz-btn" onclick="QZ.answer(1)">Bilmayman</button><button type="button" class="qz-btn pri" onclick="QZ.answer()">Javob berish</button></div>`;
+  if(x.t==='open') body=`<input class="qz-in" id="qzAns" maxlength="80" autocomplete="off" placeholder="${L('ansPh')}" onkeydown="if(event.key==='Enter')QZ.answer()">
+    <div class="qz-2"><button type="button" class="qz-btn" onclick="QZ.answer(1)">${L('dunno')}</button><button type="button" class="qz-btn pri" onclick="QZ.answer()">${L('answer')}</button></div>`;
   else body=`<div class="qz-opts${x.t==='tf'?' tf':''}">${x.o.map((o,j)=>`<button type="button" class="qz-opt" data-j="${j}" onclick="QZ.pick(${j})"><span class="k">${x.t==='tf'?(j?'✕':'✓'):'ABCD'[j]}</span><span>${esc(o)}</span><span class="lb"></span></button>`).join('')}</div>`;
-  view(`<div class="qz-top"><button type="button" class="qz-x" onclick="QZ.quit()" aria-label="Yopish">✕</button>
-    <div class="qz-prog"><b>${P.i+1} / ${tot}</b><small>${P.exam?'📋 Sinf testi':P.streak>=2?'🔥 '+P.streak+' tasi ketma-ket to\'g\'ri':(P.retry?'Xatolar ustida ishlash':'&nbsp;')}</small><div class="qz-bar"><i style="width:${P.i/tot*100}%"></i></div></div>
+  view(`<div class="qz-top"><button type="button" class="qz-x" onclick="QZ.quit()" aria-label="${L('close')}">✕</button>
+    <div class="qz-prog"><b>${P.i+1} / ${tot}</b><small>${P.exam?L('examT'):P.streak>=2?L('streak',{n:P.streak}):(P.retry?L('retryMode'):'&nbsp;')}</small><div class="qz-bar"><i style="width:${P.i/tot*100}%"></i></div></div>
     <div class="qz-tm" id="qzTm"><span id="qzTs">${T}</span></div></div>
-  <div class="qz-q"><small>${k+1}-SAVOL${x.t==='tf'?' · TO\'G\'RIMI?':x.t==='open'?' · JAVOBNI YOZING':''}</small><h2>${esc(x.q)}</h2></div>
+  <div class="qz-q"><small>${L('qN',{n:k+1})}${x.t==='tf'?L('tfQ'):x.t==='open'?L('openQ'):''}</small><h2>${esc(x.q)}</h2></div>
   ${body}
-  <div id="qzAfter"><div class="qz-note">${P.exam?(x.t==='open'?'Javobni yozing — keyin o\'zgartirib bo\'lmaydi':'Javobni tanlang — keyin o\'zgartirib bo\'lmaydi'):x.t==='open'?'Qisqa javob yozing — imlo xatosi kichik bo\'lsa ham qabul qilinadi':'Javobni tanlang — darhol to\'g\'ri yoki xatoligini ko\'rasiz'}</div></div>`);
+  <div id="qzAfter"><div class="qz-note">${P.exam?L(x.t==='open'?'noteExamOpen':'noteExamPick'):L(x.t==='open'?'noteOpen':'notePick')}</div></div>`);
   if(x.t==='open') setTimeout(()=>{const i=$('qzAns'); i&&i.focus()},150);
   let left=T; const tm=$('qzTm');
   timer=setInterval(()=>{left--; const s=$('qzTs'); if(!s){stopT();return}
@@ -465,8 +802,8 @@ function answer(skip){
     const k=P.order[P.i], inp=$('qzAns'); P.ans[k]=skip?'':(inp?inp.value.trim():''); hap();
     if(inp) inp.disabled=true; document.querySelectorAll('#qz .qz-2 .qz-btn').forEach(b=>b.disabled=true);
     const last=P.i+1>=P.order.length;
-    if(last){$('qzAfter').innerHTML=`<div class="qz-note">${skip===2?'⏱ Vaqt tugadi. ':''}Bu oxirgi savol edi</div><button type="button" class="cta" onclick="QZ.finish()">Yakunlash</button>`; return}
-    $('qzAfter').innerHTML=`<div class="qz-note">${skip===2?'⏱ Vaqt tugadi — keyingi savol':'✓ Javob qabul qilindi'}</div>`;
+    if(last){$('qzAfter').innerHTML=`<div class="qz-note">${skip===2?L('timeUp'):''}${L('lastQ')}</div><button type="button" class="cta" onclick="QZ.finish()">${L('finish')}</button>`; return}
+    $('qzAfter').innerHTML=`<div class="qz-note">${skip===2?L('timeNext'):L('accepted')}</div>`;
     setTimeout(next, skip===2?900:550); return;
   }
   const q=S.quiz, k=P.order[P.i], x=q.data.questions[k], inp=$('qzAns'), v=inp?inp.value:'';
@@ -476,8 +813,8 @@ function answer(skip){
   if(ok){P.score++;P.streak++;P.best=Math.max(P.best,P.streak);hap('ok')}
   else{if(!P.wrong.includes(k)) P.wrong.push(k); P.streak=0; hap('err')}
   const last=P.i+1>=P.order.length;
-  $('qzAfter').innerHTML=`<div class="qz-why" style="${ok?'background:rgba(16,185,129,.12);border-color:rgba(16,185,129,.4)':''}"><b style="${ok?'color:#10B981':''}">${ok?'✓ To\'g\'ri!':skip===2?'⏱ Vaqt tugadi. To\'g\'ri javob: ':skip?'To\'g\'ri javob: ':'✕ Xato. To\'g\'ri javob: '}${ok?'':esc(x.ans[0])}</b>${x.e?`<p>${esc(x.e)}</p>`:''}</div>
-    <button type="button" class="cta" onclick="QZ.next()">${last?'Natijani ko\'rish':'Keyingi savol'}</button>`;
+  $('qzAfter').innerHTML=`<div class="qz-why" style="${ok?'background:rgba(16,185,129,.12);border-color:rgba(16,185,129,.4)':''}"><b style="${ok?'color:#10B981':''}">${ok?L('okBang'):skip===2?L('timeIs'):skip?L('correctIs'):L('wrongIs')}${ok?'':esc(x.ans[0])}</b>${x.e?`<p>${esc(x.e)}</p>`:''}</div>
+    <button type="button" class="cta" onclick="QZ.next()">${L(last?'seeRes':'nextQ')}</button>`;
 }
 function pick(j){
   if(P.locked===P.i) return; P.locked=P.i; stopT();
@@ -485,30 +822,30 @@ function pick(j){
     const k=P.order[P.i]; P.ans[k]=j; hap();
     document.querySelectorAll('.qz-opt').forEach(b=>{const n=+b.dataset.j; b.disabled=true; b.classList.add(n===j?'sel':'dim')});
     const last=P.i+1>=P.order.length;
-    if(last){$('qzAfter').innerHTML=`<div class="qz-note">${j<0?'⏱ Vaqt tugadi. ':''}Bu oxirgi savol edi</div><button type="button" class="cta" onclick="QZ.finish()">Yakunlash</button>`; return}
-    $('qzAfter').innerHTML=`<div class="qz-note">${j<0?'⏱ Vaqt tugadi — keyingi savol':'✓ Javob qabul qilindi'}</div>`;
+    if(last){$('qzAfter').innerHTML=`<div class="qz-note">${j<0?L('timeUp'):''}${L('lastQ')}</div><button type="button" class="cta" onclick="QZ.finish()">${L('finish')}</button>`; return}
+    $('qzAfter').innerHTML=`<div class="qz-note">${j<0?L('timeNext'):L('accepted')}</div>`;
     setTimeout(next, j<0?900:550); return;
   }
   const q=S.quiz, k=P.order[P.i], x=q.data.questions[k], ok=j===x.a;
   document.querySelectorAll('.qz-opt').forEach(b=>{const n=+b.dataset.j; b.disabled=true;
-    if(n===x.a){b.classList.add('good');b.querySelector('.lb').textContent="to'g'ri javob"}
-    else if(n===j){b.classList.add('bad');b.querySelector('.lb').textContent='sizning javobingiz'}
+    if(n===x.a){b.classList.add('good');b.querySelector('.lb').textContent=L('right')}
+    else if(n===j){b.classList.add('bad');b.querySelector('.lb').textContent=L('yours')}
     else b.classList.add('dim')});
   if(ok){P.score++;P.streak++;P.best=Math.max(P.best,P.streak);hap('ok')}
   else{if(!P.wrong.includes(k)) P.wrong.push(k); P.streak=0; hap('err')}
   const last=P.i+1>=P.order.length;
-  $('qzAfter').innerHTML=`${x.e?`<div class="qz-why"><b>${j<0?'⏱ Vaqt tugadi. ':''}Nima uchun?</b><p>${esc(x.e)}</p></div>`:(j<0?'<div class="qz-note">⏱ Vaqt tugadi</div>':'')}
-    <button type="button" class="cta" onclick="QZ.next()">${last?'Natijani ko\'rish':'Keyingi savol'}</button>`;
+  $('qzAfter').innerHTML=`${x.e?`<div class="qz-why"><b>${j<0?L('timeUp'):''}${L('why')}</b><p>${esc(x.e)}</p></div>`:(j<0?`<div class="qz-note">${L('timeOnly')}</div>`:'')}
+    <button type="button" class="cta" onclick="QZ.next()">${L(last?'seeRes':'nextQ')}</button>`;
   setTimeout(()=>{const b=document.querySelector('#qzAfter .cta'); b&&b.scrollIntoView({behavior:'smooth',block:'nearest'})},60);
 }
 function next(){P.i++; if(P.i>=P.order.length) finish(); else ask()}
 function quit(){
-  if(P&&P.exam){askQuit(()=>finish(true),'Testni yakunlaysizmi? Javob berilmagan savollar xato hisoblanadi va qayta yechib bo\'lmaydi.');return}
+  if(P&&P.exam){askQuit(()=>finish(true),L('quitExam'));return}
   if(!P||!P.i){S.quiz&&S.quiz.mine?ready(S.code):show('home');return}
   askQuit(()=>finish(true));
 }
 function askQuit(cb,msg){                   // Telegram'ning o'z oynasi (brauzer confirm Telegram ichida bloklanishi mumkin)
-  const m=msg||'Tugatasizmi? Natija hozirgi holatda saqlanadi.';
+  const m=msg||L('quitAsk');
   try{if(tg&&tg.showConfirm&&tg.isVersionAtLeast&&tg.isVersionAtLeast('6.2')){tg.showConfirm(m,ok=>{if(ok)cb()});return}}catch(e){}
   cb();
 }
@@ -522,38 +859,38 @@ async function finish(early){
     if(d.ok) rank=[d.rank,d.of];
   }
   const pct=Math.round(P.score/tot*100);
-  const msg=pct>=85?"Zo'r natija!":pct>=60?'Yaxshi natija!':pct>=40?'Yomon emas, yana mashq qiling':'Mavzuni yana bir takrorlang';
+  const msg=L(pct>=85?'great':pct>=60?'good':pct>=40?'okRes':'badRes');
   view(`<div class="qz-ring" style="--p:${pct}%"><div><b>${pct}%</b><small>${P.score} / ${tot}</small></div></div>
   <div class="qz-title">${msg}</div>
   <div style="text-align:center;color:var(--muted);font-size:14px;margin-top:4px">${esc(q.data.title||q.topic)}</div>
-  <div class="qz-stats"><div><b>${mmss(secs)}</b><small>vaqt</small></div><div><b>${P.best}</b><small>ketma-ket to'g'ri</small></div>
-    <div><b>${rank?rank[0]+'-o\'rin':'—'}</b><small>${rank?rank[1]+' kishidan':(P.retry?'qayta yechish':'')}</small></div></div>
-  ${P.wrong.length?`<button type="button" class="cta" onclick="QZ.retry()">${P.wrong.length} ta xatoni qayta yechish</button>`:''}
-  <div class="qz-2"><button type="button" class="qz-btn" onclick="QZ.shareRes(${pct})">Natijani ulashish</button>
-  <button type="button" class="qz-btn" onclick="${q.mine?`QZ.results()`:`show('home')`}">${q.mine?'Natijalar':'TadrisAI\'ni ochish'}</button></div>
-  ${q.mine?'':`<div class="qz-card" style="margin-top:14px;text-align:center"><b>O'z testingizni yarating</b><div class="qz-hint">Mavzuni yozing — AI 30 soniyada test tuzadi (tez orada)</div></div>`}`);
+  <div class="qz-stats"><div><b>${mmss(secs)}</b><small>${L('time')}</small></div><div><b>${P.best}</b><small>${L('streakS')}</small></div>
+    <div><b>${rank?L('place',{n:rank[0]}):'—'}</b><small>${rank?L('ofN',{n:rank[1]}):(P.retry?L('retryS'):'')}</small></div></div>
+  ${P.wrong.length?`<button type="button" class="cta" onclick="QZ.retry()">${L('retryN',{n:P.wrong.length})}</button>`:''}
+  <div class="qz-2"><button type="button" class="qz-btn" onclick="QZ.shareRes(${pct})">${L('shareRes')}</button>
+  <button type="button" class="qz-btn" onclick="${q.mine?`QZ.results()`:`show('home')`}">${q.mine?L('results'):L('openApp')}</button></div>
+  ${q.mine?'':`<div class="qz-card" style="margin-top:14px;text-align:center"><b>${L('ownT')}</b><div class="qz-hint">${L('ownD')}</div></div>`}`);
 }
 async function finishExam(){
   const q=S.quiz, n=q.data.questions.length, secs=Math.round((Date.now()-P.t0)/1000);
-  view('<div class="qz-load"><div class="qz-spin"></div><b>Natija hisoblanmoqda…</b></div>');
+  view(`<div class="qz-load"><div class="qz-spin"></div><b>${L('calc')}</b></div>`);
   const answers=[...Array(n)].map((_,i)=>P.ans[i]===undefined?(q.data.questions[i].t==='open'?'':-1):P.ans[i]);
   let d={}; for(let t=0;t<3&&!d.ok&&d.error!=='done';t++){d=await api('/quiz/submit',{code:S.code,name:P.name,secs,answers},20000).catch(()=>({}))}
-  if(d.error==='done'){toast('ℹ️','Siz bu testni oldin yechgansiz');return join(S.code)}
-  if(!d.ok){view(`<div class="qz-load"><b>Natija yuborilmadi</b><div class="qz-hint">Internetni tekshirib, qayta urinib ko'ring</div><button type="button" class="cta" onclick="QZ.finish()">Qayta yuborish</button></div>`);return}
+  if(d.error==='done'){toast('ℹ️',L('already'));return join(S.code)}
+  if(!d.ok){view(`<div class="qz-load"><b>${L('notSent')}</b><div class="qz-hint">${L('checkNet')}</div><button type="button" class="cta" onclick="QZ.finish()">${L('resend')}</button></div>`);return}
   const pct=Math.round(d.score/d.total*100);
   view(`<div class="qz-ring" style="--p:${pct}%"><div><b>${pct}%</b><small>${d.score} / ${d.total}</small></div></div>
-  <div class="qz-title">Test yakunlandi</div>
+  <div class="qz-title">${L('done')}</div>
   <div style="text-align:center;color:var(--muted);font-size:14px;margin-top:4px">${esc(q.data.title||q.topic)}</div>
-  <div class="qz-stats"><div><b>${mmss(secs)}</b><small>vaqt</small></div><div><b>${d.score}</b><small>to'g'ri javob</small></div><div><b>${d.rank}-o'rin</b><small>${d.of} kishidan</small></div></div>
-  <div class="qz-card" style="text-align:center"><b>✅ Natijangiz o'qituvchiga yuborildi</b><div class="qz-hint">To'g'ri javoblarni o'qituvchingiz e'lon qiladi</div></div>
-  <button type="button" class="cta" onclick="show('home')">TadrisAI'ni ochish</button>`);
+  <div class="qz-stats"><div><b>${mmss(secs)}</b><small>${L('time')}</small></div><div><b>${d.score}</b><small>${L('correctN')}</small></div><div><b>${L('place',{n:d.rank})}</b><small>${L('ofN',{n:d.of})}</small></div></div>
+  <div class="qz-card" style="text-align:center"><b>${L('sentT')}</b><div class="qz-hint">${L('teacherAnn')}</div></div>
+  <button type="button" class="cta" onclick="show('home')">${L('openApp')}</button>`);
 }
 function retry(){
   const w=P.wrong.slice(); P={name:P.name,order:w,i:0,score:0,wrong:[],streak:0,best:0,t0:Date.now(),retry:true}; ask();
 }
 function shareRes(pct){
   const q=S.quiz, l=linkOf(S.code);
-  const u='https://t.me/share/url?url='+encodeURIComponent(l)+'&text='+encodeURIComponent('Men «'+(q.data.title||q.topic)+'» testidan '+pct+'% to\'pladim! Siz ham sinab ko\'ring 👇');
+  const u='https://t.me/share/url?url='+encodeURIComponent(l)+'&text='+encodeURIComponent(L('shareMsg',{t:q.data.title||q.topic,p:pct}));
   try{tg&&tg.openTelegramLink?tg.openTelegramLink(u):window.open(u,'_blank')}catch(e){}
 }
 
@@ -562,23 +899,23 @@ async function results(){
   const q=S.quiz;
   view('<div class="qz-load"><div class="qz-spin"></div></div>');
   const d=await api('/quiz/results',{code:S.code},20000).catch(()=>({}));
-  if(!d.ok){toast('⚠️',"Yuklab bo'lmadi");return ready(S.code)}
+  if(!d.ok){toast('⚠️',L('loadErr'));return ready(S.code)}
   const rows=d.rows||[], n=rows.length;
   const avg=n?Math.round(rows.reduce((a,r)=>a+(r[2]?r[1]/r[2]:0),0)/n*100):0;
   const avgT=n?Math.round(rows.reduce((a,r)=>a+r[3],0)/n):0;
   const top=(d.miss||[])[0];
   let warn='';
   if(top&&q.kind==='test'&&q.data.questions[top[0]]){
-    warn=`<div class="qz-warn"><b>Eng ko'p xato: ${top[0]+1}-savol</b><p>«${esc(q.data.questions[top[0]].q)}» — ${n} kishidan ${top[1]} tasi xato qildi. Darsda qayta tushuntirish kerak.</p></div>`;
+    warn=`<div class="qz-warn"><b>${L('mostWrong',{n:top[0]+1})}</b><p>${L('mostWrongD',{q:esc(q.data.questions[top[0]].q),n,m:top[1]})}</p></div>`;
   }
-  view(`<button class="back" onclick="QZ.ready('${S.code}')">← Orqaga</button>
-  <div class="qz-head" style="flex-direction:column;align-items:flex-start;gap:2px"><h1 style="font-size:22px">Natijalar</h1><small style="color:var(--muted)">${esc(q.data.title||q.topic)}</small></div>
-  <div class="qz-stats"><div><b>${n}</b><small>yechdi</small></div><div><b>${avg}%</b><small>o'rtacha</small></div><div><b>${mmss(avgT)}</b><small>o'rtacha vaqt</small></div></div>
+  view(`<button class="back" onclick="QZ.ready('${S.code}')">${L('back')}</button>
+  <div class="qz-head" style="flex-direction:column;align-items:flex-start;gap:2px"><h1 style="font-size:22px">${L('results')}</h1><small style="color:var(--muted)">${esc(q.data.title||q.topic)}</small></div>
+  <div class="qz-stats"><div><b>${n}</b><small>${L('solved')}</small></div><div><b>${avg}%</b><small>${L('avg')}</small></div><div><b>${mmss(avgT)}</b><small>${L('avgT')}</small></div></div>
   ${warn}
-  <div class="group">${q.kind==='cross'?'Qatnashchilar':"O'quvchilar"}</div>
+  <div class="group">${L(q.kind==='cross'?'partic':'students')}</div>
   <div class="qz-card" style="padding:0">${n?rows.map((r,i)=>`<div class="qz-row"><span style="width:18px;color:var(--muted);font-weight:700">${i+1}</span><span class="qz-av">${esc((r[0]||'?')[0])}</span>
     <span style="flex:1;min-width:0"><b style="display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(r[0])}</b><small style="color:var(--muted)">${mmss(r[3])} · ${esc(r[4])}</small></span>
-    <b style="color:${r[2]&&r[1]/r[2]>=.75?'#10B981':'#F59E0B'}">${r[1]}/${r[2]}</b></div>`).join(''):'<div class="qz-hint" style="padding:16px">Hali hech kim yechmadi. Havolani ulashing.</div>'}</div>`);
+    <b style="color:${r[2]&&r[1]/r[2]>=.75?'#10B981':'#F59E0B'}">${r[1]}/${r[2]}</b></div>`).join(''):`<div class="qz-hint" style="padding:16px">${L('nobody')}</div>`}</div>`);
 }
 
 /* ---------- Krossvord ---------- */
@@ -604,11 +941,11 @@ function crossView(){
     if(C.checked&&c.v&&norm(c.v)!==norm(c.ch)) cls.push('wrong');
     if(c.ws.every(found)) cls.push('done');
     h+=`<div class="${cls.join(' ')}" style="width:${sz}px;height:${sz}px;font-size:${Math.round(sz*.5)}px" onclick="QZ.tap('${k}')">${c.n?`<em>${c.n}</em>`:''}${esc(showCh(c.v))}</div>`}
-  view(`<div class="qz-top"><button type="button" class="qz-x" onclick="QZ.crossQuit()" aria-label="Yopish">✕</button>
-    <div class="qz-prog"><b>${esc(g.title||S.quiz.topic)}</b><small>${nf} / ${g.words.length} so'z topildi · <span id="qzCt">${mmss(Math.round((Date.now()-C.t0)/1000))}</span></small></div></div>
+  view(`<div class="qz-top"><button type="button" class="qz-x" onclick="QZ.crossQuit()" aria-label="${L('close')}">✕</button>
+    <div class="qz-prog"><b>${esc(g.title||S.quiz.topic)}</b><small>${L('foundW',{n:nf,m:g.words.length})} · <span id="qzCt">${mmss(Math.round((Date.now()-C.t0)/1000))}</span></small></div></div>
   <div class="qz-gwrap"><div class="qz-grid" style="grid-template-columns:repeat(${g.w},${sz}px)">${h}</div></div>
-  <div class="qz-clue"><small>${w.n} · ${w.d==='a'?'GORIZONTAL':'VERTIKAL'} · ${w.w.length} HARF</small><p>${esc(w.c)}</p></div>
-  <div class="qz-2" style="margin-top:0"><button type="button" class="qz-btn" onclick="QZ.hint()">💡 Bitta harf ochish</button><button type="button" class="qz-btn pri" onclick="QZ.check()">Tekshirish</button></div>
+  <div class="qz-clue"><small>${w.n} · ${L(w.d==='a'?'across':'down')} · ${L('letters',{n:w.w.length})}</small><p>${esc(w.c)}</p></div>
+  <div class="qz-2" style="margin-top:0"><button type="button" class="qz-btn" onclick="QZ.hint()">${L('hint1')}</button><button type="button" class="qz-btn pri" onclick="QZ.check()">${L('check')}</button></div>
   <div class="qz-card" style="padding:0;margin-top:12px;overflow:hidden">${g.words.map((x,i)=>`<button type="button" class="qz-cl${found(i)?' f':''}" onclick="QZ.sel(${i})"><b>${x.n} ${x.d==='a'?'→':'↓'}</b><span>${esc(x.c)} (${x.w.length})</span></button>`).join('')}</div>
   <input id="qzKey" autocomplete="off" autocorrect="off" autocapitalize="characters" spellcheck="false">`);
   const key=$('qzKey');
@@ -639,7 +976,7 @@ function hint(){
   C.focus=false; crossView();
 }
 function check(){C.checked=true; hap(); C.focus=false; crossView();
-  const n=S.quiz.data.words.filter((w,i)=>found(i)).length; toast(n===S.quiz.data.words.length?'🎉':'🔎',n+' / '+S.quiz.data.words.length+" so'z to'g'ri");
+  const n=S.quiz.data.words.filter((w,i)=>found(i)).length; toast(n===S.quiz.data.words.length?'🎉':'🔎',L('wordsOk',{n,m:S.quiz.data.words.length}));
   if(n===S.quiz.data.words.length) crossDone()}
 function crossQuit(){
   if(!Object.values(C.cells).some(c=>c.v)){S.quiz.mine?ready(S.code):show('home');return}
@@ -651,11 +988,11 @@ async function crossDone(){
   const wrong=g.words.map((w,i)=>found(i)?-1:i).filter(i=>i>=0);
   const d=await api('/quiz/submit',{code:S.code,name:C.name,score:n,total:tot,secs,wrong},15000).catch(()=>({}));
   const pct=Math.round(n/tot*100);
-  view(`<div class="qz-ring" style="--p:${pct}%"><div><b>${n}/${tot}</b><small>so'z</small></div></div>
-  <div class="qz-title">${n===tot?'Barcha so\'zlar topildi! 🎉':'Krossvord yakunlandi'}</div>
-  <div class="qz-stats"><div><b>${mmss(secs)}</b><small>vaqt</small></div><div><b>${C.hints}</b><small>yordam</small></div><div><b>${d.ok?d.rank+'-o\'rin':'—'}</b><small>${d.ok?d.of+' kishidan':''}</small></div></div>
-  <div class="group">Javoblar</div><div class="qz-card" style="padding:0">${g.words.map((w,i)=>`<div class="qz-row"><b style="width:38px;color:var(--chip-text)">${w.n} ${w.d==='a'?'→':'↓'}</b><span style="flex:1">${esc(w.w.split('').map(showCh).join(''))}</span><span>${found(i)?'✅':'❌'}</span></div>`).join('')}</div>
-  <div class="qz-2"><button type="button" class="qz-btn" onclick="QZ.shareRes(${pct})">Ulashish</button><button type="button" class="qz-btn" onclick="${S.quiz.mine?'QZ.results()':`show('home')`}">${S.quiz.mine?'Natijalar':'TadrisAI\'ni ochish'}</button></div>`);
+  view(`<div class="qz-ring" style="--p:${pct}%"><div><b>${n}/${tot}</b><small>${L('words')}</small></div></div>
+  <div class="qz-title">${L(n===tot?'allFound':'crossDone')}</div>
+  <div class="qz-stats"><div><b>${mmss(secs)}</b><small>${L('time')}</small></div><div><b>${C.hints}</b><small>${L('hints')}</small></div><div><b>${d.ok?L('place',{n:d.rank}):'—'}</b><small>${d.ok?L('ofN',{n:d.of}):''}</small></div></div>
+  <div class="group">${L('answers')}</div><div class="qz-card" style="padding:0">${g.words.map((w,i)=>`<div class="qz-row"><b style="width:38px;color:var(--chip-text)">${w.n} ${w.d==='a'?'→':'↓'}</b><span style="flex:1">${esc(w.w.split('').map(showCh).join(''))}</span><span>${found(i)?'✅':'❌'}</span></div>`).join('')}</div>
+  <div class="qz-2"><button type="button" class="qz-btn" onclick="QZ.shareRes(${pct})">${L('shareS')}</button><button type="button" class="qz-btn" onclick="${S.quiz.mine?'QZ.results()':`show('home')`}">${S.quiz.mine?L('results'):L('openApp')}</button></div>`);
 }
 
 window.QZ={finish,example,exTab,print,open,openCross,setN,srcUp,srcDel,pickSel,setQ,answer,set,create,ready,copy,share,questions,del,join,start,pick,next,quit,retry,shareRes,results,tap,sel,hint,check,crossQuit};

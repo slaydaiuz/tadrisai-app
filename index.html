@@ -1161,11 +1161,16 @@ function ishSoon(){
 }
 function row(ic,title,desc){
   if(isQuiz()&&(ic==='quiz'||ic==='test')){    // Test quiz va Krossvord — alohida bo'limlar, hozircha faqat admin sinovi
-    const tag='<span class="soon" style="background:rgba(16,185,129,.18);color:#10B981">SINOV</span>';
+    const QR={uz:{tr:'SINOV',nw:'YANGI',t:'Test quiz',td:"Mavzu yoki darslik sahifasidan test · havola bilan ulashish",c:'Krossvord',cd:"Mavzu bo'yicha krossvord · ilovada yechiladi"},
+      ru:{tr:'ТЕСТ',nw:'НОВОЕ',t:'Тест-квиз',td:'Тест по теме или странице учебника · отправка по ссылке',c:'Кроссворд',cd:'Кроссворд по теме · решается в приложении'},
+      en:{tr:'TRIAL',nw:'NEW',t:'Test quiz',td:'A test from a topic or textbook page · share by link',c:'Crossword',cd:'A crossword on a topic · solved in the app'},
+      kaa:{tr:'SINAQ',nw:'JAŃA',t:'Test quiz',td:'Tema yamasa sabaqlıq betinen test · siltewish penen bólisiw',c:'Krossvord',cd:'Tema boyınsha krossvord · qosımshada sheshiledi'}};
+    const r=lang==='uzn'?UZN.deep(QR.uz):(QR[lang]||QR.uz);           // 2026-11-16: hamma tilda
+    const tag=`<span class="soon" style="background:rgba(16,185,129,.18);color:#10B981">${r.tr}</span>`;
     const cross=isAdmin()||SRV.quiz_cross!==false;      // krossvord hozircha faqat sinovchilarga
-    const ttag=SRV.quiz_free||isAdmin()?tag:'<span class="soon" style="background:rgba(16,185,129,.18);color:#10B981">YANGI</span>';
-    return `<button class="row" onclick="QZ.open()"><span class="row-ic">${IC.test}</span><span class="txt"><b>Test quiz</b><i>Mavzu yoki darslik sahifasidan test · havola bilan ulashish</i></span>${ttag}</button>`+
-      (cross?`<button class="row" onclick="QZ.openCross()"><span class="row-ic">${IC.quiz}</span><span class="txt"><b>Krossvord</b><i>Mavzu bo'yicha krossvord · ilovada yechiladi</i></span>${tag}</button>`:'');
+    const ttag=SRV.quiz_free||isAdmin()?tag:`<span class="soon" style="background:rgba(16,185,129,.18);color:#10B981">${r.nw}</span>`;
+    return `<button class="row" onclick="QZ.open()"><span class="row-ic">${IC.test}</span><span class="txt"><b>${r.t}</b><i>${r.td}</i></span>${ttag}</button>`+
+      (cross?`<button class="row" onclick="QZ.openCross()"><span class="row-ic">${IC.quiz}</span><span class="txt"><b>${r.c}</b><i>${r.cd}</i></span>${tag}</button>`:'');
   }
   return `<button class="row" onclick="soon()"><span class="row-ic">${IC[ic]}</span><span class="txt"><b>${title}</b><i>${desc}</i></span><span class="soon">${t('soonTag')}</span></button>`;
 }
@@ -2045,7 +2050,7 @@ refreshMe();
 if(qs.get('screen')) show(qs.get('screen'));
 if(qs.get('form')) openForm(qs.get('form'));
 </script>
-<script src="quiz.js?v=12"></script>
+<script src="quiz.js?v=13"></script>
 <div class="toast" id="toast"></div>
 <div class="end-ov" id="endOv" onclick="if(event.target===this)closeEndFull()">
   <div class="end-ov-box"><button type="button" class="end-ov-x" onclick="closeEndFull()">✕</button>
