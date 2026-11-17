@@ -888,7 +888,9 @@ html.desk .hbal{display:none}
 
     <div class="ix-sec"><div class="ix-lbl" data-ix="fmt">Fayl formati</div><div class="ix-grid2" id="ixFmt"></div></div>
 
-    <div class="ix-sec"><div class="ix-lbl" id="ixLangQ">Qaysi tilda bo'lsin?</div><div class="ix-grid2" id="ixLang"></div></div>
+    <div class="ix-sec"><div class="ix-lbl" id="ixLangQ">Qaysi tilda bo'lsin?</div>
+      <svg width="0" height="0" style="position:absolute"><defs><linearGradient id="gli" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#fff" stop-opacity="0"/><stop offset=".5" stop-color="#fff" stop-opacity=".55"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient></defs></svg>
+      <div class="seg3" id="ixLang" role="group" style="grid-template-columns:repeat(2,1fr)"></div></div>
 
     <div class="ix-sum"><div><span id="ixSumL"></span><b id="ixSumR"></b></div><span id="ixBal"></span></div>
     <button class="cta" id="ixCta" type="button" onclick="IX.submit()"></button>
@@ -1960,7 +1962,11 @@ const IX=(()=>{
     // format, til
     $('ixFmt').innerHTML=[['DOCX',L('docx')],['PDF',L('pdf')]].map((x,i)=>`<button type="button" aria-pressed="${s.fmt===i}" onclick="IX.set('fmt',${i})">${x[0]}<small>${x[1]}</small></button>`).join('');
     $('ixLangQ').textContent=L('langQ',{d:(lang==='uz'||lang==='uzn'||lang==='kaa')?docName():docName().toLowerCase()});
-    $('ixLang').innerHTML=LG.map((x,i)=>`<button type="button" aria-pressed="${s.lang===i}" onclick="IX.set('lang',${i})">${x[0]}</button>`).join('');
+    // 2026-11-17, egasi: prezentatsiyadagi kabi — bayroqli tugmalar (bayroqlar prezentatsiya bo'limidagisidan olinadi)
+    const IXLN={uz:"O'zbek",kaa:'Qaraqalpaq',uzn:'Özbek (yangi)',uzc:'Ўзбек (кирилл)',ru:'Rus',en:'Eng'};
+    const flag=k=>{const f=document.querySelector(`[data-dl="${k==='uzc'?'uz':k}"] svg.flag`);
+      return f?f.outerHTML.replace(/(id="|url\(#)(c\w+)/g,(m,a,b)=>a+b+'x'+k).replace(/url\(#gl\)/g,'url(#gli)'):''};
+    $('ixLang').innerHTML=LG.map((x,i)=>`<button type="button" aria-pressed="${s.lang===i}" onclick="IX.set('lang',${i})">${flag(x[1])}<span>${IXLN[x[1]]||x[0]}</span></button>`).join('');
     // jami
     const price=PRICE[s.pages][s.tier];
     $('ixSumL').textContent=(s.tier?L('t1'):L('t0'))+' · '+s.pages+' '+L('bet'); $('ixSumR').textContent=sum(price)+' '+L('som');
