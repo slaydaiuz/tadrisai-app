@@ -1241,7 +1241,7 @@ let TXS=loadTx();
 // Aksiya: 2026-11-04 17:00 (Toshkent) gacha 5 000 -> +1 000, 10 000 -> +2 000; keyin eng kam to'ldirish 10 000 (bot bilan bir xil)
 const PROMO_END=Date.parse('2026-11-04T17:00:00+05:00'), promoOn=()=>Date.now()<PROMO_END;
 const OFFER_START=Date.parse('2026-11-18T11:30:00+05:00'), OFFER_END=Date.parse('2026-11-19T00:00:00+05:00'), offerOn=()=>!promoOn()&&Date.now()>=OFFER_START&&Date.now()<OFFER_END;   // «Qayta chegirma»: 18-noyabr 11:30 → 23:59, faqat 20 000 → 25 000 (botdagi OFFER_* bilan bir xil)
-const amountsNow=()=>offerOn()?[[10000,0],[20000,5000],[50000,5000],[100000,15000]]:promoOn()?[[5000,1000],[10000,2000],[50000,5000],[100000,15000]]:[[10000,0],[20000,0],[50000,5000],[100000,15000]];
+const amountsNow=()=>offerOn()?[[10000,0],[20000,5000],[50000,0],[100000,0]]:promoOn()?[[5000,1000],[10000,2000],[50000,5000],[100000,15000]]:[[10000,0],[20000,0],[50000,5000],[100000,15000]];
 const minTopup=()=>UNL?1000:(promoOn()?5000:10000);   // admin sinovi uchun 1 000
 let cdTimer=0;
 function renderCd(){
