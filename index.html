@@ -669,6 +669,17 @@ html.desk .greet h1{font-size:clamp(26px,2.2vw,34px)}
 html.desk .qz-opts{display:grid;grid-template-columns:1fr 1fr}
 html.desk .qz-stats{grid-template-columns:repeat(3,1fr)}
 html.desk .hbal{display:none}
+/* 2026-11-20, egasi: kompyuter/web'da bo'limlar va tugmalar orasi kengroq */
+@media (min-width:760px){
+  html .group{margin:34px 2px 14px}
+  html .seg2,html .seg3,html .qz-types{gap:14px}
+  html .qz-seg{gap:12px}
+  html .nchips{gap:10px}
+  html .seg3 button{padding:14px 8px}
+  html .qz-types button,html .seg2 button{padding-top:13px;padding-bottom:13px}
+  html .qz-get{gap:10px;margin-top:22px}
+  html .qz-2c{margin-top:30px;gap:14px}
+}
 /* To'liq ekran (Telegram 8.0+): Telegram o'z tugmalarini ustiga qo'yadi — tepadan joy qoldiramiz */
 html.tgfs .wrap{padding-top:calc(14px + var(--tg-safe-area-inset-top,0px) + var(--tg-content-safe-area-inset-top,0px))}
 html.tgfs.desk nav{padding-top:calc(16px + var(--tg-safe-area-inset-top,0px) + var(--tg-content-safe-area-inset-top,0px))}
