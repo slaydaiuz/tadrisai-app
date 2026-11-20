@@ -147,7 +147,7 @@ const QD={
 uz:{
   back:"← Orqaga", title:"Test quiz", trial:"SINOV", topic:"Mavzu", topicPh:"Masalan: Fotosintez", crossPh:"Masalan: Qon aylanish tizimi",
   nQ:"Savollar soni", level:"Qiyinlik", qtype:"Savol turi", example:"Misol ›", grade:"Sinf / kurs", subject:"Fan",
-  pickOpt:"Tanlang (ixtiyoriy)", other:"Boshqa…", ownPh:"O'zingiz yozing", qlang:"Til", forWhom:"Kim uchun?",
+  pickOpt:"Tanlang (ixtiyoriy)", other:"Boshqa…", ownPh:"O'zingiz yozing", qlang:"Til", qlangT:"Test qaysi tilda bo'lsin?", qlangC:"Krossvord qaysi tilda bo'lsin?", forWhom:"Kim uchun?",
   self:"O'zim uchun", selfD:"mashq: javob va izoh darhol, qayta yechsa bo'ladi",
   cls:"Sinf uchun", clsD:"imtihon: bir marta, javobni o'zgartirib bo'lmaydi",
   youGet:"Siz olasiz", get1:"Havola — o'quvchilar ilovada yechadi, darhol javob va izoh ko'radi",
@@ -229,7 +229,7 @@ uz:{
 ru:{
   back:"← Назад", title:"Тест-квиз", trial:"ТЕСТ", topic:"Тема", topicPh:"Например: Фотосинтез", crossPh:"Например: Кровеносная система",
   nQ:"Количество вопросов", level:"Сложность", qtype:"Тип вопросов", example:"Пример ›", grade:"Класс / курс", subject:"Предмет",
-  pickOpt:"Не выбрано", other:"Другое…", ownPh:"Напишите сами", qlang:"Язык", forWhom:"Для кого?",
+  pickOpt:"Не выбрано", other:"Другое…", ownPh:"Напишите сами", qlang:"Язык", qlangT:"На каком языке сделать тест?", qlangC:"На каком языке сделать кроссворд?", forWhom:"Для кого?",
   self:"Для себя", selfD:"практика: ответ и пояснение сразу, можно пройти заново",
   cls:"Для класса", clsD:"экзамен: один раз, ответ нельзя изменить",
   youGet:"Вы получите", get1:"Ссылку — ученики решают в приложении и сразу видят ответ и пояснение",
@@ -311,7 +311,7 @@ ru:{
 en:{
   back:"← Back", title:"Test quiz", trial:"TRIAL", topic:"Topic", topicPh:"E.g. Photosynthesis", crossPh:"E.g. The circulatory system",
   nQ:"Number of questions", level:"Difficulty", qtype:"Question type", example:"Example ›", grade:"Grade / year", subject:"Subject",
-  pickOpt:"Choose (optional)", other:"Other…", ownPh:"Type your own", qlang:"Language", forWhom:"Who is it for?",
+  pickOpt:"Choose (optional)", other:"Other…", ownPh:"Type your own", qlang:"Language", qlangT:"Which language should the test be in?", qlangC:"Which language should the crossword be in?", forWhom:"Who is it for?",
   self:"For myself", selfD:"practice: answer and explanation right away, can retake",
   cls:"For a class", clsD:"exam: once only, answers can't be changed",
   youGet:"You get", get1:"A link — students solve it in the app and instantly see the answer and explanation",
@@ -393,7 +393,7 @@ en:{
 kaa:{
   back:"← Artqa", title:"Test quiz", trial:"SINAQ", topic:"Tema", topicPh:"Mısalı: Fotosintez", crossPh:"Mısalı: Qan aylanıw sisteması",
   nQ:"Sorawlar sanı", level:"Qıyınlıǵı", qtype:"Soraw túri", example:"Mısal ›", grade:"Klass / kurs", subject:"Pán",
-  pickOpt:"Tańlań (ıqtıyarıy)", other:"Basqa…", ownPh:"Ózińiz jazıń", qlang:"Til", forWhom:"Kim ushın?",
+  pickOpt:"Tańlań (ıqtıyarıy)", other:"Basqa…", ownPh:"Ózińiz jazıń", qlang:"Til", qlangT:"Test qaysı tilde bolsın?", qlangC:"Krossvord qaysı tilde bolsın?", forWhom:"Kim ushın?",
   self:"Ózim ushın", selfD:"shınıǵıw: juwap hám túsindirme birden, qayta sheshiwge boladı",
   cls:"Klass ushın", clsD:"imtixan: bir ret, juwaptı ózgertip bolmaydı",
   youGet:"Siz alasız", get1:"Siltewish — oqıwshılar qosımshada sheshedi, juwap hám túsindirmeni birden kóredi",
@@ -499,7 +499,10 @@ function view(h){stopT(); box().innerHTML=h; show('qz'); window.scrollTo(0,0)}
 
 /* ---------- Yaratish: Test (krossvord — alohida bo'lim, pastda) ---------- */
 const pr=(a,b)=>' aria-pressed="'+(a===b)+'"';
-const langs=()=>`<div class="group">${L('qlang')}</div><div class="qz-langs">${LKEYS.map(k=>`<button type="button"${pr(S.qlang,k)} onclick="QZ.set('qlang','${k}')">${LN(k)}</button>`).join('')}</div>`;
+// 2026-11-20, egasi: til tanlash slayd/mustaqil ishdagi kabi — bayroqli 2 ustunli tugmalar, «Test qaysi tilda bo'lsin?»
+const QFLAGS={"uz": ["<svg class=\"flag\" viewBox=\"0 0 24 24\"><defs><clipPath id=\"qcu\"><circle cx=\"12\" cy=\"12\" r=\"11\"/></clipPath></defs><g clip-path=\"url(#qcu)\"><rect width=\"24\" height=\"8\" fill=\"#1EB5E8\"/><rect y=\"8\" width=\"24\" height=\"8\" fill=\"#fff\"/><rect y=\"16\" width=\"24\" height=\"8\" fill=\"#1EB53A\"/><rect y=\"7.4\" width=\"24\" height=\"1.2\" fill=\"#CE1126\"/><rect y=\"15.4\" width=\"24\" height=\"1.2\" fill=\"#CE1126\"/><circle cx=\"6.5\" cy=\"4\" r=\"2.2\" fill=\"#fff\"/><circle cx=\"7.4\" cy=\"4\" r=\"2\" fill=\"#1EB5E8\"/></g><circle class=\"shine\" cx=\"12\" cy=\"12\" r=\"11\" fill=\"url(#qgl)\"/></svg>", "O'zbek"], "kaa": ["<svg class=\"flag\" viewBox=\"0 0 24 24\"><defs><clipPath id=\"qck\"><circle cx=\"12\" cy=\"12\" r=\"11\"/></clipPath></defs><g clip-path=\"url(#qck)\"><rect width=\"24\" height=\"8\" fill=\"#0099B5\"/><rect y=\"8\" width=\"24\" height=\"8\" fill=\"#FFD100\"/><rect y=\"16\" width=\"24\" height=\"8\" fill=\"#1EB53A\"/><rect y=\"7.4\" width=\"24\" height=\"1.2\" fill=\"#CE1126\"/><rect y=\"15.4\" width=\"24\" height=\"1.2\" fill=\"#CE1126\"/></g><circle class=\"shine\" cx=\"12\" cy=\"12\" r=\"11\" fill=\"url(#qgl)\"/></svg>", "Qaraqalpaq"], "uzn": ["<svg class=\"flag\" viewBox=\"0 0 24 24\"><defs><clipPath id=\"qcun\"><circle cx=\"12\" cy=\"12\" r=\"11\"/></clipPath></defs><g clip-path=\"url(#qcun)\"><rect width=\"24\" height=\"8\" fill=\"#1EB5E8\"/><rect y=\"8\" width=\"24\" height=\"8\" fill=\"#fff\"/><rect y=\"16\" width=\"24\" height=\"8\" fill=\"#1EB53A\"/><rect y=\"7.4\" width=\"24\" height=\"1.2\" fill=\"#CE1126\"/><rect y=\"15.4\" width=\"24\" height=\"1.2\" fill=\"#CE1126\"/><circle cx=\"6.5\" cy=\"4\" r=\"2.2\" fill=\"#fff\"/><circle cx=\"7.4\" cy=\"4\" r=\"2\" fill=\"#1EB5E8\"/></g><circle class=\"shine\" cx=\"12\" cy=\"12\" r=\"11\" fill=\"url(#qgl)\"/></svg>", "Özbek (yangi)"], "ru": ["<svg class=\"flag\" viewBox=\"0 0 24 24\"><defs><clipPath id=\"qcr\"><circle cx=\"12\" cy=\"12\" r=\"11\"/></clipPath></defs><g clip-path=\"url(#qcr)\"><rect width=\"24\" height=\"8\" fill=\"#fff\"/><rect y=\"8\" width=\"24\" height=\"8\" fill=\"#0039A6\"/><rect y=\"16\" width=\"24\" height=\"8\" fill=\"#D52B1E\"/></g><circle cx=\"12\" cy=\"12\" r=\"10.6\" fill=\"none\" stroke=\"#CBD5E1\" stroke-width=\".8\"/><circle class=\"shine\" cx=\"12\" cy=\"12\" r=\"11\" fill=\"url(#qgl)\"/></svg>", "Rus"], "en": ["<svg class=\"flag\" viewBox=\"0 0 24 24\"><defs><clipPath id=\"qce\"><circle cx=\"12\" cy=\"12\" r=\"11\"/></clipPath></defs><g clip-path=\"url(#qce)\"><rect width=\"24\" height=\"24\" fill=\"#012169\"/><path d=\"M0 0L24 24M24 0L0 24\" stroke=\"#fff\" stroke-width=\"4\"/><path d=\"M0 0L24 24M24 0L0 24\" stroke=\"#C8102E\" stroke-width=\"1.5\"/><path d=\"M12 0V24M0 12H24\" stroke=\"#fff\" stroke-width=\"6\"/><path d=\"M12 0V24M0 12H24\" stroke=\"#C8102E\" stroke-width=\"3.4\"/></g><circle class=\"shine\" cx=\"12\" cy=\"12\" r=\"11\" fill=\"url(#qgl)\"/></svg>", "Eng"]};
+const QGL='<svg width="0" height="0" style="position:absolute"><defs><linearGradient id="qgl" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#fff" stop-opacity="0"/><stop offset=".5" stop-color="#fff" stop-opacity=".55"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient></defs></svg>';
+const langs=(kind)=>`<div class="group">${L(kind==='cross'?'qlangC':'qlangT')}</div><div class="seg3" role="group" style="grid-template-columns:repeat(2,1fr)">${QGL}${['uz','kaa','uzn','ru','en'].map(k=>`<button type="button"${pr(S.qlang,k)} onclick="QZ.set('qlang','${k}')">${QFLAGS[k][0]}<span>${QFLAGS[k][1]}</span></button>`).join('')}</div>`;
 const levels=()=>`<div class="group">${L('level')}</div><div class="qz-seg">${['easy','mid','hard'].map(k=>`<button type="button"${pr(S.level,k)} onclick="QZ.set('level','${k}')">${LV(k)}</button>`).join('')}</div>`;
 function selBox(id,label,list,val,ph){
   const other=val&&!list.includes(val);
@@ -522,7 +525,7 @@ function open(){
   <div class="group">${L('qtype')}</div>
   <div class="qz-types">${Object.keys(QT).map(k=>`<button type="button"${pr(S.qtype,k)} onclick="QZ.set('qtype','${k}')"><b>${QTx(k)[0]}</b><span>${QTx(k)[1]}</span><em class="qz-ex" role="button" onclick="event.stopPropagation();QZ.example('${k}')">${L('example')}</em></button>`).join('')}</div>
   <div class="qz-2c">${selBox('qzGrade',L('grade'),GRADES(),S.grade,L('pickOpt'))}${selBox('qzSubj',L('subject'),L('SUBJ'),S.subject,L('pickOpt'))}</div>
-  ${langs()}
+  ${langs('test')}
   <div class="group">${L('forWhom')}</div>
   <div class="seg2"><button type="button"${pr(S.aud,'self')} onclick="QZ.set('aud','self')"><span class="e">🙋</span><b>${L('self')}</b><span>${L('selfD')}</span></button>
   <button type="button"${pr(S.aud,'class')} onclick="QZ.set('aud','class')"><span class="e">👩‍🏫</span><b>${L('cls')}</b><span>${L('clsD')}</span></button></div>
@@ -651,7 +654,7 @@ function openCross(){
   <textarea class="qz-ta" id="qzTopic" placeholder="${L('crossPh')}">${esc(S.topic||'')}</textarea>
   <div class="group">${L('nWords')}</div>
   <div class="nchips" style="grid-template-columns:repeat(3,1fr)">${[8,12,16].map(n=>`<button type="button"${pr(S.cn,n)} onclick="QZ.set('cn',${n})">${n}</button>`).join('')}</div>
-  ${levels()}${langs()}
+  ${levels()}${langs('cross')}
   <div class="qz-card qz-get"><b style="font-size:14px">${L('youGet')}</b>
     <div><i>✓</i>${L('cget1')}</div>
     <div><i>✓</i>${L('cget2')}</div></div>
