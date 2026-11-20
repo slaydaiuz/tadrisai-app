@@ -495,7 +495,13 @@ const hap=k=>{try{tg&&tg.HapticFeedback&&(k==='ok'||k==='err'?tg.HapticFeedback.
 const linkOf=c=>'https://t.me/'+(qs.get('bot')||'tadrisai_bot')+'?start=q_'+c;
 const mmss=s=>Math.floor(s/60)+':'+String(s%60).padStart(2,'0');
 let timer=0; const stopT=()=>{if(timer){clearInterval(timer);timer=0}};
-function view(h){stopT(); box().innerHTML=h; show('qz'); window.scrollTo(0,0)}
+// 2026-11-20, egasi: til/qiyinlik/savol turini tanlaganda sahifa tepaga sakramasin — o'sha joyida qolsin
+let KEEP=null;
+function view(h){stopT(); const keep=KEEP; KEEP=null;
+  const prevMine=keep&&$('qzMine')?$('qzMine').innerHTML:null;      // «Mening testlarim» qayta «yuklanmoqda»ga aylanib, sahifa sakramasin
+  box().innerHTML=h; show('qz');
+  if(prevMine!=null&&$('qzMine')) $('qzMine').innerHTML=prevMine;
+  if(keep){window.scrollTo(0,keep.y); requestAnimationFrame(()=>window.scrollTo(0,keep.y))} else window.scrollTo(0,0)}
 
 /* ---------- Yaratish: Test (krossvord — alohida bo'lim, pastda) ---------- */
 const pr=(a,b)=>' aria-pressed="'+(a===b)+'"';
@@ -570,7 +576,7 @@ function pickSel(id,v){
   const k=id==='qzGrade'?'grade':'subject'; S[k]=v==='__o'?(o.value||''):v; if(v==='__o') o.focus();
 }
 function setQ(k,v){S[k]=v}
-function set(k,v){S.topic=($('qzTopic')||{}).value||S.topic; S[k]=v; hap(); (S.kind==='cross'?openCross:open)()}
+function set(k,v){S.topic=($('qzTopic')||{}).value||S.topic; S[k]=v; hap(); KEEP={y:window.scrollY}; (S.kind==='cross'?openCross:open)()}
 async function mine(kind){
   let d={}; try{d=await api('/quiz/mine',{},15000)}catch(e){}
   const el=$('qzMine'); if(!el) return;
