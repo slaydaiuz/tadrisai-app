@@ -696,7 +696,8 @@ body.wl-on .wrap,body.wl-on nav{visibility:hidden}
 .wl-card .logo{height:46px;margin:0 auto 18px}
 .wl-card h1{font-size:23px;line-height:1.25;margin-bottom:10px}
 .wl-card>p{color:var(--muted);font-size:14.5px;line-height:1.55}
-.wl-tg{display:flex;align-items:center;justify-content:center;gap:10px;margin-top:24px}
+.wl-tg{display:flex;align-items:center;justify-content:center;gap:10px;margin-top:24px;text-decoration:none;box-sizing:border-box}
+.wl-tg.off{opacity:.6;pointer-events:none}
 .wl-tg svg{width:22px;height:22px;flex:none}
 .wl-wait{margin-top:18px;padding:14px;border-radius:var(--r-md);background:var(--chip);color:var(--text);font-size:14px;line-height:1.5;text-align:left;display:none}
 .wl-wait.on{display:block}
@@ -2182,40 +2183,54 @@ syncDesk();
 renderPlan();
 refreshMe();
 /* ---------- Sayt: Telegram orqali kirish ---------- */
-let wlPoll=null;
+// 2026-11-22, egasi: «juda murakkab» — kod oldindan olinadi, tugma oddiy t.me havolasi (telefonda Telegram to'g'ridan-to'g'ri ochiladi),
+// botda tasdiq tugmasi yo'q. Kompyuterda shu sahifa o'zi kiradi; telefonda botdagi «Saytni ochish» (?w=...) havolasi kiritadi.
+let wlPoll=null, wlCode=null, wlUntil=0, wlFetch=null;
+async function wlNewCode(){
+  const b=$('wlBtn'); b.classList.add('off');
+  let d={}; try{d=await api('/web/login',{},15000)}catch(e){}
+  if(!d||!d.ok){b.classList.remove('off'); return false}
+  wlCode=d.code; wlUntil=Date.now()+((d.ttl||600)-60)*1000;
+  const url='https://t.me/'+(d.bot||BOTNAME)+'?start=web_'+d.code;
+  b.href=url; $('wlLink').href=url; b.classList.remove('off'); return true;
+}
 function webLoginShow(){
   const o=$('wlogin'); if(!o) return;
   if(!$('wlLogo').innerHTML){const l=document.querySelector('header .logo'); if(l) $('wlLogo').innerHTML=l.outerHTML.replace(/ id="([^"]+)"/g,' id="wl$1"').replace(/url\(#([^)]+)\)/g,'url(#wl$1)')}
   $('wlLangs').innerHTML=Object.entries(LANGS).map(([k,n])=>`<button type="button" class="${k===lang?'on':''}" onclick="lang='${k}';store.set('lang','${k}');renderAll();webLoginShow()">${n}</button>`).join('');
   o.querySelectorAll('[data-i18n]').forEach(e=>e.textContent=t(e.dataset.i18n));
   o.classList.add('on'); document.body.classList.add('wl-on');
+  if(!wlCode&&!wlFetch) wlFetch=wlNewCode().finally(()=>{wlFetch=null});
 }
-async function webLogin(){
-  const b=$('wlBtn'); if(b.disabled) return; b.disabled=true;
-  // oyna «await»dan oldin ochiladi — aks holda brauzer uni bloklaydi
-  let w=null; try{w=window.open('about:blank','_blank')}catch(e){}
-  let d={}; try{d=await api('/web/login',{},15000)}catch(e){}
-  b.disabled=false;
-  if(!d||!d.ok){try{w&&w.close()}catch(e){} toast('⚠️',t('payErr')); return}
-  const url='https://t.me/'+(d.bot||BOTNAME)+'?start=web_'+d.code;
-  $('wlLink').href=url; $('wlWait').classList.add('on');
-  if(w){try{w.location.href=url}catch(e){location.href=url}} else location.href=url;
-  clearInterval(wlPoll); const until=Date.now()+(d.ttl||600)*1000;
+function webLogin(ev){
+  if(!wlCode||Date.now()>wlUntil){            // kod yo'q yoki eskirgan — yangisini olib, keyin ochamiz
+    if(ev) ev.preventDefault();
+    wlCode=null; wlNewCode().then(ok=>{if(ok) location.href=$('wlBtn').href; else toast('⚠️',t('payErr'))});
+  }
+  $('wlWait').classList.add('on');
+  clearInterval(wlPoll); const code=()=>wlCode, until=Date.now()+600000;
   wlPoll=setInterval(async()=>{
-    if(Date.now()>until){clearInterval(wlPoll); $('wlWait').classList.remove('on'); toast('⌛',t('wlExp')); return}
-    let r={}; try{r=await api('/web/poll',{code:d.code},10000)}catch(e){return}
-    if(r&&r.ws){clearInterval(wlPoll);
-      try{localStorage.setItem('tadris_ws',r.ws); if(r.boot) localStorage.setItem('tadris_boot',JSON.stringify(r.boot))}catch(e){}
-      location.reload()}
-    else if(r&&r.error==='expired'){clearInterval(wlPoll); $('wlWait').classList.remove('on'); toast('⌛',t('wlExp'))}
+    if(!code()) return;
+    if(Date.now()>until){clearInterval(wlPoll); $('wlWait').classList.remove('on'); toast('⌛',t('wlExp')); wlCode=null; wlNewCode(); return}
+    let r={}; try{r=await api('/web/poll',{code:code()},10000)}catch(e){return}
+    if(r&&r.ws){clearInterval(wlPoll); webSave(r)}
+    else if(r&&r.error==='expired'){clearInterval(wlPoll); $('wlWait').classList.remove('on'); toast('⌛',t('wlExp')); wlCode=null; wlNewCode()}
   },2000);
+  return true;
 }
+function webSave(r){
+  try{localStorage.setItem('tadris_ws',r.ws); if(r.boot) localStorage.setItem('tadris_boot',JSON.stringify(r.boot))}catch(e){}
+  location.replace(location.pathname);
+}
+// botdagi «Saytni ochish» havolasi: ?w=... — shu brauzerga kiradi
+if(WEB&&qs.get('w')){const w=qs.get('w'); history.replaceState(null,'',location.pathname);
+  api('/web/claim',{w},15000).then(r=>{if(r&&r.ws) webSave(r); else if(!WS) toast('⌛',t('wlExp'))}).catch(()=>{});}
 async function webLogout(){
   try{await api('/web/logout',{},8000)}catch(e){}
   webForget(); location.reload();
 }
 if(WEB&&WS){const b=$('webOutBtn'); if(b) b.style.display='flex'}
-if(WEB&&!WS&&!qs.get('quiz')) document.addEventListener('DOMContentLoaded',webLoginShow);   // kirish oynasi skriptdan keyin turadi
+if(WEB&&!WS&&!qs.get('quiz')&&!qs.get('w')) document.addEventListener('DOMContentLoaded',webLoginShow);   // kirish oynasi skriptdan keyin turadi
 if(qs.get('screen')) show(qs.get('screen'));
 if(qs.get('form')) openForm(qs.get('form'));
 </script>
@@ -2231,7 +2246,7 @@ if(qs.get('form')) openForm(qs.get('form'));
   <div id="wlLogo"></div>
   <h1 data-i18n="wlTitle"></h1>
   <p data-i18n="wlSub"></p>
-  <button class="cta wl-tg" type="button" id="wlBtn" onclick="webLogin()"><svg viewBox="0 0 24 24" fill="#fff" aria-hidden="true"><path d="M21.6 3.3 2.9 10.5c-1.3.5-1.3 1.2-.2 1.5l4.8 1.5 1.8 5.6c.2.6.1.9.8.9.5 0 .7-.2 1-.5l2.3-2.3 4.9 3.6c.9.5 1.5.2 1.8-.8l3.2-15.1c.3-1.3-.5-1.9-1.4-1.5ZM8.4 13.2l9.7-6.1c.5-.3.9-.1.5.2l-8.3 7.5-.3 3.4-1.6-5Z"/></svg><span data-i18n="wlBtn"></span></button>
+  <a class="cta wl-tg" id="wlBtn" href="#" target="_blank" rel="noopener" onclick="return webLogin(event)"><svg viewBox="0 0 24 24" fill="#fff" aria-hidden="true"><path d="M21.6 3.3 2.9 10.5c-1.3.5-1.3 1.2-.2 1.5l4.8 1.5 1.8 5.6c.2.6.1.9.8.9.5 0 .7-.2 1-.5l2.3-2.3 4.9 3.6c.9.5 1.5.2 1.8-.8l3.2-15.1c.3-1.3-.5-1.9-1.4-1.5ZM8.4 13.2l9.7-6.1c.5-.3.9-.1.5.2l-8.3 7.5-.3 3.4-1.6-5Z"/></svg><span data-i18n="wlBtn"></span></a>
   <div class="wl-wait" id="wlWait"><div class="row"><span class="wl-spin"></span><span data-i18n="wlWait"></span></div><a id="wlLink" target="_blank" rel="noopener" data-i18n="wlLink"></a></div>
   <div class="wl-note" data-i18n="wlNote"></div>
   <div class="wl-langs" id="wlLangs"></div>
