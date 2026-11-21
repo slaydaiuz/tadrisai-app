@@ -147,7 +147,7 @@ const QD={
 uz:{
   back:"← Orqaga", title:"Test quiz", trial:"SINOV", topic:"Mavzu", topicPh:"Masalan: Fotosintez", crossPh:"Masalan: Qon aylanish tizimi",
   nQ:"Savollar soni", level:"Qiyinlik", qtype:"Savol turi", example:"Misol ›", grade:"Sinf / kurs", subject:"Fan",
-  pickOpt:"Tanlang (ixtiyoriy)", other:"Boshqa…", ownPh:"O'zingiz yozing", qlang:"Til", qlangT:"Test qaysi tilda bo'lsin?", qlangC:"Krossvord qaysi tilda bo'lsin?", forWhom:"Kim uchun?",
+  pickOpt:"Tanlang (ixtiyoriy)", other:"Boshqa…", ownPh:"O'zingiz yozing", qlang:"Til", qlangT:"Test qaysi tilda bo'lsin?", qlangC:"Krossvord qaysi tilda bo'lsin?", forWhom:"Kim uchun?", giftFree:"Tekin (2 000 so'mlik sovg'a)", giftUsed:"Sovg'a ishlatildi — test tekin tayyorlandi",
   self:"O'zim uchun", selfD:"mashq: javob va izoh darhol, qayta yechsa bo'ladi",
   cls:"Sinf uchun", clsD:"imtihon: bir marta, javobni o'zgartirib bo'lmaydi",
   youGet:"Siz olasiz", get1:"Havola — o'quvchilar ilovada yechadi, darhol javob va izoh ko'radi",
@@ -229,7 +229,7 @@ uz:{
 ru:{
   back:"← Назад", title:"Тест-квиз", trial:"ТЕСТ", topic:"Тема", topicPh:"Например: Фотосинтез", crossPh:"Например: Кровеносная система",
   nQ:"Количество вопросов", level:"Сложность", qtype:"Тип вопросов", example:"Пример ›", grade:"Класс / курс", subject:"Предмет",
-  pickOpt:"Не выбрано", other:"Другое…", ownPh:"Напишите сами", qlang:"Язык", qlangT:"На каком языке сделать тест?", qlangC:"На каком языке сделать кроссворд?", forWhom:"Для кого?",
+  pickOpt:"Не выбрано", other:"Другое…", ownPh:"Напишите сами", qlang:"Язык", qlangT:"На каком языке сделать тест?", qlangC:"На каком языке сделать кроссворд?", forWhom:"Для кого?", giftFree:"Бесплатно (подарок 2 000 сум)", giftUsed:"Подарок использован — тест сделан бесплатно",
   self:"Для себя", selfD:"практика: ответ и пояснение сразу, можно пройти заново",
   cls:"Для класса", clsD:"экзамен: один раз, ответ нельзя изменить",
   youGet:"Вы получите", get1:"Ссылку — ученики решают в приложении и сразу видят ответ и пояснение",
@@ -311,7 +311,7 @@ ru:{
 en:{
   back:"← Back", title:"Test quiz", trial:"TRIAL", topic:"Topic", topicPh:"E.g. Photosynthesis", crossPh:"E.g. The circulatory system",
   nQ:"Number of questions", level:"Difficulty", qtype:"Question type", example:"Example ›", grade:"Grade / year", subject:"Subject",
-  pickOpt:"Choose (optional)", other:"Other…", ownPh:"Type your own", qlang:"Language", qlangT:"Which language should the test be in?", qlangC:"Which language should the crossword be in?", forWhom:"Who is it for?",
+  pickOpt:"Choose (optional)", other:"Other…", ownPh:"Type your own", qlang:"Language", qlangT:"Which language should the test be in?", qlangC:"Which language should the crossword be in?", forWhom:"Who is it for?", giftFree:"Free (2 000 UZS gift)", giftUsed:"Gift used — the test was made for free",
   self:"For myself", selfD:"practice: answer and explanation right away, can retake",
   cls:"For a class", clsD:"exam: once only, answers can't be changed",
   youGet:"You get", get1:"A link — students solve it in the app and instantly see the answer and explanation",
@@ -393,7 +393,7 @@ en:{
 kaa:{
   back:"← Artqa", title:"Test quiz", trial:"SINAQ", topic:"Tema", topicPh:"Mısalı: Fotosintez", crossPh:"Mısalı: Qan aylanıw sisteması",
   nQ:"Sorawlar sanı", level:"Qıyınlıǵı", qtype:"Soraw túri", example:"Mısal ›", grade:"Klass / kurs", subject:"Pán",
-  pickOpt:"Tańlań (ıqtıyarıy)", other:"Basqa…", ownPh:"Ózińiz jazıń", qlang:"Til", qlangT:"Test qaysı tilde bolsın?", qlangC:"Krossvord qaysı tilde bolsın?", forWhom:"Kim ushın?",
+  pickOpt:"Tańlań (ıqtıyarıy)", other:"Basqa…", ownPh:"Ózińiz jazıń", qlang:"Til", qlangT:"Test qaysı tilde bolsın?", qlangC:"Krossvord qaysı tilde bolsın?", forWhom:"Kim ushın?", giftFree:"Biypul (2 000 swmlıq sawǵa)", giftUsed:"Sawǵa paydalanıldı — test biypul tayarlandı",
   self:"Ózim ushın", selfD:"shınıǵıw: juwap hám túsindirme birden, qayta sheshiwge boladı",
   cls:"Klass ushın", clsD:"imtixan: bir ret, juwaptı ózgertip bolmaydı",
   youGet:"Siz alasız", get1:"Siltewish — oqıwshılar qosımshada sheshedi, juwap hám túsindirmeni birden kóredi",
@@ -487,7 +487,8 @@ const S={kind:'test',n:20,cn:12,level:'mid',aud:'class',qtype:'mc',grade:'',subj
 const QT={mc:1,tf:1,open:1,mix:1};                     // savol turlari (nomlari — L('QT'))
 const TMIN=10,TMAX=50,TMARKS=[10,20,30,40,50];
 /* 2026-11-16, egasi: narxlar (botdagi quiz.TEST_PRICES bilan bir xil) — savollar soni shu chegaragacha */
-const QPR=[[10,2990],[20,3990],[30,4990],[40,5990],[50,6990]];
+const QPR=[[10,1990],[20,3990],[30,4990],[40,5990],[50,6990]];   // 2026-11-21, egasi: 10 savol 1 990
+const qGift=()=>S.kind==='test'&&S.n<=10&&typeof FREE!=='undefined'&&FREE>0;   // 2 000 so'mlik sovg'a 10 savolgacha testga yetadi
 const qPrice=n=>(QPR.find(([l])=>n<=l)||QPR[QPR.length-1])[1];
 const qFree=()=>(typeof isAdmin==='function'&&isAdmin())||(typeof SRV!=='undefined'&&SRV&&SRV.quiz_free===true);
 const box=()=>$('qz');
@@ -549,9 +550,9 @@ function setN(v,silent){
   const p=v=>(v-TMIN)/(TMAX-TMIN)*100;
   $('qzRng').value=S.n; $('qzFill').style.width=p(S.n)+'%'; $('qzBub').style.left=p(S.n)+'%'; $('qzBub').textContent=L('nq',{n:S.n});
   $('qzTicks').innerHTML=TMARKS.map(m=>`<div class="rng-tick ${m<=S.n?'on':''} ${m===S.n?'cur':''}" style="left:${p(m)}%"><b>${m}</b><i></i><span></span></div>`).join('');
-  const pr=qPrice(S.n), fr=qFree();
-  $('qzNPrice').innerHTML=`${L('nq',{n:S.n})} · <b style="font-size:14px">${fr?L('freeTrial'):money(pr)}</b>`;
-  const go=$('qzGo'); if(go) go.textContent=L('createT')+' · '+(fr?L('free'):money(pr));
+  const pr=qPrice(S.n), fr=qFree(), gf=!fr&&qGift();
+  $('qzNPrice').innerHTML=`${L('nq',{n:S.n})} · <b style="font-size:14px">${fr?L('freeTrial'):gf?'🎁 '+L('giftFree'):money(pr)}</b>`;
+  const go=$('qzGo'); if(go) go.textContent=L('createT')+' · '+(fr||gf?L('free'):money(pr));
   const eta=$('qzEta'); if(eta) eta.textContent=L('readyIn',{x:S.n<=20?'20–40':S.n<=35?'40–70':'60–100'});
   if(!silent) hap();
 }
@@ -685,7 +686,8 @@ async function create(){
   if(d.error==='balance'){(cross?openCross:open)(); toast('💳',L('noBal',{x:money(d.price)})); if(typeof openTopup==='function') openTopup(d.need||d.price); return}
   if(!d.ok){toast('⚠️',d.error==='limit'?L('limit'):d.error==='admin'?L('expired'):d.refund?L('failRef',{x:money(d.refund)}):L('fail'));(cross?openCross:open)();return}
   if(typeof d.balance==='number'&&typeof BALANCE!=='undefined'){BALANCE=d.balance; try{renderWallet()}catch(e){}}
-  if(d.price>0) toast('✅',L('paid',{x:money(d.price)}));
+  if(d.gift){FREE=0; toast('🎁',L('giftUsed'))}
+  else if(d.price>0) toast('✅',L('paid',{x:money(d.price)}));
   else if(typeof SRV!=='undefined'&&SRV&&SRV.quiz_left!=null){SRV.quiz_left=Math.max(0,SRV.quiz_left-1);toast('🧪',L('trialLeft',{n:SRV.quiz_left}))}
   hap('ok'); S.src=null; ready(d.code);
 }
