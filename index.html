@@ -687,6 +687,29 @@ html.desk .hbal{display:none}
 html.tgfs .wrap{padding-top:calc(14px + var(--tg-safe-area-inset-top,0px) + var(--tg-content-safe-area-inset-top,0px))}
 html.tgfs.desk nav{padding-top:calc(16px + var(--tg-safe-area-inset-top,0px) + var(--tg-content-safe-area-inset-top,0px))}
 #fsBtn svg{width:18px;height:18px}
+
+/* ---------- Sayt: Telegram orqali kirish ekrani ---------- */
+.wlogin{position:fixed;inset:0;z-index:60;display:none;place-items:center;padding:24px 16px;overflow-y:auto;background:transparent}
+body.wl-on .wrap,body.wl-on nav{visibility:hidden}
+.wlogin.on{display:grid;animation:fadein .25s ease}
+.wl-card{position:relative;z-index:1;width:100%;max-width:420px;padding:30px 24px 22px;border-radius:var(--r-lg);background:var(--surface);border:1px solid var(--line);text-align:center;box-shadow:var(--shadow);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}
+.wl-card .logo{height:46px;margin:0 auto 18px}
+.wl-card h1{font-size:23px;line-height:1.25;margin-bottom:10px}
+.wl-card>p{color:var(--muted);font-size:14.5px;line-height:1.55}
+.wl-tg{display:flex;align-items:center;justify-content:center;gap:10px;margin-top:24px}
+.wl-tg svg{width:22px;height:22px;flex:none}
+.wl-wait{margin-top:18px;padding:14px;border-radius:var(--r-md);background:var(--chip);color:var(--text);font-size:14px;line-height:1.5;text-align:left;display:none}
+.wl-wait.on{display:block}
+.wl-wait .row{display:flex;gap:10px;align-items:flex-start}
+.wl-spin{flex:none;width:18px;height:18px;margin-top:2px;border-radius:50%;border:2.5px solid var(--chip-text);border-right-color:transparent;animation:wlspin .8s linear infinite}
+@keyframes wlspin{to{transform:rotate(360deg)}}
+.wl-wait a{display:inline-block;margin-top:10px;color:var(--chip-text);font-weight:600;text-decoration:underline;cursor:pointer}
+.wl-note{margin-top:14px;color:var(--muted);font-size:12.5px}
+.wl-langs{display:flex;flex-wrap:wrap;justify-content:center;gap:6px;margin-top:20px}
+.wl-langs button{padding:6px 11px;border-radius:999px;border:1px solid var(--line);font-size:13px;color:var(--muted)}
+.wl-langs button.on{background:var(--chip);color:var(--chip-text);border-color:transparent;font-weight:600}
+.wl-foot{margin-top:14px;font-size:12px;color:var(--muted)}
+.wl-foot a{color:inherit;text-decoration:underline;cursor:pointer}
 </style>
 </head>
 <body>
@@ -1017,6 +1040,7 @@ html.tgfs.desk nav{padding-top:calc(16px + var(--tg-safe-area-inset-top,0px) + v
         <button class="prow" onclick="openDoc('oferta')"><span data-i18n="oferta"></span><em>›</em></button>
         <button class="prow" onclick="openDoc('privacy')"><span data-i18n="privacy"></span><em>›</em></button>
       </div></div></div></div>
+    <button type="button" class="prow" id="webOutBtn" style="display:none;margin-top:10px;border-radius:var(--r-md);border:1.5px solid var(--line);background:var(--surface)" onclick="webLogout()"><span>🚪 <span data-i18n="webOut"></span></span><em>›</em></button>
   </section>
 </div>
 
@@ -1161,16 +1185,42 @@ const UZN=(()=>{
   const deep=o=>typeof o==='string'?tr(o):Array.isArray(o)?o.map(deep):(o&&typeof o==='object')?Object.fromEntries(Object.entries(o).map(([k,v])=>[k,deep(v)])):o;
   return {tr,deep};
 })();
+/* Sayt: kirish ekrani matnlari (2026-11-22) */
+Object.assign(T.uz,{"wlTitle": "TadrisAI'ga xush kelibsiz", "wlSub": "Prezentatsiya, mustaqil ish va testlar — bir necha daqiqada. Kirish uchun Telegram hisobingizdan foydalaning: balans va fayllaringiz botdagidek bo'ladi.", "wlBtn": "Telegram orqali kirish", "wlWait": "Telegram'da botga o'ting va «✅ Ha, saytga kiraman» tugmasini bosing. Shu sahifa o'zi ochiladi.", "wlLink": "Telegram ochilmadimi? Shu yerni bosing", "wlExp": "Kutish vaqti tugadi. Qayta bosing.", "wlNote": "Fayllar tayyor bo'lgach Telegram'dagi botga ham keladi.", "webOut": "Saytdan chiqish", "webErr": "Botga yuborib bo'lmadi. Telegram'da botni oching va qayta urinib ko'ring.", "webGone": "Bu fayl topilmadi yoki 30 kunlik saqlash muddati tugagan."});
+Object.assign(T.ru,{"wlTitle": "Добро пожаловать в TadrisAI", "wlSub": "Презентации, самостоятельные работы и тесты — за несколько минут. Войдите через Telegram: баланс и файлы будут те же, что и в боте.", "wlBtn": "Войти через Telegram", "wlWait": "Перейдите в бот в Telegram и нажмите «✅ Да, войти на сайт». Эта страница откроется сама.", "wlLink": "Telegram не открылся? Нажмите сюда", "wlExp": "Время ожидания истекло. Нажмите ещё раз.", "wlNote": "Готовые файлы также приходят в бот в Telegram.", "webOut": "Выйти с сайта", "webErr": "Не удалось отправить в бот. Откройте бот в Telegram и попробуйте снова.", "webGone": "Файл не найден или срок хранения (30 дней) истёк."});
+Object.assign(T.en,{"wlTitle": "Welcome to TadrisAI", "wlSub": "Presentations, independent work and tests — in a few minutes. Sign in with Telegram: your balance and files are the same as in the bot.", "wlBtn": "Sign in with Telegram", "wlWait": "Go to the bot in Telegram and press «✅ Yes, sign in». This page will open by itself.", "wlLink": "Telegram didn't open? Tap here", "wlExp": "Waiting time is over. Press again.", "wlNote": "Finished files also arrive in the bot in Telegram.", "webOut": "Sign out of the site", "webErr": "Couldn't send to the bot. Open the bot in Telegram and try again.", "webGone": "File not found or the 30-day storage period has ended."});
 T.uzn=UZN.deep(T.uz);
 /* Qoraqalpoqcha (2016-yilgi lotin alifbosi); tarjima qilinmagan kalitlar o'zbekchaga qaytadi */
 T.kaa=Object.assign({},T.uz,{"okNext": "Endi buyırtpa beriń — temanı jazıń, qalǵanın AI isleydi", "okPrez": "📊 Prezentaciya jaratıw", "okIsh": "📄 Óz betinshe jumıs jazıw", "okBackPrez": "Prezentaciyanı dawam ettiriw ›", "okBackIsh": "Óz betinshe jumıstı dawam ettiriw ›", "okHome": "Bas betke qaytıw", "hello": "Sálem", "sub": "Búgin ne tayarlaymız?", "change": "· almastırıw", "student": "Student", "teacher": "Oqıtıwshı", "studentDesc": "Óz betinshe jumıs, slayd, referat", "teacherDesc": "Sabaq ushın slayd, sabaq jobası, test", "prez": "Prezentaciya", "prezDesc": "Tayın .pptx, 6–20 slayd", "prezDescT": "Sabaq ushın slaydlar, .pptx", "ish": "Óz betinshe jumıs", "ishDesc": "Titul, joba, tekst hám ádebiyatlar, .docx", "dars": "Sabaq jobası", "darsDesc": "Maqset, basqıshlar hám waqıt bólistiriliwi", "more": "Jáne", "testS": "Testke tayarlanıw", "testSDesc": "Tema boyınsha sorawlar menen shınıǵıw", "ref": "Referat", "refDesc": "Qısqa jumıs, kirisiw hám juwmaq penen", "testT": "Test generatorı", "testTDesc": "Sorawlar hám juwaplar gilti, .docx", "site": "Krossvord hám interaktiv usıllar", "siteDesc": "Saytta tayarlanadı hám sabaqta ashıladı", "siteBtn": "Saytqa ótiw", "soonTag": "Jaqın arada", "popTag": "Kóp tańlanadı", "back": "← Artqa", "formSub": "Maǵlıwmatlardı tolıqtırıń", "asLabel": "Kim retinde jaratasız?", "asStudent": "Student retinde", "asStudentDesc": "Tapsırıw ushın: titulda studenttiń atı", "asTeacher": "Oqıtıwshı retinde", "asTeacherDesc": "Sabaq ushın: titulda oqıtıwshınıń atı", "fFan": "Pán", "phFan": "Mısalı: Ekonomika teoriyası", "fMav": "Tema", "phMav": "Mısalı: Inflyaciya hám onıń túrleri", "fFak": "Fakultet", "phFak": "Mısalı: Ekonomika", "fYon": "Tálim baǵdarı", "phYon": "Mısalı: Finans", "fCls": "Klass yamasa kurs", "phCls": "Mısalı: 9-klass yamasa 2-kurs", "sizeSlides": "Slaydlar sanı", "sizePages": "Betler sanı", "titul": "Titul bet ushın", "uniS": "Universitet", "uniT": "Oqıw ornı", "phUni": "Mısalı: Berdaq atındaǵı Qaraqalpaq mámleketlik universiteti", "nameS": "Studenttiń F.A.Á.", "nameT": "Oqıtıwshınıń F.A.Á.", "phName": "Mısalı: Allambergenov Ayaz Baxadırovich", "fGrp": "Topar", "phGrp": "Mısalı: MF-21", "fTea": "Oqıtıwshınıń F.A.Á.", "phTea": "Mısalı: Nurımbetova G.A.", "uniIsh": "Universitet yamasa institut", "optGroup": "Qosımsha maǵlıwmatlar", "optSub": "Universitet, fakultet, topar — titulǵa jazıladı", "optFilled": "✓ {n} maydan slaydqa jazıladı", "optOff": "{n} maydan tolıqtırılǵan, biraq belgilenbegen — slaydqa jazılmaydı", "ishSoonMsg": "Óz betinshe jumıs bólimi jaqın arada iske túsedi. Házirshe prezentaciya jaratıwıńız múmkin — birinshisi biypul!", "densTitle": "Slaydtaǵı tekst kólemi", "densShort": "Qısqa hám anıq", "densShortD": "Tek tiykarǵı pikirler", "densFull": "Tolıq", "densFullD": "Tolıq túsindiriw", "densShortCap": "hár bántte <b>6–10 sóz</b>", "densFullCap": "hár bántte <b>15–20 sóz</b>", "densShortHint": "💡 Hár bántte 6–10 sóz: tek tiykarǵı pikir, az tekst hám iri háripler. Qalǵanın prezentaciyada ózińiz aytıp beresiz.", "densFullHint": "💡 Hár bántte 15–20 sóz: hár bir pikir mısallar menen tolıq túsindiriledi. Óz betinshe oqıw ushın qolaylı.", "planTitle": "Slaydlar jobası", "planAi": "AI ózi dúzsin", "planAiD": "Temaǵa sáykes joba dúzedi", "planOwn": "Ózim jazaman", "planOwnD": "Joba tayın bolsa", "planCount": "Jobada neshe bánt bar?", "planNote": "💡 Bot hár bir bánt boyınsha slaydlardı ózi bólistiredi.", "planPh": "{n}-bánt", "planFill": "Joba bántlerin jazıń", "opt": " (qálewińizshe)", "cityLbl": "Titulǵa qalanı jazıw", "phCity": "Mısalı: Nókis", "design": "Dizayn", "pickAuto": "AI tańlasın", "pickAutoD": "Hár saparı basqasha, tákirarlanbaydı", "pickOwn": "Ózim tańlayman", "pickOwnD": "10 dizaynnıń birin", "images": "Súwretler hám tarif", "imgArt": "Ortasha", "imgArtD": "Sxemalar, infografika hám sapa qadaǵalawı", "imgPhoto": "Standart", "imgPhotoD": "Haqıyqıy fotosúwretler, AI oylap jazadı", "imgPrem": "Premium", "imgPremD": "3D modeller hám animaciya", "imgArtInfo": "✏️ Eń kúshli AI joba dúzedi hám tayın slaydlardı tekseredi: álsiz jerlerin ózi qayta jazadı. Kóbirek sızılma, sxema hám infografika, hár bir quramalı termin túsindiriledi, aqırında «Tiykarǵı terminler» slaydı. Tómende dizayndı tańlawıńız múmkin.", "freeHint": "🎁 2 000 swmlıq sawǵa: Standart, 6 slaydqa shekem — biypul", "giftLine": "🎁 onnan 2 000 swm — sawǵa: 10 sorawlı test yamasa 6 slaydqa shekem prezentaciya", "giftRule": "🎁 2 000 swmlıq sawǵa tek 6 slaydqa shekem Standart prezentaciyaǵa yamasa 10 sorawlı testke isleydi.", "pcs": "", "pcsSlides": "slayd", "balance": "Balans", "topupBtn": "+ Tolıqtırıw", "topupBtn2": "💳 Balanstı tolıqtırıw", "history": "Tariyx", "lastOps": "Sońǵı ámeller", "noOps": "Ele ámeller joq", "topupTitle": "Balanstı tolıqtırıw", "chooseSum": "Summanı tańlań", "ownSum": "Basqa summa (keminde 5 000 swm)", "payMethod": "Tólem usılı", "pickPm": "Tólem sistemasın tańlań", "payBtn": "{x} tólew", "minSum": "Keminde {x}", "willGet": "Balansqa {x} túsedi. Tólem qáwipsiz betde ámelge asırıladı.", "bonus": "bonus", "offLbl": "🎓 Studentler kúni bonusı — bayramıńız menen! Tamamlanıwına:", "offWhy": "20 000 → 25 000 · 50 000 → 62 000 · 100 000 → 130 000 swm túsedi", "cdLbl": "Eń az tolıqtırıw 5 000 swm aynasınıń jabılıwına:", "cdWhy": "17:00 den keyin eń az tolıqtırıw 10 000 swm boladı", "needMore": "Buyırtpa ushın jáne {x} kerek", "payTitle": "Tólem sorawı jiberildi", "payText": "Tólem siltemesi botqa jiberiledi. Bul aynanı jabıwıńız múmkin.", "fbTitle": "Pikir bildiriw", "fbText": "Botqa ótiń hám video yamasa jazba pikirińizdi jiberiń.", "promo": "🎥 <b>Video pikir qaldırıń</b> hám balansıńızǵa <b class='nw'>+1&nbsp;000&nbsp;swm</b> alıń.", "lowBal": "💳 Balansıńız: <b>{b}</b>. Bul buyırtpa ushın jáne <b>{x}</b> kerek.", "op_topup": "Balans tolıqtırıldı", "op_admin": "Balans tolıqtırıldı", "op_bonus": "Bonus", "op_spend": "Prezentaciya", "op_refund": "Qaytarıldı", "nbTitle": "Balans jetkiliksiz", "nbText": "Bul kólemniń bahası {p}. 2 000 swmlıq sawǵa Standart tarifinde 6 slaydqa shekem yamasa 10 sorawlı testke isleydi.", "free": "Biypul", "ctaFree": "Biypul jaratıw", "from": "swmnan", "legal": "Hújjetler", "oferta": "Ashıq oferta", "privacy": "Qupıyalıq siyasatı", "imgPhotoInfo": "📷 AI temanı tereń oylap jazadı. Súwretler fotobanklerdegi haqıyqıy fotosúwretlerden tańlanadı. Dizayn hám jaylasıwdı bot ózi tańlaydı.", "imgPremInfo": "✨ AI hár bir tema ushın premium sapalı, anıq, 3D kórinistegi súwretlerdi ózi jaratadı. Bul múmkinshilik jaqın arada qosıladı.", "imgPremD": "3D modeller hám animaciya", "premNote": "📌 <b>Eskertiw:</b> 3D modeller biologiya hám anatomiya, texnika, fizika, ximiya, geografiya hám astronomiya temalarında eń jaqsı shıǵadı. Modeli tabılmaǵan bólimler ushın shıraylı sızılmalar sızıp beremiz. 3D aylanıw hám qozǵalıs kompyuterdegi PowerPoint 2019 / 365 te kórinedi.", "noPhone": "Telefonda Premium slaydtı qozǵalta almaysız — kompyuter yamasa noutbuktan ashıń.", "premEx": "🔍 Qalay shıǵıwın mısallarda kóriw", "exTitle": "Premium 3D mısalları", "exWait": "Tolıq mısaldı kóriw ushın azǵana kútiń…", "vid3d": "✅ Temada 3D modeller tabılsa", "vidDraw": "✏️ 3D modeller tabılmasa — usı variant", "vidNote": "🎬 Kompyuterdegi PowerPoint'te animaciya usılay kórinedi:", "picNote": "📸 Tayın slaydlardan mısallar:", "exClose": "Jabıw", "lowTitle": "Bul temada 3D modeller azıraq", "lowText": "Modeli tabılmaǵan bólimler ushın shıraylı sızılmalar sızıp beremiz — prezentaciya bárbir tolıq hám shıraylı shıǵadı.", "lowGo": "Dawam etiw", "lowBack": "Basqa tarif tańlaw", "lowInline": "ℹ️ Bul temada 3D modeller azıraq — tabılmaǵan bólimlerge sızılmalar sızıladı.", "checking": "Tema tekserilip atır…", "docLang": "Slayd qaysı tilde bolsın?", "ctaPrez": "Prezentaciya jaratıw", "ctaIsh": "Óz betinshe jumıs jaratıw", "hint": "Fayl 2–4 minutta botqa keledi", "endQ": "Trenddegi juwmaqlawshı videolar", "endNone": "Juwmaqlawshı videosız", "endFree": "Biypul", "endPaid": "Tólemli", "endGift": "🎁 Sawǵa prezentaciyaǵa «Biypul» juwmaqlawshı videonı qosıwǵa boladı", "filesTitle": "Fayllarım", "filesSub": "Jaratqan fayllarıńız usı jerde saqlanadı", "filesKeep": "Fayllar 30 kún saqlanadı, keyin óship ketedi.", "fSend": "Botqa jiberiw", "fLeft": "kún qaldı", "fPrez": "Prezentaciya", "fIsh": "Óz betinshe jumıs", "sentTitle": "Sorawıńız qabıl etildi", "sentText": "Sorawıńız orınlanıp atır. Tayın bolǵannan soń fayldı botqa jiberemiz. Bul aynanı jabıwıńız múmkin.", "sentBtn": "Túsinikli", "resTitle": "Fayl jiberilip atır", "resText": "Fayl bir neshe sekundta botqa keledi. Bul aynanı jabıwıńız múmkin.", "filesEmpty": "Ele fayl joq. Birinshisin jaratıń.", "filesBtn": "Jaratıwdı baslaw", "moreLbl": "Karta, Uzum, Alif, UzQR…", "moreBtn": "Basqa usıllar ›", "moreTitle": "Basqa tólem usılları", "moreNote": "Bul usıllar inPAY'diń qáwipsiz tólem betinde ashıladı", "pmCard": "Bank kartası", "pmQr": "qálegen bank qosımshası", "sumPay": "Tólem", "sumGet": "Balansqa túsedi", "willSafe": "Tólem Payme, Click yamasa banktiń qáwipsiz betinde ámelge asadı.", "payOferta": "Tólem etiw arqalı <a href='#' onclick=\"openDoc('oferta');return false\">ashıq oferta</a> shártlerine razılıq bildiresiz.", "creating": "Esap jaratılıp atır…", "waitTitle": "Tólemdi kútip atırmız…", "waitText": "{m} ashıldı. Tólemdi tastıyıqlań hám usı jerge qaytıń — balans ózi jańalanadı.", "wS1": "Esap jaratıldı · {x}", "wS2": "{m} ashıldı", "wS3": "Tólemniń tastıyıqlanıwı kútilip atır", "wS4": "Balansqa túsiriw", "reopen": "↗ {m}'di qayta ashıw", "otherWay": "Basqa usıl menen tólew", "waitNote": "Silteme jáne {m} minut ámel etedi — usı waqıt ishinde tóleń", "waitExp": "⚠️ Silteme eskirdi. Eski bette tólemeń — pul túspey qalıwı múmkin. Jańa silteme ashıń.", "okTitle": "Balans tolıqtırıldı!", "okSub": "{a} + {b} bonus", "okBal": "Házirgi balans:", "backApp": "Qosımshaǵa qaytıw", "backProf": "Profilge qaytıw", "payErr": "Tólem sisteması házir juwap bermedi. Azdan soń qayta urınıp kóriń.", "payFail": "Tólem ámelge aspadı yamasa biykar etildi.", "fbTile": "Bot haqqında jıllı pikir ushın", "fbPer": "{x} alıń", "verInfo": "TadrisAI — MVP 2. Bot hám qosımsha úzliksiz jańalanıp baradı. Usınıs hám qátelerdi profildegi pikir bólimi arqalı jiberiń.", "sumBonus": "Bonus", "sumLbl": "Summa", "profTitle": "Profil", "freeLeft": "Biypul urınıs", "myRole": "Meniń rolim", "invite": "Dostı shaqırıw", "invPer": "hár biri ushın {x}", "invTitle": "Dosıńızdı shaqırıń", "invLead": "Hár bir dosıńız dizimnen ótip, birinshi faylın alsa — balansıńızǵa {x}!", "invCopy": "Kóshirip alıw", "invCopied": "Silteme kóshirildi", "invShare": "✈️ Telegram'da bólisiw", "invShareText": "TadrisAI — prezentaciya hám óz betinshe jumıstı 2–4 minutta tayarlap beretuǵın bot. Birinshisi biypul!", "invCnt": "shaqırılǵanlar", "invSum": "tabılǵan swm", "invFriends": "Doslarıńız", "invWait": "fayl kútilip atır", "invHow": "Qalay isleydi?", "invS1": "Siltemeni dosıńızǵa jiberiń yamasa toparǵa salıń.", "invS2": "Dosıńız silteme arqalı kirip, dizimnen ótedi hám birinshi faylın aladı.", "invS3": "Sol zamatı balansıńızǵa {x} túsedi. Onı qálegen tarifte paydalanıwıńız múmkin.", "invRules": "• Hár bir dos tek bir ret esaplanadı.<br>• Ayına 20 ǵa shekem bonus (<span class='nw'>20&nbsp;000&nbsp;swm</span>).<br>• Ózińizdi yamasa jalǵan akkauntlardı shaqırıw esaplanbaydı.", "buy": "Kredit satıp alıw", "version": "Versiya", "navHome": "Bas bet", "navFiles": "Fayllarım", "navProfile": "Profil", "fill": "Iltimas, mindetli maydanlardı tolıqtırıń.", "wrongOpen": "Maǵlıwmat jiberilmedi. Botta /start basıń hám qosımshanı tómendegi túyme arqalı ashıń.", "notTg": "Iltimas, qosımshanı Telegram botınan ashıń.", "soonMsg": "Bul bólim jaqın arada qosıladı."});
+Object.assign(T.kaa,{"wlTitle": "TadrisAI'ǵa xosh keldińiz", "wlSub": "Prezentaciya, óz betinshe jumıs hám testler — bir neshe minutta. Kiriw ushın Telegram esabıńızdan paydalanıń: balans hám fayllarıńız bottaǵıday boladı.", "wlBtn": "Telegram arqalı kiriw", "wlWait": "Telegram'da botqa ótiń hám «✅ Awa, saytqa kiremen» túymesin basıń. Usı bet ózi ashıladı.", "wlLink": "Telegram ashılmadı ma? Usı jerdi basıń", "wlExp": "Kútiw waqtı tawsıldı. Qayta basıń.", "wlNote": "Fayllar tayın bolǵannan soń Telegram'daǵı botqa da keledi.", "webOut": "Saytdan shıǵıw", "webErr": "Botqa jiberip bolmadı. Telegram'da bottı ashıń hám qayta urınıp kóriń.", "webGone": "Bul fayl tabılmadı yamasa 30 kúnlik saqlaw múddeti tawsılǵan."});
 const LANGS={uz:"O'zbekcha",kaa:"Qaraqalpaqsha",uzn:"Özbekça (yangi alifbo)",ru:"Русский",en:"English"};
 const LCODE=l=>l==='uzn'?'ÖZ':l==='kaa'?'QQ':l.toUpperCase();
 
 /* ---------- State ---------- */
-const qs=new URLSearchParams(location.search);
+/* ---------- Sayt (tadris.ai) rejimi: Telegram'dan tashqarida ochilganda — Telegram orqali kirish (2026-11-22, egasi) ---------- */
+const API=(/(^|\.)tadris\.ai$/i.test(location.hostname)?location.origin:'https://91-107-229-30.sslip.io')+'/api';
+const WEB=(()=>{const w=window.Telegram&&window.Telegram.WebApp, p=new URLSearchParams(location.search); return !(w&&w.initData)&&!p.get('sig')})();
+let WS=''; if(WEB){try{WS=localStorage.getItem('tadris_ws')||''}catch(e){}}
+function webForget(){WS=''; try{localStorage.removeItem('tadris_ws');localStorage.removeItem('tadris_boot')}catch(e){}}
+function webBoot(){   // sinxron: ilova holati (balans, fayllar, do'stlar) shu javobdan quriladi — botdagi havola o'rniga
+  let b=null;
+  try{const x=new XMLHttpRequest(); x.open('POST',API+'/web/boot',false); x.setRequestHeader('Content-Type','text/plain'); x.send(JSON.stringify({ws:WS}));
+    if(x.status===401){webForget(); return null}
+    const d=JSON.parse(x.responseText||'{}'); if(d.ok&&d.boot){b=d.boot; try{localStorage.setItem('tadris_boot',JSON.stringify(b))}catch(e){}}
+  }catch(e){}
+  if(!b){try{b=JSON.parse(localStorage.getItem('tadris_boot')||'null')}catch(e){}}   // tarmoq yo'q — oxirgi holat
+  return b;
+}
+const qs=(()=>{const p=new URLSearchParams(location.search); if(!WEB||!WS) return p;
+  const b=webBoot(); if(!b) return p; const m=new URLSearchParams(b); p.forEach((v,k)=>m.set(k,v)); return m})();
 const store={get(k){try{return localStorage.getItem('tadris_'+k)}catch(e){return null}},set(k,v){try{localStorage.setItem('tadris_'+k,v)}catch(e){}}};
 const tg=window.Telegram&&window.Telegram.WebApp;
+if(WEB&&tg){   // brauzerda Telegram amallari o'rniga oddiy brauzer amallari
+  const op=u=>{let w=null; try{w=window.open(u,'_blank')}catch(e){} if(!w) location.href=u};
+  tg.openLink=op; tg.openTelegramLink=op; tg.close=()=>{}; tg.sendData=()=>{};
+  tg.enableClosingConfirmation=()=>{}; tg.disableClosingConfirmation=()=>{};
+}
+const inApp=()=>(WEB&&!!WS)||!!(tg&&tg.platform&&tg.platform!=='unknown');
 // Brauzer (Telegram Desktop ichidagi Edge) avval yozilganlarni «Сохраненные сведения» deb taklif qilmasin —
 // keyin JS bilan qo'shiladigan maydonlarga ham (masalan, reja bandlari) yozishdan oldin o'chiramiz.
 document.addEventListener('focusin',e=>{const el=e.target;if(el&&el.matches&&el.matches('input,textarea')&&el.getAttribute('autocomplete')!=='off'){el.setAttribute('autocomplete','off');el.setAttribute('autocorrect','off')}},true);
@@ -1308,10 +1358,9 @@ function renderTopup(){
   $('paySum').style.display=ok?'':'none';
 }
 /* ---------- To'lov ilovaning o'zida (server API orqali) ---------- */
-const API='https://91-107-229-30.sslip.io/api';
 const PM_NAME={payme:'Payme',click:'Click',paynet:'Paynet',plum:'Plum',other:'inPAY'};
 let pay=null, payTimer=null;
-function authBody(){return {init:(tg&&tg.initData)||'',uid:qs.get('uid')||'',sig:qs.get('sig')||''}}
+function authBody(){return {init:(tg&&tg.initData)||'',uid:qs.get('uid')||'',sig:qs.get('sig')||'',ws:WS}}
 async function api(path,body,ms){
   const ac=window.AbortController?new AbortController():null, tm=ac&&ms?setTimeout(()=>ac.abort(),ms):0;
   const r=await fetch(API+path,{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify(Object.assign(authBody(),body)),signal:ac?ac.signal:undefined})
@@ -1322,10 +1371,10 @@ async function api(path,body,ms){
 /* Ilova ochilganda balans va amallarni serverdan yangilaymiz (tugmadagi ma'lumot eskirgan bo'lishi mumkin) */
 let meAt=0;
 async function refreshMe(){
-  if(!((tg&&tg.initData)||qs.get('sig'))||Date.now()-meAt<15000) return;
+  if(!((tg&&tg.initData)||qs.get('sig')||WS)||Date.now()-meAt<15000) return;
   meAt=Date.now();
   try{
-    const d=await api('/me',{}); if(!d||!d.ok) return;
+    const d=await api('/me',{}); if(WEB&&d&&d.error==='auth'){webForget(); webLoginShow(); return} if(!d||!d.ok) return;
     if(typeof d.balance==='number') BALANCE=d.balance;
     if(Array.isArray(d.tx)) TXS=d.tx;
     if(typeof d.free==='number') FREE=d.free;
@@ -1773,7 +1822,13 @@ var goFn=null;
 /* ---------- Botga yuborish (Telegram oynani o'zi yopadi) ---------- */
 let pending=null;
 function sendToBot(data,ic,title,text){
-  if(!(tg&&tg.platform&&tg.platform!=='unknown')){showInfo('📱','TadrisAI',t('notTg'));return}
+  if(!inApp()){showInfo('📱','TadrisAI',t('notTg'));return}
+  if(WEB){                                             // saytda sendData yo'q — server botga o'zi yuboradi
+    if(data.mode==='topup'){toast('⚠️',t('payErr'));return}
+    showInfo(ic,title,text);
+    api('/web/act',{data},15000).then(d=>{if(!d||!d.ok){$('sent').classList.remove('on'); toast('⚠️',t(d&&d.error==='gone'?'webGone':'webErr'))}})
+      .catch(()=>{$('sent').classList.remove('on'); toast('⚠️',t('webErr'))});
+    return}
   pending=data;
   $('sentIc').innerHTML='<span>'+ic+'</span>'; $('sentIc').className='sent-ic '+(ic==='⏳'?'wait':'file'); $('sentTitle').textContent=title; $('sentText').textContent=text; $('sentBtn').textContent=t('sentBtn');
   $('sent').classList.add('on');
@@ -1784,7 +1839,7 @@ function sendToBot(data,ic,title,text){
    «Tushunarli» — faqat eslatma: bosilsa ilova yopilib, bot chatida tayyorlanish jarayoni ko'rinadi. */
 let orderReq=null;
 function sendOrder(data){
-  if(!(tg&&tg.platform&&tg.platform!=='unknown')){showInfo('📱','TadrisAI',t('notTg'));return}
+  if(!inApp()){showInfo('📱','TadrisAI',t('notTg'));return}
   data.nonce=Date.now().toString(36)+Math.random().toString(36).slice(2,8);
   pending=null;
   $('sentIc').innerHTML='<span>⏳</span>'; $('sentIc').className='sent-ic wait'; $('sentTitle').textContent=t('sentTitle'); $('sentText').textContent=t('sentText'); $('sentBtn').textContent=t('sentBtn');
@@ -2116,6 +2171,41 @@ renderAll();
 syncDesk();
 renderPlan();
 refreshMe();
+/* ---------- Sayt: Telegram orqali kirish ---------- */
+let wlPoll=null;
+function webLoginShow(){
+  const o=$('wlogin'); if(!o) return;
+  if(!$('wlLogo').innerHTML){const l=document.querySelector('header .logo'); if(l) $('wlLogo').innerHTML=l.outerHTML.replace(/ id="([^"]+)"/g,' id="wl$1"').replace(/url\(#([^)]+)\)/g,'url(#wl$1)')}
+  $('wlLangs').innerHTML=Object.entries(LANGS).map(([k,n])=>`<button type="button" class="${k===lang?'on':''}" onclick="lang='${k}';store.set('lang','${k}');renderAll();webLoginShow()">${n}</button>`).join('');
+  o.querySelectorAll('[data-i18n]').forEach(e=>e.textContent=t(e.dataset.i18n));
+  o.classList.add('on'); document.body.classList.add('wl-on');
+}
+async function webLogin(){
+  const b=$('wlBtn'); if(b.disabled) return; b.disabled=true;
+  // oyna «await»dan oldin ochiladi — aks holda brauzer uni bloklaydi
+  let w=null; try{w=window.open('about:blank','_blank')}catch(e){}
+  let d={}; try{d=await api('/web/login',{},15000)}catch(e){}
+  b.disabled=false;
+  if(!d||!d.ok){try{w&&w.close()}catch(e){} toast('⚠️',t('payErr')); return}
+  const url='https://t.me/'+(d.bot||BOTNAME)+'?start=web_'+d.code;
+  $('wlLink').href=url; $('wlWait').classList.add('on');
+  if(w){try{w.location.href=url}catch(e){location.href=url}} else location.href=url;
+  clearInterval(wlPoll); const until=Date.now()+(d.ttl||600)*1000;
+  wlPoll=setInterval(async()=>{
+    if(Date.now()>until){clearInterval(wlPoll); $('wlWait').classList.remove('on'); toast('⌛',t('wlExp')); return}
+    let r={}; try{r=await api('/web/poll',{code:d.code},10000)}catch(e){return}
+    if(r&&r.ws){clearInterval(wlPoll);
+      try{localStorage.setItem('tadris_ws',r.ws); if(r.boot) localStorage.setItem('tadris_boot',JSON.stringify(r.boot))}catch(e){}
+      location.reload()}
+    else if(r&&r.error==='expired'){clearInterval(wlPoll); $('wlWait').classList.remove('on'); toast('⌛',t('wlExp'))}
+  },2000);
+}
+async function webLogout(){
+  try{await api('/web/logout',{},8000)}catch(e){}
+  webForget(); location.reload();
+}
+if(WEB&&WS){const b=$('webOutBtn'); if(b) b.style.display='flex'}
+if(WEB&&!WS&&!qs.get('quiz')) document.addEventListener('DOMContentLoaded',webLoginShow);   // kirish oynasi skriptdan keyin turadi
 if(qs.get('screen')) show(qs.get('screen'));
 if(qs.get('form')) openForm(qs.get('form'));
 </script>
@@ -2127,6 +2217,16 @@ if(qs.get('form')) openForm(qs.get('form'));
       <span class="end-load on" id="endLoadF"><i><s id="endBarF"></s></i><em id="endPctF"></em></span></div>
     <button type="button" class="end-ov-pick" id="endOvPick" onclick="pickEndFull()"></button></div>
 </div>
+<div class="wlogin" id="wlogin"><div class="wl-card">
+  <div id="wlLogo"></div>
+  <h1 data-i18n="wlTitle"></h1>
+  <p data-i18n="wlSub"></p>
+  <button class="cta wl-tg" type="button" id="wlBtn" onclick="webLogin()"><svg viewBox="0 0 24 24" fill="#fff" aria-hidden="true"><path d="M21.6 3.3 2.9 10.5c-1.3.5-1.3 1.2-.2 1.5l4.8 1.5 1.8 5.6c.2.6.1.9.8.9.5 0 .7-.2 1-.5l2.3-2.3 4.9 3.6c.9.5 1.5.2 1.8-.8l3.2-15.1c.3-1.3-.5-1.9-1.4-1.5ZM8.4 13.2l9.7-6.1c.5-.3.9-.1.5.2l-8.3 7.5-.3 3.4-1.6-5Z"/></svg><span data-i18n="wlBtn"></span></button>
+  <div class="wl-wait" id="wlWait"><div class="row"><span class="wl-spin"></span><span data-i18n="wlWait"></span></div><a id="wlLink" target="_blank" rel="noopener" data-i18n="wlLink"></a></div>
+  <div class="wl-note" data-i18n="wlNote"></div>
+  <div class="wl-langs" id="wlLangs"></div>
+  <div class="wl-foot"><a onclick="openDoc('oferta')" data-i18n="oferta"></a> · <a onclick="openDoc('privacy')" data-i18n="privacy"></a></div>
+</div></div>
 <div class="sent" id="sent"><div class="sent-card">
   <div class="sent-ic" id="sentIc"><span>⏳</span></div>
   <b id="sentTitle"></b>
