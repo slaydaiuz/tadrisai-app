@@ -472,7 +472,9 @@ kaa:{
   gradeF:["{n}-klass","{n}-kurs"],
   SUBJ:["Matematika","Algebra","Geometriya","Fizika","Ximiya","Biologiya","Geografiya","Tariyx","Ana tili","Ádebiyat","Ózbek tili","Orıs tili","Inglis tili","Nemis tili","Informatika","Huqıq","Ekonomika","Baslawısh tálim","Texnologiya","Súwretlew óneri","Muzıka","Dene tárbiyası","Tárbiya"]
 }};
-function ql(){const l=['ru','en','kaa','uzn'].includes(lang)?lang:'uz';     // ilova tili o'zgarsa ham darhol
+['kk','ky','tg'].forEach(l=>{QD[l]=Object.assign({},QD.ru,(window.L3&&L3[l]&&L3[l].Q)||{})});
+['uz','ru','en','kaa'].forEach(l=>{if(QD[l]&&QD[l].LNAME) Object.assign(QD[l].LNAME,{uz:{kk:'Qozoq',ky:"Qirg'iz",tg:'Tojik'},ru:{kk:'Казахский',ky:'Киргизский',tg:'Таджикский'},en:{kk:'Kazakh',ky:'Kyrgyz',tg:'Tajik'},kaa:{kk:'Qazaq',ky:'Qırǵız',tg:'Tájik'}}[l])});   // 2026-11-22: qozoq, qirg'iz, tojik
+function ql(){const l=['ru','en','kaa','uzn','kk','ky','tg'].includes(lang)?lang:'uz';     // ilova tili o'zgarsa ham darhol
   if(l==='uzn'&&!QD.uzn) QD.uzn=(typeof UZN!=='undefined')?UZN.deep(QD.uz):QD.uz; return l}
 function L(k,v){const q=ql(); let s=QD[q]&&QD[q][k]; if(s==null) s=QD.uz[k]; if(s==null) return k;
   if(Array.isArray(s)&&s.length===3&&v&&v.n!=null&&typeof s[0]==='string'&&s[0].includes('{n}')){   // ruscha ko'plik: 1 / 2–4 / 5+
