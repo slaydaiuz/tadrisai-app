@@ -1924,7 +1924,7 @@ function resend(id){
 function setRole(r){role=r;store.set('role',r);renderAll()}
 function accToggle(b){b.closest('.acc').classList.toggle('open')}
 function openDoc(n){
-  const u=new URL(n+'.html',location.href).href;
+  const u=new URL(n+(['kk','ky','tg'].includes(lang)?'-'+lang:'')+'.html',location.href).href;   // 2026-11-22: tarjimalar
   try{if(tg&&tg.openLink){tg.openLink(u);return}}catch(e){}
   window.open(u,'_blank');
 }

@@ -3,7 +3,7 @@ Matnni o'zgartirish uchun faqat .md fayllarni tahrirlang va shu skriptni ishga t
 import html, re, pathlib
 HERE = pathlib.Path(__file__).parent
 SHELL = """<!doctype html>
-<html lang="uz"><head><meta charset="utf-8">
+<html lang="{lang}"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>{title} — TadrisAI</title>
 <link rel="icon" href="favicon.svg">
@@ -29,7 +29,7 @@ a{{color:var(--accent)}}
 <h1>{title}</h1>
 <div class="meta">{meta}</div>
 {body}
-<p class="sign">Hurmat bilan,<br>TadrisAI jamoasi</p>
+<p class="sign">{sign}</p>
 </main></body></html>
 """
 
@@ -61,9 +61,16 @@ def render(md):
             out.append(f"<p>{inline(s)}</p>")
     if lst: out.append("</ul>")
     if sec: out.append("</section>")
-    return SHELL.format(title=html.escape(title), meta=inline(meta), body="\n".join(out))
+    return SHELL.format(title=html.escape(title), meta=inline(meta), body="\n".join(out), lang=LANG, sign=SIGN[LANG])
 
-for name in ("oferta", "privacy"):
-    md = (HERE / f"{name}.md").read_text(encoding="utf-8")
-    (HERE.parent / f"{name}.html").write_text(render(md), encoding="utf-8")
-    print("tayyor:", name)
+# 2026-11-22: qozoq, qirg'iz, tojik tarjimalari — oferta-kk.md -> oferta-kk.html va h.k.
+SIGN = {"uz": "Hurmat bilan,<br>TadrisAI jamoasi", "kk": "Құрметпен,<br>TadrisAI командасы",
+        "ky": "Урматтоо менен,<br>TadrisAI командасы", "tg": "Бо эҳтиром,<br>дастаи TadrisAI"}
+for LANG in ("uz", "kk", "ky", "tg"):
+    sfx = "" if LANG == "uz" else "-" + LANG
+    for name in ("oferta", "privacy"):
+        src = HERE / f"{name}{sfx}.md"
+        if not src.exists():
+            continue
+        (HERE.parent / f"{name}{sfx}.html").write_text(render(src.read_text(encoding="utf-8")), encoding="utf-8")
+        print("tayyor:", name + sfx)
