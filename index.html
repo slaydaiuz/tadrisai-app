@@ -1612,7 +1612,7 @@ function pauseEnd(){endVids().forEach(v=>{try{v.pause()}catch(e){}})}
 function toggleEnd(){endOpen=!endOpen; syncEnd(); if(endOpen&&endUse()!=='none') playEnd(); else if(!endOpen) pauseEnd()}
 function setEnd(v){ending=v;store.set('ending',v);syncSize();if(v!=='none')playEnd()}
 function setTpl(n){endTpl=n; syncEnd(); playEnd()}
-const endSrc=n=>'ex/end/'+(n===2?'t2-':n===3?'t3-':'')+(['uz','uzn','kaa','ru','en'].includes(docLang)?docLang:'uz')+'-'+ending+'.mp4?v=1';
+const endSrc=n=>'ex/end/'+(n===2?'t2-':n===3?'t3-':'')+(['uz','uzn','kaa','ru','en','kk','ky','tg'].includes(docLang)?docLang:'uz')+'-'+ending+'.mp4?v=1';
 /* Yuklash foiz bilan: fayl to'liq yuklanib (blob), keyin o'ynaydi. Bir marta yuklangani keshda qoladi. */
 const END_BLOB={}, END_LOADING={};
 function endProg(id,p){const l=$('endLoad'+id); if(!l) return;
