@@ -725,6 +725,7 @@ body.wl-on .wrap,body.wl-on nav{visibility:hidden}
 .pw-now{font-size:13.5px;margin:2px 0 4px}
 .site-bn{display:none;align-items:center;gap:12px;margin:12px 0 0;padding:13px 14px;border-radius:var(--r-md);background:var(--chip);color:var(--text);cursor:pointer}
 .site-bn.on{display:flex}
+.go-site{background:rgba(5,8,20,.55)}
 .site-bn .i{font-size:22px} .site-bn b{display:block;font-size:14.5px} .site-bn small{display:block;font-size:12.5px;color:var(--muted);margin-top:2px}
 .site-bn em{margin-left:auto;font-style:normal;color:var(--muted)}
 .wl-foot a{color:inherit;text-decoration:underline;cursor:pointer}
@@ -1063,6 +1064,7 @@ body.wl-on .wrap,body.wl-on nav{visibility:hidden}
         <input id="pwPass" type="password" autocomplete="new-password" data-ph="pwNew">
         <button class="cta" type="submit" id="pwGo" data-i18n="pwSave"></button>
         <div class="wl-msg" id="pwMsg"></div>
+        <button type="button" class="wl-alt" id="pwSiteBtn" style="display:none" onclick="openSite()" data-i18n="goRow"></button>
       </form></div></div></div></div>
     <div class="acc"><button type="button" class="acc-h" onclick="accToggle(this)"><span class="ai">ℹ️</span><span data-i18n="version"></span><em>MVP 2</em><span class="chev">▾</span></button>
       <div class="acc-b"><div><div class="acc-in"><div class="acc-txt" data-i18n="verInfo"></div></div></div></div></div>
@@ -1238,15 +1240,18 @@ const PWT={
  uz:{wlOr:"yoki",wlPwBtn:"🔑 Login va parol bilan kirish",wlLogin:"Login",wlPass:"Parol",wlEnter:"Kirish",wlForgot:"Parolni unutdingizmi? Kod bilan kirish",wlCodeWho:"Login, Telegram @username yoki ID",wlCodeSend:"Kodni botga yuborish",wlCodeSent:"Kod @tadrisai_bot ga yuborildi. Telegram'ni ochib, kodni shu yerga yozing.",wlCode:"6 xonali kod",wlPwHint:"Login va parol hali yo'qmi? Avval Telegram orqali kiring, keyin «Profil» bo'limida o'rnating.",wlBack:"← Login va parol bilan kirish",
   eWrong:"Login yoki parol noto'g'ri",eLocked:"Urinishlar juda ko'p. 15 daqiqadan keyin qayta urinib ko'ring yoki Telegram orqali kiring.",eNotFound:"Bunday foydalanuvchi topilmadi. Telegram orqali kiring.",eWait:"Kod yuborilgan. Yangisini {s} soniyadan keyin so'rash mumkin.",eCode:"Kod noto'g'ri",eCodeExp:"Kod eskirgan — yangisini so'rang",eBlocked:"Botga xabar yuborib bo'lmadi. Telegram'da @tadrisai_bot ni ochib, /start bosing.",eClosed:"Sayt hozircha yopiq — tez orada ochiladi.",eNet:"Server javob bermadi. Qayta urinib ko'ring.",
   pwTitle:"Sayt uchun login va parol",pwInfo:"tadris.ai saytiga Telegram'siz kirish uchun. Telegram ishlamay qolsa ham hisobingiz, balans va fayllaringiz o'zingizda qoladi.",pwNow:"Hozirgi login: {l}",pwNew:"Yangi parol (kamida 6 belgi)",pwSave:"Saqlash",pwSaved:"✅ Saqlandi. Endi tadris.ai ga shu login va parol bilan kira olasiz.",pwOn:"o'rnatilgan",pwOff:"o'rnatilmagan",eLogin:"Login 3–32 belgi: lotin harflari, raqam, _ yoki . (faqat raqamdan iborat bo'lmasin)",eShort:"Parol kamida 6 belgi bo'lsin",eTaken:"Bu login band — boshqasini tanlang",
-  bnSite:"tadris.ai saytida ham ishlating",bnSiteSub:"Login va parol o'rnating — Telegram'siz ham kira olasiz"},
+  bnSite:"tadris.ai saytida ham ishlating",bnSiteSub:"Login va parol o'rnating — Telegram'siz ham kira olasiz",
+  goTitle:"tadris.ai brauzerda ochiladi",goSub:"Sayt Chrome yoki Safari'da ochiladi va siz avtomatik kirasiz. Balans va fayllaringiz shu yerdagidek.",goBtn:"🌐 Brauzerda ochish",goLater:"Keyinroq",goRow:"🌐 Saytni brauzerda ochish"},
  ru:{wlOr:"или",wlPwBtn:"🔑 Войти по логину и паролю",wlLogin:"Логин",wlPass:"Пароль",wlEnter:"Войти",wlForgot:"Забыли пароль? Войти по коду",wlCodeWho:"Логин, Telegram @username или ID",wlCodeSend:"Отправить код в бот",wlCodeSent:"Код отправлен в @tadrisai_bot. Откройте Telegram и введите код здесь.",wlCode:"Код из 6 цифр",wlPwHint:"Ещё нет логина и пароля? Сначала войдите через Telegram, затем задайте их в разделе «Профиль».",wlBack:"← Войти по логину и паролю",
   eWrong:"Неверный логин или пароль",eLocked:"Слишком много попыток. Попробуйте через 15 минут или войдите через Telegram.",eNotFound:"Пользователь не найден. Войдите через Telegram.",eWait:"Код уже отправлен. Новый можно запросить через {s} с.",eCode:"Неверный код",eCodeExp:"Код устарел — запросите новый",eBlocked:"Не удалось написать вам в бот. Откройте @tadrisai_bot в Telegram и нажмите /start.",eClosed:"Сайт пока закрыт — скоро откроется.",eNet:"Сервер не ответил. Попробуйте ещё раз.",
   pwTitle:"Логин и пароль для сайта",pwInfo:"Для входа на tadris.ai без Telegram. Даже если Telegram перестанет работать, ваш аккаунт, баланс и файлы останутся с вами.",pwNow:"Текущий логин: {l}",pwNew:"Новый пароль (не менее 6 символов)",pwSave:"Сохранить",pwSaved:"✅ Сохранено. Теперь на tadris.ai можно входить по этому логину и паролю.",pwOn:"задан",pwOff:"не задан",eLogin:"Логин 3–32 символа: латиница, цифры, _ или . (не только цифры)",eShort:"Пароль — не менее 6 символов",eTaken:"Этот логин занят — выберите другой",
-  bnSite:"Пользуйтесь и на сайте tadris.ai",bnSiteSub:"Задайте логин и пароль — сможете входить и без Telegram"},
+  bnSite:"Пользуйтесь и на сайте tadris.ai",bnSiteSub:"Задайте логин и пароль — сможете входить и без Telegram",
+  goTitle:"tadris.ai откроется в браузере",goSub:"Сайт откроется в Chrome или Safari, вход выполнится автоматически. Баланс и файлы — те же.",goBtn:"🌐 Открыть в браузере",goLater:"Позже",goRow:"🌐 Открыть сайт в браузере"},
  en:{wlOr:"or",wlPwBtn:"🔑 Sign in with login and password",wlLogin:"Login",wlPass:"Password",wlEnter:"Sign in",wlForgot:"Forgot your password? Sign in with a code",wlCodeWho:"Login, Telegram @username or ID",wlCodeSend:"Send code to the bot",wlCodeSent:"The code was sent to @tadrisai_bot. Open Telegram and enter it here.",wlCode:"6-digit code",wlPwHint:"No login and password yet? Sign in with Telegram first, then set them in Profile.",wlBack:"← Sign in with login and password",
   eWrong:"Wrong login or password",eLocked:"Too many attempts. Try again in 15 minutes or sign in with Telegram.",eNotFound:"User not found. Sign in with Telegram.",eWait:"A code was already sent. You can request a new one in {s} s.",eCode:"Wrong code",eCodeExp:"The code has expired — request a new one",eBlocked:"Couldn't message you in the bot. Open @tadrisai_bot in Telegram and tap /start.",eClosed:"The site isn't open yet — coming soon.",eNet:"The server didn't respond. Please try again.",
   pwTitle:"Site login and password",pwInfo:"To sign in to tadris.ai without Telegram. Even if Telegram stops working, your account, balance and files stay with you.",pwNow:"Current login: {l}",pwNew:"New password (at least 6 characters)",pwSave:"Save",pwSaved:"✅ Saved. You can now sign in to tadris.ai with this login and password.",pwOn:"set",pwOff:"not set",eLogin:"Login: 3–32 characters — Latin letters, digits, _ or . (not digits only)",eShort:"Password must be at least 6 characters",eTaken:"This login is taken — choose another",
-  bnSite:"Use TadrisAI on tadris.ai too",bnSiteSub:"Set a login and password — sign in even without Telegram"}};
+  bnSite:"Use TadrisAI on tadris.ai too",bnSiteSub:"Set a login and password — sign in even without Telegram",
+  goTitle:"tadris.ai opens in your browser",goSub:"The site opens in Chrome or Safari and signs you in automatically. Same balance and files.",goBtn:"🌐 Open in browser",goLater:"Later",goRow:"🌐 Open the site in a browser"}};
 Object.assign(T.uz,PWT.uz); Object.assign(T.ru,PWT.ru); Object.assign(T.en,PWT.en); Object.assign(T.uzn,UZN.deep(PWT.uz));
 const LANGS={uz:"O'zbekcha",kaa:"Qaraqalpaqsha",uzn:"Özbekça (yangi alifbo)",ru:"Русский",en:"English"};
 const LCODE=l=>l==='uzn'?'ÖZ':l==='kaa'?'QQ':l==='kk'?'KZ':l==='ky'?'KG':l==='tg'?'TJ':l.toUpperCase();
@@ -2332,7 +2337,24 @@ function renderPw(){
   if(SRV.wlogin&&!$('pwLogin').value) $('pwLogin').value=SRV.wlogin;
   wlPh(a);
   const bn=$('siteBn'); if(bn) bn.classList.toggle('on',!WEB&&!!SRV.site&&!SRV.wlogin);
+  const sb=$('pwSiteBtn'); if(sb) sb.style.display=(!WEB&&SRV.site)?'':'none';
+  if(!WEB&&SRV.site&&!siteLink) sitePrefetch();
 }
+// --- Telegram ilovasidan saytni TASHQI brauzerda ochish (2026-11-22): oddiy havola Telegram ichki brauzerida qoladi,
+// WebApp.openLink esa Chrome/Safari'ni ochadi. Havola oldindan olinadi — openLink bosish bilan darhol chaqirilishi kerak.
+let siteLink=null, siteLinkT=0, siteLinkF=null;
+function sitePrefetch(){
+  if(WEB||siteLinkF) return;
+  siteLinkF=api('/web/link',{},12000).then(d=>{if(d&&d.ok){siteLink=d.url; siteLinkT=Date.now()}}).catch(()=>{}).finally(()=>{siteLinkF=null});
+}
+function openSite(){
+  const fresh=siteLink&&Date.now()-siteLinkT<8*60000, url=fresh?siteLink:'https://tadris.ai/';
+  try{if(tg&&tg.openLink) tg.openLink(url,{try_instant_view:false}); else window.open(url,'_blank')}catch(e){window.open(url,'_blank')}
+  siteLink=null; sitePrefetch(); goSiteClose();
+}
+function goSiteShow(){const o=$('goSite'); if(!o) return; o.querySelectorAll('[data-i18n]').forEach(e=>e.textContent=t(e.dataset.i18n)); o.classList.add('on'); sitePrefetch()}
+function goSiteClose(){const o=$('goSite'); if(o) o.classList.remove('on')}
+if(!WEB&&qs.get('go')==='site') document.addEventListener('DOMContentLoaded',goSiteShow);
 function openPwSet(){
   show('profile'); const a=$('accPw'); if(!a) return;
   a.classList.add('open'); setTimeout(()=>{a.scrollIntoView({behavior:'smooth',block:'center'}); $('pwLogin').focus()},250);
@@ -2371,6 +2393,13 @@ if(qs.get('form')) openForm(qs.get('form'));
       <span class="end-load on" id="endLoadF"><i><s id="endBarF"></s></i><em id="endPctF"></em></span></div>
     <button type="button" class="end-ov-pick" id="endOvPick" onclick="pickEndFull()"></button></div>
 </div>
+<div class="wlogin go-site" id="goSite" onclick="if(event.target===this)goSiteClose()"><div class="wl-card">
+  <div style="font-size:42px;line-height:1">🌐</div>
+  <h1 style="margin-top:12px" data-i18n="goTitle"></h1>
+  <p data-i18n="goSub"></p>
+  <button type="button" class="cta" id="goSiteBtn" onclick="openSite()" data-i18n="goBtn"></button>
+  <button type="button" class="wl-alt" onclick="goSiteClose()" data-i18n="goLater"></button>
+</div></div>
 <div class="wlogin" id="wlogin"><div class="wl-card">
   <div id="wlLogo"></div>
   <h1 data-i18n="wlTitle"></h1>
