@@ -726,6 +726,15 @@ body.wl-on .wrap,body.wl-on nav{visibility:hidden}
 .site-bn{display:none;align-items:center;gap:12px;margin:12px 0 0;padding:13px 14px;border-radius:var(--r-md);background:var(--chip);color:var(--text);cursor:pointer}
 .site-bn.on{display:flex}
 .go-site{background:rgba(5,8,20,.55)}
+/* 2026-11-22: Telegram ichida to'lov/balans yo'q — hammasi saytda */
+.hbal .hsite{display:none;font-weight:700;font-size:14px;padding:4px 6px 4px 0;white-space:nowrap}
+body.tg-nopay .hbal .v,body.tg-nopay .hbal .plus{display:none}
+body.tg-nopay .hbal .hsite{display:inline}
+body.tg-nopay .wallet,body.tg-nopay #txAnchor,body.tg-nopay #txList,body.tg-nopay .dk-bal{display:none!important}
+.site-card{display:none;padding:20px 18px;border-radius:var(--r-lg);background:linear-gradient(135deg,var(--violet),#3b82f6);color:#fff;margin-bottom:12px}
+body.tg-nopay .site-card{display:block}
+.site-card p{font-size:16px;font-weight:700;line-height:1.4;margin:0}
+.site-card button{margin-top:14px;width:100%;padding:13px;border-radius:var(--r-md);background:#fff;color:#1e1b4b;font-weight:800;font-size:15px}
 .site-bn .i{font-size:22px} .site-bn b{display:block;font-size:14.5px} .site-bn small{display:block;font-size:12.5px;color:var(--muted);margin-top:2px}
 .site-bn em{margin-left:auto;font-style:normal;color:var(--muted)}
 .wl-foot a{color:inherit;text-decoration:underline;cursor:pointer}
@@ -790,7 +799,7 @@ body.wl-on .wrap,body.wl-on nav{visibility:hidden}
       <div class="greet-top">
         <h1 id="hello"></h1>
         <button type="button" class="hbal" id="homeBal" onclick="openTopup(0)" aria-label="Balans">
-          <span class="v"><i data-i18n="balance"></i><b id="homeBalV"></b></span><span class="plus">+</span>
+          <span class="v"><i data-i18n="balance"></i><b id="homeBalV"></b></span><span class="plus">+</span><span class="hsite">🌐 <span data-i18n="goSiteShort"></span></span>
         </button>
       </div>
       <p data-i18n="sub"></p>
@@ -1043,6 +1052,7 @@ body.wl-on .wrap,body.wl-on nav{visibility:hidden}
   <section class="screen" id="profile">
     <div class="page-title" data-i18n="profTitle"></div>
     <div class="page-sub" id="profName"></div>
+    <div class="site-card" id="siteCard"><p data-i18n="siteCardT"></p><button type="button" onclick="openSite()" data-i18n="siteCardBtn"></button></div>
     <div class="wallet"><small data-i18n="balance"></small><div class="big" id="balBig">0</div><small id="giftLine" style="display:none;margin-top:-4px;opacity:.85"></small>
       <div class="row2"><button type="button" onclick="openTopup(0)" data-i18n="topupBtn"></button><button type="button" class="ghost" onclick="$('txAnchor').scrollIntoView({behavior:'smooth'})" data-i18n="history"></button></div></div>
     <div class="duo">
@@ -1241,17 +1251,20 @@ const PWT={
   eWrong:"Login yoki parol noto'g'ri",eLocked:"Urinishlar juda ko'p. 15 daqiqadan keyin qayta urinib ko'ring yoki bot orqali kiring.",eNotFound:"Bunday foydalanuvchi topilmadi. bot orqali kiring.",eWait:"Kod yuborilgan. Yangisini {s} soniyadan keyin so'rash mumkin.",eCode:"Kod noto'g'ri",eCodeExp:"Kod eskirgan — yangisini so'rang",eBlocked:"Botga xabar yuborib bo'lmadi. Telegram'da @tadrisai_bot ni ochib, /start bosing.",eClosed:"Sayt hozircha yopiq — tez orada ochiladi.",eNet:"Server javob bermadi. Qayta urinib ko'ring.",
   pwTitle:"Sayt uchun login va parol",pwInfo:"tadris.ai saytiga Telegram'siz kirish uchun. Telegram ishlamay qolsa ham hisobingiz, balans va fayllaringiz o'zingizda qoladi.",pwNow:"Hozirgi login: {l}",pwNew:"Yangi parol (kamida 6 belgi)",pwSave:"Saqlash",pwSaved:"✅ Saqlandi. Endi tadris.ai ga shu login va parol bilan kira olasiz.",pwOn:"o'rnatilgan",pwOff:"o'rnatilmagan",eLogin:"Login 3–32 belgi: lotin harflari, raqam, _ yoki . (faqat raqamdan iborat bo'lmasin)",eShort:"Parol kamida 6 belgi bo'lsin",eTaken:"Bu login band — boshqasini tanlang",
   bnSite:"tadris.ai saytida ham ishlating",bnSiteSub:"Login va parol o'rnating — Telegram'siz ham kira olasiz",
-  goTitle:"tadris.ai brauzerda ochiladi",goSub:"Sayt Chrome yoki Safari'da ochiladi va siz avtomatik kirasiz. Balans va fayllaringiz shu yerdagidek.",goBtn:"🌐 Brauzerda ochish",goLater:"Keyinroq",goRow:"🌐 Saytni brauzerda ochish",wlAcc:"Telegram'da hozir qaysi hisob ochiq bo'lsa, sayt o'sha hisob bilan kiradi. Boshqa hisob kerak bo'lsa, avval Telegram'da hisobni almashtiring."},
+  goTitle:"tadris.ai brauzerda ochiladi",goSub:"Sayt Chrome yoki Safari'da ochiladi va siz avtomatik kirasiz. Balans va fayllaringiz shu yerdagidek.",goBtn:"🌐 Brauzerda ochish",goLater:"Keyinroq",goRow:"🌐 Saytni brauzerda ochish",wlAcc:"Telegram'da hozir qaysi hisob ochiq bo'lsa, sayt o'sha hisob bilan kiradi. Boshqa hisob kerak bo'lsa, avval Telegram'da hisobni almashtiring.",
+  goSiteShort:"Saytga o'tish",siteCardT:"To'lovlar va boshqa amallar hammasi tadris.ai saytida amalga oshiriladi",siteCardBtn:"🌐 Saytga o'tish",lowBalSite:"💳 Bu buyurtma uchun balans yetarli emas. Balans tadris.ai saytida to'ldiriladi.",goTitleTop:"Balans saytda to'ldiriladi",goSubTop:"Sayt brauzerda ochiladi va siz avtomatik kirasiz. To'ldirgach, shu yerga qaytib buyurtmani davom ettiring.",goBtnTop:"🌐 Saytda to'ldirish"},
  ru:{wlOr:"или",wlPwBtn:"🔑 Войти по логину и паролю",wlLogin:"Логин",wlPass:"Пароль",wlEnter:"Войти",wlForgot:"Забыли пароль? Войти по коду",wlCodeWho:"Логин, Telegram @username или ID",wlCodeSend:"Отправить код в бот",wlCodeSent:"Код отправлен в @tadrisai_bot. Откройте Telegram и введите код здесь.",wlCode:"Код из 6 цифр",wlPwHint:"Ещё нет логина и пароля? Сначала войдите через бот, затем задайте их в разделе «Профиль».",wlBack:"← Войти по логину и паролю",
   eWrong:"Неверный логин или пароль",eLocked:"Слишком много попыток. Попробуйте через 15 минут или войдите через бот.",eNotFound:"Пользователь не найден. Войдите через бот.",eWait:"Код уже отправлен. Новый можно запросить через {s} с.",eCode:"Неверный код",eCodeExp:"Код устарел — запросите новый",eBlocked:"Не удалось написать вам в бот. Откройте @tadrisai_bot в Telegram и нажмите /start.",eClosed:"Сайт пока закрыт — скоро откроется.",eNet:"Сервер не ответил. Попробуйте ещё раз.",
   pwTitle:"Логин и пароль для сайта",pwInfo:"Для входа на tadris.ai без Telegram. Даже если Telegram перестанет работать, ваш аккаунт, баланс и файлы останутся с вами.",pwNow:"Текущий логин: {l}",pwNew:"Новый пароль (не менее 6 символов)",pwSave:"Сохранить",pwSaved:"✅ Сохранено. Теперь на tadris.ai можно входить по этому логину и паролю.",pwOn:"задан",pwOff:"не задан",eLogin:"Логин 3–32 символа: латиница, цифры, _ или . (не только цифры)",eShort:"Пароль — не менее 6 символов",eTaken:"Этот логин занят — выберите другой",
   bnSite:"Пользуйтесь и на сайте tadris.ai",bnSiteSub:"Задайте логин и пароль — сможете входить и без Telegram",
-  goTitle:"tadris.ai откроется в браузере",goSub:"Сайт откроется в Chrome или Safari, вход выполнится автоматически. Баланс и файлы — те же.",goBtn:"🌐 Открыть в браузере",goLater:"Позже",goRow:"🌐 Открыть сайт в браузере",wlAcc:"Вход выполняется с тем аккаунтом, который сейчас открыт в Telegram. Нужен другой — сначала переключите аккаунт в Telegram."},
+  goTitle:"tadris.ai откроется в браузере",goSub:"Сайт откроется в Chrome или Safari, вход выполнится автоматически. Баланс и файлы — те же.",goBtn:"🌐 Открыть в браузере",goLater:"Позже",goRow:"🌐 Открыть сайт в браузере",wlAcc:"Вход выполняется с тем аккаунтом, который сейчас открыт в Telegram. Нужен другой — сначала переключите аккаунт в Telegram.",
+  goSiteShort:"На сайт",siteCardT:"Оплата и все остальные действия выполняются на сайте tadris.ai",siteCardBtn:"🌐 Перейти на сайт",lowBalSite:"💳 Для этого заказа не хватает баланса. Баланс пополняется на сайте tadris.ai.",goTitleTop:"Баланс пополняется на сайте",goSubTop:"Сайт откроется в браузере, вход выполнится автоматически. После пополнения вернитесь сюда и продолжите заказ.",goBtnTop:"🌐 Пополнить на сайте"},
  en:{wlOr:"or",wlPwBtn:"🔑 Sign in with login and password",wlLogin:"Login",wlPass:"Password",wlEnter:"Sign in",wlForgot:"Forgot your password? Sign in with a code",wlCodeWho:"Login, Telegram @username or ID",wlCodeSend:"Send code to the bot",wlCodeSent:"The code was sent to @tadrisai_bot. Open Telegram and enter it here.",wlCode:"6-digit code",wlPwHint:"No login and password yet? Sign in via the bot first, then set them in Profile.",wlBack:"← Sign in with login and password",
   eWrong:"Wrong login or password",eLocked:"Too many attempts. Try again in 15 minutes or sign in via the bot.",eNotFound:"User not found. Sign in via the bot.",eWait:"A code was already sent. You can request a new one in {s} s.",eCode:"Wrong code",eCodeExp:"The code has expired — request a new one",eBlocked:"Couldn't message you in the bot. Open @tadrisai_bot in Telegram and tap /start.",eClosed:"The site isn't open yet — coming soon.",eNet:"The server didn't respond. Please try again.",
   pwTitle:"Site login and password",pwInfo:"To sign in to tadris.ai without Telegram. Even if Telegram stops working, your account, balance and files stay with you.",pwNow:"Current login: {l}",pwNew:"New password (at least 6 characters)",pwSave:"Save",pwSaved:"✅ Saved. You can now sign in to tadris.ai with this login and password.",pwOn:"set",pwOff:"not set",eLogin:"Login: 3–32 characters — Latin letters, digits, _ or . (not digits only)",eShort:"Password must be at least 6 characters",eTaken:"This login is taken — choose another",
   bnSite:"Use TadrisAI on tadris.ai too",bnSiteSub:"Set a login and password — sign in even without Telegram",
-  goTitle:"tadris.ai opens in your browser",goSub:"The site opens in Chrome or Safari and signs you in automatically. Same balance and files.",goBtn:"🌐 Open in browser",goLater:"Later",goRow:"🌐 Open the site in a browser",wlAcc:"You'll be signed in with the account currently open in Telegram. Need another one? Switch accounts in Telegram first."}};
+  goTitle:"tadris.ai opens in your browser",goSub:"The site opens in Chrome or Safari and signs you in automatically. Same balance and files.",goBtn:"🌐 Open in browser",goLater:"Later",goRow:"🌐 Open the site in a browser",wlAcc:"You'll be signed in with the account currently open in Telegram. Need another one? Switch accounts in Telegram first.",
+  goSiteShort:"Go to site",siteCardT:"Payments and all other actions are done on the tadris.ai website",siteCardBtn:"🌐 Go to the site",lowBalSite:"💳 Your balance isn't enough for this order. Top up on the tadris.ai website.",goTitleTop:"Top up on the website",goSubTop:"The site opens in your browser and signs you in automatically. After topping up, come back here and continue your order.",goBtnTop:"🌐 Top up on the site"}};
 Object.assign(T.uz,PWT.uz); Object.assign(T.ru,PWT.ru); Object.assign(T.en,PWT.en); Object.assign(T.uzn,UZN.deep(PWT.uz));
 const LANGS={uz:"O'zbekcha",kaa:"Qaraqalpaqsha",uzn:"Özbekça (yangi alifbo)",ru:"Русский",en:"English"};
 const LCODE=l=>l==='uzn'?'ÖZ':l==='kaa'?'QQ':l==='kk'?'KZ':l==='ky'?'KG':l==='tg'?'TJ':l.toUpperCase();
@@ -1368,7 +1381,8 @@ function openForm(m){
 }
 let FREE=Math.max(0,parseInt(qs.get('free')||'0',10)||0);
 const UNL=qs.get('unl')==='1';          // admin: cheklovsiz
-const SRV={live:null,disc:null,admin:null,quiz:null};   // /api/me dan keladi (ochilish, Premium chegirmasi); kelmaguncha telefon soati
+const SRV={live:null,disc:null,admin:null,quiz:null};
+try{if(!WEB&&localStorage.getItem('tadris_nopay')==='1'){SRV.nopay=true; document.body&&document.body.classList.add('tg-nopay')}}catch(e){}   // oldingi holat (miltillamasin)   // /api/me dan keladi (ochilish, Premium chegirmasi); kelmaguncha telefon soati
 const KNOWN=UNL||qs.has('free');        // eski tugmadan ochilsa - tekshiruvni bot o'zi qiladi
 let BALANCE=Math.max(0,parseInt(qs.get('bal')||'0',10)||0);   // botdan keladi
 function loadTx(){
@@ -1395,6 +1409,7 @@ const PMS=['payme','click','paynet'];
 function lastPm(){let v='';try{v=localStorage.getItem('tadris_pm')||''}catch(e){} if(!PMS.includes(v)) v=qs.get('lpm')||''; return PMS.includes(v)?v:''}
 let amt=50000, pm=lastPm(), topupBack='profile';   // oxirgi marta qaysi usulda to'lagan bo'lsa o'sha; birinchi marta — tanlanmagan
 function openTopup(need){
+  if(SRV.nopay){ if(need>0) goSiteShow('topup'); else show('profile'); return }   // Telegram ichida to'lov yo'q
   topupBack=document.querySelector('.screen.on')?.id||'profile';
   if(need>0){amt=Math.max(minTopup(),Math.ceil(need/1000)*1000); $('amtOwn').value=amt}
   else {amt=promoOn()?10000:offerOn()?20000:50000; $('amtOwn').value=''}
@@ -1445,7 +1460,10 @@ async function refreshMe(){
     if(typeof d.admin==='boolean'&&d.admin!==SRV.admin){SRV.admin=d.admin; renderHome()}
     if(typeof d.quiz==='boolean'&&d.quiz!==SRV.quiz){SRV.quiz=d.quiz; renderHome()}
     SRV.quiz_left=(typeof d.quiz_left==='number')?d.quiz_left:null;
-    SRV.site=d.site===true; SRV.wlogin=d.web_login||null; renderPw();
+    SRV.site=d.site===true; SRV.wlogin=d.web_login||null;
+    SRV.nopay=!WEB&&d.nopay===true; document.body.classList.toggle('tg-nopay',SRV.nopay); try{localStorage.setItem('tadris_nopay',SRV.nopay?'1':'')}catch(e){}
+    if(SRV.nopay){sitePrefetch(); renderPlan()}
+    renderPw();
     SRV.quiz_free=d.quiz_free===true; if(typeof d.quiz_cross==='boolean'&&d.quiz_cross!==SRV.quiz_cross){SRV.quiz_cross=d.quiz_cross; renderHome()}
     syncDesk();
     renderWallet(); renderPlan(); try{if(mode==='prez') syncDesign()}catch(e){}
@@ -1742,8 +1760,8 @@ function syncSize(){
   $('rngPrice').innerHTML=`${size} ${t('pcsSlides')} · ${discNow()&&!isFree(size)?'<s class="old-p">'+nosum(fullOf(size,img)+(endUse()==='paid'?endCost():0))+'</s>':''}<b>${isFree(size)?'🎁 '+t('free'):money(p)}</b>`;
   const low=KNOWN&&!UNL&&!isFree(size)&&BALANCE<p;
   $('lowBal').classList.toggle('on',low);
-  if(low) $('lowBal').innerHTML=t('lowBal').replace('{b}',money(BALANCE)).replace('{x}',money(p-BALANCE))+(FREE>0?'<br>'+t('giftRule'):'');
-  $('cta').textContent=isFree(size)?'🎁 '+t('ctaFree'):low?t('topupBtn2'):t('ctaPrez')+' · '+money(p);
+  if(low) $('lowBal').innerHTML=(SRV.nopay?t('lowBalSite'):t('lowBal').replace('{b}',money(BALANCE)).replace('{x}',money(p-BALANCE)))+(FREE>0?'<br>'+t('giftRule'):'');
+  $('cta').textContent=isFree(size)?'🎁 '+t('ctaFree'):low?t(SRV.nopay?'goBtnTop':'topupBtn2'):t('ctaPrez')+' · '+money(p);
   document.querySelectorAll('[data-from]').forEach(e=>{const k=e.dataset.from, d=k==='premium'&&discOn();
     e.innerHTML=(d?'<s class="old-p">'+nosum(fullOf(10,k))+'</s>':'')+nosum(priceOf(10,k))+' '+t('from')});
   const pt=$('premTag'); if(pt){const on=live(), d=on&&discOn(); pt.textContent=!on?t('soonTag'):d?'−'+nosum(PREM_DISC):t('newTag'); pt.classList.toggle('disc',d)}
@@ -2347,17 +2365,23 @@ function sitePrefetch(){
   if(WEB||siteLinkF) return;
   siteLinkF=api('/web/link',{},12000).then(d=>{siteLinkErr=!(d&&d.ok); if(d&&d.ok){siteLink=d.url; siteLinkT=Date.now()}}).catch(()=>{}).finally(()=>{siteLinkF=null});
 }
-function openSite(){
+let goKind='';
+function openSite(scr){
+  scr=scr||goKind;
   // 2026-11-22: kirish havolasi bo'lmasa (sayt bu hisob uchun yopiq) saytni ochmaymiz — aks holda brauzerda
   // oldin kirilgan BOSHQA hisob ochilib qoladi
   if(siteLinkErr&&!siteLink){toast('🌐',t('eClosed')); goSiteClose(); return}
-  const fresh=siteLink&&Date.now()-siteLinkT<8*60000, url=fresh?siteLink:'https://tadris.ai/';
+  const fresh=siteLink&&Date.now()-siteLinkT<8*60000, url=(fresh?siteLink:'https://tadris.ai/')+(scr?(fresh?'&':'?')+'screen='+scr:'');
   try{if(tg&&tg.openLink) tg.openLink(url,{try_instant_view:false}); else window.open(url,'_blank')}catch(e){window.open(url,'_blank')}
   siteLink=null; sitePrefetch(); goSiteClose();
 }
-function goSiteShow(){const o=$('goSite'); if(!o) return; o.querySelectorAll('[data-i18n]').forEach(e=>e.textContent=t(e.dataset.i18n)); o.classList.add('on'); sitePrefetch()}
-function goSiteClose(){const o=$('goSite'); if(o) o.classList.remove('on')}
-if(!WEB&&qs.get('go')==='site') document.addEventListener('DOMContentLoaded',goSiteShow);
+function goSiteShow(kind){
+  const o=$('goSite'); if(!o) return; goKind=kind==='topup'?'topup':'';
+  o.querySelectorAll('[data-i18n]').forEach(e=>e.textContent=t(e.dataset.i18n));
+  if(goKind){o.querySelector('h1').textContent=t('goTitleTop'); o.querySelector('p').textContent=t('goSubTop'); $('goSiteBtn').textContent=t('goBtnTop')}
+  o.classList.add('on'); sitePrefetch()}
+function goSiteClose(){const o=$('goSite'); if(o) o.classList.remove('on'); goKind=''}
+if(!WEB&&qs.get('go')==='site') document.addEventListener('DOMContentLoaded',()=>goSiteShow(qs.get('scr')));
 function openPwSet(){
   show('profile'); const a=$('accPw'); if(!a) return;
   a.classList.add('open'); setTimeout(()=>{a.scrollIntoView({behavior:'smooth',block:'center'}); $('pwLogin').focus()},250);
@@ -2372,20 +2396,20 @@ async function pwSave(ev){
   else wlMsg('pwMsg',wlErr(d&&d.error),1);
   return false;
 }
-function webSave(r){
+function webSave(r,scr){
   try{localStorage.setItem('tadris_ws',r.ws); if(r.boot) localStorage.setItem('tadris_boot',JSON.stringify(r.boot))}catch(e){}
-  location.replace(location.pathname);
+  location.replace(location.pathname+(scr==='topup'?'?screen=topup':''));
 }
 // botdagi «Saytni ochish» havolasi: ?w=... — shu brauzerga kiradi
-if(WEB&&qs.get('w')){const w=qs.get('w'); history.replaceState(null,'',location.pathname);
-  api('/web/claim',{w},15000).then(r=>{if(r&&r.ws) webSave(r); else if(!WS) toast('⌛',t('wlExp'))}).catch(()=>{});}
+if(WEB&&qs.get('w')){const w=qs.get('w'), scr=qs.get('screen'); history.replaceState(null,'',location.pathname);
+  api('/web/claim',{w},15000).then(r=>{if(r&&r.ws) webSave(r,scr); else if(!WS) toast('⌛',t('wlExp'))}).catch(()=>{});}
 async function webLogout(){
   try{await api('/web/logout',{},8000)}catch(e){}
   webForget(); location.reload();
 }
 if(WEB&&WS){const b=$('webOutBtn'); if(b) b.style.display='flex'}
 if(WEB&&!WS&&!qs.get('quiz')&&!qs.get('w')) document.addEventListener('DOMContentLoaded',webLoginShow);   // kirish oynasi skriptdan keyin turadi
-if(qs.get('screen')) show(qs.get('screen'));
+if(qs.get('screen')==='topup'&&!qs.get('w')){if(WEB&&WS) openTopup(0)} else if(qs.get('screen')) show(qs.get('screen'));
 if(qs.get('form')) openForm(qs.get('form'));
 </script>
 <script src="quiz.js?v=18"></script>
