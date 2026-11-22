@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+Disallow: /ex/
+
+Sitemap: https://tadris.ai/sitemap.xml
