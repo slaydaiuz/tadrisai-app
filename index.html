@@ -747,6 +747,9 @@ body.wl-on .wrap,body.wl-on nav{visibility:hidden}
 .site-bn{display:none;align-items:center;gap:12px;margin:12px 0 0;padding:13px 14px;border-radius:var(--r-md);background:var(--chip);color:var(--text);cursor:pointer}
 .site-bn.on{display:flex}
 .go-site{background:rgba(5,8,20,.55)}
+/* 2026-11-23, egasi: ilova yopilganda orqada xizmatlar ko'rinmasin — faqat bir tusli fon va «Saytga o'tish» */
+body.tg-closed .wrap,body.tg-closed nav,body.tg-closed .dk-side,body.tg-closed .toast{display:none!important}
+body.tg-closed .go-site{background:var(--bg)}
 /* 2026-11-22: Telegram ichida to'lov/balans yo'q — hammasi saytda */
 .hbal .hsite{display:none;font-weight:700;font-size:14px;padding:4px 6px 4px 0;white-space:nowrap}
 body.tg-nopay .hbal .v,body.tg-nopay .hbal .plus{display:none}
@@ -1405,7 +1408,9 @@ function openForm(m){
 let FREE=Math.max(0,parseInt(qs.get('free')||'0',10)||0);
 const UNL=qs.get('unl')==='1';          // admin: cheklovsiz
 const SRV={live:null,disc:null,admin:null,quiz:null};
-try{if(!WEB&&localStorage.getItem('tadris_nopay')==='1'){SRV.nopay=true; document.body&&document.body.classList.add('tg-nopay')}}catch(e){}   // oldingi holat (miltillamasin)   // /api/me dan keladi (ochilish, Premium chegirmasi); kelmaguncha telefon soati
+try{if(!WEB&&localStorage.getItem('tadris_nopay')==='1'){SRV.nopay=true; document.body&&document.body.classList.add('tg-nopay')}}catch(e){}
+try{if(!WEB&&(localStorage.getItem('tadris_closed')==='1'||qs.get('go')==='site')){SRV.closed=true; document.body&&document.body.classList.add('tg-closed')}}catch(e){}   // miltillamasin
+if(SRV.closed) document.addEventListener('DOMContentLoaded',()=>{if(SRV.closed) goSiteShow()});   // oldingi holat (miltillamasin)   // /api/me dan keladi (ochilish, Premium chegirmasi); kelmaguncha telefon soati
 const KNOWN=UNL||qs.has('free');        // eski tugmadan ochilsa - tekshiruvni bot o'zi qiladi
 let BALANCE=Math.max(0,parseInt(qs.get('bal')||'0',10)||0);   // botdan keladi
 function loadTx(){
@@ -1486,7 +1491,9 @@ async function refreshMe(){
     SRV.site=d.site===true; SRV.wlogin=d.web_login||null;
     SRV.nopay=!WEB&&d.nopay===true; document.body.classList.toggle('tg-nopay',SRV.nopay); try{localStorage.setItem('tadris_nopay',SRV.nopay?'1':'')}catch(e){}
     if(SRV.nopay){sitePrefetch(); renderPlan()}
-    SRV.closed=!WEB&&d.closed===true; if(SRV.closed) goSiteShow();       // 2026-11-22 23:59 dan Telegram ilovasi yopiq — faqat saytga o'tish
+    SRV.closed=!WEB&&d.closed===true; document.body.classList.toggle('tg-closed',SRV.closed);
+    try{localStorage.setItem('tadris_closed',SRV.closed?'1':'')}catch(e){}
+    if(SRV.closed) goSiteShow();       // 2026-11-22 23:59 dan Telegram ilovasi yopiq — faqat saytga o'tish
     renderPw();
     SRV.quiz_free=d.quiz_free===true; if(typeof d.quiz_cross==='boolean'&&d.quiz_cross!==SRV.quiz_cross){SRV.quiz_cross=d.quiz_cross; renderHome()}
     syncDesk();
