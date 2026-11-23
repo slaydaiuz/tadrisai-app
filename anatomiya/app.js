@@ -8,7 +8,7 @@ const $ = id => document.getElementById(id);
 const API = location.hostname === 'tadris.ai' ? '/api' : 'https://91-107-229-30.sslip.io/api';
 const QS = new URLSearchParams(location.search);
 const DEV = QS.get('dev') === '1' && location.hostname !== 'tadris.ai';
-const V = '5';
+const V = '6';
 
 // ------------------------------------------------------------------ matnlar
 const TX = {
@@ -327,6 +327,7 @@ function partColor(p) {
       R(/testis|epididym|ductus deferens|seminal|prostat|penis|scrot|ovary|uterus|vagina/, 0xd6a596) || R(/colon|caecum|cecum|rectum|appendix|taeni|anal/, 0xc97f6a))) c = 0xd98b7a;
     if (/segment/.test(en)) { const k = hashN(en); const col = new THREE.Color(c); col.offsetHSL(0, 0, (k - 0.5) * 0.18); return col.getHex(); }
   }
+  else if (s === 10) { if (p[5]) c = parseInt(p[5], 16); }
   else if (s === 9) { const pal = [0xe7c2a5, 0xdcb093, 0xf0d0b6, 0xd9a688, 0xe9bb9b]; c = pal[Math.floor(hashN(en) * pal.length)]; }
   const col = new THREE.Color(c); col.offsetHSL(0, 0, (hashN(en) - 0.5) * 0.07); return col.getHex();
 }
@@ -335,6 +336,7 @@ function hiddenByDefault(p) {
   if (p[3] === 4) return /fascia|bursa|sheath|septum/.test(en) && !/iliotibial/.test(en);
   if (p[3] === 7) return /dura|arachnoid|pia mater|falx|tentorium/.test(en);
   if (p[3] === 8) return /peritoneum|omentum|fascia|parietal pleura/.test(en);
+  if (p[3] === 10) return /spongy bone|transverse colon|ascending colon|descending colon|colic flexure|caecum|appendix|ileocaecal/.test(en);
   return false;
 }
 
@@ -354,10 +356,10 @@ async function openAtlas(id, pickN) {
   try { files = await Promise.all([...a.layers.map(L => loadFile(L.f)), a.ins ? loadFile('s2') : null]); } catch (e) { $('loadT').textContent = t('err'); console.error(e); return; }
   if (AT !== a) return;
   a.layers.forEach((L, li) => {
-    const only = L.only ? new Set(L.only.map(s => s.toLowerCase())) : null, ctx = L.role === 'ctx';
+    const only = L.only ? new Set(L.only.map(s => s.toLowerCase())) : null, nms = L.names ? new Set(L.names.map(s => s.toLowerCase())) : null, ctx = L.role === 'ctx';
     for (const fp of files[li]) {
       const p = C.parts[fp.id]; if (!p || p[4] !== 0) continue;
-      if (only && !nodeAnc(p[2]).some(ni => only.has(C.names[C.nodes[ni][0]][0].toLowerCase()))) continue;
+      if ((only || nms) && !((only && nodeAnc(p[2]).some(ni => only.has(C.names[C.nodes[ni][0]][0].toLowerCase()))) || (nms && nms.has(C.names[p[0]][0].toLowerCase())))) continue;
       const g = geom(fp);
       const mat = new THREE.MeshStandardMaterial({roughness: 0.55, metalness: 0.0, side: THREE.DoubleSide, clippingPlanes: [clipPlane], clipShadows: true});
       const m = new THREE.Mesh(g, mat);
@@ -655,7 +657,7 @@ function labels() {
   $('hint').textContent = t('hint'); $('sA').textContent = t('together'); $('sB').textContent = t('apart'); $('bGrid').innerHTML = '▦ ' + esc(t('grid'));
   [['tHome', 'home'], ['tView', 'view'], ['tBoth', 'both'], ['tHide', 'hideSel'], ['tIso', 'iso'], ['tAll', 'showAll'], ['tXray', 'xray'], ['tCut', 'cut'], ['tMore', 'more']].forEach(([id, k]) => { $(id).dataset.tip = t(k); $(id).setAttribute('aria-label', t(k)); });
   $('tBoth').classList.toggle('on', BOTH); $('tXray').classList.toggle('on', XRAY); $('tCut').classList.toggle('on', CUT.ax >= 0);
-  $('cred2').textContent = 'Z-Anatomy · BodyParts3D © DBCLS';
+  $('cred2').textContent = AT.src === 'hra' ? 'HuBMAP Human Reference Atlas (CC BY 4.0) · Visible Human, NLM' : 'Z-Anatomy · BodyParts3D © DBCLS';
   langBtns($('vlangs'), () => { labels(); if (sel) setLabel(selMeshes(), nm(sel.n), lat(sel.n)); setLmLabel(); selbar(); renderPanel(true); });
 }
 function openPanel(on) { $('panel').classList.toggle('open', on); }
