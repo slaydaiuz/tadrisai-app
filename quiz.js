@@ -145,7 +145,7 @@ document.head.appendChild(st);
 /* ---------- Tarjimalar (2026-11-16, egasi: «hammaga o'z tilida ko'rinsin») — uz / ru / en / kaa, uzn uz'dan avtomatik ---------- */
 const QD={
 uz:{
-  back:"← Orqaga", title:"Test quiz", trial:"SINOV", topic:"Mavzu", topicPh:"Masalan: Fotosintez", crossPh:"Masalan: Qon aylanish tizimi",
+  back:"← Orqaga", title:"Test quiz", trial:"SINOV", topic:"Mavzu", topicPh:"Masalan: Fotosintez",topicOpt:"Ixtiyoriy — fayl yuklandi, AI mavzuni fayldan o'zi aniqlaydi", crossPh:"Masalan: Qon aylanish tizimi",
   nQ:"Savollar soni", level:"Qiyinlik", qtype:"Savol turi", example:"Misol ›", grade:"Sinf / kurs", subject:"Fan",
   pickOpt:"Tanlang (ixtiyoriy)", other:"Boshqa…", ownPh:"O'zingiz yozing", qlang:"Til", qlangT:"Test qaysi tilda bo'lsin?", qlangC:"Krossvord qaysi tilda bo'lsin?", forWhom:"Kim uchun?", giftFree:"Tekin (2 000 so'mlik sovg'a)", giftUsed:"Sovg'a ishlatildi — test tekin tayyorlandi",
   self:"O'zim uchun", selfD:"mashq: javob va izoh darhol, qayta yechsa bo'ladi",
@@ -227,7 +227,7 @@ uz:{
   SUBJ:["Matematika","Algebra","Geometriya","Fizika","Kimyo","Biologiya","Geografiya","Tarix","Ona tili","Adabiyot","O'zbek tili","Rus tili","Ingliz tili","Nemis tili","Informatika","Huquq","Iqtisodiyot","Boshlang'ich ta'lim","Texnologiya","Tasviriy san'at","Musiqa","Jismoniy tarbiya","Tarbiya"]
 },
 ru:{
-  back:"← Назад", title:"Тест-квиз", trial:"ТЕСТ", topic:"Тема", topicPh:"Например: Фотосинтез", crossPh:"Например: Кровеносная система",
+  back:"← Назад", title:"Тест-квиз", trial:"ТЕСТ", topic:"Тема", topicPh:"Например: Фотосинтез",topicOpt:"Необязательно — файл загружен, ИИ сам определит тему по файлу", crossPh:"Например: Кровеносная система",
   nQ:"Количество вопросов", level:"Сложность", qtype:"Тип вопросов", example:"Пример ›", grade:"Класс / курс", subject:"Предмет",
   pickOpt:"Не выбрано", other:"Другое…", ownPh:"Напишите сами", qlang:"Язык", qlangT:"На каком языке сделать тест?", qlangC:"На каком языке сделать кроссворд?", forWhom:"Для кого?", giftFree:"Бесплатно (подарок 2 000 сум)", giftUsed:"Подарок использован — тест сделан бесплатно",
   self:"Для себя", selfD:"практика: ответ и пояснение сразу, можно пройти заново",
@@ -309,7 +309,7 @@ ru:{
   SUBJ:["Математика","Алгебра","Геометрия","Физика","Химия","Биология","География","История","Родной язык","Литература","Узбекский язык","Русский язык","Английский язык","Немецкий язык","Информатика","Право","Экономика","Начальное образование","Технология","Изобразительное искусство","Музыка","Физкультура","Воспитание"]
 },
 en:{
-  back:"← Back", title:"Test quiz", trial:"TRIAL", topic:"Topic", topicPh:"E.g. Photosynthesis", crossPh:"E.g. The circulatory system",
+  back:"← Back", title:"Test quiz", trial:"TRIAL", topic:"Topic", topicPh:"E.g. Photosynthesis",topicOpt:"Optional — a file is attached, the AI will take the topic from it", crossPh:"E.g. The circulatory system",
   nQ:"Number of questions", level:"Difficulty", qtype:"Question type", example:"Example ›", grade:"Grade / year", subject:"Subject",
   pickOpt:"Choose (optional)", other:"Other…", ownPh:"Type your own", qlang:"Language", qlangT:"Which language should the test be in?", qlangC:"Which language should the crossword be in?", forWhom:"Who is it for?", giftFree:"Free (2 000 UZS gift)", giftUsed:"Gift used — the test was made for free",
   self:"For myself", selfD:"practice: answer and explanation right away, can retake",
@@ -528,7 +528,7 @@ function open(){
   view(`<button class="back" onclick="show('home')">${L('back')}</button>
   <div class="qz-head"><h1>${L('title')}</h1>${qFree()?`<span class="qz-tag">${L('trial')}</span>`:''}</div>
   <div class="group" style="margin-top:0">${L('topic')}</div>
-  <textarea class="qz-ta" id="qzTopic" placeholder="${L('topicPh')}">${esc(S.topic||'')}</textarea>
+  <textarea class="qz-ta" id="qzTopic" placeholder="${S.src?L('topicOpt'):L('topicPh')}">${esc(S.topic||'')}</textarea>
   <div class="qz-src" id="qzSrc">${srcBox()}</div>
   <div class="group">${L('nQ')}</div>
   <div class="rng" style="margin-top:62px"><div class="rng-track"><div class="rng-fill" id="qzFill"></div></div><div id="qzTicks"></div>
@@ -577,8 +577,9 @@ async function srcUp(inp){
   if(!d.ok){S.src=null; $('qzSrc').innerHTML=srcBox();
     toast('⚠️',{notext:L('noText'),type:L('badType'),big:L('tooBig')}[d.error]||L('readErr'));return}
   S.src={src:d.src,name:d.name,kind:d.kind,chars:d.chars,cut:d.cut}; $('qzSrc').innerHTML=srcBox(); hap('ok');
+  if($('qzTopic')) $('qzTopic').placeholder=L('topicOpt');
 }
-function srcDel(){S.src=null; $('qzSrc').innerHTML=srcBox()}
+function srcDel(){S.src=null; $('qzSrc').innerHTML=srcBox(); if($('qzTopic')) $('qzTopic').placeholder=L('topicPh')}
 function pickSel(id,v){
   const o=$(id+'O'); o.style.display=v==='__o'?'block':'none';
   const k=id==='qzGrade'?'grade':'subject'; S[k]=v==='__o'?(o.value||''):v; if(v==='__o') o.focus();
@@ -680,11 +681,11 @@ function openCross(){
 }
 async function create(){
   const topic=($('qzTopic').value||'').trim(), cross=S.kind==='cross';
-  if(topic.length<3){toast('✏️',L('writeTopic'));$('qzTopic').focus();return}
+  if(topic.length<3&&!(S.src&&!cross)){toast('✏️',L('writeTopic'));$('qzTopic').focus();return}   // fayl yuklansa mavzu ixtiyoriy
   S.topic=topic; hap();
   const t0=Date.now();
   view(`<div class="qz-load"><div class="qz-spin"></div><b style="font-size:17px">${L(cross?'aiCross':'aiTest')}</b>
-    <div style="color:var(--muted);font-size:14px">«${esc(topic)}»${!cross&&S.src?'<br>📎 '+esc(S.src.name):''}<br><span id="qzSec">0</span> ${L('sec')}</div></div>`);
+    <div style="color:var(--muted);font-size:14px">${topic?'«'+esc(topic)+'»':''}${!cross&&S.src?(topic?'<br>':'')+'📎 '+esc(S.src.name):''}<br><span id="qzSec">0</span> ${L('sec')}</div></div>`);
   timer=setInterval(()=>{const e=$('qzSec'); if(e) e.textContent=Math.round((Date.now()-t0)/1000)},1000);
   const body=cross?{kind:'cross',topic,n:S.cn,level:S.level,qlang:S.qlang}
     :{kind:'test',topic,n:S.n,level:S.level,aud:S.aud,qlang:S.qlang,qtype:S.qtype,grade:S.grade,subject:S.subject,src:S.src&&S.src.src};
