@@ -8,7 +8,7 @@ const $ = id => document.getElementById(id);
 const API = location.hostname === 'tadris.ai' ? '/api' : 'https://91-107-229-30.sslip.io/api';
 const QS = new URLSearchParams(location.search);
 const DEV = QS.get('dev') === '1' && location.hostname !== 'tadris.ai';
-const V = '2';
+const V = '3';
 
 // ------------------------------------------------------------------ matnlar
 const TX = {
@@ -109,7 +109,7 @@ Object.assign(TX.uz, {kick: '3D anatomiya', title: "Tanani qatlamma-qatlam o'rga
   home: 'Boshiga qaytarish', view: 'Tomonlar', both: 'Juftini birga belgilash', hideSel: 'Yashirish', iso: "Yolg'iz qoldirish", showAll: 'Hammasini qaytarish', xray: 'Shaffof rejim', cut: 'Kesib ko\'rish', more: 'Yana',
   vF: 'Old', vB: 'Orqa', vL: 'Chap yon', vR: "O'ng yon", vT: 'Tepa', vD: 'Past', vFit: "Ekranga sig'dirish", cutD: 'Tekislikni surib, ichini oching.', cPos: 'Chuqurlik', cFlip: 'Teskari tomonni qoldirish',
   mSel: 'Tanlangan qism', mGroup: "Guruhini yolg'iz qoldirish", mFocus: "Yaqindan ko'rish", mLm: "Belgilarni ko'rsatish", mFull: 'Butun ekran', mKeys: "Tugmalar: H yashirish · I yolg'iz · A qaytarish · F yaqinlash · X shaffof · Esc bekor",
-  together: 'Butun', apart: "Bo'laklab", search: "Ro'yxatdan qidirish…", openAll: 'Ochish', closeAll: 'Yopish', stCount: '{n} ta · {s} tasi ochilgan',
+  together: 'Butun', apart: 'Ajratilgan', grid: 'Qatorga terish', search: "Ro'yxatdan qidirish…", openAll: 'Ochish', closeAll: 'Yopish', stCount: '{n} ta · {s} tasi ochilgan',
   layers: 'Tizimlar', opacity: "Ko'rinish darajasi", solo: "Yolg'iz", reset: 'Asliga', ctx: 'Skelet (orqa fon)', insT: 'Mushak yopishgan joylar', insD: "Suyak tanlansa — unga yopishgan mushaklar joyi, mushak tanlansa — uning suyakdagi izlari bo'yaladi.",
   insO: 'Boshlanadi', insE: 'Yopishadi', lmT: 'Suyak belgilari', lmD: "Tanlangan suyak yoki a'zoning nomli nuqtalari: do'mboq, teshik, qirra va boshqalar.",
   pick: 'Hali hech narsa tanlanmagan', pickD: 'Modeldan biror qismni bosing yoki ro\'yxatdan toping.', aOnly: "Yolg'iz qoldirish", aHide: 'Yashirish', aFocus: 'Yaqindan', aAll: 'Hammasi',
@@ -124,7 +124,7 @@ Object.assign(TX.ru, {kick: '3D-анатомия', title: 'Изучайте те
   home: 'В начало', view: 'Стороны', both: 'Отмечать пару вместе', hideSel: 'Скрыть', iso: 'Оставить одну', showAll: 'Вернуть всё', xray: 'Прозрачный режим', cut: 'Разрез', more: 'Ещё',
   vF: 'Спереди', vB: 'Сзади', vL: 'Слева', vR: 'Справа', vT: 'Сверху', vD: 'Снизу', vFit: 'Вписать в экран', cutD: 'Двигайте плоскость и заглядывайте внутрь.', cPos: 'Глубина', cFlip: 'Оставить другую сторону',
   mSel: 'Выбранная часть', mGroup: 'Оставить её группу', mFocus: 'Рассмотреть ближе', mLm: 'Показывать ориентиры', mFull: 'На весь экран', mKeys: 'Клавиши: H скрыть · I оставить · A вернуть · F приблизить · X прозрачно · Esc отмена',
-  together: 'Целиком', apart: 'По частям', search: 'Поиск по списку…', openAll: 'Раскрыть', closeAll: 'Свернуть', stCount: '{n} · открыто {s}',
+  together: 'Целиком', apart: 'Раздвинуто', grid: 'Разложить рядами', search: 'Поиск по списку…', openAll: 'Раскрыть', closeAll: 'Свернуть', stCount: '{n} · открыто {s}',
   layers: 'Системы', opacity: 'Видимость', solo: 'Одна', reset: 'Как было', ctx: 'Скелет (фон)', insT: 'Где крепятся мышцы', insD: 'Выбрана кость — окрашиваются места крепления её мышц; выбрана мышца — её следы на костях.',
   insO: 'Начинается', insE: 'Крепится', lmT: 'Ориентиры на костях', lmD: 'Названные точки выбранной кости или органа: бугры, отверстия, гребни и другие.',
   pick: 'Пока ничего не выбрано', pickD: 'Нажмите на часть модели или найдите её в списке.', aOnly: 'Оставить одну', aHide: 'Скрыть', aFocus: 'Ближе', aAll: 'Всё',
@@ -139,7 +139,7 @@ Object.assign(TX.en, {kick: '3D anatomy', title: 'Learn the body layer by layer'
   home: 'Back to start', view: 'Sides', both: 'Mark the pair together', hideSel: 'Hide', iso: 'Keep only this', showAll: 'Bring all back', xray: 'See-through', cut: 'Cut open', more: 'More',
   vF: 'Front', vB: 'Back', vL: 'Left', vR: 'Right', vT: 'Top', vD: 'Bottom', vFit: 'Fit to screen', cutD: 'Slide the plane to look inside.', cPos: 'Depth', cFlip: 'Keep the other side',
   mSel: 'Selected part', mGroup: 'Keep only its group', mFocus: 'Look closer', mLm: 'Show landmarks', mFull: 'Full screen', mKeys: 'Keys: H hide · I keep · A bring back · F zoom · X see-through · Esc clear',
-  together: 'Whole', apart: 'In pieces', search: 'Search the list…', openAll: 'Expand', closeAll: 'Collapse', stCount: '{n} · {s} opened',
+  together: 'Whole', apart: 'Apart', grid: 'Lay out in rows', search: 'Search the list…', openAll: 'Expand', closeAll: 'Collapse', stCount: '{n} · {s} opened',
   layers: 'Systems', opacity: 'Visibility', solo: 'Only', reset: 'Reset', ctx: 'Skeleton (background)', insT: 'Where muscles attach', insD: 'Pick a bone to paint where its muscles attach, or pick a muscle to see its marks on the bones.',
   insO: 'Starts', insE: 'Attaches', lmT: 'Bone landmarks', lmD: 'Named points on the selected bone or organ: tubercles, holes, ridges and more.',
   pick: 'Nothing picked yet', pickD: 'Tap a part of the model or find it in the list.', aOnly: 'Keep only this', aHide: 'Hide', aFocus: 'Closer', aAll: 'All',
@@ -206,9 +206,10 @@ function renderHome() {
   $('cats').querySelectorAll('button').forEach(b => b.onclick = () => { CAT = b.dataset.c; renderHome(); });
   $('grid').innerHTML = C.atlases.filter(a => CAT === 'all' || a.cat === CAT).map(a => {
     const c = catOf(a.cat), s = seenGet(a.id).size, p = a.n ? Math.floor(s / a.n * 100) : 0;
-    return `<button class="acard" data-a="${a.id}" style="--c:${c[2]}"><div class="row"><div class="ic">${a.ic}</div><span class="tag">${esc(tr(c[1]))}</span></div><b>${esc(tr(a.t))}</b><p>${esc(tr(a.d))}</p>
+    return `<button class="acard" data-a="${a.id}" style="--c:${c[2]}"><div class="pic"><img src="img/${a.id}.webp?v=${V}" alt="" loading="lazy"><span class="tag">${esc(tr(c[1]))}</span>${a.id !== 'butun-tana' && s ? `<span class="pct">${p}%</span>` : ''}</div>
+      <div class="cb"><b>${esc(tr(a.t))}</b><p>${esc(tr(a.d))}</p>
       <div class="meta"><span>${t('nSt', {n: a.n})}</span>${a.lmn ? `<span>${t('nLm', {n: a.lmn})}</span>` : ''}<span>${t('mb', {n: String(a.mb).replace('.', ',')})}</span></div>
-      ${a.id !== 'butun-tana' ? `<div class="pr"><span>${t('seenP', {p})}</span><span>${s} / ${a.n}</span></div><div class="pb"><i style="width:${p}%"></i></div>` : ''}</button>`;
+      ${a.id !== 'butun-tana' ? `<div class="pb"><i style="width:${p}%"></i></div>` : ''}</div></button>`;
   }).join('');
   $('grid').querySelectorAll('.acard').forEach(b => b.onclick = () => openAtlas(b.dataset.a));
   $('credit').innerHTML = esc(t('credit', {c: C.credit})) + ' <a href="https://github.com/Z-Anatomy/Models-of-human-anatomy" target="_blank" rel="noopener">Z-Anatomy</a> · <a href="https://dbarchive.biosciencedbc.jp/en/bodyparts3d/" target="_blank" rel="noopener">BodyParts3D</a>';
@@ -341,7 +342,7 @@ async function openAtlas(id, pickN) {
   history.replaceState(null, '', location.pathname + '?a=' + a.id + (pickN != null ? '&n=' + pickN : '') + (DEV ? '&dev=1' : ''));
   labels();
   if (!initGL()) { $('loadT').textContent = t('noGl'); $('load').classList.remove('hide'); return; }
-  resize(); $('load').classList.remove('hide'); $('loadT').textContent = t('load'); $('exp').value = 0; explodeK = 0;
+  resize(); $('load').classList.remove('hide'); $('loadT').textContent = t('load'); $('exp').value = 0; explodeK = 0; GRID = null; GK = 0; $('bGrid').classList.remove('on');
   if (root) { scene.remove(root); root.traverse(o => { if (o.isMesh) { o.geometry.dispose(); o.material.dispose(); } }); }
   root = new THREE.Group(); scene.add(root); MESHES = []; ITEMS = []; BYN = new Map(); INS = []; LMG = null;
   renderPanel();
@@ -393,6 +394,7 @@ async function openAtlas(id, pickN) {
 
 // --- ko'rinish va ranglar
 function applyVis() {
+  GRID = null;
   for (const m of MESHES) {
     const u = m.userData, lay = u.ctx ? 0 : u.sys;
     let v = LAYV[lay] !== false && !u.hidden;
@@ -400,6 +402,7 @@ function applyVis() {
     m.visible = v;
   }
   updateIns(); updateLm();
+  if (explodeK > 0 || GK > 0) { if (GK > 0) buildGrid(); place(); }
 }
 function paint() {
   const qmode = (Q && Q.i < Q.list.length && Q.mode !== 'find') || (DP && DP.q.length);
@@ -454,10 +457,55 @@ function faceMs(ms) {   // savolda belgilangan qism kameraga qarab tursin
   dir.y = dir.y * 0.3; dir.normalize(); if (Math.abs(dir.z) < 0.25 && Math.abs(dir.x) < 0.25) dir.set(0, 0, 1);
   const d = radius / Math.sin(fitFov() / 2) * 0.9; animCam(dir.multiplyScalar(d).add(new THREE.Vector3(0, s.center.y * 0.5, 0)), new THREE.Vector3(0, s.center.y * 0.5, 0));
 }
-function setExplode(k) {
-  explodeK = k; for (const m of MESHES) m.position.copy(m.userData.c).sub(center).multiplyScalar(k * 0.9);
-  for (const m of INS) { const off = boneOffset(m.userData.p[6], m.userData.p[1]); m.position.copy(off || m.userData.c.clone().sub(center).multiplyScalar(k * 0.9)); }
+// --- ajratish: 0…0.5 — markazdan sochiladi, 0.5…1 — hamma bo'lak kattadan kichikka qarab qator-qator teriladi
+let GRID = null, GSZ = null;
+function buildGrid() {
+  const ms = MESHES.filter(m => !m.userData.ctx && !m.userData.hidden && LAYV[m.userData.sys] !== false && (!SOLO || m.userData.sys === SOLO));
+  const sz = m => { const b = m.geometry.boundingBox; return [b.max.x - b.min.x, b.max.y - b.min.y]; };
+  const items = ms.map(m => { const [w, h] = sz(m); return {m, w, h, s: Math.max(w, h)}; }).sort((a, b) => b.s - a.s);
+  if (!items.length) { GRID = new Map(); GSZ = new THREE.Vector3(1, 1, 1); return; }
+  const gap = Math.max(radius * 0.012, items[Math.floor(items.length / 2)].s * 0.35);
+  const area = items.reduce((a, it) => a + (it.w + gap) * (it.h + gap), 0);
+  const W = Math.max(items[0].w + gap, Math.sqrt(area * Math.max(0.6, camera.aspect)) * 1.05);
+  const slots = []; let x = 0, y = 0, rowH = 0, row = [];
+  const flush = () => { const off = (W - x) / 2; row.forEach(r => { r.x += off; r.y = y - rowH / 2; }); y -= rowH + gap; x = 0; rowH = 0; row = []; };
+  for (const it of items) {
+    if (x > 0 && x + it.w > W) flush();
+    const r = {it, x: x + it.w / 2, y: 0}; row.push(r); slots.push(r); x += it.w + gap; rowH = Math.max(rowH, it.h);
+  }
+  flush();
+  const H = -y - gap; GRID = new Map(); GSZ = new THREE.Vector3(W, H, items[0].s * 0.3);
+  for (const r of slots) GRID.set(r.it.m, new THREE.Vector3(r.x - W / 2, r.y + H / 2, 0).add(center).sub(r.it.m.userData.c));
+}
+const ease = t => t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2;
+let GK = 0;   // 0 — joyida, 1 — qatorga terilgan
+function setExplode(k) { explodeK = k; place(); }
+function setGrid(g) { GK = g; place(); }
+function place() {
+  const t1 = explodeK, t2 = ease(GK);
+  if (t2 > 0 && !GRID) buildGrid();
+  for (const m of MESHES) {
+    const u = m.userData, rad = u.c.clone().sub(center).multiplyScalar(t1 * 0.9);
+    if (u.ctx) { m.position.copy(rad); m.visible = GK < 0.1 && LAYV[0] !== false && !u.hidden; continue; }
+    const g = GRID && GRID.get(m);
+    if (t2 > 0 && g) m.position.copy(rad.lerp(g, t2)); else m.position.copy(rad);
+  }
+  for (const m of INS) { const off = boneOffset(m.userData.p[6], m.userData.p[1]); m.position.copy(off || m.userData.c.clone().sub(center).multiplyScalar(t1 * 0.9)); }
+  if (GK > 0) { INS.forEach(m => m.visible = false); if (LMG) LMG.visible = false; } else if (LMG) LMG.visible = true;
   if (LMG && sel) { const ms = selMeshes(); if (ms.length) LMG.position.copy(ms[0].position); }
+}
+let gridAnim = 0;
+function toggleGrid(on) {
+  on = on ?? GK < 0.5; const from = GK, to = on ? 1 : 0, t0 = performance.now(); cancelAnimationFrame(gridAnim);
+  if (on) { buildGrid(); fitGrid(); } else resetView();
+  $('bGrid').classList.toggle('on', on);
+  const tick = now => { const k = Math.min(1, (now - t0) / 1400); setGrid(from + (to - from) * k); if (k < 1) gridAnim = requestAnimationFrame(tick); };
+  gridAnim = requestAnimationFrame(tick);
+}
+function fitGrid() {
+  if (!GSZ) return; const v = camera.fov * Math.PI / 180, h = 2 * Math.atan(Math.tan(v / 2) * camera.aspect);
+  const d = Math.max(GSZ.y / 2 / Math.tan(v / 2), GSZ.x / 2 / Math.tan(h / 2)) * 1.06 + GSZ.z;
+  animCam(new THREE.Vector3(0, 0, d), new THREE.Vector3(0, 0, 0)); camera.far = Math.max(camera.far, d * 4); camera.updateProjectionMatrix(); controls.maxDistance = Math.max(controls.maxDistance, d * 2);
 }
 // insertion va landmark nuqtalari suyak bilan birga siljisin
 function boneOffset(n, side) { const it = BYN.get(n); if (!it) return null; const m = it.ms.find(x => !side || x.userData.side === side || !x.userData.side) || it.ms[0]; return m.position; }
@@ -579,7 +627,7 @@ function labels() {
   $('vBack').title = t('back'); $('vCrumb').textContent = t('kick') + ' / ' + tr(catOf(AT.cat)[1]); $('vT').textContent = tr(AT.t); $('pT').textContent = tr(AT.t);
   $('bPanel').innerHTML = '☰ ' + t('panel');
   const tb = $('tabs').querySelectorAll('button'); ['tTree', 'tLay', 'tInfo', 'tLearn'].forEach((k, i) => tb[i].textContent = t(k));
-  $('hint').textContent = t('hint'); $('sA').textContent = t('together'); $('sB').textContent = t('apart');
+  $('hint').textContent = t('hint'); $('sA').textContent = t('together'); $('sB').textContent = t('apart'); $('bGrid').innerHTML = '▦ ' + esc(t('grid'));
   [['tHome', 'home'], ['tView', 'view'], ['tBoth', 'both'], ['tHide', 'hideSel'], ['tIso', 'iso'], ['tAll', 'showAll'], ['tXray', 'xray'], ['tCut', 'cut'], ['tMore', 'more']].forEach(([id, k]) => { $(id).dataset.tip = t(k); $(id).setAttribute('aria-label', t(k)); });
   $('tBoth').classList.toggle('on', BOTH); $('tXray').classList.toggle('on', XRAY); $('tCut').classList.toggle('on', CUT.ax >= 0);
   $('cred2').textContent = 'Z-Anatomy · BodyParts3D © DBCLS';
@@ -904,10 +952,11 @@ function bind() {
   $('tHide').onclick = hideSel; $('tIso').onclick = isoSel; $('tAll').onclick = showAll;
   $('tXray').onclick = () => { XRAY = !XRAY; labels(); paint(); };
   $('exp').oninput = e => setExplode(e.target.value / 100);
+  $('bGrid').onclick = () => toggleGrid();
   let playing = 0;
   $('bPlay').onclick = () => {
     if (playing) return; const from = explodeK, to = from > 0.5 ? 0 : 1, t0 = performance.now(); playing = 1;
-    const tick = now => { const k = Math.min(1, (now - t0) / 1200), e = k < .5 ? 2 * k * k : 1 - Math.pow(-2 * k + 2, 2) / 2, v = from + (to - from) * e; setExplode(v); $('exp').value = v * 100; if (k < 1) requestAnimationFrame(tick); else playing = 0; };
+    const tick = now => { const k = Math.min(1, (now - t0) / 1200), v = from + (to - from) * ease(k); setExplode(v); $('exp').value = v * 100; if (k < 1) requestAnimationFrame(tick); else playing = 0; };
     requestAnimationFrame(tick);
   };
   $('gq').oninput = e => gsearch(e.target.value);
@@ -916,7 +965,7 @@ function bind() {
     if ($('view').classList.contains('hide') || /INPUT|TEXTAREA/.test(document.activeElement.tagName)) return;
     const k = e.key.toLowerCase();
     if (k === 'h') hideSel(); else if (k === 'i') isoSel(); else if (k === 'a') showAll(); else if (k === 'f') { if (sel) focusMs(selMeshes()); else resetView(); }
-    else if (k === 'x') { XRAY = !XRAY; labels(); paint(); } else if (k === 'escape') { closePops(); if (!Q && !DP) unselect(); }
+    else if (k === 'x') { XRAY = !XRAY; labels(); paint(); } else if (k === 'g') toggleGrid(); else if (k === 'escape') { closePops(); if (!Q && !DP) unselect(); }
   });
 }
 
@@ -924,6 +973,7 @@ function bind() {
   const ok = await gate();
   if (!ok) { $('lkT').textContent = t('lockT'); $('lkD').textContent = t('lockD'); $('lkB').textContent = t('lockB'); $('lock').classList.remove('hide'); return; }
   C = await (await fetch('z/cat.json?v=' + V)).json();
+  if (QS.get('shot') && DEV) { document.body.classList.add('shot'); window.__za = {view: (x, y, z) => { resetView(new THREE.Vector3(x, y, z), true); }, ready: () => !!(AT && MESHES.length && $('load').classList.contains('hide')), ctx: on => { LAYV[0] = on; applyVis(); paint(); }}; }
   fetch('z/info.json?v=' + V).then(r => r.ok ? r.json() : null).then(d => { INFO = d; if (AT && TAB === 'info') renderPanel(true); }).catch(() => {});
   document.documentElement.lang = LANG;
   bind(); renderHome();
