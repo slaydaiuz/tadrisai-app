@@ -8,7 +8,7 @@ const $ = id => document.getElementById(id);
 const API = location.hostname === 'tadris.ai' ? '/api' : 'https://91-107-229-30.sslip.io/api';
 const QS = new URLSearchParams(location.search);
 const DEV = QS.get('dev') === '1' && location.hostname !== 'tadris.ai';
-const V = '4';
+const V = '5';
 
 // ------------------------------------------------------------------ matnlar
 const TX = {
@@ -247,9 +247,13 @@ function initGL() {
   renderer.setClearColor(0x000000, 0); renderer.localClippingEnabled = true;
   scene = new THREE.Scene();
   camera = new THREE.PerspectiveCamera(32, 1, 0.01, 100);
-  scene.add(new THREE.HemisphereLight(0xffffff, 0x334155, 1.05));
-  const d1 = new THREE.DirectionalLight(0xffffff, 1.5); camera.add(d1); d1.position.set(0.5, 0.8, 1);
-  const d2 = new THREE.DirectionalLight(0xbfe9ff, 0.35); scene.add(d2); d2.position.set(-1, -0.3, -1);
+  renderer.toneMapping = THREE.ACESFilmicToneMapping; renderer.toneMappingExposure = 1.0;
+  // studiya yorug'ligi: kamera bilan birga aylanadi — asosiy (yuqori-o'ngdan), yumshatuvchi (chapdan), kontur (orqadan)
+  scene.add(new THREE.HemisphereLight(0xf4f7ff, 0x2a2238, 0.7));
+  const key = new THREE.DirectionalLight(0xfff6ec, 2.0); key.position.set(0.7, 1.0, 0.9); camera.add(key);
+  const fill = new THREE.DirectionalLight(0xd6e4ff, 0.8); fill.position.set(-1.0, 0.15, 0.6); camera.add(fill);
+  const rim = new THREE.DirectionalLight(0xc8b8ff, 1.3); rim.position.set(0.1, 0.6, -1.0); camera.add(rim);
+  const low = new THREE.DirectionalLight(0xffe2d0, 0.35); low.position.set(0, -1, 0.4); camera.add(low);
   scene.add(camera);
   controls = new OrbitControls(camera, renderer.domElement);
   controls.enableDamping = true; controls.dampingFactor = 0.09; controls.rotateSpeed = 0.75; controls.zoomSpeed = 1.1;
@@ -299,7 +303,7 @@ function partColor(p) {
   const en = C.names[p[0]][0].toLowerCase(), s = p[3];
   let c = 0xcccccc;
   const R = (re, v) => { if (re.test(en)) { c = v; return true; } return false; };
-  if (s === 1) { R(/./, 0xe8dfc9) && (R(/cartilage|disc\b|meniscus/, 0x9cc3d5) || R(/incisor|canine|premolar|molar|tooth/, 0xf6f1e4)); }
+  if (s === 1) { R(/./, 0xe2d6bd) && (R(/cartilage|disc\b|meniscus/, 0x9cc3d5) || R(/incisor|canine|premolar|molar|tooth/, 0xf6f1e4)); }
   else if (s === 3) { R(/./, 0xddd2b6) && (R(/capsule|membrane/, 0xc4d3de) || R(/disc|meniscus|labrum|symphysis|nucleus pulposus|anulus/, 0x8fb8d8) || R(/suture|syndesmosis|gomphosis/, 0xb9c7a8)); }
   else if (s === 4) { R(/./, 0xb4483f) && (R(/tendon sheath|sheath/, 0x9fd0e6) || R(/bursa/, 0x8bc6e8) || R(/fascia|septum/, 0xd8c7a8) || R(/aponeurosis|tendon|tract\b|retinacul|ligament|galea|linea alba|raphe/, 0xe0d6c2)); }
   else if (s === 5) {
@@ -355,7 +359,7 @@ async function openAtlas(id, pickN) {
       const p = C.parts[fp.id]; if (!p || p[4] !== 0) continue;
       if (only && !nodeAnc(p[2]).some(ni => only.has(C.names[C.nodes[ni][0]][0].toLowerCase()))) continue;
       const g = geom(fp);
-      const mat = new THREE.MeshStandardMaterial({roughness: 0.62, metalness: 0.02, side: THREE.DoubleSide, clippingPlanes: [clipPlane], clipShadows: true});
+      const mat = new THREE.MeshStandardMaterial({roughness: 0.55, metalness: 0.0, side: THREE.DoubleSide, clippingPlanes: [clipPlane], clipShadows: true});
       const m = new THREE.Mesh(g, mat);
       const base = new THREE.Color(partColor(p));
       m.userData = {p, id: fp.id, ctx, base, sys: ctx ? 0 : p[3], side: p[1], c: g.boundingSphere.center.clone(), hidden: !ctx && hiddenByDefault(p)};
@@ -388,7 +392,6 @@ async function openAtlas(id, pickN) {
   applyVis(); paint(); resetView(null, true); $('load').classList.add('hide');
   if (!animReq) loop();
   // ochiq guruhlar: yuqori 2 daraja
-  ITEMS.forEach(it => nodeAnc(it.node).slice(-2).forEach(n => OPEN.add(n)));
   if (pickN != null && BYN.has(+pickN)) select(BYN.get(+pickN), 0, true); else renderPanel();
   upgradeHQ(a);
 }
@@ -451,10 +454,10 @@ function fitDist(dir) {
   const v = camera.fov * Math.PI / 180, h = 2 * Math.atan(Math.tan(v / 2) * camera.aspect);
   const side = dir && Math.abs(dir.y) > 0.7;   // yuqoridan/pastdan qaraganda
   const H = side ? BSZ.z : BSZ.y, W = (dir && Math.abs(dir.x) > 0.7) ? BSZ.z : BSZ.x, D = side ? BSZ.y : (dir && Math.abs(dir.x) > 0.7 ? BSZ.x : BSZ.z);
-  return Math.max(H / 2 / Math.tan(v / 2), W / 2 / Math.tan(h / 2)) * 1.08 + D / 2;
+  return Math.max(H / 2 / Math.tan(v / 2), W / 2 / Math.tan(h / 2)) * 1.16 + D / 2;
 }
 function resetView(dir, instant) {
-  const d = Math.min(fitDist(dir ? dir.clone().normalize() : null), radius / Math.sin(fitFov() / 2) * 1.05);
+  const d = fitDist(dir ? dir.clone().normalize() : null);
   const v = (dir || new THREE.Vector3(0, 0.05, 1)).clone().normalize().multiplyScalar(d);
   if (instant) { cancelAnimationFrame(camAnim); camera.position.copy(v); controls.target.set(0, 0, 0); controls.update(); }
   else animCam(v, new THREE.Vector3(0, 0, 0));
