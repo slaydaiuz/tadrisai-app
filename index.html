@@ -468,6 +468,10 @@ header{display:flex;align-items:center;justify-content:space-between;gap:10px;ma
 .pms{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
 .pms button{padding:12px 6px;border-radius:14px;border:1.5px solid var(--line);background:var(--field);font-weight:800;font-size:14px}
 .pms button[aria-pressed="true"]{border-color:var(--violet);background:var(--chip)}
+/* vaqtincha o'chirilgan to'lov usuli (inPAY tomonida texnik ishlar) */
+.pms button.pm-off{opacity:.45;cursor:not-allowed;filter:grayscale(1);padding-top:8px;padding-bottom:8px}
+.pms button.pm-off::before{display:none}
+.pms button.pm-off small{display:block;font-size:10.5px;font-weight:600;color:var(--muted);margin-top:2px;line-height:1.2}
 .pm-payme{color:#22B8C8} .pm-click{color:#3B8EF0} .pm-paynet{color:#16A34A}
 /* Payme/Click/Paynet: chegara bo'ylab aylanib yuradigan nur */
 @property --pa{syntax:'<angle>';inherits:false;initial-value:0deg}
@@ -1043,7 +1047,7 @@ body.tg-nopay .site-card{display:block}
     <div class="pms" id="pms">
       <button type="button" class="pm-payme" data-pm="payme" onclick="setPm('payme')">Payme</button>
       <button type="button" class="pm-click" data-pm="click" onclick="setPm('click')">Click</button>
-      <button type="button" class="pm-paynet" data-pm="paynet" onclick="setPm('paynet')">Paynet</button>
+      <button type="button" class="pm-paynet pm-off" data-pm="paynet" onclick="setPm('paynet')" disabled aria-disabled="true">Paynet<small id="pmOffTx"></small></button>
     </div>
     <button type="button" class="morepm" onclick="openMore()"><span class="ic3"><span>💳</span><span>U</span><span>A</span><span>QR</span></span><span class="tx" data-i18n="moreLbl"></span><em data-i18n="moreBtn"></em></button>
     <div class="paysum" id="paySum"></div>
@@ -1446,7 +1450,9 @@ function renderCd(){
   const s=Math.floor(left/1000), p=n=>String(n).padStart(2,'0');
   el.style.display=''; $('cdNum').textContent=p(Math.floor(s/3600))+':'+p(Math.floor(s/60)%60)+':'+p(s%60);
 }
-const PMS=['payme','click','paynet'];
+const PM_OFF=new Set(['paynet']);   // inPAY Paynet bo'yicha texnik ishlar olib bormoqda (2026-11-23)
+const PM_OFF_TX={uz:'Texnik ishlar',ru:'Тех. работы',en:'Maintenance',kk:'Техникалық жұмыстар',ky:'Техникалык иштер',tg:'Корҳои техникӣ'};
+const PMS=['payme','click','paynet'].filter(p=>!PM_OFF.has(p));
 function lastPm(){let v='';try{v=localStorage.getItem('tadris_pm')||''}catch(e){} if(!PMS.includes(v)) v=qs.get('lpm')||''; return PMS.includes(v)?v:''}
 let amt=50000, pm=lastPm(), topupBack='profile';   // oxirgi marta qaysi usulda to'lagan bo'lsa o'sha; birinchi marta — tanlanmagan
 function openTopup(need){
@@ -1460,12 +1466,13 @@ function openTopup(need){
 }
 const bonusOf=a=>{let b=0;amountsNow().forEach(([v,bn])=>{if(a>=v)b=bn});return b};
 function setAmt(v,own){amt=v||0; if(!own)$('amtOwn').value=''; renderTopup()}
-function setPm(v){pm=v; renderTopup()}
+function setPm(v){if(PM_OFF.has(v))return; pm=v; renderTopup()}
 function needPm(){const el=$('pms'); el.classList.remove('shake'); void el.offsetWidth; el.classList.add('shake');
   el.scrollIntoView({behavior:'smooth',block:'center'}); toast('👆',t('pickPm'))}
 function renderTopup(){
   $('amts').innerHTML=amountsNow().map(([v,b])=>`<button type="button" class="amt" aria-pressed="${amt===v&&!$('amtOwn').value}" onclick="setAmt(${v})">${money(v).replace(/ (so'm|söm|swm)$/,"")}${b?`<i>+${money(b).replace(/ (so'm|söm|swm)$/,"")} ${t('bonus')}</i>`:''}</button>`).join('');
   document.querySelectorAll('[data-pm]').forEach(b=>b.setAttribute('aria-pressed',b.dataset.pm===pm));
+  if($('pmOffTx')) $('pmOffTx').textContent=PM_OFF_TX[lang]||PM_OFF_TX.uz;
   const MIN=minTopup(), ok=amt>=MIN, b=bonusOf(amt);
   $('pms').classList.toggle('need',!pm); $('pmHint').style.display=pm?'none':'flex';
   $('payBtn').textContent=!ok?t('minSum').replace('{x}',money(MIN)):(pm?t('payBtn').replace('{x}',money(amt)):t('pickPm'));
