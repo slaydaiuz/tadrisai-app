@@ -156,7 +156,7 @@ uz:{
   nq:"{n} ta savol", free:"bepul", freeTrial:"bepul (sinov)",
   srcImg:"Rasm — savollar shu rasmdagi matndan tuziladi", chars:"{n} belgi", cut:" (boshidagi 30 000 tasi olinadi)",
   srcText:" — savollar shu matndan tuziladi", del:"O'chirish", upload:"Manba yuklash", optional:"(ixtiyoriy)",
-  uploadD:"Darslik sahifasi, konspekt yoki rasm — savollar aynan shu matndan tuziladi · PDF, DOCX, JPG, PNG", file:"Fayl",
+  uploadD:"Darslik sahifasi, konspekt yoki rasm — savollar aynan shu matndan tuziladi · PDF, DOCX, PPTX, JPG, PNG", file:"Fayl",
   big8:"Fayl 8 MB dan katta", noText:"Faylda matn topilmadi — skaner bo'lsa, rasm qilib yuklang",
   badType:"Bu turdagi fayl qabul qilinmaydi", tooBig:"Fayl juda katta", readErr:"Faylni o'qib bo'lmadi",
   noTests:"Hali test yaratilmagan", noCross:"Hali krossvord yaratilmagan", solvedN:"{n} kishi yechdi",
@@ -238,7 +238,7 @@ ru:{
   nq:["{n} вопрос","{n} вопроса","{n} вопросов"], free:"бесплатно", freeTrial:"бесплатно (тест)",
   srcImg:"Изображение — вопросы составляются по тексту на нём", chars:["{n} символ","{n} символа","{n} символов"], cut:" (берутся первые 30 000)",
   srcText:" — вопросы составляются по этому тексту", del:"Удалить", upload:"Загрузить материал", optional:"(необязательно)",
-  uploadD:"Страница учебника, конспект или фото — вопросы составляются именно по этому тексту · PDF, DOCX, JPG, PNG", file:"Файл",
+  uploadD:"Страница учебника, конспект или фото — вопросы составляются именно по этому тексту · PDF, DOCX, PPTX, JPG, PNG", file:"Файл",
   big8:"Файл больше 8 МБ", noText:"В файле не найден текст — если это скан, загрузите его как изображение",
   badType:"Этот тип файла не поддерживается", tooBig:"Файл слишком большой", readErr:"Не удалось прочитать файл",
   noTests:"Тестов пока нет", noCross:"Кроссвордов пока нет", solvedN:"решили: {n}",
@@ -320,7 +320,7 @@ en:{
   nq:"{n} questions", free:"free", freeTrial:"free (trial)",
   srcImg:"Image — questions are based on the text in it", chars:"{n} characters", cut:" (first 30,000 are used)",
   srcText:" — questions are based on this text", del:"Remove", upload:"Upload material", optional:"(optional)",
-  uploadD:"Textbook page, notes or a photo — questions are based on exactly this text · PDF, DOCX, JPG, PNG", file:"File",
+  uploadD:"Textbook page, notes or a photo — questions are based on exactly this text · PDF, DOCX, PPTX, JPG, PNG", file:"File",
   big8:"The file is larger than 8 MB", noText:"No text found in the file — if it's a scan, upload it as an image",
   badType:"This file type isn't supported", tooBig:"The file is too large", readErr:"Couldn't read the file",
   noTests:"No tests yet", noCross:"No crosswords yet", solvedN:"{n} solved",
@@ -402,7 +402,7 @@ kaa:{
   nq:"{n} soraw", free:"biypul", freeTrial:"biypul (sınaq)",
   srcImg:"Súwret — sorawlar usı súwrettegi tekstten dúziledi", chars:"{n} belgi", cut:" (basındaǵı 30 000 ı alınadı)",
   srcText:" — sorawlar usı tekstten dúziledi", del:"Óshiriw", upload:"Derek júklew", optional:"(májbúriy emes)",
-  uploadD:"Sabaqlıq beti, konspekt yamasa súwret — sorawlar dál usı tekstten dúziledi · PDF, DOCX, JPG, PNG", file:"Fayl",
+  uploadD:"Sabaqlıq beti, konspekt yamasa súwret — sorawlar dál usı tekstten dúziledi · PDF, DOCX, PPTX, JPG, PNG", file:"Fayl",
   big8:"Fayl 8 MB tan úlken", noText:"Faylda tekst tabılmadı — skaner bolsa, súwret etip júkleń",
   badType:"Bul túrdegi fayl qabıl etilmeydi", tooBig:"Fayl júdá úlken", readErr:"Fayldı oqıp bolmadı",
   noTests:"Ele test jaratılmaǵan", noCross:"Ele krossvord jaratılmaǵan", solvedN:"{n} adam sheshti",
@@ -564,12 +564,13 @@ function setN(v,silent){
 }
 function srcBox(){
   if(S.src) return `<div class="qz-srcf"><span class="ic">${S.src.kind==='img'?'🖼':'📄'}</span><span class="tx"><b>${esc(S.src.name)}</b><small>${S.src.kind==='img'?L('srcImg'):L('chars',{n:(S.src.chars||0).toLocaleString('ru')})+(S.src.cut?L('cut'):'')+L('srcText')}</small></span><button type="button" onclick="QZ.srcDel()" aria-label="${L('del')}">✕</button></div>`;
-  return `<label class="qz-up"><input type="file" accept=".pdf,.docx,.txt,image/*" onchange="QZ.srcUp(this)" hidden>
+  return `<label class="qz-up"><input type="file" accept=".pdf,.docx,.pptx,.txt,image/*" onchange="QZ.srcUp(this)" hidden>
     <span class="ic">📎</span><span class="tx"><b>${L('upload')} <i>${L('optional')}</i></b><small>${L('uploadD')}</small></span><span class="btn">${L('file')}</span></label>`;
 }
 async function srcUp(inp){
   const f=inp.files&&inp.files[0]; if(!f) return;
-  if(f.size>8*1024*1024){toast('⚠️',L('big8'));return}
+  const isPpt=/\.pptx$/i.test(f.name), lim=(isPpt?25:8)*1024*1024;   // prezentatsiya rasmlar bilan og'irroq
+  if(f.size>lim){toast('⚠️',isPpt?L('big8').replace('8','25'):L('big8'));return}
   $('qzSrc').innerHTML='<div class="qz-srcf"><span class="qz-spin" style="width:26px;height:26px;border-width:3px"></span><span class="tx"><b>'+L('loading')+'</b><small>'+esc(f.name)+'</small></span></div>';
   const b64=await new Promise((ok,no)=>{const r=new FileReader(); r.onload=()=>ok(r.result); r.onerror=no; r.readAsDataURL(f)}).catch(()=>null);
   let d={}; try{d=b64?await api('/quiz/source',{name:f.name,mime:f.type,data:b64},90000):{}}catch(e){}
