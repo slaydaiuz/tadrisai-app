@@ -8,7 +8,7 @@ const $ = id => document.getElementById(id);
 const API = location.hostname === 'tadris.ai' ? '/api' : 'https://91-107-229-30.sslip.io/api';
 const QS = new URLSearchParams(location.search);
 const DEV = QS.get('dev') === '1' && location.hostname !== 'tadris.ai';
-const V = '7';
+const V = '8';
 // 3D fayllar jsDelivr CDN'dan (Cloudflare, Toshkentda ham bor; 1 yil keshlanadi). Fayl CDN'da bo'lmasa yoki xato bo'lsa — o'z serverimizdan.
 const ZSHA = 'a0c94a22952caef6962428100cd386678f56795e';
 const CDN = DEV ? '' : 'https://cdn.jsdelivr.net/gh/slaydaiuz/tadrisai-app@' + ZSHA + '/anatomiya/';
@@ -165,6 +165,13 @@ Object.assign(TX.en, {kick: '3D anatomy', title: 'Learn the body layer by layer'
   res: 'Your progress', resD: '{b} of {a} opened', test: 'Quick test', testD: '10 questions from {n} parts.', mFind: 'Find on the model', mFindD: 'A name appears — tap that part on the model.',
   mPick: 'One of four', mPickD: 'Choose the painted part\'s name from four.', mType: 'Type it', mTypeD: 'Type the painted part\'s name.', mTf: 'Yes or no', mTfD: 'Is "This is …" right?',
   hqLoad: 'Loading high quality…', deep: 'Memorise mode', noTr: 'Translation coming soon'});
+// 2026-11-23: uch rejim, «Asliga qaytarish», soddalashtirilgan bosh sahifa
+Object.assign(TX.uz, {mW: 'Butun', mA: 'Ajratish', mG: 'Qatorga terish', resetAll: 'Asliga qaytarish', flatHint: "2D ko'rinish: barmoq bilan suring, yaqinlashtiring — nomlar chiqadi",
+  gq: 'Istalgan sohani yozish orqali toping', info: "Bu bo'lim haqida", all: 'Barchasi'});
+Object.assign(TX.ru, {mW: 'Целиком', mA: 'Разобрать', mG: 'Рядами', resetAll: 'Вернуть как было', flatHint: '2D-вид: двигайте пальцем и приближайте — появятся названия',
+  gq: 'Найдите любую часть по названию', info: 'Об этом разделе'});
+Object.assign(TX.en, {mW: 'Whole', mA: 'Apart', mG: 'In rows', resetAll: 'Reset', flatHint: '2D view: drag and zoom in — names appear',
+  gq: 'Type to find any part', info: 'About this section'});
 let LANG = (() => { try { const a = localStorage.getItem('atlas_lang'); if (TX[a]) return a; const l = localStorage.getItem('tadris_lang'); if (TX[l]) return l; if (['kk', 'ky', 'tg'].includes(l)) return 'ru'; } catch (e) {} return (navigator.language || '').startsWith('ru') ? 'ru' : 'uz'; })();
 const LI = () => ({uz: 0, ru: 1, en: 2}[LANG]);
 const t = (k, o) => { let s = (TX[LANG] || TX.uz)[k] ?? TX.uz[k] ?? k; if (o) for (const [a, b] of Object.entries(o)) s = s.split('{' + a + '}').join(b); return s; };
@@ -205,7 +212,10 @@ function langBtns(el, cb) {
 }
 const catOf = id => C.cats.find(c => c[0] === id) || ['top', ['', '', ''], '#a78bfa'];
 function renderHome() {
-  $('hBack').textContent = t('back'); $('hKick').textContent = t('kick'); $('hT').innerHTML = esc(t('title')) + `<span class="badge">${t('badge')}</span>`; $('hD').textContent = t('desc');
+  $('hBack').textContent = t('back'); $('hKick').innerHTML = esc(t('kick')) + `<span class="badge">${t('badge')}</span>`;
+  $('hT').innerHTML = esc(t('title')) + `<button class="ibtn${store.get('za_info', 0) ? '' : ' pulse'}" id="hI" aria-label="${esc(t('info'))}" aria-expanded="false">!</button>`;
+  $('hInfo').textContent = t('desc');
+  $('hI').onclick = e => { e.stopPropagation(); const o = $('hInfo').classList.toggle('hide'); $('hI').setAttribute('aria-expanded', String(!o)); if (!o) { store.set('za_info', 1); $('hI').classList.remove('pulse'); } };
   const tot = C.atlases.reduce((s, a) => s, 0);
   const uniq = new Set(); C.parts.forEach(p => { if (p[4] === 0) uniq.add(p[0]); });
   $('stats').innerHTML = [[C.atlases.length, t('sAt')], [uniq.size.toLocaleString('ru'), t('sSt')], [new Set(C.lms.map(l => l[0])).size.toLocaleString('ru'), t('sLm')]].map(([a, b]) => `<div class="stat"><b>${a}</b><small>${b}</small></div>`).join('');
@@ -214,14 +224,17 @@ function renderHome() {
   const last = store.get('za_last', null), la = last && C.atlases.find(a => a.id === last.a);
   if (la) {
     const s = seenGet(la.id).size;
-    $('resume').innerHTML = `<div class="resume"><div style="flex:1;min-width:0"><small>${t('resume')}</small><b>${esc(tr(la.t))}</b><span>${t('seenOf', {a: s, b: la.n})}${last.n != null && C.names[last.n] ? ' · ' + esc(t('lastSeen', {n: nm(last.n)})) : ''}</span></div><button id="rGo">${t('resumeB')}</button></div>`;
+    $('resume').innerHTML = `<div class="resume"><div style="flex:1;min-width:0"><small>${t('resume')}</small><b>${esc(tr(la.t))}</b></div><button id="rGo">${t('resumeB')}</button></div>`;
     $('rGo').onclick = () => openAtlas(la.id, last.n);
   } else $('resume').innerHTML = '';
-  $('hAt').textContent = t('atlases'); $('hAtS').textContent = t('atlasesS');
+  $('hAt').textContent = t('atlases');
+  const curC = CAT === 'all' ? t('all') : tr(catOf(CAT)[1]), copen = !$('cats').classList.contains('hide');
+  $('cTog').innerHTML = `<i>▾</i>${esc(curC)}`; $('cTog').classList.toggle('open', copen); $('cTog').setAttribute('aria-expanded', String(copen));
+  $('cTog').onclick = () => { $('cats').classList.toggle('hide'); renderHome(); };
   const cnt = c => C.atlases.filter(a => a.cat === c).length;
   $('cats').innerHTML = `<button data-c="all" class="${CAT === 'all' ? 'on' : ''}" style="--c:#8b5cf6">${t('all')} <em>${C.atlases.length}</em></button>` +
     C.cats.filter(c => cnt(c[0])).map(c => `<button data-c="${c[0]}" class="${CAT === c[0] ? 'on' : ''}" style="--c:${c[2]}"><i></i>${esc(tr(c[1]))} <em>${cnt(c[0])}</em></button>`).join('');
-  $('cats').querySelectorAll('button').forEach(b => b.onclick = () => { CAT = b.dataset.c; renderHome(); });
+  $('cats').querySelectorAll('button').forEach(b => b.onclick = () => { CAT = b.dataset.c; $('cats').classList.add('hide'); renderHome(); });
   $('grid').innerHTML = C.atlases.filter(a => CAT === 'all' || a.cat === CAT).map(a => {
     const c = catOf(a.cat), s = seenGet(a.id).size, p = a.n ? Math.floor(s / a.n * 100) : 0;
     return `<button class="acard" data-a="${a.id}" style="--c:${c[2]}"><div class="pic"><img src="${CDN ? CDN + 'img/' + a.id + '.webp' : 'img/' + a.id + '.webp?v=' + V}" onerror="if(!this.dataset.f){this.dataset.f=1;this.src='img/${a.id}.webp?v=${V}'}" alt="" loading="lazy"><span class="tag">${esc(tr(c[1]))}</span>${a.id !== 'butun-tana' && s ? `<span class="pct">${p}%</span>` : ''}</div>
@@ -293,7 +306,7 @@ function setLoad(k, n, tot) {
 }
 let frameN = 0;
 function loop() {
-  animReq = requestAnimationFrame(loop); controls.update(); renderer.render(scene, camera); placeLabels();
+  animReq = requestAnimationFrame(loop); controls.update(); clampTarget(); renderer.render(scene, camera); placeLabels(); gridLabels();
   // telefonda: model yaqinlashtirilganda (yoki tanlab yaqinlashganda) asl sifat yuklanadi — internet tejaladi
   if (HQ_WAIT && ++frameN % 30 === 0 && AT === HQ_WAIT && camera.position.distanceTo(controls.target) < fitDist(null) * 0.55) { const a = HQ_WAIT; HQ_WAIT = null; upgradeHQ(a); }
 }
@@ -378,7 +391,7 @@ async function openAtlas(id, pickN) {
   history.replaceState(null, '', location.pathname + '?a=' + a.id + (pickN != null ? '&n=' + pickN : '') + (DEV ? '&dev=1' : ''));
   labels();
   if (!initGL()) { $('loadT').textContent = t('noGl'); $('load').classList.remove('hide'); return; }
-  resize(); $('load').classList.remove('hide'); $('loadT').textContent = t('load'); $('loadBar').classList.add('hide'); $('exp').value = 0; explodeK = 0; GRID = null; GK = 0; $('bGrid').classList.remove('on');
+  resize(); $('load').classList.remove('hide'); $('loadT').textContent = t('load'); $('loadBar').classList.add('hide'); explodeK = 0; GRID = null; GK = 0; gridAuto = false; MODE = 'whole'; setFlat(false); segUI();
   if (root) { scene.remove(root); root.traverse(o => { if (o.isMesh) { o.geometry.dispose(); o.material.dispose(); } }); }
   root = new THREE.Group(); scene.add(root); MESHES = []; ITEMS = []; BYN = new Map(); INS = []; LMG = null;
   renderPanel();
@@ -530,7 +543,8 @@ function buildGrid() {
   if (!items.length) { GRID = new Map(); GSZ = new THREE.Vector3(1, 1, 1); return; }
   const gap = Math.max(radius * 0.012, items[Math.floor(items.length / 2)].s * 0.35);
   const area = items.reduce((a, it) => a + (it.w + gap) * (it.h + gap), 0);
-  const W = Math.max(items[0].w + gap, Math.sqrt(area * Math.max(0.6, camera.aspect)) * 1.05);
+  const fa = freeArea(), asp = fa.r.width / Math.max(1, fa.r.height * fa.free);
+  const W = Math.max(items[0].w + gap, Math.sqrt(area * Math.min(2.2, Math.max(0.45, asp))) * 1.05);
   const slots = []; let x = 0, y = 0, rowH = 0, row = [];
   const flush = () => { const off = (W - x) / 2; row.forEach(r => { r.x += off; r.y = y - rowH / 2; }); y -= rowH + gap; x = 0; rowH = 0; row = []; };
   for (const it of items) {
@@ -543,6 +557,10 @@ function buildGrid() {
 }
 const ease = t => t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2;
 let GK = 0;   // 0 — joyida, 1 — qatorga terilgan
+// 2026-11-23, egasi: uch rejim — «Butun» (surgich yopiq), «Ajratish» (surgich qancha surilsa, shuncha ajraladi, 3D),
+// «Qatorga terish» (surgich surila boshlasa, bo'laklar o'zi sekin qatorga teriladi va ko'rinish 2D ga o'tadi:
+// aylantirish yo'q, surish va yaqinlashtirish bor, yaqinlashganda nomlar chiqadi).
+let MODE = 'whole', FLAT = false, gridAuto = false;
 function setExplode(k) { explodeK = k; place(); }
 function setGrid(g) { GK = g; place(); }
 function place() {
@@ -558,18 +576,115 @@ function place() {
   if (GK > 0) { INS.forEach(m => m.visible = false); if (LMG) LMG.visible = false; } else if (LMG) LMG.visible = true;
   if (LMG && sel) { const ms = selMeshes(); if (ms.length) LMG.position.copy(ms[0].position); }
 }
-let gridAnim = 0;
-function toggleGrid(on) {
-  on = on ?? GK < 0.5; const from = GK, to = on ? 1 : 0, t0 = performance.now(); cancelAnimationFrame(gridAnim);
-  if (on) { buildGrid(); fitGrid(); } else resetView();
-  $('bGrid').classList.toggle('on', on);
-  const tick = now => { const k = Math.min(1, (now - t0) / 1400); setGrid(from + (to - from) * k); if (k < 1) gridAnim = requestAnimationFrame(tick); };
-  gridAnim = requestAnimationFrame(tick);
+const ANIM = {};
+function tween(key, from, to, ms, fn, done) {
+  cancelAnimationFrame(ANIM[key]); const t0 = performance.now();
+  const tick = now => { const k = ms ? Math.min(1, (now - t0) / ms) : 1; fn(from + (to - from) * k); if (k < 1) ANIM[key] = requestAnimationFrame(tick); else { ANIM[key] = 0; done && done(); } };
+  ANIM[key] = requestAnimationFrame(tick);
+}
+function setFlat(on) {
+  if (!controls || FLAT === on) { FLAT = on; return; }
+  FLAT = on;
+  controls.enableRotate = !on; controls.zoomToCursor = on;
+  controls.touches = on ? {ONE: THREE.TOUCH.PAN, TWO: THREE.TOUCH.DOLLY_PAN} : {ONE: THREE.TOUCH.ROTATE, TWO: THREE.TOUCH.DOLLY_PAN};
+  controls.mouseButtons = on ? {LEFT: THREE.MOUSE.PAN, MIDDLE: THREE.MOUSE.DOLLY, RIGHT: THREE.MOUSE.PAN} : {LEFT: THREE.MOUSE.ROTATE, MIDDLE: THREE.MOUSE.DOLLY, RIGHT: THREE.MOUSE.PAN};
+  if (on) toast(t('flatHint'));
+}
+function segUI() {
+  $('seg').querySelectorAll('button').forEach(b => b.classList.toggle('on', b.dataset.m === MODE));
+  const e = $('exp'); e.disabled = MODE === 'whole';
+  e.value = MODE === 'grid' ? Math.round(GK * 100) : MODE === 'apart' ? Math.round(explodeK * 100) : 0;
+}
+function leaveGrid() {
+  gridAuto = false; cancelAnimationFrame(ANIM.grid);
+  const wasFlat = FLAT; setFlat(false);
+  if (GK > 0) tween('grid', GK, 0, 900 * GK, setGrid, () => { GRID = null; });
+  if (wasFlat) resetView();
+}
+function setMode(m) {
+  if (!AT) return;
+  closePops && closePops();
+  MODE = m;
+  if (m === 'whole') { leaveGrid(); if (explodeK > 0) tween('exp', explodeK, 0, 700, setExplode); }
+  else if (m === 'apart') leaveGrid();
+  else { cancelAnimationFrame(ANIM.exp); if (explodeK > 0) tween('exp', explodeK, 0, 500, setExplode); }
+  segUI();
+}
+function expInput(v) {   // surgich 0…1
+  if (MODE === 'apart') { cancelAnimationFrame(ANIM.exp); setExplode(v); return; }
+  if (MODE !== 'grid' || gridAuto) return;
+  if (v > GK + 0.02 && GK < 1) startGridAuto();                   // surila boshladi — qolganini o'zi sekin teradi
+  else if (v < GK) { setGrid(v); if (v <= 0.005) { GK = 0; place(); GRID = null; setFlat(false); resetView(); } }
+}
+function startGridAuto() {
+  if (explodeK > 0) { cancelAnimationFrame(ANIM.exp); setExplode(0); }
+  if (!FLAT || !GRID) { buildGrid(); fitGrid(); setFlat(true); }
+  gridAuto = true;
+  tween('grid', GK, 1, 2600 * (1 - GK) + 300, v => { setGrid(v); $('exp').value = Math.round(v * 100); }, () => { gridAuto = false; segUI(); });
+}
+function freeArea() {   // sahna ustidagi tugmalar egallamagan joy (tepada asboblar, pastda rejim paneli)
+  const r = $('stage').getBoundingClientRect(), H = Math.max(1, r.height);
+  const top = Math.min(H * 0.3, Math.max(0, $('bReset').getBoundingClientRect().bottom - r.top) + 8);
+  const bot = Math.min(H * 0.3, Math.max(0, r.bottom - $('expl').getBoundingClientRect().top) + 8);
+  return {r, top, bot, free: Math.max(0.4, (H - top - bot) / H)};
 }
 function fitGrid() {
-  if (!GSZ) return; const v = camera.fov * Math.PI / 180, h = 2 * Math.atan(Math.tan(v / 2) * camera.aspect);
-  const d = Math.max(GSZ.y / 2 / Math.tan(v / 2), GSZ.x / 2 / Math.tan(h / 2)) * 1.06 + GSZ.z;
-  animCam(new THREE.Vector3(0, 0, d), new THREE.Vector3(0, 0, 0)); camera.far = Math.max(camera.far, d * 4); camera.updateProjectionMatrix(); controls.maxDistance = Math.max(controls.maxDistance, d * 2);
+  if (!GSZ) return; const v = camera.fov * Math.PI / 180, h = 2 * Math.atan(Math.tan(v / 2) * camera.aspect), fa = freeArea();
+  const d = Math.max(GSZ.y / fa.free / 2 / Math.tan(v / 2), GSZ.x / 2 / Math.tan(h / 2)) * 1.04 + GSZ.z;
+  const oy = (fa.top - fa.bot) / 2 * (2 * (d - GSZ.z) * Math.tan(v / 2) / Math.max(1, fa.r.height));   // bo'sh joy markaziga
+  animCam(new THREE.Vector3(0, oy, d), new THREE.Vector3(0, oy, 0)); camera.far = Math.max(camera.far, d * 4); camera.updateProjectionMatrix(); controls.maxDistance = Math.max(controls.maxDistance, d * 2);
+  controls.minDistance = Math.min(controls.minDistance, radius * 0.01);
+}
+// aylanish markazi modeldan chiqib ketmasin (telefonda ikki barmoq bilan surilganda markaz bo'sh joyga ketib qolardi)
+const _cl = new THREE.Vector3();
+function clampTarget() {
+  if (!controls || !AT) return;
+  const t = controls.target;
+  let hx, hy, hz;
+  if (FLAT && GSZ) { hx = GSZ.x / 2; hy = GSZ.y / 2; hz = Math.max(GSZ.z, radius * 0.2); }
+  else { const k = 1 + 0.9 * explodeK; hx = BSZ.x / 2 * k; hy = BSZ.y / 2 * k; hz = BSZ.z / 2 * k; }
+  _cl.set(Math.min(hx, Math.max(-hx, t.x)) - t.x, Math.min(hy, Math.max(-hy, t.y)) - t.y, Math.min(hz, Math.max(-hz, t.z)) - t.z);
+  if (_cl.lengthSq() > 0) { t.add(_cl); camera.position.add(_cl); }
+}
+// 2D (qatorga terilgan) ko'rinishda: yaqinlashtirilgan bo'laklar tagida nomi
+let GLK = '';
+const _ga = new THREE.Vector3(), _gb = new THREE.Vector3();
+function gridLabels() {
+  const cv = $('glbl'), on = FLAT && GK > 0.98 && GRID && !gridAuto;
+  if (!on) { if (GLK) { cv.getContext('2d').clearRect(0, 0, cv.width, cv.height); GLK = ''; } return; }
+  const r = $('stage').getBoundingClientRect(), dpr = Math.min(window.devicePixelRatio || 1, 2);
+  const key = camera.position.toArray().map(x => x.toFixed(5)).join() + controls.target.toArray().map(x => x.toFixed(5)).join() + r.width + 'x' + r.height + LANG + (sel ? sel.n : '');
+  if (key === GLK) return; GLK = key;
+  const W = Math.round(r.width * dpr), H = Math.round(r.height * dpr);
+  if (cv.width !== W || cv.height !== H) { cv.width = W; cv.height = H; }
+  const g = cv.getContext('2d'); g.setTransform(dpr, 0, 0, dpr, 0, 0); g.clearRect(0, 0, r.width, r.height);
+  g.font = '700 11px Inter, system-ui, sans-serif'; g.textAlign = 'center'; g.textBaseline = 'middle';
+  for (const m of GRID.keys()) {
+    if (!m.visible) continue;
+    const b = m.geometry.boundingBox; if (!b) continue;
+    _ga.set(b.min.x, b.min.y, b.max.z).applyMatrix4(m.matrixWorld).project(camera);
+    _gb.set(b.max.x, b.min.y, b.max.z).applyMatrix4(m.matrixWorld).project(camera);
+    if (_ga.z > 1) continue;
+    const x1 = (_ga.x * 0.5 + 0.5) * r.width, x2 = (_gb.x * 0.5 + 0.5) * r.width, y = (-_ga.y * 0.5 + 0.5) * r.height, w = Math.abs(x2 - x1);
+    if (w < 42) continue;
+    const x = (x1 + x2) / 2; if (x < -80 || x > r.width + 80 || y < -20 || y > r.height + 30) continue;
+    let s = nm(m.userData.p[0]); const maxW = Math.max(w * 1.05, 46);
+    if (g.measureText(s).width > maxW) { while (s.length > 2 && g.measureText(s + '…').width > maxW) s = s.slice(0, -1); s += '…'; }
+    const tw = g.measureText(s).width, on2 = sel && sel.n === m.userData.p[0];
+    g.fillStyle = on2 ? 'rgba(139,92,246,.95)' : 'rgba(11,17,36,.8)';
+    g.beginPath(); if (g.roundRect) g.roundRect(x - tw / 2 - 6, y + 4, tw + 12, 17, 7); else g.rect(x - tw / 2 - 6, y + 4, tw + 12, 17); g.fill();
+    g.fillStyle = '#F1F5F9'; g.fillText(s, x, y + 12.5);
+  }
+}
+if (DEV) window.__zd = () => ({cam: camera.position.toArray().map(x => +x.toFixed(3)), GSZ: GSZ && GSZ.toArray().map(x => +x.toFixed(3)), aspect: +camera.aspect.toFixed(3), fov: camera.fov, maxD: controls.maxDistance, t: controls && controls.target.toArray().map(x => +x.toFixed(3)), FLAT, GK: +GK.toFixed(3), MODE, explodeK, BSZ: BSZ.toArray().map(x => +x.toFixed(3))});
+function resetAll() {   // «Asliga qaytarish»: rejim, kesim, shaffoflik, yashirilganlar, tanlov va kamera — hammasi boshidagidek
+  if (!AT) return;
+  MODE = 'whole'; gridAuto = false; cancelAnimationFrame(ANIM.grid); cancelAnimationFrame(ANIM.exp);
+  setFlat(false); GK = 0; explodeK = 0; GRID = null; place(); segUI();
+  CUT = {ax: -1, pos: 0, flip: false}; applyCut(); XRAY = false;
+  Object.keys(LAYV).forEach(k => { LAYV[k] = true; LAYO[k] = +k === 0 ? 0.22 : 1; });
+  MESHES.forEach(m => { m.userData.shown = false; });
+  closePops(); unselect(); showAll(); labels(); paint(); resetView();
 }
 // insertion va landmark nuqtalari suyak bilan birga siljisin
 function boneOffset(n, side) { const it = BYN.get(n); if (!it) return null; const m = it.ms.find(x => !side || x.userData.side === side || !x.userData.side) || it.ms[0]; return m.position; }
@@ -691,8 +806,8 @@ function labels() {
   $('vBack').title = t('back'); $('vCrumb').textContent = t('kick') + ' / ' + tr(catOf(AT.cat)[1]); $('vT').textContent = tr(AT.t); $('pT').textContent = tr(AT.t);
   $('bPanel').innerHTML = '☰ ' + t('panel');
   const tb = $('tabs').querySelectorAll('button'); ['tTree', 'tLay', 'tInfo', 'tLearn'].forEach((k, i) => tb[i].textContent = t(k));
-  $('hint').textContent = t('hint'); $('sA').textContent = t('together'); $('sB').textContent = t('apart'); $('bGrid').innerHTML = '▦ ' + esc(t('grid'));
-  [['tHome', 'home'], ['tView', 'view'], ['tBoth', 'both'], ['tHide', 'hideSel'], ['tIso', 'iso'], ['tAll', 'showAll'], ['tXray', 'xray'], ['tCut', 'cut'], ['tMore', 'more']].forEach(([id, k]) => { $(id).dataset.tip = t(k); $(id).setAttribute('aria-label', t(k)); });
+  $('hint').textContent = t('hint'); const sb = $('seg').querySelectorAll('button'); ['mW', 'mA', 'mG'].forEach((k, i) => sb[i].textContent = t(k)); $('bReset').textContent = '↺ ' + t('resetAll');
+  [['tView', 'view'], ['tBoth', 'both'], ['tHide', 'hideSel'], ['tIso', 'iso'], ['tAll', 'showAll'], ['tXray', 'xray'], ['tCut', 'cut'], ['tMore', 'more']].forEach(([id, k]) => { $(id).dataset.tip = t(k); $(id).setAttribute('aria-label', t(k)); });
   $('tBoth').classList.toggle('on', BOTH); $('tXray').classList.toggle('on', XRAY); $('tCut').classList.toggle('on', CUT.ax >= 0);
   $('cred2').textContent = AT.src === 'hra' ? 'HuBMAP Human Reference Atlas (CC BY 4.0) · Visible Human, NLM' : 'Z-Anatomy · BodyParts3D © DBCLS';
   langBtns($('vlangs'), () => { labels(); if (sel) setLabel(selMeshes(), nm(sel.n), lat(sel.n)); setLmLabel(); selbar(); renderPanel(true); });
@@ -975,7 +1090,7 @@ function togglePop(id, build) { const el = $(id); const open = el.classList.cont
 function buildView(el) {
   const D = {vF: [0, 0.05, 1], vB: [0, 0.05, -1], vL: [-1, 0.05, 0], vR: [1, 0.05, 0], vT: [0, 1, 0.001], vD: [0, -1, 0.001]};
   el.innerHTML = `<h4>${t('view')}</h4>` + Object.keys(D).map(k => `<button class="mi" data-v="${k}">${t(k)}</button>`).join('') + `<button class="mi" data-v="fit">⛶ ${t('vFit')}<kbd>F</kbd></button>`;
-  el.querySelectorAll('[data-v]').forEach(b => b.onclick = () => { const k = b.dataset.v; if (k === 'fit') resetView(camera.position.clone().sub(controls.target)); else resetView(new THREE.Vector3(...D[k])); el.classList.add('hide'); });
+  el.querySelectorAll('[data-v]').forEach(b => b.onclick = () => { const k = b.dataset.v; if (FLAT) setMode('whole'); if (k === 'fit') resetView(camera.position.clone().sub(controls.target)); else resetView(new THREE.Vector3(...D[k])); el.classList.add('hide'); });
 }
 function buildCut(el) {
   el.innerHTML = `<h4>${t('cut')}</h4><p>${t('cutD')}</p><div class="seg">${[[-1, 'cNone'], [0, 'cAx'], [1, 'cSag'], [2, 'cFr']].map(([v, k]) => `<button data-c="${v}" class="${CUT.ax === v ? 'on' : ''}">${t(k)}</button>`).join('')}</div>
@@ -1008,28 +1123,22 @@ function bind() {
   $('tabs').querySelectorAll('button').forEach(b => b.onclick = () => setTab(b.dataset.t));
   $('bPanel').onclick = () => openPanel(!$('panel').classList.contains('open')); $('pClose').onclick = () => openPanel(false);
   $('sbGo').onclick = () => { setTab('info'); openPanel(true); }; $('sbX').onclick = unselect;
-  $('tHome').onclick = () => { closePops(); resetView(); };
+  $('bReset').onclick = resetAll;
+  $('seg').querySelectorAll('button').forEach(b => b.onclick = () => setMode(b.dataset.m));
   $('tView').onclick = () => togglePop('popView', buildView);
   $('tCut').onclick = () => togglePop('popCut', buildCut);
   $('tMore').onclick = () => togglePop('popMore', buildMore);
   $('tBoth').onclick = () => { BOTH = !BOTH; labels(); if (sel) select(sel, selSide); toast(t('both') + ': ' + (BOTH ? '✓' : '✕')); };
   $('tHide').onclick = hideSel; $('tIso').onclick = isoSel; $('tAll').onclick = showAll;
   $('tXray').onclick = () => { XRAY = !XRAY; labels(); paint(); };
-  $('exp').oninput = e => setExplode(e.target.value / 100);
-  $('bGrid').onclick = () => toggleGrid();
-  let playing = 0;
-  $('bPlay').onclick = () => {
-    if (playing) return; const from = explodeK, to = from > 0.5 ? 0 : 1, t0 = performance.now(); playing = 1;
-    const tick = now => { const k = Math.min(1, (now - t0) / 1200), v = from + (to - from) * ease(k); setExplode(v); $('exp').value = v * 100; if (k < 1) requestAnimationFrame(tick); else playing = 0; };
-    requestAnimationFrame(tick);
-  };
+  $('exp').oninput = e => expInput(e.target.value / 100);
   $('gq').oninput = e => gsearch(e.target.value);
-  document.addEventListener('click', e => { if (!e.target.closest('.srch')) $('gres').classList.add('hide'); if (!e.target.closest('.pop') && !e.target.closest('.tb')) closePops(); });
+  document.addEventListener('click', e => { if (!e.target.closest('.srch')) $('gres').classList.add('hide'); if (!e.target.closest('#hInfo') && !e.target.closest('#hI') && $('hI')) { $('hInfo').classList.add('hide'); $('hI').setAttribute('aria-expanded', 'false'); } if (!e.target.closest('.pop') && !e.target.closest('.tb')) closePops(); });
   document.addEventListener('keydown', e => {
     if ($('view').classList.contains('hide') || /INPUT|TEXTAREA/.test(document.activeElement.tagName)) return;
     const k = e.key.toLowerCase();
     if (k === 'h') hideSel(); else if (k === 'i') isoSel(); else if (k === 'a') showAll(); else if (k === 'f') { if (sel) focusMs(selMeshes()); else resetView(); }
-    else if (k === 'x') { XRAY = !XRAY; labels(); paint(); } else if (k === 'g') toggleGrid(); else if (k === 'escape') { closePops(); if (!Q && !DP) unselect(); }
+    else if (k === 'x') { XRAY = !XRAY; labels(); paint(); } else if (k === 'g') { if (MODE !== 'grid') { setMode('grid'); startGridAuto(); } else setMode('whole'); } else if (k === 'escape') { closePops(); if (!Q && !DP) unselect(); }
   });
 }
 

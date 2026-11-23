@@ -29,12 +29,19 @@ button{border:0;background:none;cursor:pointer}
 .langs{display:flex;gap:2px;background:var(--card);border:1px solid var(--line);border-radius:999px;padding:3px}
 .langs button{padding:6px 11px;border-radius:999px;font-size:13px;font-weight:800;color:var(--muted)}
 .langs button.on{background:var(--acc);color:#fff}
-.hero{margin:22px 0 18px}
+.hero{margin:22px 0 14px}
 .kick{font-size:12px;font-weight:800;letter-spacing:.08em;color:var(--acc);text-transform:uppercase}
 .hero h1{font-size:clamp(26px,5vw,40px);line-height:1.12;margin:6px 0 10px;letter-spacing:-.4px}
 .hero p{margin:0;color:#CBD5E1;font-size:15.5px;line-height:1.55;max-width:680px}
+.ibtn{display:inline-grid;place-items:center;width:22px;height:22px;margin-left:8px;border-radius:50%;background:var(--acc);color:#fff;font-size:13px;font-weight:900;line-height:1;vertical-align:middle;position:relative;top:-4px}
+.ibtn.pulse{animation:ipulse 1.8s ease-out infinite}
+@keyframes ipulse{0%{box-shadow:0 0 0 0 rgba(139,92,246,.75)}70%{box-shadow:0 0 0 11px rgba(139,92,246,0)}100%{box-shadow:0 0 0 0 rgba(139,92,246,0)}}
+.ipop{margin:2px 0 4px;max-width:460px;background:var(--card2);border:1px solid rgba(139,92,246,.45);border-radius:14px;padding:11px 14px;font-size:14px;line-height:1.55;color:#CBD5E1;box-shadow:0 12px 30px rgba(0,0,0,.35)}
+.ctog{display:inline-flex;align-items:center;gap:6px;padding:6px 12px;border-radius:999px;background:var(--card);border:1px solid var(--line);font-size:13px;font-weight:800;color:#E2E8F0}
+.ctog i{font-style:normal;display:inline-block;transition:transform .2s}
+.ctog.open i{transform:rotate(180deg)}
 .badge{display:inline-block;margin-left:8px;padding:3px 9px;border-radius:99px;background:rgba(239,68,68,.15);color:#FCA5A5;font-size:11px;font-weight:800;vertical-align:middle}
-.stats{display:flex;gap:10px;flex-wrap:wrap;margin:16px 0}
+.stats{display:flex;gap:10px;flex-wrap:wrap;margin:22px 0 6px}
 .stat{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:10px 14px;min-width:110px}
 .stat b{display:block;font-size:22px} .stat small{color:var(--muted);font-size:12px}
 .srch{position:relative;margin:4px 0 18px}
@@ -45,12 +52,12 @@ button{border:0;background:none;cursor:pointer}
 .sres button{display:block;width:100%;text-align:left;padding:10px 14px;border-bottom:1px solid var(--line);font-size:14px}
 .sres button small{display:block;color:var(--muted);font-size:12px;margin-top:2px}
 .sres button:hover{background:var(--chip)}
-.resume{display:flex;align-items:center;gap:14px;background:linear-gradient(120deg,rgba(139,92,246,.18),rgba(59,130,246,.12));border:1px solid rgba(139,92,246,.35);border-radius:var(--r);padding:14px 16px;margin-bottom:18px}
+.resume{display:flex;align-items:center;gap:14px;background:linear-gradient(120deg,rgba(139,92,246,.18),rgba(59,130,246,.12));border:1px solid rgba(139,92,246,.35);border-radius:var(--r);padding:10px 12px 10px 16px;margin-bottom:16px}
 .resume small{color:var(--muted);font-size:12px;font-weight:700;letter-spacing:.05em;text-transform:uppercase}
 .resume b{display:block;font-size:17px;margin:2px 0}
 .resume span{color:#CBD5E1;font-size:13px}
 .resume button{padding:10px 16px;border-radius:999px;background:var(--acc);color:#fff;font-weight:800;flex:none}
-.h2{display:flex;align-items:baseline;gap:10px;margin:8px 0 4px}
+.h2{display:flex;align-items:center;gap:10px;margin:8px 0 10px}
 .h2 h2{margin:0;font-size:21px} .h2 small{color:var(--muted);font-size:13px}
 .cats{display:flex;gap:7px;flex-wrap:wrap;margin:10px 0 14px}
 .cats button{display:inline-flex;align-items:center;gap:7px;padding:7px 12px;border-radius:999px;background:var(--card);border:1px solid var(--line);font-size:13px;font-weight:700}
@@ -103,11 +110,16 @@ button{border:0;background:none;cursor:pointer}
 .seg button{flex:1;padding:7px 4px;border-radius:8px;font-size:12.5px;font-weight:700;color:var(--muted)} .seg button.on{background:var(--acc);color:#fff}
 .rng{width:calc(100% - 12px);margin:4px 6px 8px;accent-color:var(--acc)}
 .chk{display:flex;align-items:center;gap:8px;font-size:13px;margin:4px 6px;color:#CBD5E1}
-.hint{position:absolute;left:12px;bottom:12px;max-width:min(420px,60%);font-size:12px;color:#94A3B8;background:rgba(11,17,36,.7);border:1px solid var(--line);padding:6px 10px;border-radius:10px;pointer-events:none}
-.expl{position:absolute;left:50%;bottom:12px;transform:translateX(-50%);display:flex;align-items:center;gap:10px;padding:6px 12px 6px 6px;border-radius:999px;background:rgba(11,17,36,.82);backdrop-filter:blur(8px);border:1px solid var(--line);width:min(520px,calc(100% - 24px))}
-.expl .play{width:32px;height:32px;border-radius:50%;background:var(--acc);color:#fff;font-weight:900;flex:none}
-.expl small{font-size:11.5px;color:#CBD5E1;font-weight:700;white-space:nowrap}
-.expl input{flex:1;accent-color:var(--acc);min-width:40px}
+.hint{position:absolute;left:12px;bottom:104px;max-width:min(420px,60%);font-size:12px;color:#94A3B8;background:rgba(11,17,36,.7);border:1px solid var(--line);padding:6px 10px;border-radius:10px;pointer-events:none}
+.expl{position:absolute;left:50%;bottom:16px;transform:translateX(-50%);display:flex;flex-direction:column;align-items:stretch;gap:4px;padding:5px;border-radius:18px;background:rgba(11,17,36,.86);backdrop-filter:blur(8px);border:1px solid var(--line);width:min(440px,calc(100% - 20px))}
+.seg{display:flex;gap:3px;padding:3px;border-radius:13px;background:rgba(255,255,255,.04)}
+.seg button{flex:1;padding:8px 4px;border-radius:10px;font-size:12.5px;font-weight:800;color:#CBD5E1;white-space:nowrap;transition:background .15s,color .15s}
+.seg button.on{background:var(--acc);color:#fff}
+.expl input{margin:3px 10px 5px;accent-color:var(--acc);transition:opacity .2s,filter .2s}
+.expl input:disabled{filter:grayscale(1);opacity:.3}
+.rst{position:absolute;left:10px;top:62px;padding:7px 12px;border-radius:999px;background:rgba(11,17,36,.84);backdrop-filter:blur(8px);border:1px solid var(--line);font-size:12.5px;font-weight:800;color:#E2E8F0;z-index:3}
+.rst:active{transform:scale(.97)}
+.glbl{position:absolute;left:0;top:0;width:100%;height:100%;pointer-events:none}
 .gbtn{flex:none;padding:7px 11px;border-radius:999px;background:var(--chip);font-size:12px;font-weight:800;white-space:nowrap;border:1px solid var(--line)}
 .gbtn.on{background:linear-gradient(90deg,var(--v),var(--b));color:#fff;border-color:transparent}
 .lbl{position:absolute;left:0;top:0;pointer-events:none;display:flex;align-items:center;white-space:nowrap;z-index:3}
@@ -116,7 +128,7 @@ button{border:0;background:none;cursor:pointer}
 .lbl b{padding:5px 10px;border-radius:9px;background:rgba(11,17,36,.92);border:1px solid var(--line);font-size:13px;line-height:1.2}
 .lbl b small{display:block;font-weight:500;font-style:italic;color:var(--muted);font-size:11.5px}
 .lbl.lm b{border-color:#facc15}
-.selbar{position:absolute;left:10px;right:10px;bottom:62px;display:flex;align-items:center;gap:10px;padding:8px 8px 8px 14px;border-radius:14px;background:rgba(11,17,36,.9);border:1px solid var(--line);backdrop-filter:blur(8px)}
+.selbar{position:absolute;left:10px;right:10px;bottom:100px;display:flex;align-items:center;gap:10px;padding:8px 8px 8px 14px;border-radius:14px;background:rgba(11,17,36,.9);border:1px solid var(--line);backdrop-filter:blur(8px)}
 .selbar b{display:block;font-size:14px} .selbar small{color:var(--muted);font-style:italic;font-size:12px}
 .selbar .go{padding:9px 14px;border-radius:10px;background:var(--acc);color:#fff;font-weight:800;flex:none}
 .load{position:absolute;inset:0;display:grid;place-items:center;color:var(--muted);font-size:14px;pointer-events:none;text-align:center}
@@ -134,7 +146,7 @@ button{border:0;background:none;cursor:pointer}
 @keyframes pulse{50%{transform:scale(1.08)}}
 .spin{width:36px;height:36px;border-radius:50%;border:4px solid var(--line);border-top-color:var(--acc);animation:sp 1s linear infinite;margin:0 auto 10px}
 @keyframes sp{to{transform:rotate(360deg)}}
-.hq{position:absolute;right:12px;bottom:62px;padding:5px 10px;border-radius:999px;background:rgba(11,17,36,.8);border:1px solid var(--line);font-size:11.5px;font-weight:700;color:#CBD5E1;pointer-events:none}
+.hq{position:absolute;right:12px;bottom:100px;padding:5px 10px;border-radius:999px;background:rgba(11,17,36,.8);border:1px solid var(--line);font-size:11.5px;font-weight:700;color:#CBD5E1;pointer-events:none}
 .hq.done{color:#fff;background:linear-gradient(90deg,var(--v),var(--b));border-color:transparent}
 .cred2{position:absolute;right:12px;bottom:4px;font-size:10px;color:#64748B;pointer-events:none}
 /* panel */
@@ -235,9 +247,10 @@ button{border:0;background:none;cursor:pointer}
   .hint{display:none}
   .vtop h1{font-size:15px}
   .tools{top:8px;left:8px;right:8px}
-  .expl{bottom:10px}
+  .rst{left:8px;top:58px}
+  .expl{bottom:16px}
 }
-body.shot .vtop,body.shot .panel,body.shot .tools,body.shot .expl,body.shot .hint,body.shot .cred2,body.shot .lbl,body.shot .selbar,body.shot .load,body.shot .hq{display:none!important}
+body.shot .vtop,body.shot .panel,body.shot .tools,body.shot .expl,body.shot .hint,body.shot .cred2,body.shot .lbl,body.shot .selbar,body.shot .load,body.shot .hq,body.shot .rst,body.shot .glbl{display:none!important}
 html:has(body.shot),body.shot,body.shot .stage,body.shot #view{background:transparent!important}
 @media (min-width:900px){ .bPanel{display:none!important} .selbar{display:none!important} }
 </style>
@@ -248,13 +261,13 @@ html:has(body.shot),body.shot,body.shot .stage,body.shot #view{background:transp
 
 <div id="home" class="hide"><div class="wrapc">
   <div class="top"><a href="/" id="hBack"></a><div class="sp"></div><div class="langs" id="langs"></div></div>
-  <div class="hero"><div class="kick" id="hKick"></div><h1 id="hT"></h1><p id="hD"></p></div>
-  <div class="stats" id="stats"></div>
+  <div class="hero"><div class="kick" id="hKick"></div><h1 id="hT"></h1><div class="ipop hide" id="hInfo"></div></div>
   <div class="srch"><input id="gq" autocomplete="off" spellcheck="false"><div class="sres hide" id="gres"></div></div>
   <div id="resume"></div>
-  <div class="h2"><h2 id="hAt"></h2><small id="hAtS"></small></div>
-  <div class="cats" id="cats"></div>
+  <div class="h2"><h2 id="hAt"></h2><button class="ctog" id="cTog" aria-expanded="false"></button></div>
+  <div class="cats hide" id="cats"></div>
   <div class="grid" id="grid"></div>
+  <div class="stats" id="stats"></div>
   <p class="credit" id="credit"></p>
 </div></div>
 
@@ -268,8 +281,10 @@ html:has(body.shot),body.shot,body.shot .stage,body.shot #view{background:transp
   <div class="vmain">
     <div class="stage" id="stage">
       <canvas id="cv"></canvas>
+      <canvas id="glbl" class="glbl"></canvas>
+      <button class="rst" id="bReset"></button>
       <div class="tools">
-        <div class="tb"><button class="ib" id="tHome" data-tip=""><svg viewBox="0 0 24 24"><path d="M3 11l9-8 9 8"/><path d="M5 10v10h14V10"/></svg></button><button class="ib" id="tView" data-tip=""><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M2 12s4-7 10-7 10 7 10 7-4 7-10 7S2 12 2 12z"/></svg></button></div>
+        <div class="tb"><button class="ib" id="tView" data-tip=""><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M2 12s4-7 10-7 10 7 10 7-4 7-10 7S2 12 2 12z"/></svg></button></div>
         <div class="sp"></div>
         <div class="tb">
           <button class="ib" id="tBoth" data-tip=""><svg viewBox="0 0 24 24"><path d="M7 7h10M7 7l3-3M7 7l3 3M17 17H7m10 0l-3-3m3 3l-3 3"/></svg></button>
@@ -288,7 +303,7 @@ html:has(body.shot),body.shot,body.shot .stage,body.shot #view{background:transp
       <div class="lbl lm hide" id="lbl2"><i style="--dot:#facc15"></i><b></b></div>
       <div class="hint" id="hint"></div>
       <div class="selbar hide" id="selbar"><div style="flex:1;min-width:0"><b id="sbN"></b><small id="sbL"></small></div><button class="go" id="sbGo"></button><button class="pill" id="sbX">✕</button></div>
-      <div class="expl" id="expl"><button class="play" id="bPlay">⇄</button><small id="sA"></small><input type="range" id="exp" min="0" max="100" value="0"><small id="sB"></small><button class="gbtn" id="bGrid"></button></div>
+      <div class="expl" id="expl"><div class="seg" id="seg"><button data-m="whole"></button><button data-m="apart"></button><button data-m="grid"></button></div><input type="range" id="exp" min="0" max="100" value="0" disabled></div>
       <div class="load" id="load"><div class="lbox"><div class="spin"></div><span id="loadT"></span><div class="pbar hide" id="loadBar"><i></i><div class="prow"><b id="loadP">0%</b><span id="loadMB"></span></div></div></div></div>
       <div class="cred2" id="cred2"></div><div class="hq hide" id="hq"></div>
     </div>
@@ -300,6 +315,6 @@ html:has(body.shot),body.shot,body.shot .stage,body.shot #view{background:transp
   </div>
 </div>
 <div class="toast hide" id="toast"></div>
-<script type="module" src="app.js?v=7"></script>
+<script type="module" src="app.js?v=8"></script>
 </body>
 </html>
