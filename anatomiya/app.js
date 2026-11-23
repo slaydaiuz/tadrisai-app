@@ -2,7 +2,7 @@
 // Modellar: Z-Anatomy (CC BY-SA 4.0) asosida, u esa BodyParts3D © DBCLS (CC BY 4.0) asosida. Matnlar — TadrisAI.
 // Hammasi oldindan tayyorlangan: ishlatganda AI chaqirilmaydi.
 import * as THREE from 'three';
-import { OrbitControls } from './OrbitControls.js';
+import { OrbitControls } from '../atlas/OrbitControls.js';
 
 const $ = id => document.getElementById(id);
 const API = location.hostname === 'tadris.ai' ? '/api' : 'https://91-107-229-30.sslip.io/api';
@@ -100,6 +100,53 @@ const TX = {
     r1: 'Step 1 · choose', r2: 'Step 2 · type (with hints)', r3: 'Step 3 · no hints', deepDone: 'Well done! {n} structures learned 🎉', learned: 'learned: {n}', nothing: 'Everything is learned. Reset progress to start over.', resetP: 'Reset progress', exitQ: '✕ Leave test',
     lockT: 'Atlas coming soon', lockD: 'This section is being tested and will open for everyone soon.', lockB: 'Back to TadrisAI', topic: '{t} anatomy'},
 };
+
+// --- TadrisAI'ning o'z so'zlari (boshqa saytlardagi yozuvlar ishlatilmaydi)
+Object.assign(TX.uz, {kick: '3D anatomiya', title: "Tanani qatlamma-qatlam o'rganing", desc: "Suyakdan nervgacha — har bir qismni aylantirib ko'ring, nomini o'zbek, rus, lotin va ingliz tilida bilib oling, keyin mashqda mustahkamlang.",
+  sLm: 'Suyak belgilari', gq: 'Istalgan qismni toping: son suyagi, aorta, n. vagus…', resume: 'Oxirgi ochganingiz', resumeB: 'Ochish', seenOf: '{a} / {b} qism ochilgan',
+  atlasesS: 'Har biri alohida model — kerakli tizimni tanlang.', nSt: '{n} qism', nLm: '{n} belgi', seenP: 'Ochilgan: {p}%',
+  tTree: "Ro'yxat", tLay: 'Tizimlar', tInfo: 'Batafsil', tLearn: 'Mashq', hint: "Suring — aylanadi · g'ildirak yoki ikki barmoq — yaqinlashadi · bosing — tanlanadi",
+  home: 'Boshiga qaytarish', view: 'Tomonlar', both: 'Juftini birga belgilash', hideSel: 'Yashirish', iso: "Yolg'iz qoldirish", showAll: 'Hammasini qaytarish', xray: 'Shaffof rejim', cut: 'Kesib ko\'rish', more: 'Yana',
+  vF: 'Old', vB: 'Orqa', vL: 'Chap yon', vR: "O'ng yon", vT: 'Tepa', vD: 'Past', vFit: "Ekranga sig'dirish", cutD: 'Tekislikni surib, ichini oching.', cPos: 'Chuqurlik', cFlip: 'Teskari tomonni qoldirish',
+  mSel: 'Tanlangan qism', mGroup: "Guruhini yolg'iz qoldirish", mFocus: "Yaqindan ko'rish", mLm: "Belgilarni ko'rsatish", mFull: 'Butun ekran', mKeys: "Tugmalar: H yashirish · I yolg'iz · A qaytarish · F yaqinlash · X shaffof · Esc bekor",
+  together: 'Butun', apart: "Bo'laklab", search: "Ro'yxatdan qidirish…", openAll: 'Ochish', closeAll: 'Yopish', stCount: '{n} ta · {s} tasi ochilgan',
+  layers: 'Tizimlar', opacity: "Ko'rinish darajasi", solo: "Yolg'iz", reset: 'Asliga', ctx: 'Skelet (orqa fon)', insT: 'Mushak yopishgan joylar', insD: "Suyak tanlansa — unga yopishgan mushaklar joyi, mushak tanlansa — uning suyakdagi izlari bo'yaladi.",
+  insO: 'Boshlanadi', insE: 'Yopishadi', lmT: 'Suyak belgilari', lmD: "Tanlangan suyak yoki a'zoning nomli nuqtalari: do'mboq, teshik, qirra va boshqalar.",
+  pick: 'Hali hech narsa tanlanmagan', pickD: 'Modeldan biror qismni bosing yoki ro\'yxatdan toping.', aOnly: "Yolg'iz qoldirish", aHide: 'Yashirish', aFocus: 'Yaqindan', aAll: 'Hammasi',
+  lmL: 'Belgilar · {n}', insFrom: 'Bu suyakdan boshlanadi', insTo: 'Bu suyakka yopishadi', mOrig: 'Qayerdan boshlanadi', mIns: 'Qayerga yopishadi', related: 'Yonidagilar', other: 'Yana qayerda bor',
+  res: 'Natijangiz', resD: '{a} tadan {b} tasini ochdingiz', test: 'Tez test', testD: '10 ta savol, {n} ta qism ichidan.', mFind: 'Modeldan top', mFindD: 'Nomi chiqadi — siz uni modelda bosasiz.',
+  mPick: "4 tadan biri", mPickD: "Bo'yalgan qismning nomini to'rt variantdan tanlaysiz.", mType: "O'zing yoz", mTypeD: "Bo'yalgan qismning nomini o'zingiz yozasiz.", mTf: "Ha yoki yo'q", mTfD: "«Bu — …» degan gap to'g'rimi?",
+  deep: 'Yodlash rejimi', paired: "juft (o'ng va chap)", noTr: "O'zbekcha nomi tez orada qo'shiladi"});
+Object.assign(TX.ru, {kick: '3D-анатомия', title: 'Изучайте тело слой за слоем', desc: 'От костей до нервов — вращайте каждую часть, узнайте её название на узбекском, русском, латыни и английском и закрепите в упражнениях.',
+  sLm: 'Ориентиров на костях', gq: 'Найдите любую часть: бедренная кость, аорта, n. vagus…', resume: 'Вы открывали последним', resumeB: 'Открыть', seenOf: 'Открыто {a} из {b}',
+  atlasesS: 'Каждый — отдельная модель: выберите нужную систему.', nSt: '{n} частей', nLm: '{n} ориентиров', seenP: 'Открыто: {p}%',
+  tTree: 'Список', tLay: 'Системы', tInfo: 'Подробно', tLearn: 'Упражнения', hint: 'Тяните — вращение · колесо или два пальца — приблизить · нажмите — выбрать',
+  home: 'В начало', view: 'Стороны', both: 'Отмечать пару вместе', hideSel: 'Скрыть', iso: 'Оставить одну', showAll: 'Вернуть всё', xray: 'Прозрачный режим', cut: 'Разрез', more: 'Ещё',
+  vF: 'Спереди', vB: 'Сзади', vL: 'Слева', vR: 'Справа', vT: 'Сверху', vD: 'Снизу', vFit: 'Вписать в экран', cutD: 'Двигайте плоскость и заглядывайте внутрь.', cPos: 'Глубина', cFlip: 'Оставить другую сторону',
+  mSel: 'Выбранная часть', mGroup: 'Оставить её группу', mFocus: 'Рассмотреть ближе', mLm: 'Показывать ориентиры', mFull: 'На весь экран', mKeys: 'Клавиши: H скрыть · I оставить · A вернуть · F приблизить · X прозрачно · Esc отмена',
+  together: 'Целиком', apart: 'По частям', search: 'Поиск по списку…', openAll: 'Раскрыть', closeAll: 'Свернуть', stCount: '{n} · открыто {s}',
+  layers: 'Системы', opacity: 'Видимость', solo: 'Одна', reset: 'Как было', ctx: 'Скелет (фон)', insT: 'Где крепятся мышцы', insD: 'Выбрана кость — окрашиваются места крепления её мышц; выбрана мышца — её следы на костях.',
+  insO: 'Начинается', insE: 'Крепится', lmT: 'Ориентиры на костях', lmD: 'Названные точки выбранной кости или органа: бугры, отверстия, гребни и другие.',
+  pick: 'Пока ничего не выбрано', pickD: 'Нажмите на часть модели или найдите её в списке.', aOnly: 'Оставить одну', aHide: 'Скрыть', aFocus: 'Ближе', aAll: 'Всё',
+  lmL: 'Ориентиры · {n}', insFrom: 'Начинаются от этой кости', insTo: 'Крепятся к этой кости', mOrig: 'Откуда начинается', mIns: 'Куда крепится', related: 'Рядом', other: 'Где ещё есть',
+  res: 'Ваш результат', resD: 'Открыто {b} из {a}', test: 'Быстрый тест', testD: '10 вопросов из {n} частей.', mFind: 'Найди на модели', mFindD: 'Появится название — нажмите эту часть на модели.',
+  mPick: 'Один из четырёх', mPickD: 'Выберите название окрашенной части из четырёх.', mType: 'Напиши сам', mTypeD: 'Напишите название окрашенной части.', mTf: 'Да или нет', mTfD: 'Верно ли «Это — …»?',
+  deep: 'Режим запоминания', noTr: 'Перевод скоро появится'});
+Object.assign(TX.en, {kick: '3D anatomy', title: 'Learn the body layer by layer', desc: 'From bones to nerves — spin every part, learn its name in Uzbek, Russian, Latin and English, then lock it in with practice.',
+  sLm: 'Bone landmarks', gq: 'Find any part: femur, aorta, vagus nerve…', resume: 'You last opened', resumeB: 'Open', seenOf: '{a} of {b} opened',
+  atlasesS: 'Each one is its own model — pick the system you need.', nSt: '{n} parts', nLm: '{n} landmarks', seenP: 'Opened: {p}%',
+  tTree: 'List', tLay: 'Systems', tInfo: 'Details', tLearn: 'Practice', hint: 'Drag to spin · wheel or pinch to zoom · tap to pick',
+  home: 'Back to start', view: 'Sides', both: 'Mark the pair together', hideSel: 'Hide', iso: 'Keep only this', showAll: 'Bring all back', xray: 'See-through', cut: 'Cut open', more: 'More',
+  vF: 'Front', vB: 'Back', vL: 'Left', vR: 'Right', vT: 'Top', vD: 'Bottom', vFit: 'Fit to screen', cutD: 'Slide the plane to look inside.', cPos: 'Depth', cFlip: 'Keep the other side',
+  mSel: 'Selected part', mGroup: 'Keep only its group', mFocus: 'Look closer', mLm: 'Show landmarks', mFull: 'Full screen', mKeys: 'Keys: H hide · I keep · A bring back · F zoom · X see-through · Esc clear',
+  together: 'Whole', apart: 'In pieces', search: 'Search the list…', openAll: 'Expand', closeAll: 'Collapse', stCount: '{n} · {s} opened',
+  layers: 'Systems', opacity: 'Visibility', solo: 'Only', reset: 'Reset', ctx: 'Skeleton (background)', insT: 'Where muscles attach', insD: 'Pick a bone to paint where its muscles attach, or pick a muscle to see its marks on the bones.',
+  insO: 'Starts', insE: 'Attaches', lmT: 'Bone landmarks', lmD: 'Named points on the selected bone or organ: tubercles, holes, ridges and more.',
+  pick: 'Nothing picked yet', pickD: 'Tap a part of the model or find it in the list.', aOnly: 'Keep only this', aHide: 'Hide', aFocus: 'Closer', aAll: 'All',
+  lmL: 'Landmarks · {n}', insFrom: 'Start on this bone', insTo: 'Attach to this bone', mOrig: 'Where it starts', mIns: 'Where it attaches', related: 'Nearby', other: 'Also found in',
+  res: 'Your progress', resD: '{b} of {a} opened', test: 'Quick test', testD: '10 questions from {n} parts.', mFind: 'Find on the model', mFindD: 'A name appears — tap that part on the model.',
+  mPick: 'One of four', mPickD: 'Choose the painted part\'s name from four.', mType: 'Type it', mTypeD: 'Type the painted part\'s name.', mTf: 'Yes or no', mTfD: 'Is "This is …" right?',
+  deep: 'Memorise mode', noTr: 'Translation coming soon'});
 let LANG = (() => { try { const a = localStorage.getItem('atlas_lang'); if (TX[a]) return a; const l = localStorage.getItem('tadris_lang'); if (TX[l]) return l; if (['kk', 'ky', 'tg'].includes(l)) return 'ru'; } catch (e) {} return (navigator.language || '').startsWith('ru') ? 'ru' : 'uz'; })();
 const LI = () => ({uz: 0, ru: 1, en: 2}[LANG]);
 const t = (k, o) => { let s = (TX[LANG] || TX.uz)[k] ?? TX.uz[k] ?? k; if (o) for (const [a, b] of Object.entries(o)) s = s.split('{' + a + '}').join(b); return s; };
@@ -138,7 +185,7 @@ function langBtns(el, cb) {
   el.innerHTML = ['uz', 'ru', 'en'].map(l => `<button data-l="${l}" class="${l === LANG ? 'on' : ''}">${l.toUpperCase()}</button>`).join('');
   el.querySelectorAll('button').forEach(b => b.onclick = () => { LANG = b.dataset.l; store.set('atlas_lang', LANG); document.documentElement.lang = LANG; cb(); });
 }
-const catOf = id => C.cats.find(c => c[0] === id) || ['top', ['', '', ''], '#2dd4bf'];
+const catOf = id => C.cats.find(c => c[0] === id) || ['top', ['', '', ''], '#a78bfa'];
 function renderHome() {
   $('hBack').textContent = t('back'); $('hKick').textContent = t('kick'); $('hT').innerHTML = esc(t('title')) + `<span class="badge">${t('badge')}</span>`; $('hD').textContent = t('desc');
   const tot = C.atlases.reduce((s, a) => s, 0);
@@ -154,7 +201,7 @@ function renderHome() {
   } else $('resume').innerHTML = '';
   $('hAt').textContent = t('atlases'); $('hAtS').textContent = t('atlasesS');
   const cnt = c => C.atlases.filter(a => a.cat === c).length;
-  $('cats').innerHTML = `<button data-c="all" class="${CAT === 'all' ? 'on' : ''}" style="--c:#2dd4bf">${t('all')} <em>${C.atlases.length}</em></button>` +
+  $('cats').innerHTML = `<button data-c="all" class="${CAT === 'all' ? 'on' : ''}" style="--c:#8b5cf6">${t('all')} <em>${C.atlases.length}</em></button>` +
     C.cats.filter(c => cnt(c[0])).map(c => `<button data-c="${c[0]}" class="${CAT === c[0] ? 'on' : ''}" style="--c:${c[2]}"><i></i>${esc(tr(c[1]))} <em>${cnt(c[0])}</em></button>`).join('');
   $('cats').querySelectorAll('button').forEach(b => b.onclick = () => { CAT = b.dataset.c; renderHome(); });
   $('grid').innerHTML = C.atlases.filter(a => CAT === 'all' || a.cat === CAT).map(a => {
@@ -190,7 +237,7 @@ let LAYV = {}, LAYO = {}, SOLO = 0, OPEN = new Set(), TQ = '';
 const clipPlane = new THREE.Plane(new THREE.Vector3(0, -1, 0), 0);
 const pointer = new THREE.Vector2();
 const SYSCOL = {1: 0xe9dfc8, 3: 0x8fb8d8, 4: 0xb5524a, 5: 0xc0392b, 6: 0x6abf69, 7: 0xf2d16b, 8: 0xd98b7a, 9: 0xe0b9a0};
-const SELC = new THREE.Color(0x2dd4bf);
+const SELC = new THREE.Color(0x8b5cf6);
 
 function initGL() {
   if (renderer) return true;
@@ -323,7 +370,7 @@ async function openAtlas(id, pickN) {
     for (const fp of files[a.layers.length]) {
       const p = C.parts[fp.id]; if (!p || !p[4]) continue;
       if (!names.has(p[6]) && !names.has(p[0])) continue;
-      const mat = new THREE.MeshStandardMaterial({color: p[4] === 1 ? 0xef4444 : 0x3b82f6, roughness: 0.5, side: THREE.DoubleSide, polygonOffset: true, polygonOffsetFactor: -2, polygonOffsetUnits: -2, clippingPlanes: [clipPlane]});
+      const mat = new THREE.MeshStandardMaterial({color: p[4] === 1 ? 0xef4444 : 0x06b6d4, roughness: 0.5, side: THREE.DoubleSide, polygonOffset: true, polygonOffsetFactor: -2, polygonOffsetUnits: -2, clippingPlanes: [clipPlane]});
       const m = new THREE.Mesh(geom(fp), mat); m.visible = false; m.renderOrder = 2;
       m.userData = {p, ins: true, side: p[1], c: m.geometry.boundingSphere.center.clone()}; root.add(m); INS.push(m);
     }
@@ -445,7 +492,7 @@ function placeLabels() {
 }
 function setLabel(ms, text, sub, dot) {
   LBL = ms ? {ms} : null;
-  if (ms) { $('lbl').querySelector('b').innerHTML = esc(text) + (sub ? `<small>${esc(sub)}</small>` : ''); $('lbl').style.setProperty('--dot', dot || '#2dd4bf'); }
+  if (ms) { $('lbl').querySelector('b').innerHTML = esc(text) + (sub ? `<small>${esc(sub)}</small>` : ''); $('lbl').style.setProperty('--dot', dot || '#8b5cf6'); }
 }
 
 // --- anatomik belgilar (landmark)
@@ -613,7 +660,7 @@ function renderLayers() {
     h += `<div class="lay"><div class="row"><button class="sw${LAYV[s] ? ' on' : ''}" data-sw="${s}"></button><b>${esc(name)}</b><small>${n}</small>${s && sys.length > 1 ? `<button class="solo${SOLO === s ? ' on' : ''}" data-solo="${s}">${t('solo')}</button>` : ''}</div>
       <small>${t('opacity')}</small><input type="range" min="5" max="100" value="${Math.round((LAYO[s] ?? 1) * 100)}" data-op="${s}"></div>`;
   }
-  if (AT.ins) h += `<div class="sec">${t('insT')}</div><div class="lay"><div class="row"><button class="sw${SHOW_INS ? ' on' : ''}" id="swIns"></button><b>${t('insT')}</b></div><small style="display:block;margin-top:6px;line-height:1.45">${t('insD')}</small><div style="display:flex;gap:14px;margin-top:8px;font-size:12px"><span><i style="display:inline-block;width:9px;height:9px;border-radius:50%;background:#ef4444"></i> ${t('insO')}</span><span><i style="display:inline-block;width:9px;height:9px;border-radius:50%;background:#3b82f6"></i> ${t('insE')}</span></div></div>`;
+  if (AT.ins) h += `<div class="sec">${t('insT')}</div><div class="lay"><div class="row"><button class="sw${SHOW_INS ? ' on' : ''}" id="swIns"></button><b>${t('insT')}</b></div><small style="display:block;margin-top:6px;line-height:1.45">${t('insD')}</small><div style="display:flex;gap:14px;margin-top:8px;font-size:12px"><span><i style="display:inline-block;width:9px;height:9px;border-radius:50%;background:#ef4444"></i> ${t('insO')}</span><span><i style="display:inline-block;width:9px;height:9px;border-radius:50%;background:#06b6d4"></i> ${t('insE')}</span></div></div>`;
   if (AT.lm) h += `<div class="lay"><div class="row"><button class="sw${SHOW_LM ? ' on' : ''}" id="swLm"></button><b>${t('lmT')}</b></div><small style="display:block;margin-top:6px;line-height:1.45">${t('lmD')}</small></div>`;
   pb.innerHTML = h;
   pb.querySelectorAll('[data-sw]').forEach(b => b.onclick = () => { const s = +b.dataset.sw; LAYV[s] = !LAYV[s]; applyVis(); renderPanel(true); });
@@ -651,9 +698,9 @@ function renderInfo() {
     C.parts.forEach(p => { if (!p[4]) return; if (p[6] === n) (p[4] === 1 ? orig : insr).add(p[0]); if (p[0] === n && p[6] >= 0) (p[4] === 1 ? oB : iB).add(p[6]); });
     const lst = (s, col) => [...s].sort((a, b) => nm(a).localeCompare(nm(b), LANG)).map(x => `<button data-goto="${x}" style="--dot:${col}"><i></i>${esc(nm(x))}</button>`).join('');
     if (orig.size) h += `<div class="sec">${t('insFrom')} · ${orig.size}</div><div class="lst">${lst(orig, '#ef4444')}</div>`;
-    if (insr.size) h += `<div class="sec">${t('insTo')} · ${insr.size}</div><div class="lst">${lst(insr, '#3b82f6')}</div>`;
+    if (insr.size) h += `<div class="sec">${t('insTo')} · ${insr.size}</div><div class="lst">${lst(insr, '#06b6d4')}</div>`;
     if (oB.size) h += `<div class="sec">${t('mOrig')}</div><div class="lst">${lst(oB, '#ef4444')}</div>`;
-    if (iB.size) h += `<div class="sec">${t('mIns')}</div><div class="lst">${lst(iB, '#3b82f6')}</div>`;
+    if (iB.size) h += `<div class="sec">${t('mIns')}</div><div class="lst">${lst(iB, '#06b6d4')}</div>`;
   }
   const sib = ITEMS.filter(x => x.node === it.node && x !== it);
   if (sib.length) h += `<div class="sec">${t('related')} · ${sib.length}</div><div class="lst">` + sib.slice(0, 30).map(x => `<button data-k="${x.k}" style="--dot:#${x.ms[0].userData.base.getHexString()}"><i></i>${esc(nm(x.n))}</button>`).join('') + `</div>`;

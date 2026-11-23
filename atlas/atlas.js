@@ -1,7 +1,7 @@
 // TadrisAI · 3D anatomiya atlasi (2026-11-23, 2-versiya). Modellar: BodyParts3D, © DBCLS, CC BY 4.0.
 // Hammasi oldindan tayyorlangan (nomlar, izohlar, savollar) — ishlatganda AI chaqirilmaydi.
 import * as THREE from 'three';
-import { OrbitControls } from '../OrbitControls.js';
+import { OrbitControls } from './OrbitControls.js';
 
 const $ = id => document.getElementById(id);
 const API = location.hostname === 'tadris.ai' ? '/api' : 'https://91-107-229-30.sslip.io/api';
