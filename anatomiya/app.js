@@ -391,7 +391,7 @@ async function openAtlas(id, pickN) {
   history.replaceState(null, '', location.pathname + '?a=' + a.id + (pickN != null ? '&n=' + pickN : '') + (DEV ? '&dev=1' : ''));
   labels();
   if (!initGL()) { $('loadT').textContent = t('noGl'); $('load').classList.remove('hide'); return; }
-  resize(); $('load').classList.remove('hide'); $('loadT').textContent = t('load'); $('loadBar').classList.add('hide'); explodeK = 0; GRID = null; GK = 0; gridAuto = false; MODE = 'whole'; setFlat(false); segUI();
+  resize(); $('load').classList.remove('hide'); $('loadT').textContent = t('load'); $('loadBar').classList.add('hide'); explodeK = 0; GRID = null; GK = 0; GP = 0; GSTART = null; MODE = 'whole'; setFlat(false); segUI();
   if (root) { scene.remove(root); root.traverse(o => { if (o.isMesh) { o.geometry.dispose(); o.material.dispose(); } }); }
   root = new THREE.Group(); scene.add(root); MESHES = []; ITEMS = []; BYN = new Map(); INS = []; LMG = null;
   renderPanel();
@@ -558,9 +558,11 @@ function buildGrid() {
 const ease = t => t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2;
 let GK = 0;   // 0 — joyida, 1 — qatorga terilgan
 // 2026-11-23, egasi: uch rejim — «Butun» (surgich yopiq), «Ajratish» (surgich qancha surilsa, shuncha ajraladi, 3D),
-// «Qatorga terish» (surgich surila boshlasa, bo'laklar o'zi sekin qatorga teriladi va ko'rinish 2D ga o'tadi:
-// aylantirish yo'q, surish va yaqinlashtirish bor, yaqinlashganda nomlar chiqadi).
-let MODE = 'whole', FLAT = false, gridAuto = false;
+// «Qatorga terish» (surgich barmoqqa ergashadi: model o'z kattaligidan sekin uzoqlashib, ajralib, keyin qatorga
+// taxlanadi; ko'rinish 2D — aylantirish yo'q, surish va yaqinlashtirish bor; yaqinlashganda tagida nomi).
+// 2026-11-23 23:47, egasi: o'zi avtomatik ketib qolmasin.
+let MODE = 'whole', FLAT = false, GP = 0, GSTART = null, GFIT = null;
+const GSPLIT = 0.4, GEXP = 0.5;   // surgichning 0–40% qismi — ajralish, qolgani — qatorga taxlanish
 function setExplode(k) { explodeK = k; place(); }
 function setGrid(g) { GK = g; place(); }
 function place() {
@@ -593,52 +595,65 @@ function setFlat(on) {
 function segUI() {
   $('seg').querySelectorAll('button').forEach(b => b.classList.toggle('on', b.dataset.m === MODE));
   const e = $('exp'); e.disabled = MODE === 'whole';
-  e.value = MODE === 'grid' ? Math.round(GK * 100) : MODE === 'apart' ? Math.round(explodeK * 100) : 0;
+  e.value = MODE === 'grid' ? Math.round(GP * 100) : MODE === 'apart' ? Math.round(explodeK * 100) : 0;
 }
-function leaveGrid() {
-  gridAuto = false; cancelAnimationFrame(ANIM.grid);
-  const wasFlat = FLAT; setFlat(false);
-  if (GK > 0) tween('grid', GK, 0, 900 * GK, setGrid, () => { GRID = null; });
-  if (wasFlat) resetView();
+function leaveGrid(done) {   // qatorlardan chiqish: shu yo'l bilan orqaga — kamera boshlagan joyiga qaytadi
+  cancelAnimationFrame(ANIM.grid);
+  if (GP > 0 && GSTART) tween('grid', GP, 0, 500 + 700 * GP, gridProgress, done); else { gridProgress(0); done && done(); }
 }
 function setMode(m) {
   if (!AT) return;
   closePops && closePops();
-  MODE = m;
-  if (m === 'whole') { leaveGrid(); if (explodeK > 0) tween('exp', explodeK, 0, 700, setExplode); }
-  else if (m === 'apart') leaveGrid();
-  else { cancelAnimationFrame(ANIM.exp); if (explodeK > 0) tween('exp', explodeK, 0, 500, setExplode); }
+  const was = MODE; MODE = m;
+  if (was === 'grid' && m !== 'grid') leaveGrid(() => segUI());
+  else if (m === 'whole' && explodeK > 0) tween('exp', explodeK, 0, 700, setExplode);
+  else if (m === 'grid') { cancelAnimationFrame(ANIM.exp); if (explodeK > 0) tween('exp', explodeK, 0, 500, setExplode); }
   segUI();
 }
 function expInput(v) {   // surgich 0…1
   if (MODE === 'apart') { cancelAnimationFrame(ANIM.exp); setExplode(v); return; }
-  if (MODE !== 'grid' || gridAuto) return;
-  if (v > GK + 0.02 && GK < 1) startGridAuto();                   // surila boshladi — qolganini o'zi sekin teradi
-  else if (v < GK) { setGrid(v); if (v <= 0.005) { GK = 0; place(); GRID = null; setFlat(false); resetView(); } }
+  if (MODE === 'grid') { cancelAnimationFrame(ANIM.grid); gridProgress(v); }
 }
-function startGridAuto() {
-  if (explodeK > 0) { cancelAnimationFrame(ANIM.exp); setExplode(0); }
-  if (!FLAT || !GRID) { buildGrid(); fitGrid(); setFlat(true); }
-  gridAuto = true;
-  tween('grid', GK, 1, 2600 * (1 - GK) + 300, v => { setGrid(v); $('exp').value = Math.round(v * 100); }, () => { gridAuto = false; segUI(); });
+function gridProgress(P) {   // 0 — o'z holida (3D), 1 — qatorga taxlangan (2D); kamera ham shu bilan birga sekin uzoqlashadi
+  P = Math.max(0, Math.min(1, P));
+  if (P > 0 && !GSTART) {
+    cancelAnimationFrame(camAnim); cancelAnimationFrame(ANIM.exp);
+    GSTART = {p: camera.position.clone(), t: controls.target.clone(), e: explodeK};
+    GRID = null; buildGrid(); GFIT = gridFitCam(); setFlat(true);
+    // oraliq nuqta: ajralgan model ekrandan chiqmasligi uchun kamera shuncha uzoqlashadi
+    const f = (1 + 0.9 * GEXP) / (1 + 0.9 * GSTART.e);
+    GSTART.mp = GSTART.t.clone().add(GSTART.p.clone().sub(GSTART.t).multiplyScalar(f)); GSTART.mt = GSTART.t.clone();
+  }
+  GP = P;
+  if (!GSTART) return;
+  const a = Math.min(1, P / GSPLIT), b = Math.max(0, (P - GSPLIT) / (1 - GSPLIT));
+  explodeK = GSTART.e + (GEXP - GSTART.e) * ease(a); GK = b; place();
+  if (P <= GSPLIT) { const k = ease(a); camera.position.lerpVectors(GSTART.p, GSTART.mp, k); controls.target.lerpVectors(GSTART.t, GSTART.mt, k); }
+  else { const k = ease(b); camera.position.lerpVectors(GSTART.mp, GFIT.p, k); controls.target.lerpVectors(GSTART.mt, GFIT.t, k); }
+  if (P === 0) {
+    camera.position.copy(GSTART.p); controls.target.copy(GSTART.t);
+    explodeK = 0; GK = 0; GSTART = null; GRID = null; place(); setFlat(false);
+  }
 }
+function gridDone() { if (GP >= 1) { explodeK = 0; place(); } }   // taxlangach: ajralish izi qolmasin
 function freeArea() {   // sahna ustidagi tugmalar egallamagan joy (tepada asboblar, pastda rejim paneli)
   const r = $('stage').getBoundingClientRect(), H = Math.max(1, r.height);
   const top = Math.min(H * 0.3, Math.max(0, $('bReset').getBoundingClientRect().bottom - r.top) + 8);
   const bot = Math.min(H * 0.3, Math.max(0, r.bottom - $('expl').getBoundingClientRect().top) + 8);
   return {r, top, bot, free: Math.max(0.4, (H - top - bot) / H)};
 }
-function fitGrid() {
-  if (!GSZ) return; const v = camera.fov * Math.PI / 180, h = 2 * Math.atan(Math.tan(v / 2) * camera.aspect), fa = freeArea();
+function gridFitCam() {   // qatorlar bo'sh joyga to'liq sig'adigan kamera holati (old tomondan)
+  const v = camera.fov * Math.PI / 180, h = 2 * Math.atan(Math.tan(v / 2) * camera.aspect), fa = freeArea();
   const d = Math.max(GSZ.y / fa.free / 2 / Math.tan(v / 2), GSZ.x / 2 / Math.tan(h / 2)) * 1.04 + GSZ.z;
   const oy = (fa.top - fa.bot) / 2 * (2 * (d - GSZ.z) * Math.tan(v / 2) / Math.max(1, fa.r.height));   // bo'sh joy markaziga
-  animCam(new THREE.Vector3(0, oy, d), new THREE.Vector3(0, oy, 0)); camera.far = Math.max(camera.far, d * 4); camera.updateProjectionMatrix(); controls.maxDistance = Math.max(controls.maxDistance, d * 2);
+  camera.far = Math.max(camera.far, d * 4); camera.updateProjectionMatrix(); controls.maxDistance = Math.max(controls.maxDistance, d * 2);
   controls.minDistance = Math.min(controls.minDistance, radius * 0.01);
+  return {p: new THREE.Vector3(0, oy, d), t: new THREE.Vector3(0, oy, 0)};
 }
 // aylanish markazi modeldan chiqib ketmasin (telefonda ikki barmoq bilan surilganda markaz bo'sh joyga ketib qolardi)
 const _cl = new THREE.Vector3();
 function clampTarget() {
-  if (!controls || !AT) return;
+  if (!controls || !AT || (GSTART && GP < 1)) return;
   const t = controls.target;
   let hx, hy, hz;
   if (FLAT && GSZ) { hx = GSZ.x / 2; hy = GSZ.y / 2; hz = Math.max(GSZ.z, radius * 0.2); }
@@ -647,10 +662,10 @@ function clampTarget() {
   if (_cl.lengthSq() > 0) { t.add(_cl); camera.position.add(_cl); }
 }
 // 2D (qatorga terilgan) ko'rinishda: yaqinlashtirilgan bo'laklar tagida nomi
-let GLK = '';
+let GLK = '', GLAB = true;    // 2026-11-23 23:49, egasi: «yozuvlar turaversin» (bosganda ham nomi chiqadi)
 const _ga = new THREE.Vector3(), _gb = new THREE.Vector3();
 function gridLabels() {
-  const cv = $('glbl'), on = FLAT && GK > 0.98 && GRID && !gridAuto;
+  const cv = $('glbl'), on = GLAB && FLAT && GK > 0.98 && GRID;
   if (!on) { if (GLK) { cv.getContext('2d').clearRect(0, 0, cv.width, cv.height); GLK = ''; } return; }
   const r = $('stage').getBoundingClientRect(), dpr = Math.min(window.devicePixelRatio || 1, 2);
   const key = camera.position.toArray().map(x => x.toFixed(5)).join() + controls.target.toArray().map(x => x.toFixed(5)).join() + r.width + 'x' + r.height + LANG + (sel ? sel.n : '');
@@ -676,11 +691,11 @@ function gridLabels() {
     g.fillStyle = '#F1F5F9'; g.fillText(s, x, y + 12.5);
   }
 }
-if (DEV) window.__zd = () => ({cam: camera.position.toArray().map(x => +x.toFixed(3)), GSZ: GSZ && GSZ.toArray().map(x => +x.toFixed(3)), aspect: +camera.aspect.toFixed(3), fov: camera.fov, maxD: controls.maxDistance, t: controls && controls.target.toArray().map(x => +x.toFixed(3)), FLAT, GK: +GK.toFixed(3), MODE, explodeK, BSZ: BSZ.toArray().map(x => +x.toFixed(3))});
+if (DEV) window.__zd = () => ({cam: camera.position.toArray().map(x => +x.toFixed(3)), GSZ: GSZ && GSZ.toArray().map(x => +x.toFixed(3)), aspect: +camera.aspect.toFixed(3), fov: camera.fov, maxD: controls.maxDistance, t: controls && controls.target.toArray().map(x => +x.toFixed(3)), FLAT, GP, GK: +GK.toFixed(3), MODE, explodeK, BSZ: BSZ.toArray().map(x => +x.toFixed(3))});
 function resetAll() {   // «Asliga qaytarish»: rejim, kesim, shaffoflik, yashirilganlar, tanlov va kamera — hammasi boshidagidek
   if (!AT) return;
-  MODE = 'whole'; gridAuto = false; cancelAnimationFrame(ANIM.grid); cancelAnimationFrame(ANIM.exp);
-  setFlat(false); GK = 0; explodeK = 0; GRID = null; place(); segUI();
+  MODE = 'whole'; cancelAnimationFrame(ANIM.grid); cancelAnimationFrame(ANIM.exp);
+  setFlat(false); GK = 0; GP = 0; GSTART = null; explodeK = 0; GRID = null; place(); segUI();
   CUT = {ax: -1, pos: 0, flip: false}; applyCut(); XRAY = false;
   Object.keys(LAYV).forEach(k => { LAYV[k] = true; LAYO[k] = +k === 0 ? 0.22 : 1; });
   MESHES.forEach(m => { m.userData.shown = false; });
@@ -1132,13 +1147,14 @@ function bind() {
   $('tHide').onclick = hideSel; $('tIso').onclick = isoSel; $('tAll').onclick = showAll;
   $('tXray').onclick = () => { XRAY = !XRAY; labels(); paint(); };
   $('exp').oninput = e => expInput(e.target.value / 100);
+  $('exp').onchange = () => { if (MODE === 'grid') gridDone(); };
   $('gq').oninput = e => gsearch(e.target.value);
   document.addEventListener('click', e => { if (!e.target.closest('.srch')) $('gres').classList.add('hide'); if (!e.target.closest('#hInfo') && !e.target.closest('#hI') && $('hI')) { $('hInfo').classList.add('hide'); $('hI').setAttribute('aria-expanded', 'false'); } if (!e.target.closest('.pop') && !e.target.closest('.tb')) closePops(); });
   document.addEventListener('keydown', e => {
     if ($('view').classList.contains('hide') || /INPUT|TEXTAREA/.test(document.activeElement.tagName)) return;
     const k = e.key.toLowerCase();
     if (k === 'h') hideSel(); else if (k === 'i') isoSel(); else if (k === 'a') showAll(); else if (k === 'f') { if (sel) focusMs(selMeshes()); else resetView(); }
-    else if (k === 'x') { XRAY = !XRAY; labels(); paint(); } else if (k === 'g') { if (MODE !== 'grid') { setMode('grid'); startGridAuto(); } else setMode('whole'); } else if (k === 'escape') { closePops(); if (!Q && !DP) unselect(); }
+    else if (k === 'x') { XRAY = !XRAY; labels(); paint(); } else if (k === 'g') { if (MODE !== 'grid') { setMode('grid'); tween('grid', GP, 1, 2200, v => { gridProgress(v); $('exp').value = Math.round(v * 100); }, gridDone); } else setMode('whole'); } else if (k === 'escape') { closePops(); if (!Q && !DP) unselect(); }
   });
 }
 
