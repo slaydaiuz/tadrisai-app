@@ -176,7 +176,7 @@ async function gate() {
   if (DEV) return true;
   let ws = ''; try { ws = localStorage.getItem('tadris_ws') || ''; } catch (e) {}
   if (!ws) return false;
-  try { const r = await fetch(API + '/me', {method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({ws})}); const d = await r.json(); return !!(d && d.ok && d.admin); } catch (e) { return false; }
+  try { const r = await fetch(API + '/me', {method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({ws})}); const d = await r.json(); return !!(d && d.ok && (d.admin || d.atlas)); } catch (e) { return false; }
 }
 
 // ------------------------------------------------------------------ kutubxona

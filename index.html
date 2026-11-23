@@ -844,7 +844,7 @@ body.tg-nopay .site-card{display:block}
         <button type="button" id="hsTeacher" onclick="setRole('teacher')"><span>👨‍🏫</span><b data-i18n="teacher"></b></button>
       </div>
     </div>
-    <a class="site-bn" id="atlasCard" href="/anatomiya/" style="text-decoration:none"><span class="i">🫀</span><span><b>3D anatomiya · 21 atlas</b><small>Yangi · sinov · faqat admin ko'radi</small></span><em>›</em></a>
+    <a class="site-bn" id="atlasCard" href="/anatomiya/" style="text-decoration:none"><span class="i">🫀</span><span><b>3D anatomiya · 23 atlas</b><small>Yangi · sinov rejimida</small></span><em>›</em></a>
     <div class="site-bn" id="siteBn" onclick="openPwSet()"><span class="i">🌐</span><span><b data-i18n="bnSite"></b><small data-i18n="bnSiteSub"></small></span><em>›</em></div>
     <div id="homeBody"></div>
   </section>
@@ -1509,7 +1509,7 @@ async function refreshMe(){
     if(typeof d.quiz==='boolean'&&d.quiz!==SRV.quiz){SRV.quiz=d.quiz; renderHome()}
     SRV.quiz_left=(typeof d.quiz_left==='number')?d.quiz_left:null;
     SRV.site=d.site===true; SRV.wlogin=d.web_login||null;
-    {const ac=$('atlasCard'); if(ac) ac.classList.toggle('on',WEB&&d.admin===true);}   // 2026-11-23: atlas — hozircha faqat admin
+    {const ac=$('atlasCard'); if(ac) ac.classList.toggle('on',WEB&&(d.admin===true||d.atlas===true));}   // 2026-11-23: atlas — admin va sinovchilar
     SRV.nopay=!WEB&&d.nopay===true; document.body.classList.toggle('tg-nopay',SRV.nopay); try{localStorage.setItem('tadris_nopay',SRV.nopay?'1':'')}catch(e){}
     if(SRV.nopay){sitePrefetch(); renderPlan()}
     SRV.closed=!WEB&&d.closed===true; document.body.classList.toggle('tg-closed',SRV.closed&&!QZLINK); document.body.classList.toggle('tg-quiz',SRV.closed&&QZLINK); {const qb=document.querySelector('.qz-sitebar button'); if(qb) qb.textContent=t('qzSiteBtn')}
