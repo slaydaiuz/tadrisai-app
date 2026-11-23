@@ -8,7 +8,7 @@ const $ = id => document.getElementById(id);
 const API = location.hostname === 'tadris.ai' ? '/api' : 'https://91-107-229-30.sslip.io/api';
 const QS = new URLSearchParams(location.search);
 const DEV = QS.get('dev') === '1' && location.hostname !== 'tadris.ai';
-const V = '1';
+const V = '2';
 
 // ------------------------------------------------------------------ matnlar
 const TX = {
@@ -626,7 +626,7 @@ function renderTree() {
     let h = `<div class="tn g${open ? ' open' : ''}" data-node="${n}"><span class="ar">▶</span><span class="nm">${esc(nodeName(n))}</span><span class="c">${c}</span><button class="eye${hiddenN(n) ? ' off' : ''}" data-eyen="${n}">👁</button></div>`;
     if (open) {
       h += `<div class="tch">`;
-      [...(kids.get(n) || [])].sort((a, b) => nodeName(a).localeCompare(nodeName(b), LANG)).forEach(k => h += nodeHTML(k));
+      [...(kids.get(n) || [])].sort((a, b) => (hiddenN(a) - hiddenN(b)) || nodeName(a).localeCompare(nodeName(b), LANG)).forEach(k => h += nodeHTML(k));
       (itemsOf.get(n) || []).sort((a, b) => nm(a.n).localeCompare(nm(b.n), LANG)).forEach(it => h += itemHTML(it));
       h += `</div>`;
     }
@@ -637,7 +637,7 @@ function renderTree() {
     return `<div class="tn it${it === sel ? ' on' : ''}${seen.has(it.n) ? ' seen' : ''}" data-k="${it.k}"><span class="ar"></span><i class="dot" style="--dot:${dot}"></i><span class="nm">${esc(nm(it.n))}${it.ms.length > 1 && !BOTH ? '' : ''}</span>${it.ms.length > 1 ? '<span class="c">×' + it.ms.length + '</span>' : ''}<button class="eye${hid ? ' off' : ''}" data-eyek="${it.k}">👁</button></div>`;
   };
   let h = `<input class="pin" id="tq" placeholder="${esc(t('search'))}" value="${esc(TQ)}"><div class="cnt"><span>${t('stCount', {n: ITEMS.length, s: ITEMS.filter(i => seen.has(i.n)).length})}</span><span><button id="tOpen">${t('openAll')}</button> · <button id="tClose">${t('closeAll')}</button></span></div><div class="tree">`;
-  rs.sort((a, b) => nodeName(a).localeCompare(nodeName(b), LANG)).forEach(n => h += nodeHTML(n));
+  rs.sort((a, b) => (hiddenN(a) - hiddenN(b)) || nodeName(a).localeCompare(nodeName(b), LANG)).forEach(n => h += nodeHTML(n));
   for (const [n, its] of itemsOf) if (!rs.includes(n) && !nodeAnc(n).some(a => rs.includes(a))) its.forEach(it => h += itemHTML(it));
   h += `</div>`;
   pb.innerHTML = h;
