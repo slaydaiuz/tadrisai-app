@@ -8,7 +8,25 @@ const $ = id => document.getElementById(id);
 const API = location.hostname === 'tadris.ai' ? '/api' : 'https://91-107-229-30.sslip.io/api';
 const QS = new URLSearchParams(location.search);
 const DEV = QS.get('dev') === '1' && location.hostname !== 'tadris.ai';
-const V = '6';
+const V = '7';
+// 3D fayllar jsDelivr CDN'dan (Cloudflare, Toshkentda ham bor; 1 yil keshlanadi). Fayl CDN'da bo'lmasa yoki xato bo'lsa — o'z serverimizdan.
+const ZSHA = 'a0c94a22952caef6962428100cd386678f56795e';
+const CDN = DEV ? '' : 'https://cdn.jsdelivr.net/gh/slaydaiuz/tadrisai-app@' + ZSHA + '/anatomiya/';
+async function fetchBytes(url, onp, timeoutMs) {
+  const ctl = new AbortController(); let tm = timeoutMs ? setTimeout(() => ctl.abort(), timeoutMs) : 0;
+  try {
+    const r = await fetch(url, {signal: ctl.signal}); if (!r.ok) throw new Error('http ' + r.status);
+    const total = +r.headers.get('content-length') || 0;
+    if (!r.body || !r.body.getReader) { const b = new Uint8Array(await r.arrayBuffer()); onp && onp(b.length, b.length); return b; }
+    const rd = r.body.getReader(), chunks = []; let got = 0;
+    for (;;) {
+      const {done, value} = await rd.read(); if (done) break;
+      chunks.push(value); got += value.length; onp && onp(got, total);
+      if (tm) { clearTimeout(tm); tm = setTimeout(() => ctl.abort(), timeoutMs); }   // ma'lumot kelayotgan ekan — kutamiz
+    }
+    const out = new Uint8Array(got); let o = 0; for (const c of chunks) { out.set(c, o); o += c.length; } return out;
+  } finally { if (tm) clearTimeout(tm); }
+}
 
 // ------------------------------------------------------------------ matnlar
 const TX = {
@@ -18,7 +36,7 @@ const TX = {
     resume: "To'xtagan joyingizdan davom eting", resumeB: 'Davom etish', seenOf: '{a} / {b} ta tuzilma ko\'rib chiqildi', lastSeen: 'Oxirgi: {n}',
     atlases: 'Atlaslar', atlasesS: "Har bir atlas — alohida 3D model. Tizimni tanlang va o'rganishni boshlang.", all: 'Barchasi',
     nSt: '{n} ta tuzilma', nLm: '{n} ta belgi', mb: '{n} MB', seenP: "{p}% ko'rib chiqildi", credit: '3D modellar: {c}. Modellar TadrisAI uchun soddalashtirilgan; matn va tarjimalar TadrisAI tomonidan yozilgan.',
-    load: '3D model yuklanmoqda…', noGl: "Bu qurilma 3D ko'rinishni qo'llamaydi.", err: "Model yuklanmadi. Internetni tekshirib, qayta urinib ko'ring.",
+    load: '3D model yuklanmoqda…', noGl: "Bu qurilma 3D ko'rinishni qo'llamaydi.", err: "Model yuklanmadi. Internetni tekshirib, qayta urinib ko'ring.", boot: '3D anatomiya ochilmoqda…',
     panel: 'Panel', tTree: 'Tuzilmalar', tLay: 'Qatlamlar', tInfo: "Ma'lumot", tLearn: "O'rganish",
     hint: 'Aylantirish uchun suring, kattalashtirish uchun g\'ildirak yoki ikki barmoq, tanlash uchun bosing, yaqinlashish uchun ikki marta bosing',
     home: "Boshlang'ich ko'rinish", view: "Ko'rinish", both: 'Ikkala tomonni birga tanlash', hideSel: 'Tanlanganni yashirish', iso: "Faqat tanlanganni ko'rsatish", showAll: "Yashirilganlarni ko'rsatish", xray: 'Rentgen rejimi', cut: 'Kesim', more: 'Boshqa amallar',
@@ -47,7 +65,7 @@ const TX = {
     resume: 'Продолжите с того места, где остановились', resumeB: 'Продолжить', seenOf: 'Просмотрено {a} из {b} структур', lastSeen: 'Последнее: {n}',
     atlases: 'Атласы', atlasesS: 'Каждый атлас — отдельная 3D-модель. Выберите систему и начните изучение.', all: 'Все',
     nSt: '{n} структур', nLm: '{n} ориентиров', mb: '{n} МБ', seenP: 'Просмотрено {p}%', credit: '3D-модели: {c}. Модели упрощены для TadrisAI; тексты и переводы написаны TadrisAI.',
-    load: 'Загружается 3D-модель…', noGl: 'Это устройство не поддерживает 3D.', err: 'Модель не загрузилась. Проверьте интернет и попробуйте снова.',
+    load: 'Загружается 3D-модель…', noGl: 'Это устройство не поддерживает 3D.', err: 'Модель не загрузилась. Проверьте интернет и попробуйте снова.', boot: 'Открывается 3D-анатомия…',
     panel: 'Панель', tTree: 'Структуры', tLay: 'Слои', tInfo: 'Сведения', tLearn: 'Обучение',
     hint: 'Тяните — вращение, колесо или два пальца — масштаб, нажмите — выбор, двойное нажатие — приблизить',
     home: 'Исходный вид', view: 'Вид', both: 'Выбирать обе стороны вместе', hideSel: 'Скрыть выбранное', iso: 'Показать только выбранное', showAll: 'Показать скрытые', xray: 'Режим рентгена', cut: 'Срез', more: 'Другие действия',
@@ -76,7 +94,7 @@ const TX = {
     resume: 'Pick up where you left off', resumeB: 'Continue', seenOf: '{a} of {b} structures viewed', lastSeen: 'Last: {n}',
     atlases: 'Atlases', atlasesS: 'Each atlas is its own 3D model. Pick a system and start learning.', all: 'All',
     nSt: '{n} structures', nLm: '{n} landmarks', mb: '{n} MB', seenP: '{p}% viewed', credit: '3D models: {c}. Models simplified for TadrisAI; texts and translations written by TadrisAI.',
-    load: 'Loading 3D model…', noGl: "This device doesn't support 3D.", err: "The model didn't load. Check your connection and try again.",
+    load: 'Loading 3D model…', noGl: "This device doesn't support 3D.", err: "The model didn't load. Check your connection and try again.", boot: 'Opening 3D anatomy…',
     panel: 'Panel', tTree: 'Structures', tLay: 'Layers', tInfo: 'Info', tLearn: 'Learn',
     hint: 'Drag to rotate, wheel or pinch to zoom, tap to select, double-tap to zoom in',
     home: 'Default view', view: 'View', both: 'Select both sides together', hideSel: 'Hide selected', iso: 'Show only selected', showAll: 'Show hidden', xray: 'X-ray mode', cut: 'Section', more: 'More actions',
@@ -206,7 +224,7 @@ function renderHome() {
   $('cats').querySelectorAll('button').forEach(b => b.onclick = () => { CAT = b.dataset.c; renderHome(); });
   $('grid').innerHTML = C.atlases.filter(a => CAT === 'all' || a.cat === CAT).map(a => {
     const c = catOf(a.cat), s = seenGet(a.id).size, p = a.n ? Math.floor(s / a.n * 100) : 0;
-    return `<button class="acard" data-a="${a.id}" style="--c:${c[2]}"><div class="pic"><img src="img/${a.id}.webp?v=${V}" alt="" loading="lazy"><span class="tag">${esc(tr(c[1]))}</span>${a.id !== 'butun-tana' && s ? `<span class="pct">${p}%</span>` : ''}</div>
+    return `<button class="acard" data-a="${a.id}" style="--c:${c[2]}"><div class="pic"><img src="${CDN ? CDN + 'img/' + a.id + '.webp' : 'img/' + a.id + '.webp?v=' + V}" onerror="if(!this.dataset.f){this.dataset.f=1;this.src='img/${a.id}.webp?v=${V}'}" alt="" loading="lazy"><span class="tag">${esc(tr(c[1]))}</span>${a.id !== 'butun-tana' && s ? `<span class="pct">${p}%</span>` : ''}</div>
       <div class="cb"><b>${esc(tr(a.t))}</b><p>${esc(tr(a.d))}</p>
       <div class="meta"><span>${t('nSt', {n: a.n})}</span>${a.lmn ? `<span>${t('nLm', {n: a.lmn})}</span>` : ''}<span>${t('mb', {n: String(a.mb).replace('.', ',')})}</span></div>
       ${a.id !== 'butun-tana' ? `<div class="pb"><i style="width:${p}%"></i></div>` : ''}</div></button>`;
@@ -268,16 +286,28 @@ function initGL() {
   return true;
 }
 function resize() { if (!renderer) return; const r = $('stage').getBoundingClientRect(); renderer.setSize(r.width, r.height, false); camera.aspect = r.width / Math.max(1, r.height); camera.updateProjectionMatrix(); }
-function loop() { animReq = requestAnimationFrame(loop); controls.update(); renderer.render(scene, camera); placeLabels(); }
+const mbs = b => (b / 1048576).toFixed(b < 10485760 ? 1 : 0).replace('.', ',');
+function setLoad(k, n, tot) {
+  $('loadBar').classList.remove('hide'); $('loadBar').querySelector('i').style.width = Math.round(k * 100) + '%';
+  $('loadP').textContent = Math.round(k * 100) + '%'; $('loadMB').textContent = mbs(n) + ' / ' + mbs(tot) + ' MB';
+}
+let frameN = 0;
+function loop() {
+  animReq = requestAnimationFrame(loop); controls.update(); renderer.render(scene, camera); placeLabels();
+  // telefonda: model yaqinlashtirilganda (yoki tanlab yaqinlashganda) asl sifat yuklanadi — internet tejaladi
+  if (HQ_WAIT && ++frameN % 30 === 0 && AT === HQ_WAIT && camera.position.distanceTo(controls.target) < fitDist(null) * 0.55) { const a = HQ_WAIT; HQ_WAIT = null; upgradeHQ(a); }
+}
 
 // --- fayl yuklash (TA3D: int16 + indeks, gzip)
 const FCACHE = new Map();
-async function loadFile(f) {
-  if (FCACHE.has(f)) return FCACHE.get(f);
+async function loadFile(f, onp) {
+  if (FCACHE.has(f)) { onp && onp(C.sz && C.sz[f] || 1, C.sz && C.sz[f] || 1); return FCACHE.get(f); }
   const p = (async () => {
-    const r = await fetch('z/' + f + '.bin.gz?v=' + V); if (!r.ok) throw new Error('http ' + r.status);
     if (typeof DecompressionStream === 'undefined') throw new Error('gzip');
-    const buf = await new Response(r.body.pipeThrough(new DecompressionStream('gzip'))).arrayBuffer();
+    let gz = null;
+    if (CDN) { try { gz = await fetchBytes(CDN + 'z/' + f + '.bin.gz', onp, 15000); } catch (e) { console.warn('cdn', f, e); onp && onp(0, 0); } }
+    if (!gz) gz = await fetchBytes('z/' + f + '.bin.gz?v=' + V, onp, 0);
+    const buf = await new Response(new Blob([gz]).stream().pipeThrough(new DecompressionStream('gzip'))).arrayBuffer();
     const dv = new DataView(buf);
     if (String.fromCharCode(dv.getUint8(0), dv.getUint8(1), dv.getUint8(2), dv.getUint8(3)) !== 'TA3D') throw new Error('format');
     const hl = dv.getUint32(4, true), head = JSON.parse(new TextDecoder().decode(new Uint8Array(buf, 8, hl)));
@@ -342,18 +372,23 @@ function hiddenByDefault(p) {
 
 async function openAtlas(id, pickN) {
   const a = C.atlases.find(x => x.id === id); if (!a) return;
-  AT = a; sel = null; LMSEL = null; HL = new Map(); Q = null; DP = null; TAB = pickN != null ? 'info' : 'tree'; XRAY = false; CUT = {ax: -1, pos: 0, flip: false}; SOLO = 0; LAYV = {}; LAYO = {}; OPEN = new Set(); TQ = '';
+  AT = a; HQ_WAIT = null; sel = null; LMSEL = null; HL = new Map(); Q = null; DP = null; TAB = pickN != null ? 'info' : 'tree'; XRAY = false; CUT = {ax: -1, pos: 0, flip: false}; SOLO = 0; LAYV = {}; LAYO = {}; OPEN = new Set(); TQ = '';
   store.set('za_last', {a: a.id, n: pickN ?? null});
   $('home').classList.add('hide'); $('view').classList.remove('hide');
   history.replaceState(null, '', location.pathname + '?a=' + a.id + (pickN != null ? '&n=' + pickN : '') + (DEV ? '&dev=1' : ''));
   labels();
   if (!initGL()) { $('loadT').textContent = t('noGl'); $('load').classList.remove('hide'); return; }
-  resize(); $('load').classList.remove('hide'); $('loadT').textContent = t('load'); $('exp').value = 0; explodeK = 0; GRID = null; GK = 0; $('bGrid').classList.remove('on');
+  resize(); $('load').classList.remove('hide'); $('loadT').textContent = t('load'); $('loadBar').classList.add('hide'); $('exp').value = 0; explodeK = 0; GRID = null; GK = 0; $('bGrid').classList.remove('on');
   if (root) { scene.remove(root); root.traverse(o => { if (o.isMesh) { o.geometry.dispose(); o.material.dispose(); } }); }
   root = new THREE.Group(); scene.add(root); MESHES = []; ITEMS = []; BYN = new Map(); INS = []; LMG = null;
   renderPanel();
   let files;
-  try { files = await Promise.all([...a.layers.map(L => loadFile(L.f)), a.ins ? loadFile('s2') : null]); } catch (e) { $('loadT').textContent = t('err'); console.error(e); return; }
+  const need = [...a.layers.map(L => L.f), ...(a.ins ? ['s2'] : [])], got = {};
+  const totalB = need.reduce((x, f) => x + ((C.sz && C.sz[f]) || 400000), 0);
+  const prog = f => (n, tot) => { got[f] = n; if (AT !== a) return; const sum = Object.values(got).reduce((x, y) => x + y, 0); setLoad(Math.min(0.99, sum / totalB), sum, totalB); };
+  setLoad(0, 0, totalB);
+  try { files = await Promise.all([...a.layers.map(L => loadFile(L.f, prog(L.f))), a.ins ? loadFile('s2', prog('s2')) : null]); } catch (e) { $('loadT').textContent = t('err'); $('loadBar').classList.add('hide'); console.error(e); return; }
+  setLoad(1, totalB, totalB);
   if (AT !== a) return;
   a.layers.forEach((L, li) => {
     const only = L.only ? new Set(L.only.map(s => s.toLowerCase())) : null, nms = L.names ? new Set(L.names.map(s => s.toLowerCase())) : null, ctx = L.role === 'ctx';
@@ -395,9 +430,11 @@ async function openAtlas(id, pickN) {
   if (!animReq) loop();
   // ochiq guruhlar: yuqori 2 daraja
   if (pickN != null && BYN.has(+pickN)) select(BYN.get(+pickN), 0, true); else renderPanel();
-  upgradeHQ(a);
+  if (COARSE) HQ_WAIT = a; else upgradeHQ(a);
 }
 // --- yuqori sifat: yengil model ochilgach, asl sifatdagisi orqa fonda yuklanib, o'rniga qo'yiladi
+const COARSE = (() => { try { return matchMedia('(pointer:coarse)').matches; } catch (e) { return false; } })();
+let HQ_WAIT = null;
 const HQ_OK = (() => { try { const c = navigator.connection; if (c && c.saveData) return false; if (navigator.deviceMemory && navigator.deviceMemory < 3) return false; } catch (e) {} return true; })();
 async function upgradeHQ(a) {
   const files = [...new Set(a.layers.filter(L => L.role !== 'ctx' && !/-lo$/.test(L.f)).map(L => L.f))];
@@ -998,8 +1035,11 @@ function bind() {
 
 (async () => {
   const ok = await gate();
-  if (!ok) { $('lkT').textContent = t('lockT'); $('lkD').textContent = t('lockD'); $('lkB').textContent = t('lockB'); $('lock').classList.remove('hide'); return; }
-  C = await (await fetch('z/cat.json?v=' + V)).json();
+  if (!ok) { $('boot').classList.add('hide'); $('lkT').textContent = t('lockT'); $('lkD').textContent = t('lockD'); $('lkB').textContent = t('lockB'); $('lock').classList.remove('hide'); return; }
+  const bp = (n, tot) => { const k = tot ? n / tot : Math.min(0.9, n / 700000); $('bootBar').style.width = Math.round(k * 100) + '%'; $('bootP').textContent = Math.round(k * 100) + '%'; };
+  try { C = JSON.parse(new TextDecoder().decode(await fetchBytes('z/cat.json?v=' + V, bp, 0))); }
+  catch (e) { $('bootT').textContent = t('err'); return; }
+  $('boot').classList.add('hide');
   if (QS.get('shot') && DEV) { document.body.classList.add('shot'); window.__za = {view: (x, y, z) => { resetView(new THREE.Vector3(x, y, z), true); }, ready: () => !!(AT && MESHES.length && $('load').classList.contains('hide')), ctx: on => { LAYV[0] = on; applyVis(); paint(); }}; }
   fetch('z/info.json?v=' + V).then(r => r.ok ? r.json() : null).then(d => { INFO = d; if (AT && TAB === 'info') renderPanel(true); }).catch(() => {});
   document.documentElement.lang = LANG;
