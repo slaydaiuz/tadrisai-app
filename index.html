@@ -840,6 +840,7 @@ body.tg-nopay .site-card{display:block}
         <button type="button" id="hsTeacher" onclick="setRole('teacher')"><span>👨‍🏫</span><b data-i18n="teacher"></b></button>
       </div>
     </div>
+    <a class="site-bn" id="atlasCard" href="/atlas/" style="text-decoration:none"><span class="i">🫀</span><span><b>3D anatomiya atlasi</b><small>Sinov · faqat admin ko'radi</small></span><em>›</em></a>
     <div class="site-bn" id="siteBn" onclick="openPwSet()"><span class="i">🌐</span><span><b data-i18n="bnSite"></b><small data-i18n="bnSiteSub"></small></span><em>›</em></div>
     <div id="homeBody"></div>
   </section>
@@ -1496,6 +1497,7 @@ async function refreshMe(){
     if(typeof d.quiz==='boolean'&&d.quiz!==SRV.quiz){SRV.quiz=d.quiz; renderHome()}
     SRV.quiz_left=(typeof d.quiz_left==='number')?d.quiz_left:null;
     SRV.site=d.site===true; SRV.wlogin=d.web_login||null;
+    {const ac=$('atlasCard'); if(ac) ac.classList.toggle('on',WEB&&d.admin===true);}   // 2026-11-23: atlas — hozircha faqat admin
     SRV.nopay=!WEB&&d.nopay===true; document.body.classList.toggle('tg-nopay',SRV.nopay); try{localStorage.setItem('tadris_nopay',SRV.nopay?'1':'')}catch(e){}
     if(SRV.nopay){sitePrefetch(); renderPlan()}
     SRV.closed=!WEB&&d.closed===true; document.body.classList.toggle('tg-closed',SRV.closed&&!QZLINK); document.body.classList.toggle('tg-quiz',SRV.closed&&QZLINK); {const qb=document.querySelector('.qz-sitebar button'); if(qb) qb.textContent=t('qzSiteBtn')}
@@ -2450,10 +2452,12 @@ async function webLogout(){
 }
 if(WEB&&WS){const b=$('webOutBtn'); if(b) b.style.display='flex'}
 if(WEB&&!WS&&!qs.get('quiz')&&!qs.get('w')) document.addEventListener('DOMContentLoaded',webLoginShow);   // kirish oynasi skriptdan keyin turadi
+if(WEB&&qs.get('prez')){const tp=qs.get('prez'); history.replaceState(null,'',location.pathname);
+  document.addEventListener('DOMContentLoaded',()=>setTimeout(()=>{openForm('prez'); setTimeout(()=>{const f=$('fMav'); if(f){f.value=tp; f.dispatchEvent(new Event('input',{bubbles:true}))}},60)},300))}
 if(qs.get('screen')==='topup'&&!qs.get('w')){if(WEB&&WS) openTopup(0)} else if(qs.get('screen')) show(qs.get('screen'));
 if(qs.get('form')) openForm(qs.get('form'));
 </script>
-<script src="quiz.js?v=20"></script>
+<script src="quiz.js?v=21"></script>
 <div class="toast" id="toast"></div>
 <div class="end-ov" id="endOv" onclick="if(event.target===this)closeEndFull()">
   <div class="end-ov-box"><button type="button" class="end-ov-x" onclick="closeEndFull()">✕</button>

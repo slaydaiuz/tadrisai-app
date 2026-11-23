@@ -1016,4 +1016,5 @@ async function crossDone(){
 
 window.QZ={finish,example,exTab,print,open,openCross,setN,srcUp,srcDel,pickSel,setQ,answer,set,create,ready,copy,share,questions,del,join,start,pick,next,quit,retry,shareRes,results,tap,sel,hint,check,crossQuit};
 if(qs.get('quiz')) join(qs.get('quiz'));
+if(WEB&&qs.get('qtopic')&&!qs.get('quiz')){S.topic=qs.get('qtopic'); history.replaceState(null,'',location.pathname); setTimeout(open,350)}   // atlasdan «Test tuzish»
 })();
