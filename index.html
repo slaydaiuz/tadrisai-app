@@ -750,6 +750,12 @@ body.wl-on .wrap,body.wl-on nav{visibility:hidden}
 /* 2026-11-23, egasi: ilova yopilganda orqada xizmatlar ko'rinmasin — faqat bir tusli fon va «Saytga o'tish» */
 body.tg-closed .wrap,body.tg-closed nav,body.tg-closed .dk-side,body.tg-closed .toast{display:none!important}
 body.tg-closed .go-site{background:var(--bg)}
+/* test havolasi orqali ochilganda: faqat test + pastda «saytga o'ting» */
+.qz-sitebar{display:none}
+body.tg-quiz nav,body.tg-quiz .dk-side,body.tg-quiz header .hbal{display:none!important}
+body.tg-quiz .qz-sitebar{display:block;position:fixed;left:0;right:0;bottom:0;z-index:50;padding:10px 16px max(12px,env(safe-area-inset-bottom));background:linear-gradient(180deg,transparent,var(--bg) 35%)}
+body.tg-quiz .qz-sitebar button{width:100%;padding:14px;border-radius:var(--r-md);background:linear-gradient(90deg,var(--violet),#3b82f6);color:#fff;font-weight:800;font-size:15px;max-width:560px;display:block;margin:0 auto}
+body.tg-quiz .wrap{padding-bottom:96px}
 /* 2026-11-22: Telegram ichida to'lov/balans yo'q — hammasi saytda */
 .hbal .hsite{display:none;font-weight:700;font-size:14px;padding:4px 6px 4px 0;white-space:nowrap}
 body.tg-nopay .hbal .v,body.tg-nopay .hbal .plus{display:none}
@@ -1278,19 +1284,19 @@ const PWT={
   pwTitle:"Sayt uchun login va parol",pwInfo:"tadris.ai saytiga Telegram'siz kirish uchun. Telegram ishlamay qolsa ham hisobingiz, balans va fayllaringiz o'zingizda qoladi.",pwNow:"Hozirgi login: {l}",pwNew:"Yangi parol (kamida 6 belgi)",pwSave:"Saqlash",pwSaved:"✅ Saqlandi. Endi tadris.ai ga shu login va parol bilan kira olasiz.",pwOn:"o'rnatilgan",pwOff:"o'rnatilmagan",eLogin:"Login 3–32 belgi: lotin harflari, raqam, _ yoki . (faqat raqamdan iborat bo'lmasin)",eShort:"Parol kamida 6 belgi bo'lsin",eTaken:"Bu login band — boshqasini tanlang",
   bnSite:"tadris.ai saytida ham ishlating",bnSiteSub:"Login va parol o'rnating — Telegram'siz ham kira olasiz",
   goTitle:"tadris.ai brauzerda ochiladi",goSub:"Sayt Chrome yoki Safari'da ochiladi va siz avtomatik kirasiz. Balans va fayllaringiz shu yerdagidek.",goBtn:"🌐 Brauzerda ochish",goLater:"Keyinroq",goRow:"🌐 Saytni brauzerda ochish",wlAcc:"Telegram'da hozir qaysi hisob ochiq bo'lsa, sayt o'sha hisob bilan kiradi. Boshqa hisob kerak bo'lsa, avval Telegram'da hisobni almashtiring.",
-  goSiteShort:"Saytga o'tish",siteCardT:"To'lovlar va boshqa amallar hammasi tadris.ai saytida amalga oshiriladi",siteCardBtn:"🌐 Saytga o'tish",lowBalSite:"💳 Bu buyurtma uchun balans yetarli emas. Balans tadris.ai saytida to'ldiriladi.",goTitleTop:"Balans saytda to'ldiriladi",goSubTop:"Sayt brauzerda ochiladi va siz avtomatik kirasiz. To'ldirgach, shu yerga qaytib buyurtmani davom ettiring.",goBtnTop:"🌐 Saytda to'ldirish",closedTitle:"TadrisAI endi tadris.ai saytida",closedSub:"Barcha xizmatlar, balansingiz va fayllaringiz saytda. Tugmani bosing — sayt brauzerda ochiladi va siz avtomatik kirasiz."},
+  goSiteShort:"Saytga o'tish",siteCardT:"To'lovlar va boshqa amallar hammasi tadris.ai saytida amalga oshiriladi",siteCardBtn:"🌐 Saytga o'tish",lowBalSite:"💳 Bu buyurtma uchun balans yetarli emas. Balans tadris.ai saytida to'ldiriladi.",goTitleTop:"Balans saytda to'ldiriladi",goSubTop:"Sayt brauzerda ochiladi va siz avtomatik kirasiz. To'ldirgach, shu yerga qaytib buyurtmani davom ettiring.",goBtnTop:"🌐 Saytda to'ldirish",closedTitle:"TadrisAI endi tadris.ai saytida",qzSiteBtn:"🌐 Slayd va test yasash uchun saytga o'ting",closedSub:"Barcha xizmatlar, balansingiz va fayllaringiz saytda. Tugmani bosing — sayt brauzerda ochiladi va siz avtomatik kirasiz."},
  ru:{wlOr:"или",wlPwBtn:"🔑 Войти по логину и паролю",wlLogin:"Логин",wlPass:"Пароль",wlEnter:"Войти",wlForgot:"Забыли пароль? Войти по коду",wlCodeWho:"Логин, Telegram @username или ID",wlCodeSend:"Отправить код в бот",wlCodeSent:"Код отправлен в @tadrisai_bot. Откройте Telegram и введите код здесь.",wlCode:"Код из 6 цифр",wlPwHint:"Ещё нет логина и пароля? Сначала войдите через бот, затем задайте их в разделе «Профиль».",wlBack:"← Войти по логину и паролю",
   eWrong:"Неверный логин или пароль",eLocked:"Слишком много попыток. Попробуйте через 15 минут или войдите через бот.",eNotFound:"Пользователь не найден. Войдите через бот.",eWait:"Код уже отправлен. Новый можно запросить через {s} с.",eCode:"Неверный код",eCodeExp:"Код устарел — запросите новый",eBlocked:"Не удалось написать вам в бот. Откройте @tadrisai_bot в Telegram и нажмите /start.",eClosed:"Сайт пока закрыт — скоро откроется.",eNet:"Сервер не ответил. Попробуйте ещё раз.",
   pwTitle:"Логин и пароль для сайта",pwInfo:"Для входа на tadris.ai без Telegram. Даже если Telegram перестанет работать, ваш аккаунт, баланс и файлы останутся с вами.",pwNow:"Текущий логин: {l}",pwNew:"Новый пароль (не менее 6 символов)",pwSave:"Сохранить",pwSaved:"✅ Сохранено. Теперь на tadris.ai можно входить по этому логину и паролю.",pwOn:"задан",pwOff:"не задан",eLogin:"Логин 3–32 символа: латиница, цифры, _ или . (не только цифры)",eShort:"Пароль — не менее 6 символов",eTaken:"Этот логин занят — выберите другой",
   bnSite:"Пользуйтесь и на сайте tadris.ai",bnSiteSub:"Задайте логин и пароль — сможете входить и без Telegram",
   goTitle:"tadris.ai откроется в браузере",goSub:"Сайт откроется в Chrome или Safari, вход выполнится автоматически. Баланс и файлы — те же.",goBtn:"🌐 Открыть в браузере",goLater:"Позже",goRow:"🌐 Открыть сайт в браузере",wlAcc:"Вход выполняется с тем аккаунтом, который сейчас открыт в Telegram. Нужен другой — сначала переключите аккаунт в Telegram.",
-  goSiteShort:"На сайт",siteCardT:"Оплата и все остальные действия выполняются на сайте tadris.ai",siteCardBtn:"🌐 Перейти на сайт",lowBalSite:"💳 Для этого заказа не хватает баланса. Баланс пополняется на сайте tadris.ai.",goTitleTop:"Баланс пополняется на сайте",goSubTop:"Сайт откроется в браузере, вход выполнится автоматически. После пополнения вернитесь сюда и продолжите заказ.",goBtnTop:"🌐 Пополнить на сайте",closedTitle:"TadrisAI теперь на сайте tadris.ai",closedSub:"Все сервисы, ваш баланс и файлы — на сайте. Нажмите кнопку — сайт откроется в браузере, вход выполнится автоматически."},
+  goSiteShort:"На сайт",siteCardT:"Оплата и все остальные действия выполняются на сайте tadris.ai",siteCardBtn:"🌐 Перейти на сайт",lowBalSite:"💳 Для этого заказа не хватает баланса. Баланс пополняется на сайте tadris.ai.",goTitleTop:"Баланс пополняется на сайте",goSubTop:"Сайт откроется в браузере, вход выполнится автоматически. После пополнения вернитесь сюда и продолжите заказ.",goBtnTop:"🌐 Пополнить на сайте",closedTitle:"TadrisAI теперь на сайте tadris.ai",qzSiteBtn:"🌐 Создать слайды и тесты — на сайте",closedSub:"Все сервисы, ваш баланс и файлы — на сайте. Нажмите кнопку — сайт откроется в браузере, вход выполнится автоматически."},
  en:{wlOr:"or",wlPwBtn:"🔑 Sign in with login and password",wlLogin:"Login",wlPass:"Password",wlEnter:"Sign in",wlForgot:"Forgot your password? Sign in with a code",wlCodeWho:"Login, Telegram @username or ID",wlCodeSend:"Send code to the bot",wlCodeSent:"The code was sent to @tadrisai_bot. Open Telegram and enter it here.",wlCode:"6-digit code",wlPwHint:"No login and password yet? Sign in via the bot first, then set them in Profile.",wlBack:"← Sign in with login and password",
   eWrong:"Wrong login or password",eLocked:"Too many attempts. Try again in 15 minutes or sign in via the bot.",eNotFound:"User not found. Sign in via the bot.",eWait:"A code was already sent. You can request a new one in {s} s.",eCode:"Wrong code",eCodeExp:"The code has expired — request a new one",eBlocked:"Couldn't message you in the bot. Open @tadrisai_bot in Telegram and tap /start.",eClosed:"The site isn't open yet — coming soon.",eNet:"The server didn't respond. Please try again.",
   pwTitle:"Site login and password",pwInfo:"To sign in to tadris.ai without Telegram. Even if Telegram stops working, your account, balance and files stay with you.",pwNow:"Current login: {l}",pwNew:"New password (at least 6 characters)",pwSave:"Save",pwSaved:"✅ Saved. You can now sign in to tadris.ai with this login and password.",pwOn:"set",pwOff:"not set",eLogin:"Login: 3–32 characters — Latin letters, digits, _ or . (not digits only)",eShort:"Password must be at least 6 characters",eTaken:"This login is taken — choose another",
   bnSite:"Use TadrisAI on tadris.ai too",bnSiteSub:"Set a login and password — sign in even without Telegram",
   goTitle:"tadris.ai opens in your browser",goSub:"The site opens in Chrome or Safari and signs you in automatically. Same balance and files.",goBtn:"🌐 Open in browser",goLater:"Later",goRow:"🌐 Open the site in a browser",wlAcc:"You'll be signed in with the account currently open in Telegram. Need another one? Switch accounts in Telegram first.",
-  goSiteShort:"Go to site",siteCardT:"Payments and all other actions are done on the tadris.ai website",siteCardBtn:"🌐 Go to the site",lowBalSite:"💳 Your balance isn't enough for this order. Top up on the tadris.ai website.",goTitleTop:"Top up on the website",goSubTop:"The site opens in your browser and signs you in automatically. After topping up, come back here and continue your order.",goBtnTop:"🌐 Top up on the site",closedTitle:"TadrisAI now lives at tadris.ai",closedSub:"All services, your balance and files are on the website. Tap the button — the site opens in your browser and signs you in automatically."}};
+  goSiteShort:"Go to site",siteCardT:"Payments and all other actions are done on the tadris.ai website",siteCardBtn:"🌐 Go to the site",lowBalSite:"💳 Your balance isn't enough for this order. Top up on the tadris.ai website.",goTitleTop:"Top up on the website",goSubTop:"The site opens in your browser and signs you in automatically. After topping up, come back here and continue your order.",goBtnTop:"🌐 Top up on the site",closedTitle:"TadrisAI now lives at tadris.ai",qzSiteBtn:"🌐 Create slides and tests on the website",closedSub:"All services, your balance and files are on the website. Tap the button — the site opens in your browser and signs you in automatically."}};
 Object.assign(T.uz,PWT.uz); Object.assign(T.ru,PWT.ru); Object.assign(T.en,PWT.en); Object.assign(T.uzn,UZN.deep(PWT.uz));
 const LANGS={uz:"O'zbekcha",kaa:"Qaraqalpaqsha",uzn:"Özbekça (yangi alifbo)",ru:"Русский",en:"English"};
 const LCODE=l=>l==='uzn'?'ÖZ':l==='kaa'?'QQ':l==='kk'?'KZ':l==='ky'?'KG':l==='tg'?'TJ':l.toUpperCase();
@@ -1409,7 +1415,8 @@ let FREE=Math.max(0,parseInt(qs.get('free')||'0',10)||0);
 const UNL=qs.get('unl')==='1';          // admin: cheklovsiz
 const SRV={live:null,disc:null,admin:null,quiz:null};
 try{if(!WEB&&localStorage.getItem('tadris_nopay')==='1'){SRV.nopay=true; document.body&&document.body.classList.add('tg-nopay')}}catch(e){}
-try{if(!WEB&&(localStorage.getItem('tadris_closed')==='1'||qs.get('go')==='site')){SRV.closed=true; document.body&&document.body.classList.add('tg-closed')}}catch(e){}   // miltillamasin
+const QZLINK=!WEB&&!!qs.get('quiz');   // 2026-11-23, egasi: test havolasi Telegram ilovasida ishlayveradi (yechish bepul)
+try{if(!WEB&&!QZLINK&&(localStorage.getItem('tadris_closed')==='1'||qs.get('go')==='site')){SRV.closed=true; document.body&&document.body.classList.add('tg-closed')}}catch(e){}   // miltillamasin
 if(SRV.closed) document.addEventListener('DOMContentLoaded',()=>{if(SRV.closed) goSiteShow()});   // oldingi holat (miltillamasin)   // /api/me dan keladi (ochilish, Premium chegirmasi); kelmaguncha telefon soati
 const KNOWN=UNL||qs.has('free');        // eski tugmadan ochilsa - tekshiruvni bot o'zi qiladi
 let BALANCE=Math.max(0,parseInt(qs.get('bal')||'0',10)||0);   // botdan keladi
@@ -1491,9 +1498,9 @@ async function refreshMe(){
     SRV.site=d.site===true; SRV.wlogin=d.web_login||null;
     SRV.nopay=!WEB&&d.nopay===true; document.body.classList.toggle('tg-nopay',SRV.nopay); try{localStorage.setItem('tadris_nopay',SRV.nopay?'1':'')}catch(e){}
     if(SRV.nopay){sitePrefetch(); renderPlan()}
-    SRV.closed=!WEB&&d.closed===true; document.body.classList.toggle('tg-closed',SRV.closed);
+    SRV.closed=!WEB&&d.closed===true; document.body.classList.toggle('tg-closed',SRV.closed&&!QZLINK); document.body.classList.toggle('tg-quiz',SRV.closed&&QZLINK); {const qb=document.querySelector('.qz-sitebar button'); if(qb) qb.textContent=t('qzSiteBtn')}
     try{localStorage.setItem('tadris_closed',SRV.closed?'1':'')}catch(e){}
-    if(SRV.closed) goSiteShow();       // 2026-11-22 23:59 dan Telegram ilovasi yopiq — faqat saytga o'tish
+    if(SRV.closed&&!QZLINK) goSiteShow();       // 2026-11-22 23:59 dan Telegram ilovasi yopiq — faqat saytga o'tish (test havolasidan tashqari)
     renderPw();
     SRV.quiz_free=d.quiz_free===true; if(typeof d.quiz_cross==='boolean'&&d.quiz_cross!==SRV.quiz_cross){SRV.quiz_cross=d.quiz_cross; renderHome()}
     syncDesk();
@@ -2226,6 +2233,7 @@ const IX=(()=>{
 
 /* ---------- Navigation ---------- */
 function show(id){
+  if(SRV.closed&&!WEB&&id!=='qz'){document.body.classList.remove('tg-quiz'); document.body.classList.add('tg-closed'); goSiteShow(); return}   // yopiq ilova: faqat test yechish
   document.querySelectorAll('.screen').forEach(s=>s.classList.toggle('on',s.id===id));
   const sub=['topup','invite','paywait','payok'].includes(id);
   if(id!=='paywait') stopPoll();
@@ -2453,6 +2461,7 @@ if(qs.get('form')) openForm(qs.get('form'));
       <span class="end-load on" id="endLoadF"><i><s id="endBarF"></s></i><em id="endPctF"></em></span></div>
     <button type="button" class="end-ov-pick" id="endOvPick" onclick="pickEndFull()"></button></div>
 </div>
+<div class="qz-sitebar"><button type="button" onclick="openSite()" data-i18n="qzSiteBtn"></button></div>
 <div class="wlogin go-site" id="goSite" onclick="if(event.target===this)goSiteClose()"><div class="wl-card">
   <div style="font-size:42px;line-height:1">🌐</div>
   <h1 style="margin-top:12px" data-i18n="goTitle"></h1>
