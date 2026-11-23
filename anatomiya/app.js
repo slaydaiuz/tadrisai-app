@@ -8,7 +8,7 @@ const $ = id => document.getElementById(id);
 const API = location.hostname === 'tadris.ai' ? '/api' : 'https://91-107-229-30.sslip.io/api';
 const QS = new URLSearchParams(location.search);
 const DEV = QS.get('dev') === '1' && location.hostname !== 'tadris.ai';
-const V = '3';
+const V = '4';
 
 // ------------------------------------------------------------------ matnlar
 const TX = {
@@ -116,7 +116,7 @@ Object.assign(TX.uz, {kick: '3D anatomiya', title: "Tanani qatlamma-qatlam o'rga
   lmL: 'Belgilar · {n}', insFrom: 'Bu suyakdan boshlanadi', insTo: 'Bu suyakka yopishadi', mOrig: 'Qayerdan boshlanadi', mIns: 'Qayerga yopishadi', related: 'Yonidagilar', other: 'Yana qayerda bor',
   res: 'Natijangiz', resD: '{a} tadan {b} tasini ochdingiz', test: 'Tez test', testD: '10 ta savol, {n} ta qism ichidan.', mFind: 'Modeldan top', mFindD: 'Nomi chiqadi — siz uni modelda bosasiz.',
   mPick: "4 tadan biri", mPickD: "Bo'yalgan qismning nomini to'rt variantdan tanlaysiz.", mType: "O'zing yoz", mTypeD: "Bo'yalgan qismning nomini o'zingiz yozasiz.", mTf: "Ha yoki yo'q", mTfD: "«Bu — …» degan gap to'g'rimi?",
-  deep: 'Yodlash rejimi', paired: "juft (o'ng va chap)", noTr: "O'zbekcha nomi tez orada qo'shiladi"});
+  hqLoad: 'Yuqori sifat yuklanmoqda…', deep: 'Yodlash rejimi', paired: "juft (o'ng va chap)", noTr: "O'zbekcha nomi tez orada qo'shiladi"});
 Object.assign(TX.ru, {kick: '3D-анатомия', title: 'Изучайте тело слой за слоем', desc: 'От костей до нервов — вращайте каждую часть, узнайте её название на узбекском, русском, латыни и английском и закрепите в упражнениях.',
   sLm: 'Ориентиров на костях', gq: 'Найдите любую часть: бедренная кость, аорта, n. vagus…', resume: 'Вы открывали последним', resumeB: 'Открыть', seenOf: 'Открыто {a} из {b}',
   atlasesS: 'Каждый — отдельная модель: выберите нужную систему.', nSt: '{n} частей', nLm: '{n} ориентиров', seenP: 'Открыто: {p}%',
@@ -131,7 +131,7 @@ Object.assign(TX.ru, {kick: '3D-анатомия', title: 'Изучайте те
   lmL: 'Ориентиры · {n}', insFrom: 'Начинаются от этой кости', insTo: 'Крепятся к этой кости', mOrig: 'Откуда начинается', mIns: 'Куда крепится', related: 'Рядом', other: 'Где ещё есть',
   res: 'Ваш результат', resD: 'Открыто {b} из {a}', test: 'Быстрый тест', testD: '10 вопросов из {n} частей.', mFind: 'Найди на модели', mFindD: 'Появится название — нажмите эту часть на модели.',
   mPick: 'Один из четырёх', mPickD: 'Выберите название окрашенной части из четырёх.', mType: 'Напиши сам', mTypeD: 'Напишите название окрашенной части.', mTf: 'Да или нет', mTfD: 'Верно ли «Это — …»?',
-  deep: 'Режим запоминания', noTr: 'Перевод скоро появится'});
+  hqLoad: 'Загружается высокое качество…', deep: 'Режим запоминания', noTr: 'Перевод скоро появится'});
 Object.assign(TX.en, {kick: '3D anatomy', title: 'Learn the body layer by layer', desc: 'From bones to nerves — spin every part, learn its name in Uzbek, Russian, Latin and English, then lock it in with practice.',
   sLm: 'Bone landmarks', gq: 'Find any part: femur, aorta, vagus nerve…', resume: 'You last opened', resumeB: 'Open', seenOf: '{a} of {b} opened',
   atlasesS: 'Each one is its own model — pick the system you need.', nSt: '{n} parts', nLm: '{n} landmarks', seenP: 'Opened: {p}%',
@@ -146,7 +146,7 @@ Object.assign(TX.en, {kick: '3D anatomy', title: 'Learn the body layer by layer'
   lmL: 'Landmarks · {n}', insFrom: 'Start on this bone', insTo: 'Attach to this bone', mOrig: 'Where it starts', mIns: 'Where it attaches', related: 'Nearby', other: 'Also found in',
   res: 'Your progress', resD: '{b} of {a} opened', test: 'Quick test', testD: '10 questions from {n} parts.', mFind: 'Find on the model', mFindD: 'A name appears — tap that part on the model.',
   mPick: 'One of four', mPickD: 'Choose the painted part\'s name from four.', mType: 'Type it', mTypeD: 'Type the painted part\'s name.', mTf: 'Yes or no', mTfD: 'Is "This is …" right?',
-  deep: 'Memorise mode', noTr: 'Translation coming soon'});
+  hqLoad: 'Loading high quality…', deep: 'Memorise mode', noTr: 'Translation coming soon'});
 let LANG = (() => { try { const a = localStorage.getItem('atlas_lang'); if (TX[a]) return a; const l = localStorage.getItem('tadris_lang'); if (TX[l]) return l; if (['kk', 'ky', 'tg'].includes(l)) return 'ru'; } catch (e) {} return (navigator.language || '').startsWith('ru') ? 'ru' : 'uz'; })();
 const LI = () => ({uz: 0, ru: 1, en: 2}[LANG]);
 const t = (k, o) => { let s = (TX[LANG] || TX.uz)[k] ?? TX.uz[k] ?? k; if (o) for (const [a, b] of Object.entries(o)) s = s.split('{' + a + '}').join(b); return s; };
@@ -373,7 +373,7 @@ async function openAtlas(id, pickN) {
       if (!names.has(p[6]) && !names.has(p[0])) continue;
       const mat = new THREE.MeshStandardMaterial({color: p[4] === 1 ? 0xef4444 : 0x06b6d4, roughness: 0.5, side: THREE.DoubleSide, polygonOffset: true, polygonOffsetFactor: -2, polygonOffsetUnits: -2, clippingPlanes: [clipPlane]});
       const m = new THREE.Mesh(geom(fp), mat); m.visible = false; m.renderOrder = 2;
-      m.userData = {p, ins: true, side: p[1], c: m.geometry.boundingSphere.center.clone()}; root.add(m); INS.push(m);
+      m.userData = {p, id: fp.id, ins: true, side: p[1], c: m.geometry.boundingSphere.center.clone()}; root.add(m); INS.push(m);
     }
   }
   ITEMS.sort((x, y) => nm(x.n).localeCompare(nm(y.n), LANG));
@@ -390,6 +390,28 @@ async function openAtlas(id, pickN) {
   // ochiq guruhlar: yuqori 2 daraja
   ITEMS.forEach(it => nodeAnc(it.node).slice(-2).forEach(n => OPEN.add(n)));
   if (pickN != null && BYN.has(+pickN)) select(BYN.get(+pickN), 0, true); else renderPanel();
+  upgradeHQ(a);
+}
+// --- yuqori sifat: yengil model ochilgach, asl sifatdagisi orqa fonda yuklanib, o'rniga qo'yiladi
+const HQ_OK = (() => { try { const c = navigator.connection; if (c && c.saveData) return false; if (navigator.deviceMemory && navigator.deviceMemory < 3) return false; } catch (e) {} return true; })();
+async function upgradeHQ(a) {
+  const files = [...new Set(a.layers.filter(L => L.role !== 'ctx' && !/-lo$/.test(L.f)).map(L => L.f))];
+  if (a.ins) files.push('s2');
+  if (!HQ_OK || !files.length) { $('hq').classList.add('hide'); return; }
+  $('hq').textContent = t('hqLoad'); $('hq').classList.remove('hide', 'done');
+  for (const f of files) {
+    let parts; try { parts = await loadFile(f + '-full'); } catch (e) { console.warn('hq', f, e); continue; }
+    if (AT !== a) return;
+    const byId = new Map(parts.map(p => [p.id, p]));
+    for (const m of MESHES.concat(INS)) {
+      if (m.userData.ctx || m.userData.hq) continue;
+      const p = byId.get(m.userData.id ?? -1); if (!p) continue;
+      const old = m.geometry; m.geometry = geom(p); old.dispose(); m.userData.hq = true;
+    }
+  }
+  if (AT !== a) return;
+  GRID = null; if (GK > 0) { buildGrid(); place(); }
+  $('hq').textContent = 'HD ✓'; $('hq').classList.add('done'); setTimeout(() => { if (AT === a) $('hq').classList.add('hide'); }, 2500);
 }
 
 // --- ko'rinish va ranglar
