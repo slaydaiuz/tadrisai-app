@@ -1583,7 +1583,7 @@ async function refreshMe(){
     if(typeof d.free==='number') FREE=d.free;
     if(typeof d.live==='boolean') SRV.live=d.live;               // ochilish va chegirma — server soati bo'yicha
     if(typeof d.prem_disc==='number') SRV.disc=d.prem_disc;
-    if(typeof d.admin==='boolean'&&d.admin!==SRV.admin){SRV.admin=d.admin; renderHome()}
+    if(typeof d.admin==='boolean'&&d.admin!==SRV.admin){SRV.admin=d.admin; renderHome(); try{renderFiles()}catch(e){}}
     if(typeof d.quiz==='boolean'&&d.quiz!==SRV.quiz){SRV.quiz=d.quiz; renderHome(); try{renderFiles()}catch(e){}}
     SRV.quiz_left=(typeof d.quiz_left==='number')?d.quiz_left:null;
     SRV.site=d.site===true; SRV.wlogin=d.web_login||null;
@@ -2159,7 +2159,7 @@ function renderFiles(){
   $('fnote').style.display=items.length?'':'none';
   $('flist').innerHTML=items.map(x=>`<div class="fitem"><span class="fi">${x.kind==='p'?'📊':'📄'}</span>
     <span class="ft"><b>${esc(x.name)}</b><i>${t(x.kind==='p'?'fPrez':'fIsh')} · ${x.day.split('-').reverse().join('.')} · ${x.left} ${t('fLeft')}</i></span>
-    <span class="fb2">${WEB&&SRV.quiz!==false?`<button type="button" class="ftest" onclick="QZ.startFromFile(${Number(x.id)})">${QZ_FT()}</button>`:''}<button type="button" onclick="resend(${Number(x.id)})">${t(WEB?'fDown':'fSend')}</button></span></div>`).join('');
+    <span class="fb2">${WEB&&SRV.admin===true?`<button type="button" class="ftest" onclick="QZ.startFromFile(${Number(x.id)})">${QZ_FT()}</button>`:''}<button type="button" onclick="resend(${Number(x.id)})">${t(WEB?'fDown':'fSend')}</button></span></div>`).join('');
 }
 const QZ_FT=()=>({ru:'✅ Тест · −30%',en:'✅ Test · −30%',kaa:'✅ Test · −30%',kk:'✅ Тест · −30%',ky:'✅ Тест · −30%',tg:'✅ Тест · −30%'}[lang]||'✅ Test · −30%');   // 2026-11-25: o'z faylidan test
 function resend(id){

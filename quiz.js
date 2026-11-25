@@ -478,10 +478,10 @@ Object.assign(QD.ru,{myFile:"Выбрать из «Мои файлы»", myFileD
 Object.assign(QD.en,{myFile:"Pick from My files", myFileD:"From your own presentation or essay — 30% off", ownTag:"−30% · your file", ownD:"Questions are based on this file's text · 30% off", pickFile:"Which file should the test use?", noFiles:"My files is empty. Create a presentation or an essay first.", fileBig:"This file is too large — download it and use «Upload material».", fileGone:"This file wasn't found or its 30 days have passed.", fTest:"✅ Test · −30%"});
 Object.assign(QD.kaa,{myFile:"Fayllarımnan tańlaw", myFileD:"Ózińiz jaratqan prezentaciya yamasa óz betinshe jumıstan — 30% shegirme", ownTag:"−30% · óz faylıńız", ownD:"Sorawlar usı faylıńız tekstinen dúziledi · 30% shegirme", pickFile:"Qaysı fayldan test dúzemiz?", noFiles:"Fayllarım bos. Aldın prezentaciya yamasa óz betinshe jumıs jaratıń.", fileBig:"Bul fayl júdá úlken — onı júklep alıp, «Derek júklew» arqalı beriń.", fileGone:"Bul fayl tabılmadı yamasa 30 kúnlik múddeti tawsıldı.", fTest:"✅ Test · −30%"});
 /* 2026-11-25, egasi: fayldan test — soddalashtirilgan oyna (mavzu va qiyinlik so'ralmaydi) */
-Object.assign(QD.uz,{ownTitle:"Shu mavzu bo'yicha test", ownNote:"Savollar aynan shu faylingiz asosida tuziladi. Shuning uchun mavzu va qiyinlik so'ralmaydi — faqat savollar sonini belgilang va ismingizni yozing.", authorName:"Test tuzuvchining ismi", authorPh:"Masalan: Dilnoza Karimova", authorHint:"Testni yechganlar shu ismni ko'radi", sentBot:"✅ Havola botga yuborildi. U yerda o'zingiz yechib ko'rishingiz va testni nechta yaqiningiz yechganini ko'rishingiz mumkin."});
-Object.assign(QD.ru,{ownTitle:"Тест по этой теме", ownNote:"Вопросы составляются именно по вашему файлу. Поэтому тему и сложность выбирать не нужно — укажите только количество вопросов и своё имя.", authorName:"Имя автора теста", authorPh:"Например: Дилноза Каримова", authorHint:"Это имя увидят те, кто решает тест", sentBot:"✅ Ссылка отправлена в бот. Там можно решить тест самому и посмотреть, сколько ваших близких его прошли."});
-Object.assign(QD.en,{ownTitle:"Test on this topic", ownNote:"The questions come from this very file, so there's no topic or difficulty to choose — just set the number of questions and type your name.", authorName:"Test author's name", authorPh:"E.g. Dilnoza Karimova", authorHint:"People taking the test will see this name", sentBot:"✅ The link was sent to the bot. There you can take the test yourself and see how many people solved it."});
-Object.assign(QD.kaa,{ownTitle:"Usı tema boyınsha test", ownNote:"Sorawlar dál usı faylıńız tiykarında dúziledi. Sonlıqtan tema hám qıyınlıq soralmaydı — tek sorawlar sanın belgileń hám atıńızdı jazıń.", authorName:"Test dúziwshiniń atı", authorPh:"Mısalı: Dilnoza Karimova", authorHint:"Testti sheshkenler usı attı kóredi", sentBot:"✅ Silteme botqa jiberildi. Ol jerde ózińiz sheship kóriwińiz hám testti neshe adam sheshkenin kóriwińiz múmkin."});
+Object.assign(QD.uz,{ownTitle:"Shu mavzu bo'yicha test", ownNote:"Savollar aynan shu faylingiz asosida tuziladi.", authorName:"Test tuzuvchining ismi", authorPh:"Masalan: Dilnoza Karimova", authorHint:"Testni yechganlar shu ismni ko'radi", sentBot:"✅ Havola botga yuborildi. U yerda o'zingiz yechib ko'rishingiz va testni nechta yaqiningiz yechganini ko'rishingiz mumkin."});
+Object.assign(QD.ru,{ownTitle:"Тест по этой теме", ownNote:"Вопросы составляются именно по вашему файлу.", authorName:"Имя автора теста", authorPh:"Например: Дилноза Каримова", authorHint:"Это имя увидят те, кто решает тест", sentBot:"✅ Ссылка отправлена в бот. Там можно решить тест самому и посмотреть, сколько ваших близких его прошли."});
+Object.assign(QD.en,{ownTitle:"Test on this topic", ownNote:"The questions come from this very file.", authorName:"Test author's name", authorPh:"E.g. Dilnoza Karimova", authorHint:"People taking the test will see this name", sentBot:"✅ The link was sent to the bot. There you can take the test yourself and see how many people solved it."});
+Object.assign(QD.kaa,{ownTitle:"Usı tema boyınsha test", ownNote:"Sorawlar dál usı faylıńız tiykarında dúziledi.", authorName:"Test dúziwshiniń atı", authorPh:"Mısalı: Dilnoza Karimova", authorHint:"Testti sheshkenler usı attı kóredi", sentBot:"✅ Silteme botqa jiberildi. Ol jerde ózińiz sheship kóriwińiz hám testti neshe adam sheshkenin kóriwińiz múmkin."});
 /* 2026-11-25, egasi: xatolarni ko'rish, o'zi uchun qayta ishlash, reyting */
 Object.assign(QD.uz,{revBtn:"🔍 Xatolarni ko'rish ({n})", revTitle:"Xato javoblar", yourAns:"Sizning javobingiz", rightAns:"To'g'ri javob", noAns:"javob berilmagan", allRight:"Hammasi to'g'ri — xato yo'q! 🎉", practice:"🔁 O'zim uchun qayta ishlash", practiceD:"Har savoldan keyin to'g'ri javob va izoh ko'rinadi. Natija hech qayerga yuborilmaydi.", practiceS:"o'zingiz uchun", boardLink:"🏆 Reytingni ko'rish ›", boardT:"Reyting", you:"siz", noBoard:"Reyting hali yo'q", prevT:"Siz bu testni yechgansiz"});
 Object.assign(QD.ru,{revBtn:"🔍 Посмотреть ошибки ({n})", revTitle:"Неверные ответы", yourAns:"Ваш ответ", rightAns:"Правильный ответ", noAns:"нет ответа", allRight:"Всё верно — ошибок нет! 🎉", practice:"🔁 Пройти ещё раз для себя", practiceD:"После каждого вопроса видно правильный ответ и пояснение. Результат никуда не отправляется.", practiceS:"для себя", boardLink:"🏆 Посмотреть рейтинг ›", boardT:"Рейтинг", you:"вы", noBoard:"Рейтинга пока нет", prevT:"Вы уже решили этот тест"});
@@ -585,7 +585,7 @@ function srcBox(){
   if(S.src) return `<div class="qz-srcf"><span class="ic">${S.src.kind==='img'?'🖼':'📄'}</span><span class="tx"><b>${esc(S.src.name)}</b><small>${S.src.kind==='img'?L('srcImg'):L('chars',{n:(S.src.chars||0).toLocaleString('ru')})+(S.src.cut?L('cut'):'')+L('srcText')}</small></span><button type="button" onclick="QZ.srcDel()" aria-label="${L('del')}">✕</button></div>`;
   return `<label class="qz-up"><input type="file" accept=".pdf,.docx,.pptx,.txt,image/*" onchange="QZ.srcUp(this)" hidden>
     <span class="ic">📎</span><span class="tx"><b>${L('upload')} <i>${L('optional')}</i></b><small>${L('uploadD')}</small></span><span class="btn">${L('file')}</span></label>`+
-    (myFiles().length?`<button type="button" class="qz-up" style="width:100%;text-align:left;font:inherit;color:inherit" onclick="QZ.pickFile()"><span class="ic">📂</span><span class="tx"><b>${L('myFile')}</b><small>${L('myFileD')}</small></span><span class="btn">−30%</span></button>`:'');
+    (myFiles().length&&typeof SRV!=='undefined'&&SRV.admin===true?`<button type="button" class="qz-up" style="width:100%;text-align:left;font:inherit;color:inherit" onclick="QZ.pickFile()"><span class="ic">📂</span><span class="tx"><b>${L('myFile')}</b><small>${L('myFileD')}</small></span><span class="btn">−30%</span></button>`:'');
 }
 /* Fayllarim (index.html dagi FILES: [id, nom, 'p'|'m', sana]) — 30 kun ichidagilari */
 function myFiles(){try{return (typeof FILES!=='undefined'?FILES:[]).filter(([,, ,d])=>Date.now()-new Date(d+'T00:00:00').getTime()<30*864e5)}catch(e){return []}}
@@ -616,6 +616,8 @@ function openOwn(){
   <div class="rng" style="margin-top:62px"><div class="rng-track"><div class="rng-fill" id="qzFill"></div></div><div id="qzTicks"></div>
     <input type="range" id="qzRng" min="${TMIN}" max="${TMAX}" step="1" value="${S.n}" aria-label="${L('nQ')}" oninput="QZ.setN(this.value)"><div class="rng-bub" id="qzBub"></div></div>
   <div class="rng-price" id="qzNPrice"></div>
+  <div class="group">${L('qtype')}</div>
+  <div class="qz-types">${Object.keys(QT).map(k=>`<button type="button"${pr(S.qtype,k)} onclick="QZ.set('qtype','${k}')"><b>${QTx(k)[0]}</b><span>${QTx(k)[1]}</span><em class="qz-ex" role="button" onclick="event.stopPropagation();QZ.example('${k}')">${L('example')}</em></button>`).join('')}</div>
   <div class="group">${L('authorName')}</div>
   <input class="qz-in" id="qzAuth" maxlength="40" value="${esc(nm)}" placeholder="${L('authorPh')}" oninput="QZ.setQ('author',this.value)">
   <div class="qz-hint" style="text-align:left">${L('authorHint')}</div>
@@ -642,7 +644,7 @@ function pickSel(id,v){
   const k=id==='qzGrade'?'grade':'subject'; S[k]=v==='__o'?(o.value||''):v; if(v==='__o') o.focus();
 }
 function setQ(k,v){S[k]=v}
-function set(k,v){S.topic=($('qzTopic')||{}).value||S.topic; S[k]=v; hap(); KEEP={y:window.scrollY}; (S.kind==='cross'?openCross:open)()}
+function set(k,v){S.topic=($('qzTopic')||{}).value||S.topic; if($('qzAuth')) S.author=$('qzAuth').value; S[k]=v; hap(); KEEP={y:window.scrollY}; (S.ownMode?openOwn:S.kind==='cross'?openCross:open)()}
 async function mine(kind){
   let d={}; try{d=await api('/quiz/mine',{},15000)}catch(e){}
   const el=$('qzMine'); if(!el) return;
@@ -747,7 +749,7 @@ async function create(){
     <div style="color:var(--muted);font-size:14px">${topic?'«'+esc(topic)+'»':''}${!cross&&S.src?(topic?'<br>':'')+'📎 '+esc(S.src.name):''}<br><span id="qzSec">0</span> ${L('sec')}</div></div>`);
   timer=setInterval(()=>{const e=$('qzSec'); if(e) e.textContent=Math.round((Date.now()-t0)/1000)},1000);
   const body=cross?{kind:'cross',topic,n:S.cn,level:S.level,qlang:S.qlang}
-    :own?{kind:'test',topic,n:S.n,level:'mid',aud:'class',qlang:'auto',qtype:'mc',grade:'',subject:'',src:S.src.src,author:S.author||'',tobot:1}
+    :own?{kind:'test',topic,n:S.n,level:'mid',aud:'class',qlang:'auto',qtype:QT[S.qtype]?S.qtype:'mc',grade:'',subject:'',src:S.src.src,author:S.author||'',tobot:1}
     :{kind:'test',topic,n:S.n,level:S.level,aud:S.aud,qlang:S.qlang,qtype:S.qtype,grade:S.grade,subject:S.subject,src:S.src&&S.src.src};
   let d={}; try{d=await api('/quiz/create',body,240000)}catch(e){d={error:'net'}}
   stopT();
@@ -825,7 +827,7 @@ async function print(){
 async function join(code){
   view('<div class="qz-load"><div class="qz-spin"></div></div>');
   const q=await load(code); if(!q){show('home');return}
-  if(q.mine) return ready(code);               // 2026-11-25, egasi: muallif havolani bossa — test paneli (yechish emas)
+  if(q.mine&&q.nx) return ready(code);               // 2026-11-25, egasi: muallif havolani bossa — test paneli (yechish emas)
   const n=q.kind==='cross'?q.data.words.length:q.data.questions.length;
   const nm=userName||(tg&&tg.initDataUnsafe&&tg.initDataUnsafe.user&&tg.initDataUnsafe.user.first_name)||'';
   view(`<div style="text-align:center;margin:10px 0 18px"><div class="qz-tag" style="display:inline-block">TadrisAI</div></div>
@@ -835,7 +837,8 @@ async function join(code){
     :`<div><b>${n}</b><small>${L('qs')}</small></div><div><b>~${Math.max(2,Math.round(n*0.5))}</b><small>${L('minutes')}</small></div><div><b>30 ${L('sec')}</b><small>${L('perQ')}</small></div>`}</div>
   ${q.author?`<div class="qz-item" style="margin-bottom:14px"><span class="qz-av">${esc(q.author[0]||'?')}</span><span class="tx"><small>${L('author')}</small><b>${esc(q.author)}</b></span></div>`:''}
   ${q.exam?`<div class="qz-warn" style="margin-top:0"><b>${L('examT')}</b><p>${L('examD')}</p></div>`:''}
-  ${q.prev?prevBlock(q):`
+  ${q.prev?(q.nx?prevBlock(q):`<div class="qz-card" style="text-align:center"><b>${L('prevSolved',{at:esc(q.prev.at)})}</b><div class="qz-title" style="margin-top:6px">${q.prev.score} / ${q.prev.total}</div><div class="qz-hint">${L('noRetake')}</div></div>
+  <button type="button" class="cta" onclick="show('home')">${L('openApp')}</button>`):`
   <div class="group" style="margin-top:4px">${L('yourName')}</div>
   <input class="qz-in" id="qzName" maxlength="40" value="${esc(nm)}" placeholder="${L('namePh')}">
   <div class="qz-hint" style="text-align:left">${L('nameHint')}</div>
@@ -989,10 +992,10 @@ async function finish(early){
   <div class="qz-title">${msg}</div>
   <div style="text-align:center;color:var(--muted);font-size:14px;margin-top:4px">${esc(q.data.title||q.topic)}</div>
   <div class="qz-stats"><div><b>${mmss(secs)}</b><small>${L('time')}</small></div><div><b>${P.best}</b><small>${L('streakS')}</small></div>
-    <div${rank?' onclick="QZ.board()" style="cursor:pointer"':''}><b>${rank?L('place',{n:rank[0]}):'—'}</b><small>${rank?L('ofN',{n:rank[1]}):(P.practice?L('practiceS'):P.retry?L('retryS'):'')}</small></div></div>
-  ${P.wrong.length&&!P.retry?`<button type="button" class="cta" onclick="QZ.review()">${L('revBtn',{n:P.wrong.length})}</button>`:''}
+    <div${rank&&q.nx?' onclick="QZ.board()" style="cursor:pointer"':''}><b>${rank?L('place',{n:rank[0]}):'—'}</b><small>${rank?L('ofN',{n:rank[1]}):(P.practice?L('practiceS'):P.retry?L('retryS'):'')}</small></div></div>
+  ${P.wrong.length&&!P.retry&&q.nx?`<button type="button" class="cta" onclick="QZ.review()">${L('revBtn',{n:P.wrong.length})}</button>`:''}
   ${P.wrong.length?`<button type="button" class="${P.retry?'cta':'qz-btn'}" style="${P.retry?'':'width:100%;margin-top:10px'}" onclick="QZ.retry()">${L('retryN',{n:P.wrong.length})}</button>`:''}
-  ${rank?`<button type="button" class="qz-btn" style="width:100%;margin-top:6px;background:none;border:0;color:var(--violet);font-weight:700" onclick="QZ.board()">${L('boardLink')}</button>`:''}
+  ${rank&&q.nx?`<button type="button" class="qz-btn" style="width:100%;margin-top:6px;background:none;border:0;color:var(--violet);font-weight:700" onclick="QZ.board()">${L('boardLink')}</button>`:''}
   <div class="qz-2"><button type="button" class="qz-btn" onclick="QZ.shareRes(${pct})">${L('shareRes')}</button>
   <button type="button" class="qz-btn" onclick="${q.mine?`QZ.results()`:`show('home')`}">${q.mine?L('results'):L('openApp')}</button></div>
   ${q.mine?'':`<div class="qz-card" style="margin-top:14px;text-align:center"><b>${L('ownT')}</b><div class="qz-hint">${L('ownD')}</div></div>`}`);
@@ -1009,7 +1012,7 @@ async function finishExam(){
   resView(`<div class="qz-ring" style="--p:${pct}%"><div><b>${pct}%</b><small>${d.score} / ${d.total}</small></div></div>
   <div class="qz-title">${L('done')}</div>
   <div style="text-align:center;color:var(--muted);font-size:14px;margin-top:4px">${esc(q.data.title||q.topic)}</div>
-  <div class="qz-stats"><div><b>${mmss(secs)}</b><small>${L('time')}</small></div><div><b>${d.score}</b><small>${L('correctN')}</small></div><div onclick="QZ.board()" style="cursor:pointer"><b>${L('place',{n:d.rank})}</b><small>${L('ofN',{n:d.of})}</small></div></div>
+  <div class="qz-stats"><div><b>${mmss(secs)}</b><small>${L('time')}</small></div><div><b>${d.score}</b><small>${L('correctN')}</small></div><div${q.nx?' onclick="QZ.board()" style="cursor:pointer"':''}><b>${L('place',{n:d.rank})}</b><small>${L('ofN',{n:d.of})}</small></div></div>
   <div class="qz-card" style="text-align:center"><b>${L('sentT')}</b></div>
   ${Array.isArray(d.questions)?afterBtns((d.wrong||[]).length):''}
   <button type="button" class="qz-btn" style="width:100%;margin-top:10px" onclick="show('home')">${L('openApp')}</button>`);
