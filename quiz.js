@@ -477,6 +477,11 @@ Object.assign(QD.uz,{myFile:"Fayllarimdan tanlash", myFileD:"O'zingiz yasagan pr
 Object.assign(QD.ru,{myFile:"Выбрать из «Мои файлы»", myFileD:"Из вашей презентации или самостоятельной — скидка 30%", ownTag:"−30% · ваш файл", ownD:"Вопросы составляются по тексту этого файла · скидка 30%", pickFile:"Из какого файла составить тест?", noFiles:"«Мои файлы» пусты. Сначала создайте презентацию или самостоятельную.", fileBig:"Файл слишком большой — скачайте его и загрузите через «Загрузить материал».", fileGone:"Файл не найден или истёк срок хранения (30 дней).", fTest:"✅ Тест · −30%"});
 Object.assign(QD.en,{myFile:"Pick from My files", myFileD:"From your own presentation or essay — 30% off", ownTag:"−30% · your file", ownD:"Questions are based on this file's text · 30% off", pickFile:"Which file should the test use?", noFiles:"My files is empty. Create a presentation or an essay first.", fileBig:"This file is too large — download it and use «Upload material».", fileGone:"This file wasn't found or its 30 days have passed.", fTest:"✅ Test · −30%"});
 Object.assign(QD.kaa,{myFile:"Fayllarımnan tańlaw", myFileD:"Ózińiz jaratqan prezentaciya yamasa óz betinshe jumıstan — 30% shegirme", ownTag:"−30% · óz faylıńız", ownD:"Sorawlar usı faylıńız tekstinen dúziledi · 30% shegirme", pickFile:"Qaysı fayldan test dúzemiz?", noFiles:"Fayllarım bos. Aldın prezentaciya yamasa óz betinshe jumıs jaratıń.", fileBig:"Bul fayl júdá úlken — onı júklep alıp, «Derek júklew» arqalı beriń.", fileGone:"Bul fayl tabılmadı yamasa 30 kúnlik múddeti tawsıldı.", fTest:"✅ Test · −30%"});
+/* 2026-11-25, egasi: fayldan test — soddalashtirilgan oyna (mavzu va qiyinlik so'ralmaydi) */
+Object.assign(QD.uz,{ownTitle:"Shu mavzu bo'yicha test", ownNote:"Savollar aynan shu faylingiz asosida tuziladi. Shuning uchun mavzu va qiyinlik so'ralmaydi — faqat savollar sonini belgilang va ismingizni yozing.", authorName:"Test tuzuvchining ismi", authorPh:"Masalan: Dilnoza Karimova", authorHint:"Testni yechganlar shu ismni ko'radi", sentBot:"✅ Havola botga yuborildi. U yerda o'zingiz yechib ko'rishingiz va testni nechta yaqiningiz yechganini ko'rishingiz mumkin."});
+Object.assign(QD.ru,{ownTitle:"Тест по этой теме", ownNote:"Вопросы составляются именно по вашему файлу. Поэтому тему и сложность выбирать не нужно — укажите только количество вопросов и своё имя.", authorName:"Имя автора теста", authorPh:"Например: Дилноза Каримова", authorHint:"Это имя увидят те, кто решает тест", sentBot:"✅ Ссылка отправлена в бот. Там можно решить тест самому и посмотреть, сколько ваших близких его прошли."});
+Object.assign(QD.en,{ownTitle:"Test on this topic", ownNote:"The questions come from this very file, so there's no topic or difficulty to choose — just set the number of questions and type your name.", authorName:"Test author's name", authorPh:"E.g. Dilnoza Karimova", authorHint:"People taking the test will see this name", sentBot:"✅ The link was sent to the bot. There you can take the test yourself and see how many people solved it."});
+Object.assign(QD.kaa,{ownTitle:"Usı tema boyınsha test", ownNote:"Sorawlar dál usı faylıńız tiykarında dúziledi. Sonlıqtan tema hám qıyınlıq soralmaydı — tek sorawlar sanın belgileń hám atıńızdı jazıń.", authorName:"Test dúziwshiniń atı", authorPh:"Mısalı: Dilnoza Karimova", authorHint:"Testti sheshkenler usı attı kóredi", sentBot:"✅ Silteme botqa jiberildi. Ol jerde ózińiz sheship kóriwińiz hám testti neshe adam sheshkenin kóriwińiz múmkin."});
 /* 2026-11-25, egasi: xatolarni ko'rish, o'zi uchun qayta ishlash, reyting */
 Object.assign(QD.uz,{revBtn:"🔍 Xatolarni ko'rish ({n})", revTitle:"Xato javoblar", yourAns:"Sizning javobingiz", rightAns:"To'g'ri javob", noAns:"javob berilmagan", allRight:"Hammasi to'g'ri — xato yo'q! 🎉", practice:"🔁 O'zim uchun qayta ishlash", practiceD:"Har savoldan keyin to'g'ri javob va izoh ko'rinadi. Natija hech qayerga yuborilmaydi.", practiceS:"o'zingiz uchun", boardLink:"🏆 Reytingni ko'rish ›", boardT:"Reyting", you:"siz", noBoard:"Reyting hali yo'q", prevT:"Siz bu testni yechgansiz"});
 Object.assign(QD.ru,{revBtn:"🔍 Посмотреть ошибки ({n})", revTitle:"Неверные ответы", yourAns:"Ваш ответ", rightAns:"Правильный ответ", noAns:"нет ответа", allRight:"Всё верно — ошибок нет! 🎉", practice:"🔁 Пройти ещё раз для себя", practiceD:"После каждого вопроса видно правильный ответ и пояснение. Результат никуда не отправляется.", practiceS:"для себя", boardLink:"🏆 Посмотреть рейтинг ›", boardT:"Рейтинг", you:"вы", noBoard:"Рейтинга пока нет", prevT:"Вы уже решили этот тест"});
@@ -576,7 +581,7 @@ function setN(v,silent){
   if(!silent) hap();
 }
 function srcBox(){
-  if(S.src&&S.src.own) return `<div class="qz-srcf"><span class="ic">📊</span><span class="tx"><b>${esc(S.src.name)}</b><small><b style="display:inline;color:#10B981">${L('ownTag')}</b> · ${L('ownD')}</small></span><button type="button" onclick="QZ.srcDel()" aria-label="${L('del')}">✕</button></div>`;
+  if(S.src&&S.src.own) return `<div class="qz-srcf"><span class="ic">📊</span><span class="tx"><b>${esc(S.src.name)}</b><small><b style="display:inline;color:#10B981">${L('ownTag')}</b>${S.ownMode?'':' · '+L('ownD')}</small></span><button type="button" onclick="QZ.srcDel()" aria-label="${L('del')}">✕</button></div>`;
   if(S.src) return `<div class="qz-srcf"><span class="ic">${S.src.kind==='img'?'🖼':'📄'}</span><span class="tx"><b>${esc(S.src.name)}</b><small>${S.src.kind==='img'?L('srcImg'):L('chars',{n:(S.src.chars||0).toLocaleString('ru')})+(S.src.cut?L('cut'):'')+L('srcText')}</small></span><button type="button" onclick="QZ.srcDel()" aria-label="${L('del')}">✕</button></div>`;
   return `<label class="qz-up"><input type="file" accept=".pdf,.docx,.pptx,.txt,image/*" onchange="QZ.srcUp(this)" hidden>
     <span class="ic">📎</span><span class="tx"><b>${L('upload')} <i>${L('optional')}</i></b><small>${L('uploadD')}</small></span><span class="btn">${L('file')}</span></label>`+
@@ -591,12 +596,34 @@ function pickFile(){
 async function fromFile(id){
   const el=$('qzSrc'); if(el) el.innerHTML='<div class="qz-srcf"><span class="qz-spin" style="width:26px;height:26px;border-width:3px"></span><span class="tx"><b>'+L('loading')+'</b></span></div>';
   let d={}; try{d=await api('/quiz/fromfile',{id},90000)}catch(e){}
-  if(!d.ok){S.src=null; if($('qzSrc')) $('qzSrc').innerHTML=srcBox(); toast('⚠️',{big:L('fileBig'),gone:L('fileGone'),notext:L('noText')}[d.error]||L('readErr')); return}
+  if(!d.ok){S.src=null; const own=S.ownMode; S.ownMode=false; toast('⚠️',{big:L('fileBig'),gone:L('fileGone'),notext:L('noText')}[d.error]||L('readErr'));
+    if(own){show('files');return} if($('qzSrc')) $('qzSrc').innerHTML=srcBox(); return}
   S.src={src:d.src,name:d.name,kind:'text',chars:d.chars,cut:d.cut,own:true};
   if(!(S.topic||'').trim()&&d.topic) S.topic=d.topic;
-  hap('ok'); KEEP={y:window.scrollY}; open();
+  hap('ok'); if(S.ownMode) return openOwn(); KEEP={y:window.scrollY}; open();
 }
-function startFromFile(id){S.src=null; S.topic=''; open(); fromFile(id)}
+function startFromFile(id){       // Fayllarim / botdagi tugma: soddalashtirilgan oyna
+  S.src=null; S.topic=''; S.ownMode=true; S.kind='test';
+  view(`<div class="qz-load"><div class="qz-spin"></div><b>${L('loading')}</b></div>`); fromFile(id)}
+function openOwn(){
+  S.ownMode=true; S.kind='test';
+  const nm=S.author!=null?S.author:(userName||(tg&&tg.initDataUnsafe&&tg.initDataUnsafe.user&&tg.initDataUnsafe.user.first_name)||'');
+  view(`<button class="back" onclick="QZ.ownBack()">${L('back')}</button>
+  <div class="qz-head"><h1>${L('ownTitle')}</h1></div>
+  <div class="qz-src">${srcBox().replace('QZ.srcDel()','QZ.ownBack()')}</div>
+  <div class="qz-hint" style="text-align:left;margin-top:8px">${L('ownNote')}</div>
+  <div class="group">${L('nQ')}</div>
+  <div class="rng" style="margin-top:62px"><div class="rng-track"><div class="rng-fill" id="qzFill"></div></div><div id="qzTicks"></div>
+    <input type="range" id="qzRng" min="${TMIN}" max="${TMAX}" step="1" value="${S.n}" aria-label="${L('nQ')}" oninput="QZ.setN(this.value)"><div class="rng-bub" id="qzBub"></div></div>
+  <div class="rng-price" id="qzNPrice"></div>
+  <div class="group">${L('authorName')}</div>
+  <input class="qz-in" id="qzAuth" maxlength="40" value="${esc(nm)}" placeholder="${L('authorPh')}" oninput="QZ.setQ('author',this.value)">
+  <div class="qz-hint" style="text-align:left">${L('authorHint')}</div>
+  <button type="button" class="cta" id="qzGo" onclick="QZ.create()">${L('createT')}</button>
+  <div class="qz-hint" id="qzEta"></div>`);
+  setN(S.n,1);
+}
+function ownBack(){S.ownMode=false; S.src=null; S.topic=''; show('files')}
 async function srcUp(inp){
   const f=inp.files&&inp.files[0]; if(!f) return;
   const isPpt=/\.pptx$/i.test(f.name), lim=(isPpt?25:8)*1024*1024;   // prezentatsiya rasmlar bilan og'irroq
@@ -710,7 +737,9 @@ function openCross(){
   mine('cross');
 }
 async function create(){
-  const topic=($('qzTopic').value||'').trim(), cross=S.kind==='cross';
+  const own=!!(S.ownMode&&S.src&&S.src.own), topic=own?(S.topic||'').trim():($('qzTopic').value||'').trim(), cross=S.kind==='cross';
+  if(own&&$('qzAuth')) S.author=$('qzAuth').value.trim();
+  const back=own?openOwn:(cross?openCross:open);
   if(topic.length<3&&!(S.src&&!cross)){toast('✏️',L('writeTopic'));$('qzTopic').focus();return}   // fayl yuklansa mavzu ixtiyoriy
   S.topic=topic; hap();
   const t0=Date.now();
@@ -718,16 +747,17 @@ async function create(){
     <div style="color:var(--muted);font-size:14px">${topic?'«'+esc(topic)+'»':''}${!cross&&S.src?(topic?'<br>':'')+'📎 '+esc(S.src.name):''}<br><span id="qzSec">0</span> ${L('sec')}</div></div>`);
   timer=setInterval(()=>{const e=$('qzSec'); if(e) e.textContent=Math.round((Date.now()-t0)/1000)},1000);
   const body=cross?{kind:'cross',topic,n:S.cn,level:S.level,qlang:S.qlang}
+    :own?{kind:'test',topic,n:S.n,level:'mid',aud:'class',qlang:'auto',qtype:'mc',grade:'',subject:'',src:S.src.src,author:S.author||'',tobot:1}
     :{kind:'test',topic,n:S.n,level:S.level,aud:S.aud,qlang:S.qlang,qtype:S.qtype,grade:S.grade,subject:S.subject,src:S.src&&S.src.src};
   let d={}; try{d=await api('/quiz/create',body,240000)}catch(e){d={error:'net'}}
   stopT();
-  if(d.error==='balance'){(cross?openCross:open)(); toast('💳',L('noBal',{x:money(d.price)})); if(typeof openTopup==='function') openTopup(d.need||d.price); return}
-  if(!d.ok){toast('⚠️',d.error==='limit'?L('limit'):d.error==='admin'?L('expired'):d.refund?L('failRef',{x:money(d.refund)}):L('fail'));(cross?openCross:open)();return}
+  if(d.error==='balance'){back(); toast('💳',L('noBal',{x:money(d.price)})); if(typeof openTopup==='function') openTopup(d.need||d.price); return}
+  if(!d.ok){toast('⚠️',d.error==='limit'?L('limit'):d.error==='admin'?L('expired'):d.refund?L('failRef',{x:money(d.refund)}):L('fail'));back();return}
   if(typeof d.balance==='number'&&typeof BALANCE!=='undefined'){BALANCE=d.balance; try{renderWallet()}catch(e){}}
   if(d.gift){FREE=0; toast('🎁',L('giftUsed'))}
   else if(d.price>0) toast('✅',L('paid',{x:money(d.price)}));
   else if(typeof SRV!=='undefined'&&SRV&&SRV.quiz_left!=null){SRV.quiz_left=Math.max(0,SRV.quiz_left-1);toast('🧪',L('trialLeft',{n:SRV.quiz_left}))}
-  hap('ok'); S.src=null; ready(d.code);
+  hap('ok'); S.src=null; S.ownMode=false; S.sentBot=!!d.sent; ready(d.code);
 }
 
 /* ---------- Tayyor (muallif) ---------- */
@@ -738,12 +768,14 @@ async function load(code){
 }
 async function ready(code){
   const q=await load(code); if(!q) return open();
+  setTimeout(()=>{S.sentBot=false},0);
   const n=q.kind==='cross'?q.data.words.length:q.data.questions.length, link=linkOf(code);
   const m=(q.data.meta||{});
   const tgq=typeof QZLINK!=='undefined'&&QZLINK;   // Telegram ichidagi havola: yangi test yaratish — faqat saytda
   view(`<button class="back" onclick="${tgq?"show('home')":q.kind==='cross'?'QZ.openCross()':'QZ.open()'}">${L('back')}</button>
   <div class="qz-ok">✓</div>
   <div class="qz-title">${esc(q.data.title||q.topic)}</div>
+  ${S.sentBot?`<div class="qz-card" style="margin-top:12px;border-color:rgba(16,185,129,.45);background:rgba(16,185,129,.1);font-size:14px">${L('sentBot')}</div>`:''}
   <div class="qz-chips"><span>${L(q.kind==='cross'?'nW':'nq',{n})}</span><span>${LV(q.level)}</span><span>${LN(q.lang)}</span>${q.kind==='test'?`<span>${L(q.aud==='class'?'cls':'self')}</span>`:''}${m.qtype?`<span>${QTNx(m.qtype)}</span>`:''}${m.grade?`<span>${esc(m.grade)}</span>`:''}${m.subject?`<span>${esc(m.subject)}</span>`:''}${m.src?`<span>📎 ${esc(m.src)}</span>`:''}</div>
   <div class="group" style="margin-top:0">${L(q.kind==='cross'?'linkC':'linkT')}</div>
   <div class="qz-link"><span>${esc(link.replace('https://',''))}</span><button type="button" onclick="QZ.copy()">${L('copy')}</button></div>
@@ -1092,7 +1124,7 @@ async function crossDone(){
   <div class="qz-2"><button type="button" class="qz-btn" onclick="QZ.shareRes(${pct})">${L('shareS')}</button><button type="button" class="qz-btn" onclick="${S.quiz.mine?'QZ.results()':`show('home')`}">${S.quiz.mine?L('results'):L('openApp')}</button></div>`);
 }
 
-window.QZ={review,backRes,practice,board,pickFile,fromFile,startFromFile,finish,example,exTab,print,open,openCross,setN,srcUp,srcDel,pickSel,setQ,answer,set,create,ready,copy,share,questions,del,join,start,pick,next,quit,retry,shareRes,results,tap,sel,hint,check,crossQuit};
+window.QZ={ownBack,review,backRes,practice,board,pickFile,fromFile,startFromFile,finish,example,exTab,print,open,openCross,setN,srcUp,srcDel,pickSel,setQ,answer,set,create,ready,copy,share,questions,del,join,start,pick,next,quit,retry,shareRes,results,tap,sel,hint,check,crossQuit};
 if(qs.get('quiz')) join(qs.get('quiz'));
 if(WEB&&qs.get('qtopic')&&!qs.get('quiz')){S.topic=qs.get('qtopic'); history.replaceState(null,'',location.pathname); setTimeout(open,350)}   // atlasdan «Test tuzish»
 })();
