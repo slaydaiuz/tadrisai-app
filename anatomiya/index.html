@@ -250,7 +250,7 @@ button{border:0;background:none;cursor:pointer}
   .rst{left:8px;top:58px}
   .expl{bottom:16px}
 }
-body.shot .vtop,body.shot .panel,body.shot .tools,body.shot .expl,body.shot .hint,body.shot .cred2,body.shot .lbl,body.shot .selbar,body.shot .load,body.shot .hq,body.shot .rst,body.shot .glbl{display:none!important}
+body.shot .vtop,body.shot .panel,body.shot .tools,body.shot .expl,body.shot .hint,body.shot .cred2,body.shot .lbl,body.shot .selbar,body.shot .load,body.shot .hq,body.shot .rst,body.shot .glbl,body.shot #fdil{display:none!important}
 html:has(body.shot),body.shot,body.shot .stage,body.shot #view{background:transparent!important}
 @media (min-width:900px){ .bPanel{display:none!important} .selbar{display:none!important} }
 </style>
@@ -281,7 +281,7 @@ html:has(body.shot),body.shot,body.shot .stage,body.shot #view{background:transp
   <div class="vmain">
     <div class="stage" id="stage">
       <canvas id="cv"></canvas>
-      <canvas id="glbl" class="glbl"></canvas>
+      <canvas id="glbl" class="glbl"></canvas><canvas id="fdil" class="glbl"></canvas>
       <button class="rst" id="bReset"></button>
       <div class="tools">
         <div class="tb"><button class="ib" id="tView" data-tip=""><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M2 12s4-7 10-7 10 7 10 7-4 7-10 7S2 12 2 12z"/></svg></button></div>
@@ -315,6 +315,6 @@ html:has(body.shot),body.shot,body.shot .stage,body.shot #view{background:transp
   </div>
 </div>
 <div class="toast hide" id="toast"></div>
-<script type="module" src="app.js?v=8"></script>
+<script type="module" src="app.js?v=9"></script>
 </body>
 </html>

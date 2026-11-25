@@ -8,7 +8,7 @@ const $ = id => document.getElementById(id);
 const API = location.hostname === 'tadris.ai' ? '/api' : 'https://91-107-229-30.sslip.io/api';
 const QS = new URLSearchParams(location.search);
 const DEV = QS.get('dev') === '1' && location.hostname !== 'tadris.ai';
-const V = '8';
+const V = '9';
 // 3D fayllar jsDelivr CDN'dan (Cloudflare, Toshkentda ham bor; 1 yil keshlanadi). Fayl CDN'da bo'lmasa yoki xato bo'lsa — o'z serverimizdan.
 const ZSHA = 'a0c94a22952caef6962428100cd386678f56795e';
 const CDN = DEV ? '' : 'https://cdn.jsdelivr.net/gh/slaydaiuz/tadrisai-app@' + ZSHA + '/anatomiya/';
@@ -306,7 +306,7 @@ function setLoad(k, n, tot) {
 }
 let frameN = 0;
 function loop() {
-  animReq = requestAnimationFrame(loop); controls.update(); clampTarget(); renderer.render(scene, camera); placeLabels(); gridLabels();
+  animReq = requestAnimationFrame(loop); controls.update(); clampTarget(); renderer.render(scene, camera); placeLabels(); gridLabels(); fdiTags();
   // telefonda: model yaqinlashtirilganda (yoki tanlab yaqinlashganda) asl sifat yuklanadi — internet tejaladi
   if (HQ_WAIT && ++frameN % 30 === 0 && AT === HQ_WAIT && camera.position.distanceTo(controls.target) < fitDist(null) * 0.55) { const a = HQ_WAIT; HQ_WAIT = null; upgradeHQ(a); }
 }
@@ -370,7 +370,7 @@ function partColor(p) {
       R(/testis|epididym|ductus deferens|seminal|prostat|penis|scrot|ovary|uterus|vagina/, 0xd6a596) || R(/colon|caecum|cecum|rectum|appendix|taeni|anal/, 0xc97f6a))) c = 0xd98b7a;
     if (/segment/.test(en)) { const k = hashN(en); const col = new THREE.Color(c); col.offsetHSL(0, 0, (k - 0.5) * 0.18); return col.getHex(); }
   }
-  else if (s === 10) { if (p[5]) c = parseInt(p[5], 16); }
+  else if (s >= 10) { if (p[5]) c = parseInt(p[5], 16); }
   else if (s === 9) { const pal = [0xe7c2a5, 0xdcb093, 0xf0d0b6, 0xd9a688, 0xe9bb9b]; c = pal[Math.floor(hashN(en) * pal.length)]; }
   const col = new THREE.Color(c); col.offsetHSL(0, 0, (hashN(en) - 0.5) * 0.07); return col.getHex();
 }
@@ -379,6 +379,7 @@ function hiddenByDefault(p) {
   if (p[3] === 4) return /fascia|bursa|sheath|septum/.test(en) && !/iliotibial/.test(en);
   if (p[3] === 7) return /dura|arachnoid|pia mater|falx|tentorium/.test(en);
   if (p[3] === 8) return /peritoneum|omentum|fascia|parietal pleura/.test(en);
+  if (p[3] === 12) return /buccal mucosa/.test(en);
   if (p[3] === 10) return /spongy bone|transverse colon|ascending colon|descending colon|colic flexure|caecum|appendix|ileocaecal/.test(en);
   return false;
 }
@@ -444,6 +445,7 @@ async function openAtlas(id, pickN) {
   // ochiq guruhlar: yuqori 2 daraja
   if (pickN != null && BYN.has(+pickN)) select(BYN.get(+pickN), 0, true); else renderPanel();
   if (COARSE) HQ_WAIT = a; else upgradeHQ(a);
+  if (a.grid) setTimeout(() => { if (AT !== a) return; MODE = 'grid'; segUI(); tween('grid', 0, 1, 1400, v => { gridProgress(v); segUI(); }, gridDone); }, 350);
 }
 // --- yuqori sifat: yengil model ochilgach, asl sifatdagisi orqa fonda yuklanib, o'rniga qo'yiladi
 const COARSE = (() => { try { return matchMedia('(pointer:coarse)').matches; } catch (e) { return false; } })();
@@ -537,6 +539,7 @@ function faceMs(ms) {   // savolda belgilangan qism kameraga qarab tursin
 // --- ajratish: 0…0.5 — markazdan sochiladi, 0.5…1 — hamma bo'lak kattadan kichikka qarab qator-qator teriladi
 let GRID = null, GSZ = null;
 function buildGrid() {
+  if (AT && AT.fdi && fdiGrid()) return;
   const ms = MESHES.filter(m => !m.userData.ctx && !m.userData.hidden && LAYV[m.userData.sys] !== false && (!SOLO || m.userData.sys === SOLO));
   const sz = m => { const b = m.geometry.boundingBox; return [b.max.x - b.min.x, b.max.y - b.min.y]; };
   const items = ms.map(m => { const [w, h] = sz(m); return {m, w, h, s: Math.max(w, h)}; }).sort((a, b) => b.s - a.s);
@@ -555,6 +558,7 @@ function buildGrid() {
   const H = -y - gap; GRID = new Map(); GSZ = new THREE.Vector3(W, H, items[0].s * 0.3);
   for (const r of slots) GRID.set(r.it.m, new THREE.Vector3(r.x - W / 2, r.y + H / 2, 0).add(center).sub(r.it.m.userData.c));
 }
+const _q0 = new THREE.Quaternion();
 const ease = t => t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2;
 let GK = 0;   // 0 — joyida, 1 — qatorga terilgan
 // 2026-11-23, egasi: uch rejim — «Butun» (surgich yopiq), «Ajratish» (surgich qancha surilsa, shuncha ajraladi, 3D),
@@ -572,6 +576,12 @@ function place() {
     const u = m.userData, rad = u.c.clone().sub(center).multiplyScalar(t1 * 0.9);
     if (u.ctx) { m.position.copy(rad); m.visible = GK < 0.1 && LAYV[0] !== false && !u.hidden; continue; }
     const g = GRID && GRID.get(m);
+    if (u.gq) {   // stom: tish o'z markazi atrofida buriladi — pos = slot − R·c
+      const q = _q0.identity().slerp(u.gq, g ? t2 : 0); m.quaternion.copy(q);
+      if (t2 > 0 && g) { const rc = u.c.clone().applyQuaternion(q); m.position.copy(rad.multiplyScalar(1 - t2)).add(u.gs.clone().sub(rc).multiplyScalar(t2)); }
+      else m.position.copy(rad);
+      continue;
+    }
     if (t2 > 0 && g) m.position.copy(rad.lerp(g, t2)); else m.position.copy(rad);
   }
   for (const m of INS) { const off = boneOffset(m.userData.p[6], m.userData.p[1]); m.position.copy(off || m.userData.c.clone().sub(center).multiplyScalar(t1 * 0.9)); }
@@ -661,6 +671,71 @@ function clampTarget() {
   _cl.set(Math.min(hx, Math.max(-hx, t.x)) - t.x, Math.min(hy, Math.max(-hy, t.y)) - t.y, Math.min(hz, Math.max(-hz, t.z)) - t.z);
   if (_cl.lengthSq() > 0) { t.add(_cl); camera.position.add(_cl); }
 }
+// --- stomatologiya: tish raqami (FDI) — nomi «11 · ...» bilan boshlanadi
+const fdiOf = p => { const m = /^(\d\d) · /.exec(C.names[p[0]][0]); return m ? +m[1] : 0; };
+function fdiGrid() {   // 2026-11-25, egasi: stom bo'limi — tishlar stomatologik karta tartibida: yuqorida 17…11 | 21…27, pastda 47…41 | 31…37
+  const ms = MESHES.filter(m => !m.userData.ctx && !m.userData.hidden && m.visible !== false && LAYV[m.userData.sys] !== false);
+  const teeth = ms.filter(m => fdiOf(m.userData.p)); if (teeth.length < 4) return false;
+  const rest = ms.filter(m => !fdiOf(m.userData.p));
+  MESHES.forEach(m => { delete m.userData.gq; delete m.userData.gs; m.quaternion.identity(); });
+  const A = new THREE.Vector3(); teeth.forEach(m => A.add(m.userData.c)); A.divideScalar(teeth.length);
+  const ROT = new Map();
+  for (const m of teeth) {   // lunj/lab yuzasi kameraga (+Z) qarasin, mezial — karta markaziga
+    const bx = m.userData.c.x - A.x, bz = m.userData.c.z - A.z, f = Math.atan2(-bx, bz);
+    const q = new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(0, 1, 0), f), pa = m.geometry.attributes.position, cs = Math.cos(f), sn = Math.sin(f);
+    let x0 = 1e9, x1 = -1e9; for (let i = 0; i < pa.count; i += 3) { const x = pa.getX(i) * cs + pa.getZ(i) * sn; if (x < x0) x0 = x; if (x > x1) x1 = x; }
+    ROT.set(m, {q, w: x1 - x0});
+  }
+  const bb = m => { const b = m.geometry.boundingBox, r = ROT.get(m); return [r ? r.w : b.max.x - b.min.x, b.max.y - b.min.y]; };
+  const ord = n => { const q = Math.floor(n / 10), k = n % 10; return q === 1 || q === 4 ? -k : k; };
+  const rows = [teeth.filter(m => fdiOf(m.userData.p) < 30), teeth.filter(m => fdiOf(m.userData.p) > 30)].map(r => r.sort((a, b) => ord(fdiOf(a.userData.p)) - ord(fdiOf(b.userData.p))));
+  const tw = teeth.map(m => bb(m)[0]).sort((a, b) => a - b)[teeth.length >> 1], gap = tw * 0.45, mid = tw * 1.1;
+  GRID = new Map(); const slots = []; let y = 0, W = 0;
+  for (const row of rows) {
+    if (!row.length) continue;
+    const rh = Math.max(...row.map(m => bb(m)[1])); let x = 0; const rs = [];
+    row.forEach((m, i) => { const w = bb(m)[0]; if (i && ord(fdiOf(row[i - 1].userData.p)) < 0 && ord(fdiOf(m.userData.p)) > 0) x += mid; rs.push({m, x: x + w / 2, y: y - rh / 2}); x += w + gap; });
+    x -= gap; rs.forEach(r => r.x -= x / 2); slots.push(...rs); W = Math.max(W, x); y -= rh + gap * 2.2;
+  }
+  // qolganlari (jag', milk...) — pastda, kattasidan boshlab
+  let x = 0, rowH = 0, row = []; const flush = () => { row.forEach(r => { r.x -= x / 2; r.y = y - rowH / 2; }); y -= rowH + gap; x = 0; rowH = 0; row = []; };
+  rest.sort((a, b) => Math.max(...bb(b)) - Math.max(...bb(a))).forEach(m => { const [w, h] = bb(m); if (x > 0 && x + w > Math.max(W, w)) flush(); const r = {m, x: x + w / 2, y: 0}; row.push(r); slots.push(r); x += w + gap; rowH = Math.max(rowH, h); });
+  if (row.length) flush();
+  const H = -y - gap; GSZ = new THREE.Vector3(Math.max(W, 1e-3), H, tw);
+  for (const r of slots) {
+    const T = new THREE.Vector3(r.x, r.y + H / 2, 0).add(center), R = ROT.get(r.m);
+    GRID.set(r.m, T.clone().sub(r.m.userData.c));
+    if (R) { r.m.userData.gq = R.q; r.m.userData.gs = T; }
+  }
+  return true;
+}
+let FDK = '';
+const _fa = new THREE.Vector3();
+function fdiTags() {
+  const cv = $('fdil'); if (!cv) return;
+  const on = AT && AT.fdi && !(GLAB && FLAT && GK > 0.98);
+  if (!on) { if (FDK) { cv.getContext('2d').clearRect(0, 0, cv.width, cv.height); FDK = ''; } return; }
+  const r = $('stage').getBoundingClientRect(), dpr = Math.min(window.devicePixelRatio || 1, 2);
+  const key = camera.position.toArray().map(x => x.toFixed(5)).join() + controls.target.toArray().map(x => x.toFixed(5)).join() + r.width + 'x' + r.height + (sel ? sel.n : '') + explodeK.toFixed(3) + GK.toFixed(3) + MESHES.filter(m => m.visible).length;
+  if (key === FDK) return; FDK = key;
+  const Wd = Math.round(r.width * dpr), Hd = Math.round(r.height * dpr);
+  if (cv.width !== Wd || cv.height !== Hd) { cv.width = Wd; cv.height = Hd; }
+  const g = cv.getContext('2d'); g.setTransform(dpr, 0, 0, dpr, 0, 0); g.clearRect(0, 0, r.width, r.height);
+  const big = r.width > 700; g.font = `800 ${big ? 12 : 10}px Inter, system-ui, sans-serif`; g.textAlign = 'center'; g.textBaseline = 'middle';
+  const drawn = [], list = MESHES.filter(m => m.visible && fdiOf(m.userData.p)).sort((a, b) => (sel && b.userData.p[0] === sel.n) - (sel && a.userData.p[0] === sel.n));
+  for (const m of list) {
+    const n = fdiOf(m.userData.p);
+    const b = m.geometry.boundingBox, up = n < 30;   // yuqori tishlar: ildizi tepada — raqam ildiz tomonida (tishlar orasiga tushmasin)
+    _fa.set((b.min.x + b.max.x) / 2, up ? b.max.y + (b.max.y - b.min.y) * 0.12 : b.min.y - (b.max.y - b.min.y) * 0.12, (b.min.z + b.max.z) / 2).applyMatrix4(m.matrixWorld).project(camera);
+    if (_fa.z > 1) continue;
+    const x = (_fa.x * 0.5 + 0.5) * r.width, y = (-_fa.y * 0.5 + 0.5) * r.height; if (x < -20 || x > r.width + 20 || y < -20 || y > r.height + 20) continue;
+    const s = String(n), on2 = sel && sel.n === m.userData.p[0], w = g.measureText(s).width + (big ? 10 : 8), h = big ? 17 : 15;
+    if (drawn.some(d => Math.abs(d[0] - x) < (w + d[2]) / 2 - 1 && Math.abs(d[1] - y) < h - 2)) continue; drawn.push([x, y, w]);
+    g.fillStyle = on2 ? 'rgba(139,92,246,.98)' : n < 30 ? 'rgba(14,116,144,.88)' : 'rgba(30,64,175,.88)';
+    g.beginPath(); if (g.roundRect) g.roundRect(x - w / 2, y - h / 2, w, h, 6); else g.rect(x - w / 2, y - h / 2, w, h); g.fill();
+    g.fillStyle = '#fff'; g.fillText(s, x, y + 0.5);
+  }
+}
 // 2D (qatorga terilgan) ko'rinishda: yaqinlashtirilgan bo'laklar tagida nomi
 let GLK = '', GLAB = true;    // 2026-11-23 23:49, egasi: «yozuvlar turaversin» (bosganda ham nomi chiqadi)
 const _ga = new THREE.Vector3(), _gb = new THREE.Vector3();
@@ -677,13 +752,20 @@ function gridLabels() {
   for (const m of GRID.keys()) {
     if (!m.visible) continue;
     const b = m.geometry.boundingBox; if (!b) continue;
+    const fd0 = AT && AT.fdi ? fdiOf(m.userData.p) : 0;
+    if (fd0) {   // burilgan tish: raqam tishning pastki markazida
+      const ctr = new THREE.Vector3((b.min.x + b.max.x) / 2, (b.min.y + b.max.y) / 2, (b.min.z + b.max.z) / 2).applyMatrix4(m.matrixWorld), hy = (b.max.y - b.min.y) / 2;
+      _ga.set(ctr.x - 1e-4, ctr.y - hy, ctr.z).project(camera); _gb.set(ctr.x + 1e-4, ctr.y - hy, ctr.z).project(camera);
+    } else {
     _ga.set(b.min.x, b.min.y, b.max.z).applyMatrix4(m.matrixWorld).project(camera);
     _gb.set(b.max.x, b.min.y, b.max.z).applyMatrix4(m.matrixWorld).project(camera);
+    }
     if (_ga.z > 1) continue;
     const x1 = (_ga.x * 0.5 + 0.5) * r.width, x2 = (_gb.x * 0.5 + 0.5) * r.width, y = (-_ga.y * 0.5 + 0.5) * r.height, w = Math.abs(x2 - x1);
-    if (w < 42) continue;
+    const fd = AT && AT.fdi ? fdiOf(m.userData.p) : 0;
+    if (!fd && w < 42) continue;
     const x = (x1 + x2) / 2; if (x < -80 || x > r.width + 80 || y < -20 || y > r.height + 30) continue;
-    let s = nm(m.userData.p[0]); const maxW = Math.max(w * 1.05, 46);
+    let s = fd ? String(fd) : nm(m.userData.p[0]); const maxW = Math.max(w * 1.05, 46);
     if (g.measureText(s).width > maxW) { while (s.length > 2 && g.measureText(s + '…').width > maxW) s = s.slice(0, -1); s += '…'; }
     const tw = g.measureText(s).width, on2 = sel && sel.n === m.userData.p[0];
     g.fillStyle = on2 ? 'rgba(139,92,246,.95)' : 'rgba(11,17,36,.8)';
@@ -743,10 +825,10 @@ function updateLm() {
   if (!AT || !AT.lm || !SHOW_LM || !sel || TAB === 'learn') return;
   const ms = selMeshes().filter(m => m.visible); if (!ms.length) return;
   const sides = new Set(ms.map(m => m.userData.side));
-  const lms = C.lms.map((l, i) => [l, i]).filter(([l]) => l[1] === sel.n && (sides.has(l[2]) || !l[2] || sides.has(0)));
+  const lms = C.lms.map((l, i) => [l, i]).filter(([l, i]) => i >= (AT.lm0 || 0) && l[1] === sel.n && (sides.has(l[2]) || !l[2] || sides.has(0)));
   if (!lms.length) return;
   LMG = new THREE.Group(); LMG.userData.c = center.clone();
-  const r = Math.max(radius * 0.0032, 0.0011), g = new THREE.SphereGeometry(r, 12, 10);
+  const r = Math.max(radius * 0.0032, AT.fdi ? 0.00032 : 0.0011), g = new THREE.SphereGeometry(r, 12, 10);   // tishlar mayda — nuqta ham mayda
   for (const [l, i] of lms) {
     const s = new THREE.Mesh(g.clone(), new THREE.MeshBasicMaterial({color: i === LMSEL ? 0xfde047 : 0xfacc15, depthTest: false, transparent: true, opacity: 0.95}));
     s.position.set(l[3], l[5], -l[4]); s.renderOrder = 5; s.userData = {li: i, lm: true};
@@ -931,7 +1013,7 @@ function renderInfo() {
   // landmarklar
   if (AT.lm) {
     const lms = []; const seenL = new Set();
-    C.lms.forEach((l, i) => { if (l[1] === n && !seenL.has(l[0])) { seenL.add(l[0]); lms.push([l, i]); } });
+    C.lms.forEach((l, i) => { if (i >= (AT.lm0 || 0) && l[1] === n && !seenL.has(l[0])) { seenL.add(l[0]); lms.push([l, i]); } });
     if (lms.length) h += `<div class="sec">${t('lmL', {n: lms.length})}</div><div class="lst">` + lms.sort((a, b) => nm(a[0][0]).localeCompare(nm(b[0][0]), LANG)).map(([l, i]) => `<button data-lm="${i}" class="${LMSEL != null && C.lms[LMSEL][0] === l[0] ? 'on' : ''}"><i></i>${esc(nm(l[0]))}<small>${esc(lat(l[0]))}</small></button>`).join('') + `</div>`;
   }
   // mushak birikishi
