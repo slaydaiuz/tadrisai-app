@@ -472,6 +472,11 @@ kaa:{
   gradeF:["{n}-klass","{n}-kurs"],
   SUBJ:["Matematika","Algebra","Geometriya","Fizika","Ximiya","Biologiya","Geografiya","Tariyx","Ana tili","Ádebiyat","Ózbek tili","Orıs tili","Inglis tili","Nemis tili","Informatika","Huqıq","Ekonomika","Baslawısh tálim","Texnologiya","Súwretlew óneri","Muzıka","Dene tárbiyası","Tárbiya"]
 }};
+/* 2026-11-25, egasi: «Slayddan test» — Fayllarim'dagi o'z faylidan, 30% chegirma */
+Object.assign(QD.uz,{myFile:"Fayllarimdan tanlash", myFileD:"O'zingiz yasagan prezentatsiya yoki mustaqil ishdan — 30% chegirma", ownTag:"−30% · o'z faylingiz", ownD:"Savollar shu faylingiz matnidan tuziladi · 30% chegirma", pickFile:"Qaysi fayldan test tuzamiz?", noFiles:"Fayllarim bo'sh. Avval prezentatsiya yoki mustaqil ish yarating.", fileBig:"Bu fayl juda katta — uni yuklab olib, «Manba yuklash» orqali bering.", fileGone:"Bu fayl topilmadi yoki 30 kunlik muddati tugagan.", fTest:"✅ Test · −30%"});
+Object.assign(QD.ru,{myFile:"Выбрать из «Мои файлы»", myFileD:"Из вашей презентации или самостоятельной — скидка 30%", ownTag:"−30% · ваш файл", ownD:"Вопросы составляются по тексту этого файла · скидка 30%", pickFile:"Из какого файла составить тест?", noFiles:"«Мои файлы» пусты. Сначала создайте презентацию или самостоятельную.", fileBig:"Файл слишком большой — скачайте его и загрузите через «Загрузить материал».", fileGone:"Файл не найден или истёк срок хранения (30 дней).", fTest:"✅ Тест · −30%"});
+Object.assign(QD.en,{myFile:"Pick from My files", myFileD:"From your own presentation or essay — 30% off", ownTag:"−30% · your file", ownD:"Questions are based on this file's text · 30% off", pickFile:"Which file should the test use?", noFiles:"My files is empty. Create a presentation or an essay first.", fileBig:"This file is too large — download it and use «Upload material».", fileGone:"This file wasn't found or its 30 days have passed.", fTest:"✅ Test · −30%"});
+Object.assign(QD.kaa,{myFile:"Fayllarımnan tańlaw", myFileD:"Ózińiz jaratqan prezentaciya yamasa óz betinshe jumıstan — 30% shegirme", ownTag:"−30% · óz faylıńız", ownD:"Sorawlar usı faylıńız tekstinen dúziledi · 30% shegirme", pickFile:"Qaysı fayldan test dúzemiz?", noFiles:"Fayllarım bos. Aldın prezentaciya yamasa óz betinshe jumıs jaratıń.", fileBig:"Bul fayl júdá úlken — onı júklep alıp, «Derek júklew» arqalı beriń.", fileGone:"Bul fayl tabılmadı yamasa 30 kúnlik múddeti tawsıldı.", fTest:"✅ Test · −30%"});
 ['kk','ky','tg'].forEach(l=>{QD[l]=Object.assign({},QD.ru,(window.L3&&L3[l]&&L3[l].Q)||{})});
 ['uz','ru','en','kaa'].forEach(l=>{if(QD[l]&&QD[l].LNAME) Object.assign(QD[l].LNAME,{uz:{kk:'Qozoq',ky:"Qirg'iz",tg:'Tojik'},ru:{kk:'Казахский',ky:'Киргизский',tg:'Таджикский'},en:{kk:'Kazakh',ky:'Kyrgyz',tg:'Tajik'},kaa:{kk:'Qazaq',ky:'Qırǵız',tg:'Tájik'}}[l])});   // 2026-11-22: qozoq, qirg'iz, tojik
 function ql(){const l=['ru','en','kaa','uzn','kk','ky','tg'].includes(lang)?lang:'uz';     // ilova tili o'zgarsa ham darhol
@@ -491,7 +496,9 @@ const TMIN=10,TMAX=50,TMARKS=[10,20,30,40,50];
 /* 2026-11-16, egasi: narxlar (botdagi quiz.TEST_PRICES bilan bir xil) — savollar soni shu chegaragacha */
 const QPR=[[10,1990],[20,3990],[30,4990],[40,5990],[50,6990]];   // 2026-11-21, egasi: 10 savol 1 990
 const qGift=()=>S.kind==='test'&&S.n<=10&&typeof FREE!=='undefined'&&FREE>0;   // 2 000 so'mlik sovg'a 10 savolgacha testga yetadi
-const qPrice=n=>(QPR.find(([l])=>n<=l)||QPR[QPR.length-1])[1];
+const qPrice0=n=>(QPR.find(([l])=>n<=l)||QPR[QPR.length-1])[1];
+const ownPrice=p=>Math.floor(p*0.7/100)*100+90;                 // botdagi quiz.own_price bilan bir xil: 1 990 → 1 390
+const qPrice=n=>S.src&&S.src.own?ownPrice(qPrice0(n)):qPrice0(n);
 const qFree=()=>(typeof isAdmin==='function'&&isAdmin())||(typeof SRV!=='undefined'&&SRV&&SRV.quiz_free===true);
 const box=()=>$('qz');
 const hap=k=>{try{tg&&tg.HapticFeedback&&(k==='ok'||k==='err'?tg.HapticFeedback.notificationOccurred(k==='ok'?'success':'error'):tg.HapticFeedback.impactOccurred('light'))}catch(e){}};
@@ -557,16 +564,34 @@ function setN(v,silent){
   $('qzRng').value=S.n; $('qzFill').style.width=p(S.n)+'%'; $('qzBub').style.left=p(S.n)+'%'; $('qzBub').textContent=L('nq',{n:S.n});
   $('qzTicks').innerHTML=TMARKS.map(m=>`<div class="rng-tick ${m<=S.n?'on':''} ${m===S.n?'cur':''}" style="left:${p(m)}%"><b>${m}</b><i></i><span></span></div>`).join('');
   const pr=qPrice(S.n), fr=qFree(), gf=!fr&&qGift();
-  $('qzNPrice').innerHTML=`${L('nq',{n:S.n})} · <b style="font-size:14px">${fr?L('freeTrial'):gf?'🎁 '+L('giftFree'):money(pr)}</b>`;
+  const old=S.src&&S.src.own&&!fr&&!gf?` <s style="color:var(--muted);font-weight:500">${money(qPrice0(S.n))}</s>`:'';
+  $('qzNPrice').innerHTML=`${L('nq',{n:S.n})} · <b style="font-size:14px">${fr?L('freeTrial'):gf?'🎁 '+L('giftFree'):money(pr)}</b>${old}`;
   const go=$('qzGo'); if(go) go.textContent=L('createT')+' · '+(fr||gf?L('free'):money(pr));
   const eta=$('qzEta'); if(eta) eta.textContent=L('readyIn',{x:S.n<=20?'20–40':S.n<=35?'40–70':'60–100'});
   if(!silent) hap();
 }
 function srcBox(){
+  if(S.src&&S.src.own) return `<div class="qz-srcf"><span class="ic">📊</span><span class="tx"><b>${esc(S.src.name)}</b><small><b style="display:inline;color:#10B981">${L('ownTag')}</b> · ${L('ownD')}</small></span><button type="button" onclick="QZ.srcDel()" aria-label="${L('del')}">✕</button></div>`;
   if(S.src) return `<div class="qz-srcf"><span class="ic">${S.src.kind==='img'?'🖼':'📄'}</span><span class="tx"><b>${esc(S.src.name)}</b><small>${S.src.kind==='img'?L('srcImg'):L('chars',{n:(S.src.chars||0).toLocaleString('ru')})+(S.src.cut?L('cut'):'')+L('srcText')}</small></span><button type="button" onclick="QZ.srcDel()" aria-label="${L('del')}">✕</button></div>`;
   return `<label class="qz-up"><input type="file" accept=".pdf,.docx,.pptx,.txt,image/*" onchange="QZ.srcUp(this)" hidden>
-    <span class="ic">📎</span><span class="tx"><b>${L('upload')} <i>${L('optional')}</i></b><small>${L('uploadD')}</small></span><span class="btn">${L('file')}</span></label>`;
+    <span class="ic">📎</span><span class="tx"><b>${L('upload')} <i>${L('optional')}</i></b><small>${L('uploadD')}</small></span><span class="btn">${L('file')}</span></label>`+
+    (myFiles().length?`<button type="button" class="qz-up" style="width:100%;text-align:left;font:inherit;color:inherit" onclick="QZ.pickFile()"><span class="ic">📂</span><span class="tx"><b>${L('myFile')}</b><small>${L('myFileD')}</small></span><span class="btn">−30%</span></button>`:'');
 }
+/* Fayllarim (index.html dagi FILES: [id, nom, 'p'|'m', sana]) — 30 kun ichidagilari */
+function myFiles(){try{return (typeof FILES!=='undefined'?FILES:[]).filter(([,, ,d])=>Date.now()-new Date(d+'T00:00:00').getTime()<30*864e5)}catch(e){return []}}
+function pickFile(){
+  const fs=myFiles(); if(!fs.length){toast('📂',L('noFiles'));return}
+  $('qzSrc').innerHTML=`<div class="group" style="margin-top:10px">${L('pickFile')}</div><div class="qz-list">`+fs.map(([id,nm,k])=>`<button type="button" class="qz-item" onclick="QZ.fromFile(${Number(id)})"><span class="ic">${k==='p'?'📊':'📄'}</span><span class="tx"><b>${esc(nm)}</b><small>−30%</small></span><span>›</span></button>`).join('')+'</div>';
+}
+async function fromFile(id){
+  const el=$('qzSrc'); if(el) el.innerHTML='<div class="qz-srcf"><span class="qz-spin" style="width:26px;height:26px;border-width:3px"></span><span class="tx"><b>'+L('loading')+'</b></span></div>';
+  let d={}; try{d=await api('/quiz/fromfile',{id},90000)}catch(e){}
+  if(!d.ok){S.src=null; if($('qzSrc')) $('qzSrc').innerHTML=srcBox(); toast('⚠️',{big:L('fileBig'),gone:L('fileGone'),notext:L('noText')}[d.error]||L('readErr')); return}
+  S.src={src:d.src,name:d.name,kind:'text',chars:d.chars,cut:d.cut,own:true};
+  if(!(S.topic||'').trim()&&d.topic) S.topic=d.topic;
+  hap('ok'); KEEP={y:window.scrollY}; open();
+}
+function startFromFile(id){S.src=null; S.topic=''; open(); fromFile(id)}
 async function srcUp(inp){
   const f=inp.files&&inp.files[0]; if(!f) return;
   const isPpt=/\.pptx$/i.test(f.name), lim=(isPpt?25:8)*1024*1024;   // prezentatsiya rasmlar bilan og'irroq
@@ -1014,7 +1039,7 @@ async function crossDone(){
   <div class="qz-2"><button type="button" class="qz-btn" onclick="QZ.shareRes(${pct})">${L('shareS')}</button><button type="button" class="qz-btn" onclick="${S.quiz.mine?'QZ.results()':`show('home')`}">${S.quiz.mine?L('results'):L('openApp')}</button></div>`);
 }
 
-window.QZ={finish,example,exTab,print,open,openCross,setN,srcUp,srcDel,pickSel,setQ,answer,set,create,ready,copy,share,questions,del,join,start,pick,next,quit,retry,shareRes,results,tap,sel,hint,check,crossQuit};
+window.QZ={pickFile,fromFile,startFromFile,finish,example,exTab,print,open,openCross,setN,srcUp,srcDel,pickSel,setQ,answer,set,create,ready,copy,share,questions,del,join,start,pick,next,quit,retry,shareRes,results,tap,sel,hint,check,crossQuit};
 if(qs.get('quiz')) join(qs.get('quiz'));
 if(WEB&&qs.get('qtopic')&&!qs.get('quiz')){S.topic=qs.get('qtopic'); history.replaceState(null,'',location.pathname); setTimeout(open,350)}   // atlasdan «Test tuzish»
 })();
