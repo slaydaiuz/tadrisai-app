@@ -477,6 +477,11 @@ Object.assign(QD.uz,{myFile:"Fayllarimdan tanlash", myFileD:"O'zingiz yasagan pr
 Object.assign(QD.ru,{myFile:"Выбрать из «Мои файлы»", myFileD:"Из вашей презентации или самостоятельной — скидка 30%", ownTag:"−30% · ваш файл", ownD:"Вопросы составляются по тексту этого файла · скидка 30%", pickFile:"Из какого файла составить тест?", noFiles:"«Мои файлы» пусты. Сначала создайте презентацию или самостоятельную.", fileBig:"Файл слишком большой — скачайте его и загрузите через «Загрузить материал».", fileGone:"Файл не найден или истёк срок хранения (30 дней).", fTest:"✅ Тест · −30%"});
 Object.assign(QD.en,{myFile:"Pick from My files", myFileD:"From your own presentation or essay — 30% off", ownTag:"−30% · your file", ownD:"Questions are based on this file's text · 30% off", pickFile:"Which file should the test use?", noFiles:"My files is empty. Create a presentation or an essay first.", fileBig:"This file is too large — download it and use «Upload material».", fileGone:"This file wasn't found or its 30 days have passed.", fTest:"✅ Test · −30%"});
 Object.assign(QD.kaa,{myFile:"Fayllarımnan tańlaw", myFileD:"Ózińiz jaratqan prezentaciya yamasa óz betinshe jumıstan — 30% shegirme", ownTag:"−30% · óz faylıńız", ownD:"Sorawlar usı faylıńız tekstinen dúziledi · 30% shegirme", pickFile:"Qaysı fayldan test dúzemiz?", noFiles:"Fayllarım bos. Aldın prezentaciya yamasa óz betinshe jumıs jaratıń.", fileBig:"Bul fayl júdá úlken — onı júklep alıp, «Derek júklew» arqalı beriń.", fileGone:"Bul fayl tabılmadı yamasa 30 kúnlik múddeti tawsıldı.", fTest:"✅ Test · −30%"});
+/* 2026-11-25, egasi: xatolarni ko'rish, o'zi uchun qayta ishlash, reyting */
+Object.assign(QD.uz,{revBtn:"🔍 Xatolarni ko'rish ({n})", revTitle:"Xato javoblar", yourAns:"Sizning javobingiz", rightAns:"To'g'ri javob", noAns:"javob berilmagan", allRight:"Hammasi to'g'ri — xato yo'q! 🎉", practice:"🔁 O'zim uchun qayta ishlash", practiceD:"Har savoldan keyin to'g'ri javob va izoh ko'rinadi. Natija hech qayerga yuborilmaydi.", practiceS:"o'zingiz uchun", boardLink:"🏆 Reytingni ko'rish ›", boardT:"Reyting", you:"siz", noBoard:"Reyting hali yo'q", prevT:"Siz bu testni yechgansiz"});
+Object.assign(QD.ru,{revBtn:"🔍 Посмотреть ошибки ({n})", revTitle:"Неверные ответы", yourAns:"Ваш ответ", rightAns:"Правильный ответ", noAns:"нет ответа", allRight:"Всё верно — ошибок нет! 🎉", practice:"🔁 Пройти ещё раз для себя", practiceD:"После каждого вопроса видно правильный ответ и пояснение. Результат никуда не отправляется.", practiceS:"для себя", boardLink:"🏆 Посмотреть рейтинг ›", boardT:"Рейтинг", you:"вы", noBoard:"Рейтинга пока нет", prevT:"Вы уже решили этот тест"});
+Object.assign(QD.en,{revBtn:"🔍 Review mistakes ({n})", revTitle:"Wrong answers", yourAns:"Your answer", rightAns:"Correct answer", noAns:"no answer", allRight:"All correct — no mistakes! 🎉", practice:"🔁 Practise again for myself", practiceD:"You see the correct answer and explanation after each question. The result isn't sent anywhere.", practiceS:"practice", boardLink:"🏆 See the leaderboard ›", boardT:"Leaderboard", you:"you", noBoard:"No leaderboard yet", prevT:"You've already taken this test"});
+Object.assign(QD.kaa,{revBtn:"🔍 Qátelerdi kóriw ({n})", revTitle:"Qáte juwaplar", yourAns:"Sizdiń juwabıńız", rightAns:"Durıs juwap", noAns:"juwap berilmegen", allRight:"Hámmesi durıs — qáte joq! 🎉", practice:"🔁 Ózim ushın qayta islew", practiceD:"Hár sorawdan keyin durıs juwap hám túsindirme kórinedi. Nátiyje hesh qayaqqa jiberilmeydi.", practiceS:"ózińiz ushın", boardLink:"🏆 Reytingti kóriw ›", boardT:"Reyting", you:"siz", noBoard:"Reyting ele joq", prevT:"Siz bul testti sheshkensiz"});
 ['kk','ky','tg'].forEach(l=>{QD[l]=Object.assign({},QD.ru,(window.L3&&L3[l]&&L3[l].Q)||{})});
 ['uz','ru','en','kaa'].forEach(l=>{if(QD[l]&&QD[l].LNAME) Object.assign(QD[l].LNAME,{uz:{kk:'Qozoq',ky:"Qirg'iz",tg:'Tojik'},ru:{kk:'Казахский',ky:'Киргизский',tg:'Таджикский'},en:{kk:'Kazakh',ky:'Kyrgyz',tg:'Tajik'},kaa:{kk:'Qazaq',ky:'Qırǵız',tg:'Tájik'}}[l])});   // 2026-11-22: qozoq, qirg'iz, tojik
 function ql(){const l=['ru','en','kaa','uzn','kk','ky','tg'].includes(lang)?lang:'uz';     // ilova tili o'zgarsa ham darhol
@@ -735,7 +740,8 @@ async function ready(code){
   const q=await load(code); if(!q) return open();
   const n=q.kind==='cross'?q.data.words.length:q.data.questions.length, link=linkOf(code);
   const m=(q.data.meta||{});
-  view(`<button class="back" onclick="${q.kind==='cross'?'QZ.openCross()':'QZ.open()'}">${L('back')}</button>
+  const tgq=typeof QZLINK!=='undefined'&&QZLINK;   // Telegram ichidagi havola: yangi test yaratish — faqat saytda
+  view(`<button class="back" onclick="${tgq?"show('home')":q.kind==='cross'?'QZ.openCross()':'QZ.open()'}">${L('back')}</button>
   <div class="qz-ok">✓</div>
   <div class="qz-title">${esc(q.data.title||q.topic)}</div>
   <div class="qz-chips"><span>${L(q.kind==='cross'?'nW':'nq',{n})}</span><span>${LV(q.level)}</span><span>${LN(q.lang)}</span>${q.kind==='test'?`<span>${L(q.aud==='class'?'cls':'self')}</span>`:''}${m.qtype?`<span>${QTNx(m.qtype)}</span>`:''}${m.grade?`<span>${esc(m.grade)}</span>`:''}${m.subject?`<span>${esc(m.subject)}</span>`:''}${m.src?`<span>📎 ${esc(m.src)}</span>`:''}</div>
@@ -787,6 +793,7 @@ async function print(){
 async function join(code){
   view('<div class="qz-load"><div class="qz-spin"></div></div>');
   const q=await load(code); if(!q){show('home');return}
+  if(q.mine) return ready(code);               // 2026-11-25, egasi: muallif havolani bossa — test paneli (yechish emas)
   const n=q.kind==='cross'?q.data.words.length:q.data.questions.length;
   const nm=userName||(tg&&tg.initDataUnsafe&&tg.initDataUnsafe.user&&tg.initDataUnsafe.user.first_name)||'';
   view(`<div style="text-align:center;margin:10px 0 18px"><div class="qz-tag" style="display:inline-block">TadrisAI</div></div>
@@ -796,13 +803,55 @@ async function join(code){
     :`<div><b>${n}</b><small>${L('qs')}</small></div><div><b>~${Math.max(2,Math.round(n*0.5))}</b><small>${L('minutes')}</small></div><div><b>30 ${L('sec')}</b><small>${L('perQ')}</small></div>`}</div>
   ${q.author?`<div class="qz-item" style="margin-bottom:14px"><span class="qz-av">${esc(q.author[0]||'?')}</span><span class="tx"><small>${L('author')}</small><b>${esc(q.author)}</b></span></div>`:''}
   ${q.exam?`<div class="qz-warn" style="margin-top:0"><b>${L('examT')}</b><p>${L('examD')}</p></div>`:''}
-  ${q.prev?`<div class="qz-card" style="text-align:center"><b>${L('prevSolved',{at:esc(q.prev.at)})}</b><div class="qz-title" style="margin-top:6px">${q.prev.score} / ${q.prev.total}</div><div class="qz-hint">${L('noRetake')}</div></div>
-  <button type="button" class="cta" onclick="show('home')">${L('openApp')}</button>`:`
+  ${q.prev?prevBlock(q):`
   <div class="group" style="margin-top:4px">${L('yourName')}</div>
   <input class="qz-in" id="qzName" maxlength="40" value="${esc(nm)}" placeholder="${L('namePh')}">
   <div class="qz-hint" style="text-align:left">${L('nameHint')}</div>
   <button type="button" class="cta" onclick="QZ.start(1)">${L('start')}</button>
   <div class="qz-hint">${L('freeNoReg')}</div>`}`);
+}
+
+function prevBlock(q){                      // sinf testini yechib bo'lgan: natija, xatolar, o'zi uchun mashq, reyting
+  const w=q.prev.wrong||[]; P={name:'',order:[],i:0,score:q.prev.score,wrong:w,ans:q.prev.answers||[],exam:false};
+  return `<div class="qz-card" style="text-align:center"><b>${L('prevSolved',{at:esc(q.prev.at)})}</b><div class="qz-title" style="margin-top:6px">${q.prev.score} / ${q.prev.total}</div><div class="qz-hint">${L('noRetake')}</div></div>
+  ${afterBtns(w.length)}`;
+}
+function afterBtns(nw){                      // natija ostidagi tugmalar: xatolar · o'zi uchun · reyting
+  return `${nw?`<button type="button" class="cta" onclick="QZ.review()">${L('revBtn',{n:nw})}</button>`:`<div class="qz-hint" style="margin:12px 0 0">${L('allRight')}</div>`}
+  <button type="button" class="qz-btn" style="width:100%;margin-top:10px" onclick="QZ.practice()">${L('practice')}</button>
+  <div class="qz-hint" style="margin-top:6px">${L('practiceD')}</div>
+  <button type="button" class="qz-btn" style="width:100%;margin-top:10px;background:none;border:0;color:var(--violet);font-weight:700" onclick="QZ.board()">${L('boardLink')}</button>`;
+}
+let RES='';                                   // oxirgi natija oynasi (xatolar / reytingdan qaytish uchun)
+function resView(h){RES=h; view(h)}
+function review(){
+  const q=S.quiz, qs=q.data.questions, w=(P&&P.wrong)||[];
+  const optTx=(x,v)=>v==null||v===''||v===-1?`<i style="color:var(--muted)">${L('noAns')}</i>`:x.t==='open'?esc(v):esc(x.o[v]!=null?x.o[v]:'—');
+  const right=x=>x.t==='open'?esc((x.ans||[])[0]||''):esc(x.o[x.a]!=null?x.o[x.a]:'');
+  view(`<button class="back" onclick="QZ.backRes()">${L('back')}</button>
+  <div class="qz-head" style="flex-direction:column;align-items:flex-start;gap:2px"><h1 style="font-size:22px">${L('revTitle')}</h1><small style="color:var(--muted)">${esc(q.data.title||q.topic)} · ${w.length}</small></div>
+  ${w.length?w.slice().sort((a,b)=>a-b).map(k=>{const x=qs[k]; if(!x) return ''; const v=P.ans?P.ans[k]:undefined;
+    return `<div class="qz-card" style="margin-top:10px"><small style="color:var(--muted);font-weight:700">${L('qN',{n:k+1})}</small><div style="font-weight:700;margin:4px 0 10px">${esc(x.q)}</div>
+      ${v!==undefined?`<div class="qz-opt bad" style="margin:0 0 6px"><span class="k">✕</span><span>${optTx(x,v)}</span><span class="lb">${L('yourAns')}</span></div>`:''}
+      <div class="qz-opt good" style="margin:0"><span class="k">✓</span><span>${right(x)}</span><span class="lb">${L('rightAns')}</span></div>
+      ${x.e?`<div class="qz-why" style="margin-top:8px"><b>${L('why')}</b><p>${esc(x.e)}</p></div>`:''}</div>`}).join(''):`<div class="qz-hint">${L('allRight')}</div>`}
+  <button type="button" class="qz-btn" style="width:100%;margin-top:14px" onclick="QZ.practice()">${L('practice')}</button>`);
+}
+function backRes(){if(RES) view(RES); else join(S.code)}
+function practice(){                          // o'zi uchun: javob darhol ko'rinadi, natija yuborilmaydi, qayta-qayta
+  const q=S.quiz; if(!q||!q.data.questions[0]||q.data.questions[0].a==null&&!q.data.questions[0].ans) return;
+  P={name:'',order:q.data.questions.map((x,i)=>i),i:0,score:0,wrong:[],streak:0,best:0,t0:Date.now(),retry:false,exam:false,practice:true,ans:[]};
+  ask();
+}
+async function board(){
+  view('<div class="qz-load"><div class="qz-spin"></div></div>');
+  const d=await api('/quiz/board',{code:S.code},15000).catch(()=>({}));
+  const rows=(d&&d.rows)||[];
+  view(`<button class="back" onclick="QZ.backRes()">${L('back')}</button>
+  <div class="qz-head" style="flex-direction:column;align-items:flex-start;gap:2px"><h1 style="font-size:22px">${L('boardT')}</h1><small style="color:var(--muted)">${esc(S.quiz.data.title||S.quiz.topic)} · ${d.of||0}</small></div>
+  <div class="qz-card" style="padding:0;margin-top:12px">${rows.length?rows.map(r=>`<div class="qz-row" style="${r[4]?'background:rgba(139,92,246,.14)':''}"><span style="width:22px;color:var(--muted);font-weight:800">${r[5]}</span><span class="qz-av">${esc((r[0]||'?')[0])}</span>
+    <span style="flex:1;min-width:0"><b style="display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(r[0])}${r[4]?` <small style="color:var(--violet)">· ${L('you')}</small>`:''}</b><small style="color:var(--muted)">${mmss(r[3])}</small></span>
+    <b style="color:${r[2]&&r[1]/r[2]>=.75?'#10B981':'#F59E0B'}">${r[1]}/${r[2]}</b></div>`).join(''):`<div class="qz-hint" style="padding:16px">${L('noBoard')}</div>`}</div>`);
 }
 
 /* ---------- Test yechish ---------- */
@@ -824,7 +873,7 @@ function ask(){
     <div class="qz-2"><button type="button" class="qz-btn" onclick="QZ.answer(1)">${L('dunno')}</button><button type="button" class="qz-btn pri" onclick="QZ.answer()">${L('answer')}</button></div>`;
   else body=`<div class="qz-opts${x.t==='tf'?' tf':''}">${x.o.map((o,j)=>`<button type="button" class="qz-opt" data-j="${j}" onclick="QZ.pick(${j})"><span class="k">${x.t==='tf'?(j?'✕':'✓'):'ABCD'[j]}</span><span>${esc(o)}</span><span class="lb"></span></button>`).join('')}</div>`;
   view(`<div class="qz-top"><button type="button" class="qz-x" onclick="QZ.quit()" aria-label="${L('close')}">✕</button>
-    <div class="qz-prog"><b>${P.i+1} / ${tot}</b><small>${P.exam?L('examT'):P.streak>=2?L('streak',{n:P.streak}):(P.retry?L('retryMode'):'&nbsp;')}</small><div class="qz-bar"><i style="width:${P.i/tot*100}%"></i></div></div>
+    <div class="qz-prog"><b>${P.i+1} / ${tot}</b><small>${P.exam?L('examT'):P.practice?L('practiceS'):P.streak>=2?L('streak',{n:P.streak}):(P.retry?L('retryMode'):'&nbsp;')}</small><div class="qz-bar"><i style="width:${P.i/tot*100}%"></i></div></div>
     <div class="qz-tm" id="qzTm"><span id="qzTs">${T}</span></div></div>
   <div class="qz-q"><small>${L('qN',{n:k+1})}${x.t==='tf'?L('tfQ'):x.t==='open'?L('openQ'):''}</small><h2>${esc(x.q)}</h2></div>
   ${body}
@@ -851,7 +900,7 @@ function answer(skip){
     setTimeout(next, skip===2?900:550); return;
   }
   const q=S.quiz, k=P.order[P.i], x=q.data.questions[k], inp=$('qzAns'), v=inp?inp.value:'';
-  const ok=!skip&&okOpen(v,x.ans);
+  const ok=!skip&&okOpen(v,x.ans); if(P.ans&&!P.retry) P.ans[k]=skip?'':v.trim();
   if(inp){inp.disabled=true; inp.style.borderColor=ok?'#10B981':'#EF4444'}
   document.querySelectorAll('#qz .qz-2 .qz-btn').forEach(b=>b.disabled=true);
   if(ok){P.score++;P.streak++;P.best=Math.max(P.best,P.streak);hap('ok')}
@@ -870,7 +919,7 @@ function pick(j){
     $('qzAfter').innerHTML=`<div class="qz-note">${j<0?L('timeNext'):L('accepted')}</div>`;
     setTimeout(next, j<0?900:550); return;
   }
-  const q=S.quiz, k=P.order[P.i], x=q.data.questions[k], ok=j===x.a;
+  const q=S.quiz, k=P.order[P.i], x=q.data.questions[k], ok=j===x.a; if(P.ans&&!P.retry) P.ans[k]=j;
   document.querySelectorAll('.qz-opt').forEach(b=>{const n=+b.dataset.j; b.disabled=true;
     if(n===x.a){b.classList.add('good');b.querySelector('.lb').textContent=L('right')}
     else if(n===j){b.classList.add('bad');b.querySelector('.lb').textContent=L('yours')}
@@ -898,18 +947,20 @@ async function finish(early){
   if(P.exam) return finishExam();
   const q=S.quiz, tot=P.retry?P.order.length:q.data.questions.length, secs=Math.round((Date.now()-P.t0)/1000);
   let rank=null;
-  if(!P.retry){
-    const d=await api('/quiz/submit',{code:S.code,name:P.name,score:P.score,total:tot,secs,wrong:P.wrong},15000).catch(()=>({}));
+  if(!P.retry&&!P.practice){
+    const d=await api('/quiz/submit',{code:S.code,name:P.name,score:P.score,total:tot,secs,wrong:P.wrong,answers:P.ans||[]},15000).catch(()=>({}));
     if(d.ok) rank=[d.rank,d.of];
   }
   const pct=Math.round(P.score/tot*100);
   const msg=L(pct>=85?'great':pct>=60?'good':pct>=40?'okRes':'badRes');
-  view(`<div class="qz-ring" style="--p:${pct}%"><div><b>${pct}%</b><small>${P.score} / ${tot}</small></div></div>
+  resView(`<div class="qz-ring" style="--p:${pct}%"><div><b>${pct}%</b><small>${P.score} / ${tot}</small></div></div>
   <div class="qz-title">${msg}</div>
   <div style="text-align:center;color:var(--muted);font-size:14px;margin-top:4px">${esc(q.data.title||q.topic)}</div>
   <div class="qz-stats"><div><b>${mmss(secs)}</b><small>${L('time')}</small></div><div><b>${P.best}</b><small>${L('streakS')}</small></div>
-    <div><b>${rank?L('place',{n:rank[0]}):'—'}</b><small>${rank?L('ofN',{n:rank[1]}):(P.retry?L('retryS'):'')}</small></div></div>
-  ${P.wrong.length?`<button type="button" class="cta" onclick="QZ.retry()">${L('retryN',{n:P.wrong.length})}</button>`:''}
+    <div${rank?' onclick="QZ.board()" style="cursor:pointer"':''}><b>${rank?L('place',{n:rank[0]}):'—'}</b><small>${rank?L('ofN',{n:rank[1]}):(P.practice?L('practiceS'):P.retry?L('retryS'):'')}</small></div></div>
+  ${P.wrong.length&&!P.retry?`<button type="button" class="cta" onclick="QZ.review()">${L('revBtn',{n:P.wrong.length})}</button>`:''}
+  ${P.wrong.length?`<button type="button" class="${P.retry?'cta':'qz-btn'}" style="${P.retry?'':'width:100%;margin-top:10px'}" onclick="QZ.retry()">${L('retryN',{n:P.wrong.length})}</button>`:''}
+  ${rank?`<button type="button" class="qz-btn" style="width:100%;margin-top:6px;background:none;border:0;color:var(--violet);font-weight:700" onclick="QZ.board()">${L('boardLink')}</button>`:''}
   <div class="qz-2"><button type="button" class="qz-btn" onclick="QZ.shareRes(${pct})">${L('shareRes')}</button>
   <button type="button" class="qz-btn" onclick="${q.mine?`QZ.results()`:`show('home')`}">${q.mine?L('results'):L('openApp')}</button></div>
   ${q.mine?'':`<div class="qz-card" style="margin-top:14px;text-align:center"><b>${L('ownT')}</b><div class="qz-hint">${L('ownD')}</div></div>`}`);
@@ -922,12 +973,14 @@ async function finishExam(){
   if(d.error==='done'){toast('ℹ️',L('already'));return join(S.code)}
   if(!d.ok){view(`<div class="qz-load"><b>${L('notSent')}</b><div class="qz-hint">${L('checkNet')}</div><button type="button" class="cta" onclick="QZ.finish()">${L('resend')}</button></div>`);return}
   const pct=Math.round(d.score/d.total*100);
-  view(`<div class="qz-ring" style="--p:${pct}%"><div><b>${pct}%</b><small>${d.score} / ${d.total}</small></div></div>
+  if(Array.isArray(d.questions)){S.quiz.data=Object.assign({},q.data,{questions:d.questions}); P.wrong=d.wrong||[]}   // endi to'g'ri javoblar ochiq
+  resView(`<div class="qz-ring" style="--p:${pct}%"><div><b>${pct}%</b><small>${d.score} / ${d.total}</small></div></div>
   <div class="qz-title">${L('done')}</div>
   <div style="text-align:center;color:var(--muted);font-size:14px;margin-top:4px">${esc(q.data.title||q.topic)}</div>
-  <div class="qz-stats"><div><b>${mmss(secs)}</b><small>${L('time')}</small></div><div><b>${d.score}</b><small>${L('correctN')}</small></div><div><b>${L('place',{n:d.rank})}</b><small>${L('ofN',{n:d.of})}</small></div></div>
-  <div class="qz-card" style="text-align:center"><b>${L('sentT')}</b><div class="qz-hint">${L('teacherAnn')}</div></div>
-  <button type="button" class="cta" onclick="show('home')">${L('openApp')}</button>`);
+  <div class="qz-stats"><div><b>${mmss(secs)}</b><small>${L('time')}</small></div><div><b>${d.score}</b><small>${L('correctN')}</small></div><div onclick="QZ.board()" style="cursor:pointer"><b>${L('place',{n:d.rank})}</b><small>${L('ofN',{n:d.of})}</small></div></div>
+  <div class="qz-card" style="text-align:center"><b>${L('sentT')}</b></div>
+  ${Array.isArray(d.questions)?afterBtns((d.wrong||[]).length):''}
+  <button type="button" class="qz-btn" style="width:100%;margin-top:10px" onclick="show('home')">${L('openApp')}</button>`);
 }
 function retry(){
   const w=P.wrong.slice(); P={name:P.name,order:w,i:0,score:0,wrong:[],streak:0,best:0,t0:Date.now(),retry:true}; ask();
@@ -1039,7 +1092,7 @@ async function crossDone(){
   <div class="qz-2"><button type="button" class="qz-btn" onclick="QZ.shareRes(${pct})">${L('shareS')}</button><button type="button" class="qz-btn" onclick="${S.quiz.mine?'QZ.results()':`show('home')`}">${S.quiz.mine?L('results'):L('openApp')}</button></div>`);
 }
 
-window.QZ={pickFile,fromFile,startFromFile,finish,example,exTab,print,open,openCross,setN,srcUp,srcDel,pickSel,setQ,answer,set,create,ready,copy,share,questions,del,join,start,pick,next,quit,retry,shareRes,results,tap,sel,hint,check,crossQuit};
+window.QZ={review,backRes,practice,board,pickFile,fromFile,startFromFile,finish,example,exTab,print,open,openCross,setN,srcUp,srcDel,pickSel,setQ,answer,set,create,ready,copy,share,questions,del,join,start,pick,next,quit,retry,shareRes,results,tap,sel,hint,check,crossQuit};
 if(qs.get('quiz')) join(qs.get('quiz'));
 if(WEB&&qs.get('qtopic')&&!qs.get('quiz')){S.topic=qs.get('qtopic'); history.replaceState(null,'',location.pathname); setTimeout(open,350)}   // atlasdan «Test tuzish»
 })();
