@@ -22,11 +22,12 @@ Botda ro'yxatdan o'tish (tilni tanlab, kanalga obuna bo'lish) yoki Xizmatdan foy
 - qonunchilikda belgilangan majburiyatlarni bajarish.
 
 ## 4. Ma'lumotlarni uchinchi shaxslarga berish
-Biz Foydalanuvchi ma'lumotlarini sotmaymiz va reklama maqsadida boshqalarga bermaymiz. Xizmat ishlashi uchun ma'lumotlarning bir qismi faqat quyidagi tomonlarga uzatiladi:
+Biz Foydalanuvchi ma'lumotlarini sotmaymiz. Xizmat ishlashi va reklamalarimiz samaradorligini o'lchash uchun ma'lumotlarning bir qismi faqat quyidagi tomonlarga uzatiladi:
 - **AI xizmati (Anthropic, Claude):** Fayl tayyorlash uchun Buyurtmadagi mavzu va formaga kiritilgan ma'lumotlar yuboriladi. Telegram ID yuborilmaydi.
 - **Fotobanklar (Pixabay, Pexels):** faqat slaydlar uchun inglizcha qidiruv so'zlari yuboriladi, shaxsga doir ma'lumot yuborilmaydi.
 - **To'lov tizimlari (Payme, Click):** to'lovni amalga oshirish uchun zarur bo'lgan ma'lumotlar.
 - **Telegram:** Bot Telegram platformasi orqali ishlaydi va uning qoidalariga bo'ysunadi.
+- **Meta Platforms (Facebook, Instagram):** tadris.ai saytida Meta Pixel va Conversions API ishlatiladi. Reklamalarimiz samaradorligini o'lchash uchun Meta'ga sahifa ochilgani, ro'yxatdan o'tish va to'lov fakti (summasi bilan), brauzerning texnik ma'lumotlari (cookie identifikatori, brauzer turi, IP manzil) hamda Telegram ID raqamingizning qaytarib bo'lmaydigan shifrlangan (SHA-256) ko'rinishi yuboriladi. Ism, username va buyurtma mazmuni yuborilmaydi. Meta bu ma'lumotlarni o'zining (https://www.facebook.com/privacy/policy){maxfiylik siyosati}ga muvofiq ishlaydi. Brauzer sozlamalarida cookie'larni o'chirib yoki reklama blokirovkachisi orqali bundan voz kechishingiz mumkin.
 - **Davlat organlari:** faqat qonunchilikda belgilangan hollarda va tartibda.
 AI xizmati O'zbekistondan tashqarida joylashgan. Ro'yxatdan o'tish orqali Foydalanuvchi Buyurtma ma'lumotlarining Fayl tayyorlash maqsadida shu xizmatga uzatilishiga rozilik beradi.
 

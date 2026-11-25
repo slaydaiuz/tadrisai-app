@@ -797,6 +797,7 @@ body.tg-nopay .site-card{display:block}
 .site-bn em{margin-left:auto;font-style:normal;color:var(--muted)}
 .wl-foot a{color:inherit;text-decoration:underline;cursor:pointer}
 </style>
+<script src="px.js?v=1"></script>
 </head>
 <body>
 <div class="sky" aria-hidden="true"><div class="blob b1"></div><div class="blob b2"></div><div class="blob b3"></div></div>
@@ -1609,7 +1610,7 @@ async function payNow(m){
   const btn=$('payBtn'); if(btn.dataset.busy) return;
   btn.dataset.busy='1'; const old=btn.textContent; btn.textContent=t('creating');
   let d=null;
-  try{d=await api('/pay/create',{amount:amt,method:m==='other'?'':m})}catch(e){d=null}   // paynet ham aniq yuboriladi (inPAY Paynet ilovasi havolasini qaytaradi)
+  try{d=await api('/pay/create',{amount:amt,method:m==='other'?'':m,fbp:window.TPX?TPX.fbp():'',fbc:window.TPX?TPX.fbc():''})}catch(e){d=null}   // paynet ham aniq yuboriladi (inPAY Paynet ilovasi havolasini qaytaradi)
   delete btn.dataset.busy; btn.textContent=old;
   if(!d||d.error==='auth'||d.error==='off'){          // server yetmasa: eski yo'l - havola botga keladi
     sendToBot({mode:'topup',amount:amt,method:m},'💳',t('payTitle'),t('payText'));return}
@@ -1643,6 +1644,7 @@ async function pollPay(){
   stopPoll(); if(!pay) return;
   let d=null; try{d=await api('/pay/status',{order_id:pay.order})}catch(e){}
   if(d&&d.ok&&d.status==='paid'){
+    if(d.px&&window.TPX) TPX.track('Purchase',{value:d.px.value,currency:d.px.currency},'pay_'+pay.order);   // server bilan bir xil event_id
     BALANCE=d.balance; renderWallet(); renderWait(true);
     $('okBig').textContent='+'+money(d.amount+(d.bonus||0));
     $('okSub').innerHTML=(d.bonus?esc(t('okSub').replace('{a}',money(d.amount)).replace('{b}',money(d.bonus)))+'<br>':'')+
@@ -2463,7 +2465,7 @@ refreshMe();
 let wlPoll=null, wlCode=null, wlUntil=0, wlFetch=null;
 async function wlNewCode(){
   const b=$('wlBtn'); b.classList.add('off');
-  let d={}; try{d=await api('/web/login',{},15000)}catch(e){}
+  const px=window.TPX||{}; let d={}; try{d=await api('/web/login',{ad:px.ad?px.ad():'',fbp:px.fbp?px.fbp():'',fbc:px.fbc?px.fbc():''},15000)}catch(e){}
   if(!d||!d.ok){b.classList.remove('off'); return false}
   wlCode=d.code; wlUntil=Date.now()+((d.ttl||600)-60)*1000;
   const url='https://t.me/'+(d.bot||BOTNAME)+'?start=web_'+d.code;
@@ -2489,7 +2491,7 @@ function webLogin(ev){
     if(!code()) return;
     if(Date.now()>until){clearInterval(wlPoll); $('wlWait').classList.remove('on'); toast('⌛',t('wlExp')); wlCode=null; wlNewCode(); return}
     let r={}; try{r=await api('/web/poll',{code:code()},10000)}catch(e){return}
-    if(r&&r.ws){clearInterval(wlPoll); webSave(r)}
+    if(r&&r.ws){clearInterval(wlPoll); if(r.reg&&window.TPX) TPX.later('CompleteRegistration',{},r.reg); webSave(r)}   // Pixel: server bilan bir xil event_id
     else if(r&&r.error==='expired'){clearInterval(wlPoll); $('wlWait').classList.remove('on'); toast('⌛',t('wlExp')); wlCode=null; wlNewCode()}
   },2000);
   return true;

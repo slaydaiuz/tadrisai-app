@@ -74,6 +74,7 @@ Fayllardagi fotosuratlar ochiq fotobanklardan (Pixabay, Pexels) ularning litsenz
 
 ## 12. Shaxsga doir ma'lumotlar
 Foydalanuvchi ma'lumotlarini yig'ish, saqlash va ishlatish tartibi alohida hujjat — (privacy.html){Maxfiylik siyosati}da belgilangan. Ofertani tasdiqlash orqali Foydalanuvchi o'z shaxsga doir ma'lumotlari ushbu siyosatga muvofiq ishlanishiga rozilik beradi.
+tadris.ai saytida reklama samaradorligini o'lchash uchun Meta Pixel va Conversions API ishlatiladi; qanday ma'lumot yuborilishi Maxfiylik siyosatining 4-bandida yozilgan.
 
 ## 13. Nizolarni hal qilish
 Tomonlar o'rtasidagi kelishmovchiliklar avvalo muzokaralar yo'li bilan hal qilinadi. Foydalanuvchi murojaatlari 10 ish kuni ichida ko'rib chiqiladi.
