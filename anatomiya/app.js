@@ -8,7 +8,7 @@ const $ = id => document.getElementById(id);
 const API = location.hostname === 'tadris.ai' ? '/api' : 'https://91-107-229-30.sslip.io/api';
 const QS = new URLSearchParams(location.search);
 const DEV = QS.get('dev') === '1' && location.hostname !== 'tadris.ai';
-const V = '9';
+const V = '10';
 // 3D fayllar jsDelivr CDN'dan (Cloudflare, Toshkentda ham bor; 1 yil keshlanadi). Fayl CDN'da bo'lmasa yoki xato bo'lsa — o'z serverimizdan.
 const ZSHA = '63a19b341e8172137ccfb12967cab7ac252637ab';
 const CDN = DEV ? '' : 'https://cdn.jsdelivr.net/gh/slaydaiuz/tadrisai-app@' + ZSHA + '/anatomiya/';
@@ -306,7 +306,7 @@ function setLoad(k, n, tot) {
 }
 let frameN = 0;
 function loop() {
-  animReq = requestAnimationFrame(loop); controls.update(); clampTarget(); renderer.render(scene, camera); placeLabels(); gridLabels(); fdiTags();
+  animReq = requestAnimationFrame(loop); controls.update(); clampTarget(); renderer.render(scene, camera); placeLabels(); gridLabels(); fdiTags(); plateLabels();
   // telefonda: model yaqinlashtirilganda (yoki tanlab yaqinlashganda) asl sifat yuklanadi — internet tejaladi
   if (HQ_WAIT && ++frameN % 30 === 0 && AT === HQ_WAIT && camera.position.distanceTo(controls.target) < fitDist(null) * 0.55) { const a = HQ_WAIT; HQ_WAIT = null; upgradeHQ(a); }
 }
@@ -386,7 +386,7 @@ function hiddenByDefault(p) {
 
 async function openAtlas(id, pickN) {
   const a = C.atlases.find(x => x.id === id); if (!a) return;
-  AT = a; HQ_WAIT = null; sel = null; LMSEL = null; HL = new Map(); Q = null; DP = null; TAB = pickN != null ? 'info' : 'tree'; XRAY = false; CUT = {ax: -1, pos: 0, flip: false}; SOLO = 0; LAYV = {}; LAYO = {}; OPEN = new Set(); TQ = '';
+  AT = a; PLATE = false; HQ_WAIT = null; sel = null; LMSEL = null; HL = new Map(); Q = null; DP = null; TAB = pickN != null ? 'info' : 'tree'; XRAY = false; CUT = {ax: -1, pos: 0, flip: false}; SOLO = 0; LAYV = {}; LAYO = {}; OPEN = new Set(); TQ = '';
   store.set('za_last', {a: a.id, n: pickN ?? null});
   $('home').classList.add('hide'); $('view').classList.remove('hide');
   history.replaceState(null, '', location.pathname + '?a=' + a.id + (pickN != null ? '&n=' + pickN : '') + (DEV ? '&dev=1' : ''));
@@ -709,6 +709,60 @@ function fdiGrid() {   // 2026-11-25, egasi: stom bo'limi — tishlar stomatolog
   }
   return true;
 }
+// --- «Rasmda ko'rish» (2026-11-25, egasi: Anatomy Standard rasmlaridagidek — qism nomlari chetda, chiziq bilan). O'z modelimizdan, 4 tilda.
+let PLATE = false, PLK = '';
+const PLT = {uz: "Rasmda ko'rish", ru: 'Подписи как в атласе', en: 'Labelled view'};
+const _pr = new THREE.Raycaster();
+function plateUI() { const b = $('bPlate'); if (!b) return; b.classList.toggle('hide', !(AT && AT.lm)); b.classList.toggle('on', PLATE); b.textContent = '🏷 ' + (PLT[LANG] || PLT.uz); }
+function togglePlate() {
+  PLATE = !PLATE; PLK = '';
+  if (PLATE && !sel) {   // tanlanmagan bo'lsa — eng ko'p belgisi bor qismni tanlaymiz
+    const cnt = new Map(); C.lms.forEach((l, i) => { if (i >= (AT.lm0 || 0)) cnt.set(l[1], (cnt.get(l[1]) || 0) + 1); });
+    let best = null; for (const it of ITEMS) if ((cnt.get(it.n) || 0) > (best ? cnt.get(best.n) : 0)) best = it;
+    if (best) select(best, 0, true);
+  }
+  plateUI();
+}
+function plateLabels() {
+  const cv = $('pltl'); if (!cv) return;
+  const on = PLATE && LMG && LMG.visible && sel && GK < 0.02;
+  if (!on) { if (PLK) { cv.getContext('2d').clearRect(0, 0, cv.width, cv.height); PLK = ''; } return; }
+  const r = $('stage').getBoundingClientRect(), dpr = Math.min(window.devicePixelRatio || 1, 2);
+  const key = camera.position.toArray().map(x => x.toFixed(5)).join() + controls.target.toArray().map(x => x.toFixed(5)).join() + r.width + 'x' + r.height + LANG + sel.n + LMG.children.length + (LMSEL || '');
+  if (key === PLK) return; PLK = key;
+  const Wd = Math.round(r.width * dpr), Hd = Math.round(r.height * dpr);
+  if (cv.width !== Wd || cv.height !== Hd) { cv.width = Wd; cv.height = Hd; }
+  const g = cv.getContext('2d'); g.setTransform(dpr, 0, 0, dpr, 0, 0); g.clearRect(0, 0, r.width, r.height);
+  const small = r.width < 600, fs = small ? 10 : 12; g.font = `italic 600 ${fs}px Inter, system-ui, sans-serif`; g.textBaseline = 'middle';
+  const occ = MESHES.filter(m => m.visible && !m.userData.ctx), pts = [], seen = new Set();
+  for (const ch of LMG.children) {
+    ch.updateMatrixWorld(); const w = new THREE.Vector3().setFromMatrixPosition(ch.matrixWorld), d = w.distanceTo(camera.position);
+    _pr.set(camera.position, w.clone().sub(camera.position).normalize()); const h = _pr.intersectObjects(occ, false)[0];
+    if (h && h.distance < d - Math.max(radius * 0.012, 0.0008)) continue;   // orqa tomonda — ko'rinmaydi
+    const p = w.clone().project(camera); if (p.z > 1) continue;
+    const x = (p.x * .5 + .5) * r.width, y = (-p.y * .5 + .5) * r.height, l = C.lms[ch.userData.li], t = nm(l[0]);
+    if (seen.has(t + Math.round(x / 30) + Math.round(y / 30))) continue; seen.add(t + Math.round(x / 30) + Math.round(y / 30));
+    pts.push({x, y, t, li: ch.userData.li});
+  }
+  if (!pts.length) return;
+  const cx = pts.reduce((a, q) => a + q.x, 0) / pts.length, pad = small ? 6 : 14, gap = fs + (small ? 7 : 6), top = small ? 100 : 54, bot = r.height - (small ? 120 : 110);
+  const maxW = r.width * (small ? 0.36 : 0.24);
+  for (const side of [0, 1]) {
+    const col = pts.filter(q => (q.x >= cx) === !!side).sort((a, b) => a.y - b.y); if (!col.length) continue;
+    let y = top; let ys = col.map(q => { y = Math.max(y, Math.min(q.y, bot)); const v = y; y += gap; return v; });
+    const span = col[col.length - 1].y - col[0].y, tot = (col.length - 1) * gap;
+    if (tot > span + gap) { const mid = (col[0].y + col[col.length - 1].y) / 2, st = Math.max(top, Math.min(bot - tot, mid - tot / 2)); ys = col.map((q, i) => st + i * gap); }   // ko'p bo'lsa — teng taqsimlanadi
+    let over = ys[ys.length - 1] - bot; if (over > 0) for (let i = ys.length - 1; i >= 0; i--) { ys[i] -= over; if (i && ys[i] - gap >= ys[i - 1]) break; if (i) over = ys[i - 1] - (ys[i] - gap); if (over <= 0) break; }
+    col.forEach((q, i) => {
+      let s = q.t; while (s.length > 3 && g.measureText(s).width > maxW) s = s.slice(0, -2) + '…';
+      const tw = g.measureText(s).width, lx = side ? r.width - pad - tw : pad, ex = side ? lx - 6 : lx + tw + 6, on2 = q.li === LMSEL;
+      g.strokeStyle = on2 ? '#fde047' : 'rgba(226,232,240,.75)'; g.lineWidth = 1; g.beginPath(); g.moveTo(ex, ys[i]); g.lineTo(q.x, q.y); g.stroke();
+      g.fillStyle = 'rgba(11,17,36,.72)'; g.fillRect(lx - 3, ys[i] - fs / 2 - 2, tw + 6, fs + 4);
+      g.fillStyle = on2 ? '#fde047' : '#F1F5F9'; g.textAlign = 'left'; g.fillText(s, lx, ys[i] + .5);
+      g.fillStyle = '#facc15'; g.beginPath(); g.arc(q.x, q.y, 2.2, 0, 7); g.fill();
+    });
+  }
+}
 let FDK = '';
 const _fa = new THREE.Vector3();
 function fdiTags() {
@@ -773,6 +827,7 @@ function gridLabels() {
     g.fillStyle = '#F1F5F9'; g.fillText(s, x, y + 12.5);
   }
 }
+if (DEV) window.__zlm = () => { if (!LMG) return []; const r = $('stage').getBoundingClientRect(); return LMG.children.map(ch => { ch.updateMatrixWorld(); const w = new THREE.Vector3().setFromMatrixPosition(ch.matrixWorld), p = w.clone().project(camera); const n = w.clone().sub(camera.position).normalize(); return {n: C.names[C.lms[ch.userData.li][0]][1], x: (p.x * .5 + .5) * r.width, y: (-p.y * .5 + .5) * r.height}; }); };
 if (DEV) window.__zd = () => ({cam: camera.position.toArray().map(x => +x.toFixed(3)), GSZ: GSZ && GSZ.toArray().map(x => +x.toFixed(3)), aspect: +camera.aspect.toFixed(3), fov: camera.fov, maxD: controls.maxDistance, t: controls && controls.target.toArray().map(x => +x.toFixed(3)), FLAT, GP, GK: +GK.toFixed(3), MODE, explodeK, BSZ: BSZ.toArray().map(x => +x.toFixed(3))});
 function resetAll() {   // «Asliga qaytarish»: rejim, kesim, shaffoflik, yashirilganlar, tanlov va kamera — hammasi boshidagidek
   if (!AT) return;
@@ -811,7 +866,7 @@ function placeOne(el, w) {
   el.classList.remove('hide');
 }
 function placeLabels() {
-  if (LBL && LBL.ms && LBL.ms.length) { const m = LBL.ms[0]; placeOne($('lbl'), m.geometry.boundingSphere.center.clone().applyMatrix4(m.matrixWorld)); } else $('lbl').classList.add('hide');
+  if (!PLATE && LBL && LBL.ms && LBL.ms.length) { const m = LBL.ms[0]; placeOne($('lbl'), m.geometry.boundingSphere.center.clone().applyMatrix4(m.matrixWorld)); } else $('lbl').classList.add('hide');
   if (LMSEL && LMG) { const s = LMG.children.find(c => c.userData.li === LMSEL); if (s) { s.updateMatrixWorld(); placeOne($('lbl2'), new THREE.Vector3().setFromMatrixPosition(s.matrixWorld)); } else $('lbl2').classList.add('hide'); } else $('lbl2').classList.add('hide');
 }
 function setLabel(ms, text, sub, dot) {
@@ -903,7 +958,7 @@ function labels() {
   $('vBack').title = t('back'); $('vCrumb').textContent = t('kick') + ' / ' + tr(catOf(AT.cat)[1]); $('vT').textContent = tr(AT.t); $('pT').textContent = tr(AT.t);
   $('bPanel').innerHTML = '☰ ' + t('panel');
   const tb = $('tabs').querySelectorAll('button'); ['tTree', 'tLay', 'tInfo', 'tLearn'].forEach((k, i) => tb[i].textContent = t(k));
-  $('hint').textContent = t('hint'); const sb = $('seg').querySelectorAll('button'); ['mW', 'mA', 'mG'].forEach((k, i) => sb[i].textContent = t(k)); $('bReset').textContent = '↺ ' + t('resetAll');
+  $('hint').textContent = t('hint'); const sb = $('seg').querySelectorAll('button'); ['mW', 'mA', 'mG'].forEach((k, i) => sb[i].textContent = t(k)); $('bReset').textContent = '↺ ' + t('resetAll'); plateUI();
   [['tView', 'view'], ['tBoth', 'both'], ['tHide', 'hideSel'], ['tIso', 'iso'], ['tAll', 'showAll'], ['tXray', 'xray'], ['tCut', 'cut'], ['tMore', 'more']].forEach(([id, k]) => { $(id).dataset.tip = t(k); $(id).setAttribute('aria-label', t(k)); });
   $('tBoth').classList.toggle('on', BOTH); $('tXray').classList.toggle('on', XRAY); $('tCut').classList.toggle('on', CUT.ax >= 0);
   $('cred2').textContent = AT.src === 'hra' ? 'HuBMAP Human Reference Atlas (CC BY 4.0) · Visible Human, NLM' : 'Z-Anatomy · BodyParts3D © DBCLS';
@@ -1220,7 +1275,7 @@ function bind() {
   $('tabs').querySelectorAll('button').forEach(b => b.onclick = () => setTab(b.dataset.t));
   $('bPanel').onclick = () => openPanel(!$('panel').classList.contains('open')); $('pClose').onclick = () => openPanel(false);
   $('sbGo').onclick = () => { setTab('info'); openPanel(true); }; $('sbX').onclick = unselect;
-  $('bReset').onclick = resetAll;
+  $('bReset').onclick = resetAll; $('bPlate').onclick = togglePlate;
   $('seg').querySelectorAll('button').forEach(b => b.onclick = () => setMode(b.dataset.m));
   $('tView').onclick = () => togglePop('popView', buildView);
   $('tCut').onclick = () => togglePop('popCut', buildCut);

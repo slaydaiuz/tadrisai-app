@@ -117,6 +117,7 @@ button{border:0;background:none;cursor:pointer}
 .seg button.on{background:var(--acc);color:#fff}
 .expl input{margin:3px 10px 5px;accent-color:var(--acc);transition:opacity .2s,filter .2s}
 .expl input:disabled{filter:grayscale(1);opacity:.3}
+.rst.plt{top:100px}.rst.plt.on{background:#7c3aed;border-color:#a78bfa}
 .rst{position:absolute;left:10px;top:62px;padding:7px 12px;border-radius:999px;background:rgba(11,17,36,.84);backdrop-filter:blur(8px);border:1px solid var(--line);font-size:12.5px;font-weight:800;color:#E2E8F0;z-index:3}
 .rst:active{transform:scale(.97)}
 .glbl{position:absolute;left:0;top:0;width:100%;height:100%;pointer-events:none}
@@ -248,9 +249,10 @@ button{border:0;background:none;cursor:pointer}
   .vtop h1{font-size:15px}
   .tools{top:8px;left:8px;right:8px}
   .rst{left:8px;top:58px}
+  .rst.plt{top:96px}
   .expl{bottom:16px}
 }
-body.shot .vtop,body.shot .panel,body.shot .tools,body.shot .expl,body.shot .hint,body.shot .cred2,body.shot .lbl,body.shot .selbar,body.shot .load,body.shot .hq,body.shot .rst,body.shot .glbl,body.shot #fdil{display:none!important}
+body.shot .vtop,body.shot .panel,body.shot .tools,body.shot .expl,body.shot .hint,body.shot .cred2,body.shot .lbl,body.shot .selbar,body.shot .load,body.shot .hq,body.shot .rst,body.shot .glbl,body.shot #fdil,body.shot #pltl,body.shot .plt{display:none!important}
 html:has(body.shot),body.shot,body.shot .stage,body.shot #view{background:transparent!important}
 @media (min-width:900px){ .bPanel{display:none!important} .selbar{display:none!important} }
 </style>
@@ -281,8 +283,8 @@ html:has(body.shot),body.shot,body.shot .stage,body.shot #view{background:transp
   <div class="vmain">
     <div class="stage" id="stage">
       <canvas id="cv"></canvas>
-      <canvas id="glbl" class="glbl"></canvas><canvas id="fdil" class="glbl"></canvas>
-      <button class="rst" id="bReset"></button>
+      <canvas id="glbl" class="glbl"></canvas><canvas id="fdil" class="glbl"></canvas><canvas id="pltl" class="glbl"></canvas>
+      <button class="rst" id="bReset"></button><button class="rst plt hide" id="bPlate"></button>
       <div class="tools">
         <div class="tb"><button class="ib" id="tView" data-tip=""><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M2 12s4-7 10-7 10 7 10 7-4 7-10 7S2 12 2 12z"/></svg></button></div>
         <div class="sp"></div>
@@ -315,6 +317,6 @@ html:has(body.shot),body.shot,body.shot .stage,body.shot #view{background:transp
   </div>
 </div>
 <div class="toast hide" id="toast"></div>
-<script type="module" src="app.js?v=9"></script>
+<script type="module" src="app.js?v=10"></script>
 </body>
 </html>
