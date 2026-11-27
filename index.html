@@ -944,6 +944,8 @@ body.tg-nopay .site-card{display:block}
         <button type="button" class="nl-adm" data-dl="kk" onclick="setDocLang('kk')" style="display:none"><svg class="flag" viewBox="0 0 24 24"><defs><clipPath id="ckz"><circle cx="12" cy="12" r="11"/></clipPath></defs><g clip-path="url(#ckz)"><rect width="24" height="24" fill="#00AFCA"/><g stroke="#FEC50C" stroke-width="1" stroke-linecap="round"><path d="M12 5.4V4M12 16.6V18M6.4 11H5M17.6 11H19M8 7 7 6M16 7l1-1M8 15l-1 1M16 15l1 1"/></g><circle cx="12" cy="11" r="3.6" fill="#FEC50C"/><path d="M8 18.2c1.6 1.1 6.4 1.1 8 0" stroke="#FEC50C" stroke-width="1.1" fill="none"/><rect x="2.4" y="3" width="1.3" height="18" fill="#FEC50C" opacity=".85"/></g><circle class="shine" cx="12" cy="12" r="11" fill="url(#gl)"/></svg><span>Qozoq</span></button>
         <button type="button" class="nl-adm" data-dl="ky" onclick="setDocLang('ky')" style="display:none"><svg class="flag" viewBox="0 0 24 24"><defs><clipPath id="ckg"><circle cx="12" cy="12" r="11"/></clipPath></defs><g clip-path="url(#ckg)"><rect width="24" height="24" fill="#E8112D"/><g stroke="#FFEF00" stroke-width="1.1" stroke-linecap="round"><path d="M12 4.4v2M12 17.6v2M4.4 12h2M17.6 12h2M6.6 6.6 8 8M16 16l1.4 1.4M6.6 17.4 8 16M16 8l1.4-1.4"/></g><circle cx="12" cy="12" r="4.4" fill="#FFEF00"/><circle cx="12" cy="12" r="2.9" fill="#E8112D"/><path d="M9.4 11h5.2M9.4 13h5.2M11 9.4v5.2M13 9.4v5.2" stroke="#FFEF00" stroke-width=".7"/></g><circle class="shine" cx="12" cy="12" r="11" fill="url(#gl)"/></svg><span>Qirg'iz</span></button>
         <button type="button" class="nl-adm" data-dl="tg" onclick="setDocLang('tg')" style="display:none"><svg class="flag" viewBox="0 0 24 24"><defs><clipPath id="ctj"><circle cx="12" cy="12" r="11"/></clipPath></defs><g clip-path="url(#ctj)"><rect width="24" height="7" fill="#CC0000"/><rect y="7" width="24" height="10" fill="#fff"/><rect y="17" width="24" height="7" fill="#006600"/><path d="M9.5 13.4h5l.4-2.4-1.3 1-1.6-1.8-1.6 1.8-1.3-1z" fill="#F8C300"/><g fill="#F8C300"><circle cx="8.6" cy="9.5" r=".45"/><circle cx="10.2" cy="8.7" r=".45"/><circle cx="12" cy="8.4" r=".45"/><circle cx="13.8" cy="8.7" r=".45"/><circle cx="15.4" cy="9.5" r=".45"/></g></g><circle cx="12" cy="12" r="10.6" fill="none" stroke="#CBD5E1" stroke-width=".8"/><circle class="shine" cx="12" cy="12" r="11" fill="url(#gl)"/></svg><span>Tojik</span></button>
+        <button type="button" class="nl-adm" data-dl="de" onclick="setDocLang('de')" style="display:none"><svg class="flag" viewBox="0 0 24 24"><defs><clipPath id="cde"><circle cx="12" cy="12" r="11"/></clipPath></defs><g clip-path="url(#cde)"><rect width="24" height="8" fill="#141414"/><rect y="8" width="24" height="8" fill="#DD0000"/><rect y="16" width="24" height="8" fill="#FFCE00"/></g><circle cx="12" cy="12" r="10.6" fill="none" stroke="#CBD5E1" stroke-width=".8"/><circle class="shine" cx="12" cy="12" r="11" fill="url(#gl)"/></svg><span>Nemis</span></button>
+        <button type="button" class="nl-adm" data-dl="fr" onclick="setDocLang('fr')" style="display:none"><svg class="flag" viewBox="0 0 24 24"><defs><clipPath id="cfr"><circle cx="12" cy="12" r="11"/></clipPath></defs><g clip-path="url(#cfr)"><rect width="8" height="24" fill="#0055A4"/><rect x="8" width="8" height="24" fill="#fff"/><rect x="16" width="8" height="24" fill="#EF4135"/></g><circle cx="12" cy="12" r="10.6" fill="none" stroke="#CBD5E1" stroke-width=".8"/><circle class="shine" cx="12" cy="12" r="11" fill="url(#gl)"/></svg><span>Fransuz</span></button>
       </div>
     </div>
     <div id="endWrap">
@@ -1173,6 +1175,7 @@ body.tg-nopay .site-card{display:block}
 </div></nav>
 
 <script src="l3.js?v=4"></script>
+<script src="l4.js?v=1"></script>
 <script>
 /* ---------- Icons ---------- */
 const IC = {
@@ -1362,6 +1365,7 @@ const LANGS={uz:"O'zbekcha",kaa:"Qaraqalpaqsha",uzn:"Özbekça (yangi alifbo)",r
 const LCODE=l=>l==='uzn'?'ÖZ':l==='kaa'?'QQ':l==='kk'?'KZ':l==='ky'?'KG':l==='tg'?'TJ':l.toUpperCase();
 /* 2026-11-22: qozoq, qirg'iz, tojik (l3.js) — tarjima qilinmagan kalitlar ruschaga qaytadi */
 ['kk','ky','tg'].forEach(l=>{const x=window.L3&&L3[l]; T[l]=Object.assign({},T.ru,x&&x.T||{})});
+['de','fr'].forEach(l=>{const x=window.L4&&L4[l]; T[l]=Object.assign({},T.en,x&&x.T||{})});   // 2026-11-27: nemis, fransuz (l4.js) — yo'q kalit inglizchaga qaytadi
 
 /* ---------- State ---------- */
 /* ---------- Sayt (tadris.ai) rejimi: Telegram'dan tashqarida ochilganda — Telegram orqali kirish (2026-11-22, egasi) ---------- */
@@ -1417,7 +1421,7 @@ function qzTexts(){
       ru:{tr:'ТЕСТ',nw:'НОВОЕ',t:'Тест-квиз',td:'Тест по теме или странице учебника · отправка по ссылке',c:'Кроссворд',cd:'Кроссворд по теме · решается в приложении'},
       en:{tr:'TRIAL',nw:'NEW',t:'Test quiz',td:'A test from a topic or textbook page · share by link',c:'Crossword',cd:'A crossword on a topic · solved in the app'},
       kaa:{tr:'SINAQ',nw:'JAŃA',t:'Test quiz',td:'Tema yamasa sabaqlıq betinen test · siltewish penen bólisiw',c:'Krossvord',cd:'Tema boyınsha krossvord · qosımshada sheshiledi'}};
-    return lang==='uzn'?UZN.deep(QR.uz):(QR[lang]||(['kk','ky','tg'].includes(lang)?Object.assign({},QR.ru,(window.L3&&L3[lang]&&L3[lang].QR)||{}):QR.uz));           // 2026-11-16: hamma tilda
+    return lang==='uzn'?UZN.deep(QR.uz):(QR[lang]||(['kk','ky','tg'].includes(lang)?Object.assign({},QR.ru,(window.L3&&L3[lang]&&L3[lang].QR)||{}):['de','fr'].includes(lang)?Object.assign({},QR.en,(window.L4&&L4[lang]&&L4[lang].QR)||{}):QR.uz));           // 2026-11-16: hamma tilda
 }
 function quizCard(){
   const r=qzTexts(), b=SRV.quiz_free||isAdmin()?r.tr:r.nw;
@@ -1503,7 +1507,7 @@ const loyIs=()=>!!(LOY&&LOY.on&&(LOY.n||0)>=(LOY.need||2));
 function loyPct(a){if(!loyElig()) return 0; let p=0; (LOY.pct||[]).forEach(([v,x])=>{if(a>=v)p=x}); return p}
 const amountsNow=()=>{const b=baseAmounts(); if(!loyElig()) return b; const vs=[10000,20000,50000,100000]; return vs.map(v=>[v,Math.max(baseBonus(v),Math.floor(v*loyPct(v)/100))])};
 const MONS={uz:['yanvar','fevral','mart','aprel','may','iyun','iyul','avgust','sentabr','oktabr','noyabr','dekabr'],ru:['января','февраля','марта','апреля','мая','июня','июля','августа','сентября','октября','ноября','декабря'],en:['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec']};
-function lyDate(s){if(!s) return ''; const [y,m,d]=s.split('-').map(Number); const L=['ru','kk','ky','tg'].includes(lang)?'ru':lang==='en'?'en':'uz';
+function lyDate(s){if(!s) return ''; const [y,m,d]=s.split('-').map(Number); const L=['ru','kk','ky','tg'].includes(lang)?'ru':['en','de','fr'].includes(lang)?'en':'uz';
   const r=L==='uz'?d+'\u2011'+MONS.uz[m-1]:L==='ru'?d+' '+MONS.ru[m-1]:MONS.en[m-1]+' '+d; return lang==='uzn'&&window.UZN&&UZN.to?UZN.to(r):r}
 function renderLoy(){
   const bd=$('loyBadge'); if(!bd) return;
@@ -1524,7 +1528,7 @@ function renderCd(){
   el.style.display=''; $('cdNum').textContent=p(Math.floor(s/3600))+':'+p(Math.floor(s/60)%60)+':'+p(s%60);
 }
 const PM_OFF=new Set(['paynet']);   // inPAY Paynet bo'yicha texnik ishlar olib bormoqda (2026-11-23)
-const PM_OFF_TX={uz:'Texnik ishlar',ru:'Тех. работы',en:'Maintenance',kk:'Техникалық жұмыстар',ky:'Техникалык иштер',tg:'Корҳои техникӣ'};
+const PM_OFF_TX={uz:'Texnik ishlar',ru:'Тех. работы',en:'Maintenance',kk:'Техникалық жұмыстар',ky:'Техникалык иштер',tg:'Корҳои техникӣ',de:'Wartungsarbeiten',fr:'Maintenance'};
 const PMS=['payme','click','paynet'].filter(p=>!PM_OFF.has(p));
 function lastPm(){let v='';try{v=localStorage.getItem('tadris_pm')||''}catch(e){} if(!PMS.includes(v)) v=qs.get('lpm')||''; return PMS.includes(v)?v:''}
 let amt=50000, pm=lastPm(), topupBack='profile';   // oxirgi marta qaysi usulda to'lagan bo'lsa o'sha; birinchi marta — tanlanmagan
@@ -1798,7 +1802,7 @@ function setImg(v){img=v;store.set('img',v);syncDesign();syncSize();if(v==='prem
 /* ---------- Narxlar va slaydlar soni (surgich) ---------- */
 const PRICES={photo:[2990,3990,4990,5990],art:[4990,5990,6990,7990],premium:[15000,20000,25000,30000]};
 const MARKS=[6,10,15,20,25], SMIN=6, SMAX=25;
-const money=v=>v.toLocaleString('ru-RU').replace(/,/g,' ')+(lang==='uzn'?' söm':lang==='kaa'?' swm':lang==='tg'?' сӯм':(lang==='kk'||lang==='ky')?' сум':" so'm");
+const money=v=>v.toLocaleString('ru-RU').replace(/,/g,' ')+(lang==='uzn'?' söm':lang==='kaa'?' swm':lang==='tg'?' сӯм':(lang==='kk'||lang==='ky')?' сум':(lang==='de'||lang==='fr')?' UZS':" so'm");
 const bucket=n=>n<=10?0:n<=15?1:n<=20?2:3;
 const isFree=n=>FREE>0&&n<=6&&(mode!=='prez'||img==='photo');   // sovg'a: faqat Standart, 10 tagacha
 // Ommaga ochilish (egasi, 2026-11-09): Premium 3D va yakuniy videolar 17:00 (Toshkent) dan hamma uchun; admin oldindan ko'radi
@@ -1831,7 +1835,7 @@ function pauseEnd(){endVids().forEach(v=>{try{v.pause()}catch(e){}})}
 function toggleEnd(){endOpen=!endOpen; syncEnd(); if(endOpen&&endUse()!=='none') playEnd(); else if(!endOpen) pauseEnd()}
 function setEnd(v){ending=v;store.set('ending',v);syncSize();if(v!=='none')playEnd()}
 function setTpl(n){endTpl=n; syncEnd(); playEnd()}
-const endSrc=n=>'ex/end/'+(n===2?'t2-':n===3?'t3-':'')+(['uz','uzn','kaa','ru','en','kk','ky','tg'].includes(docLang)?docLang:'uz')+'-'+ending+'.mp4?v=1';
+const endSrc=n=>'ex/end/'+(n===2?'t2-':n===3?'t3-':'')+(['uz','uzn','kaa','ru','en','kk','ky','tg','de','fr'].includes(docLang)?docLang:'uz')+'-'+ending+'.mp4?v=1';
 /* Yuklash foiz bilan: fayl to'liq yuklanib (blob), keyin o'ynaydi. Bir marta yuklangani keshda qoladi. */
 const END_BLOB={}, END_LOADING={};
 function endProg(id,p){const l=$('endLoad'+id); if(!l) return;
@@ -1940,7 +1944,7 @@ document.addEventListener('focusout',e=>{if(e.target&&e.target.id==='fMav'&&mode
 function setDocLang(l){docLang=l;store.set('docLang',l);syncDocLang()}
 function syncDocLang(){
   if(!docLang) docLang=store.get('docLang')||lang;
-  if(!UNL&&['kk','ky','tg'].includes(docLang)) docLang=lang;   // 2026-11-22: qozoq, qirg'iz, tojik — hozircha faqat admin
+  if(!UNL&&['kk','ky','tg','de','fr'].includes(docLang)) docLang=lang;   // 2026-11-22: qozoq, qirg'iz, tojik — hozircha faqat admin
   document.querySelectorAll('.nl-adm').forEach(b=>b.style.display=UNL?'':'none');
   document.querySelectorAll('[data-dl]').forEach(b=>b.setAttribute('aria-pressed',b.dataset.dl===docLang));
   $('docLangWrap').style.display=mode==='prez'?'block':'none';
@@ -2177,7 +2181,7 @@ function resend(id){
 function setRole(r){role=r;store.set('role',r);renderAll()}
 function accToggle(b){b.closest('.acc').classList.toggle('open')}
 function openDoc(n){
-  const u=new URL(n+(['kk','ky','tg'].includes(lang)?'-'+lang:'')+'.html',location.href).href;   // 2026-11-22: tarjimalar
+  const u=new URL(n+(['kk','ky','tg','de','fr'].includes(lang)?'-'+lang:'')+'.html',location.href).href;   // 2026-11-22: tarjimalar
   try{if(tg&&tg.openLink){tg.openLink(u);return}}catch(e){}
   window.open(u,'_blank');
 }
@@ -2244,7 +2248,8 @@ const IX=(()=>{
       f_city:'City and year (optional, left out if empty)',f_cityPh:'E.g.: Urgench',
       cv0:'Blue frame, centred text, «Prepared by» on the right',cv1:'No frame, black centred text. For strict requirements',cv2:'Light-blue frame, everything left-aligned'}};
   D.uzn=UZN.deep(D.uz);
-  ['kk','ky','tg'].forEach(l=>{D[l]=Object.assign({},D.ru,(window.L3&&L3[l]&&L3[l].D)||{})});   // 2026-11-22
+  ['kk','ky','tg'].forEach(l=>{D[l]=Object.assign({},D.ru,(window.L3&&L3[l]&&L3[l].D)||{})});
+  ['de','fr'].forEach(l=>{D[l]=Object.assign({},D.en,(window.L4&&L4[l]&&L4[l].D)||{})});   // 2026-11-27   // 2026-11-22
   D.kaa=Object.assign({},D.uz,{"back": "← Artqa", "sub": "Temanı jazıń, qalǵanın AI isleydi", "topic": "Tema", "topicPh": "Mısalı: Cifrlı ekonomika hám onıń Qaraqalpaqstanda rawajlanıwı", "subj": "Pán", "subjPh": "Mısalı: Ekonomika teoriyası", "pages": "Betler sanı", "tier": "Tarif", "planQ": "Jobanı kim dúzedi?", "titul": "Titul maǵlıwmatları", "important": "Áhmiyetli", "liveHtml": "<b style=\"color:var(--text)\">Janlı kórinis</b><br>Oqıtıwshı birinshi usı betti kóredi — qátesiz tolıqtırıń. Bos orınǵa sızıq qoyıladı.", "design": "Dizayn", "bigger": "Úlkenirek kóriw ›", "notesHtml": "Qosımsha maǵlıwmatlar <span style=\"font-weight:500\">(qálewińizshe)</span>", "notesPh": "Mısalı: ámeliy mısallar kóbirek bolsın, 2020-jıldan keyingi derekler", "fmt": "Fayl formatı", "hint": "Fayl 1–3 minutta botqa keledi", "pick": "Usı dizayndı tańlaw", "ish": "Óz betinshe jumıs", "ref": "Referat", "ishD": "2–3 bap", "refD": "1–2 bap, qısqaraq", "bet": "bet", "som": "swm", "t0": "Standart", "t0d": "Tez hám anıq tekst, kesteler", "t0i": "Tema boyınsha anıq tekst, kesteler hám durıs tártiptegi ádebiyatlar dizimi. Shama menen 1 minutta tayın.", "t1": "Ortasha", "t1d": "Kúshli AI joba dúzedi hám tekseredi", "t1i": "Eń kúshli AI jobanı dúzedi hám tayın jumıstı oqıp shıǵadı: álsiz bólimlerdi ózi qayta jazadı. Shama menen 2 minut.", "pAi": "AI dúzedi", "pAiD": "temaǵa sáykes", "pOwn": "Ózim dúzemen", "pOwnD": "joba tayın bolsa", "item": "{n}-bánt atı", "itemL": "{n}-bánt", "del": "Óshiriw", "add": "+ Bánt qosıw (6 ǵa shekem)", "planNote": "Hár bir bánt bir bap yamasa bólim boladı. Kirisiw hám juwmaqtı AI ózi qosadı.", "tDone": "Tolıqtırıldı · muqabada tekserip shıǵıń", "tPart": "{n} / 5 tolıqtırıldı · bos orınǵa sızıq qoyıladı", "docx": "Word, ózgertiw múmkin", "pdf": "tayın, basıp shıǵarıwǵa", "langQ": "{d} qaysı tilde bolsın?", "admin": "Admin: sınaq ushın biypul", "bal": "Balans: {b}", "cta": "{d} jaratıw · {p}", "noTopic": "Temanı jazıń", "noPlan": "Joba bántlerin jazıń", "f_ministry": "Ministrlik", "f_uni": "Universitet yamasa institut", "f_uniPh": "Mısalı: Berdaq atındaǵı Qaraqalpaq mámleketlik universiteti", "f_fac": "Fakultet yamasa kafedra", "f_facPh": "Mısalı: Filologiya", "f_stu": "Orınlaǵan (F.A.Á.)", "f_stuPh": "Mısalı: Allambergenov Ayaz", "f_grp": "Topar", "f_grpPh": "Mısalı: 101", "f_tea": "Tekserdi (oqıtıwshı)", "f_teaPh": "Mısalı: Nurımbetova G.", "f_city": "Qala hám jıl (qálewińizshe, bos qalsa jazılmaydı)", "f_cityPh": "Mısalı: Nókis", "cv0": "Kók ramka, tekst ortada, «Orınlaǵan» oń tárepte", "cv1": "Ramkasız, qara tekst, hámmesi ortada. Qatań talap bolsa", "cv2": "Aspan reńli ramka, hámme jazıw shep tárepten"});
   const L=(k,o)=>{let v=(D[lang]||D.uz)[k]; if(v==null) v=D.uz[k]; if(o) for(const x in o) v=v.replace('{'+x+'}',o[x]); return v};
   const TX=L;   // muqova ichida L boshqa ma'noda ishlatiladi
@@ -2252,7 +2257,8 @@ const IX=(()=>{
   const MIN={uz:"O'zbekiston Respublikasi Oliy ta'lim, fan va innovatsiyalar vazirligi",uzc:'Ўзбекистон Республикаси Олий таълим, фан ва инновациялар вазирлиги',
     kaa:'Ózbekstan Respublikası Joqarı bilimlendiriw, pán hám innovaciyalar ministrligi',
     ru:'Министерство высшего образования, науки и инноваций Республики Узбекистан',en:'Ministry of Higher Education, Science and Innovation of the Republic of Uzbekistan',
-    kk:'Қазақстан Республикасы Ғылым және жоғары білім министрлігі',ky:'Кыргыз Республикасынын Билим берүү жана илим министрлиги',tg:'Вазорати маориф ва илми Ҷумҳурии Тоҷикистон'};
+    kk:'Қазақстан Республикасы Ғылым және жоғары білім министрлігі',ky:'Кыргыз Республикасынын Билим берүү жана илим министрлиги',tg:'Вазорати маориф ва илми Ҷумҳурии Тоҷикистон',
+    de:'Ministerium für Hochschulbildung, Wissenschaft und Innovation der Republik Usbekistan',fr:'Ministère de l’Enseignement supérieur, de la Science et de l’Innovation de la République d’Ouzbékistan'};
   const CV=[{k:'klassik',n:'Klassik',d:'cv0'},{k:'minimal',n:'Minimal',d:'cv1'},{k:'zamonaviy',n:'Zamonaviy',d:'cv2'}];
   const ST={ // botdagi cover.py bilan bir xil joylashuv (mm) va o'lchamlar (pt)
     klassik:{fr:'#4A6890',tx:'#365F91',ti:'#000080',sz:{min:14,uni:14,fac:12,subj:14,work:36,topic:14,by:14,chk:14,foot:14},al:{by:'right',chk:'right'},def:'center',
@@ -2262,7 +2268,7 @@ const IX=(()=>{
     zamonaviy:{fr:'#5B9BD5',tx:'#5B9BD5',ti:'#2E74B5',sz:{min:12,uni:16,fac:12,subj:16,work:42,topic:16,by:14,chk:14,foot:14},al:{},def:'left',
       pos:{min:22.2,uni:41.8,fac:55.5,subj:99,work:116,topic:167.2,by:223.5,chk:258.5,foot:272}}};
   const LG=[["O'zbekcha (lotin)",'uz'],['Qaraqalpaqsha','kaa'],['Özbekça (yangi alifbo)','uzn'],['Ўзбекча (кирилл)','uzc'],['Русский','ru'],['English','en']]
-    .concat(UNL?[['Қазақша','kk'],['Кыргызча','ky'],['Тоҷикӣ','tg']]:[]);   // yangi tillar hozircha faqat adminga
+    .concat(UNL?[['Қазақша','kk'],['Кыргызча','ky'],['Тоҷикӣ','tg'],['Deutsch','de'],['Français','fr']]:[]);   // yangi tillar hozircha faqat adminga
   const FIELDS=['ministry','uni','fac','stu','grp','tea','city'];
   const ld=(k,d)=>{try{const v=JSON.parse(localStorage.getItem('ix_'+k));return v==null?d:v}catch(e){return d}};
   const sv=(k,v)=>{try{localStorage.setItem('ix_'+k,JSON.stringify(v))}catch(e){}};
@@ -2286,7 +2292,9 @@ const IX=(()=>{
       en:{w:ref?'ESSAY':'INDEPENDENT WORK',sb:x=>'SUBJECT: "'+up(x)+'"',tp:'Topic:',by:'Prepared by:',ck:'Checked by:',gr:x=>'student of group '+x},
       kk:{w:ref?'РЕФЕРАТ':'ӨЗДІК ЖҰМЫС',sb:x=>'«'+up(x)+'» ПӘНІ БОЙЫНША',tp:'Тақырыбы:',by:'Орындаған:',ck:'Тексерген:',gr:x=>x+' тобының студенті'},
       ky:{w:ref?'РЕФЕРАТ':'ӨЗ АЛДЫНЧА ИШ',sb:x=>'«'+up(x)+'» САБАГЫ БОЮНЧА',tp:'Темасы:',by:'Аткарган:',ck:'Текшерген:',gr:x=>x+' тайпасынын студенти'},
-      tg:{w:ref?'РЕФЕРАТ':'КОРИ МУСТАҚИЛОНА',sb:x=>'АЗ ФАНИ «'+up(x)+'»',tp:'Мавзӯъ:',by:'Иҷро кард:',ck:'Санҷид:',gr:x=>'донишҷӯи гурӯҳи '+x}}[lang==='uzn'?'uz':lang];
+      tg:{w:ref?'РЕФЕРАТ':'КОРИ МУСТАҚИЛОНА',sb:x=>'АЗ ФАНИ «'+up(x)+'»',tp:'Мавзӯъ:',by:'Иҷро кард:',ck:'Санҷид:',gr:x=>'донишҷӯи гурӯҳи '+x},
+      de:{w:ref?'REFERAT':'SELBSTSTÄNDIGE ARBEIT',sb:x=>'IM FACH «'+up(x)+'»',tp:'Thema:',by:'Verfasst von:',ck:'Geprüft von:',gr:x=>'Student/in der Gruppe '+x},
+      fr:{w:ref?'EXPOSÉ':'TRAVAIL PERSONNEL',sb:x=>'EN «'+up(x)+'»',tp:'Sujet :',by:'Réalisé par :',ck:'Vérifié par :',gr:x=>'étudiant(e) du groupe '+x}}[lang==='uzn'?'uz':lang];
     const subj=val('ixSubj')||ex('subjPh'), topic=val('ixTopic')||ex('topicPh'), grp=g('grp'), stu=g('stu');
     const L={min:[up(g('ministry')||MIN[lang==='uzn'?'uz':lang])],uni:[g('uni')?up(g('uni')):BL],fac:g('fac')?[up(g('fac'))]:[],subj:subj?[T.sb(subj)]:[],work:[T.w],
       topic:[T.tp+' '+(topic||BL)],by:grp?[T.by+' '+T.gr(grp),stu||BL]:[T.by+' '+(stu||BL)],chk:[T.ck+' '+(g('tea')||BL)],foot:g('city')?[g('city')+' – '+new Date().getFullYear()]:[]};
@@ -2334,7 +2342,7 @@ const IX=(()=>{
     $('ixFmt').innerHTML=[['DOCX',L('docx')],['PDF',L('pdf')]].map((x,i)=>`<button type="button" aria-pressed="${s.fmt===i}" onclick="IX.set('fmt',${i})">${x[0]}<small>${x[1]}</small></button>`).join('');
     $('ixLangQ').textContent=L('langQ',{d:(lang==='uz'||lang==='uzn'||lang==='kaa')?docName():docName().toLowerCase()});
     // 2026-11-17, egasi: prezentatsiyadagi kabi — bayroqli tugmalar (bayroqlar prezentatsiya bo'limidagisidan olinadi)
-    const IXLN={uz:"O'zbek",kaa:'Qaraqalpaq',uzn:'Özbek (yangi)',uzc:'Ўзбек (кирилл)',ru:'Rus',en:'Eng',kk:'Qozoq',ky:"Qirg'iz",tg:'Tojik'};
+    const IXLN={uz:"O'zbek",kaa:'Qaraqalpaq',uzn:'Özbek (yangi)',uzc:'Ўзбек (кирилл)',ru:'Rus',en:'Eng',kk:'Qozoq',ky:"Qirg'iz",tg:'Tojik',de:'Nemis',fr:'Fransuz'};
     const flag=k=>{const f=document.querySelector(`[data-dl="${k==='uzc'?'uz':k}"] svg.flag`);
       return f?f.outerHTML.replace(/(id="|url\(#)(c\w+)/g,(m,a,b)=>a+b+'x'+k).replace(/url\(#gl\)/g,'url(#gli)'):''};
     $('ixLang').innerHTML=LG.map((x,i)=>`<button type="button" aria-pressed="${s.lang===i}" onclick="IX.set('lang',${i})">${flag(x[1])}<span>${IXLN[x[1]]||x[0]}</span></button>`).join('');
@@ -2411,7 +2419,7 @@ function renderAll(){
   renderHome(); renderForm(); renderProfile(); renderFiles();
 }
 const menu=$('langMenu');
-Object.entries(Object.assign({},LANGS,UNL?{kk:'Қазақша',ky:'Кыргызча',tg:'Тоҷикӣ'}:{})).forEach(([k,n])=>{const b=document.createElement('button');b.className='lang-item';b.dataset.l=k;b.innerHTML=`<span>${n}</span><small>${LCODE(k)}</small>`;b.onclick=()=>{lang=k;store.set('lang',k);menu.classList.remove('open');renderAll()};menu.appendChild(b)});
+Object.entries(Object.assign({},LANGS,UNL?{kk:'Қазақша',ky:'Кыргызча',tg:'Тоҷикӣ',de:'Deutsch',fr:'Français'}:{})).forEach(([k,n])=>{const b=document.createElement('button');b.className='lang-item';b.dataset.l=k;b.innerHTML=`<span>${n}</span><small>${LCODE(k)}</small>`;b.onclick=()=>{lang=k;store.set('lang',k);menu.classList.remove('open');renderAll()};menu.appendChild(b)});
 $('langBtn').onclick=e=>{e.stopPropagation();menu.classList.toggle('open')};
 document.addEventListener('click',e=>{if(!e.target.closest('.lang-wrap'))menu.classList.remove('open')});
 
@@ -2617,7 +2625,7 @@ if(qs.get('form')) openForm(qs.get('form'));
 if(WEB&&WS&&/^\d+$/.test(qs.get('quizfile')||'')){const qf=+qs.get('quizfile'); history.replaceState(null,'',location.pathname);   // botdagi «Test tuzish · −30%»
   document.addEventListener('DOMContentLoaded',()=>setTimeout(()=>{try{QZ.startFromFile(qf)}catch(e){}},400))}
 </script>
-<script src="quiz.js?v=22"></script>
+<script src="quiz.js?v=23"></script>
 <div class="toast" id="toast"></div>
 <div class="end-ov" id="endOv" onclick="if(event.target===this)closeEndFull()">
   <div class="end-ov-box"><button type="button" class="end-ov-x" onclick="closeEndFull()">✕</button>

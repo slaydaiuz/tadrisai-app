@@ -65,8 +65,9 @@ def render(md):
 
 # 2026-11-22: qozoq, qirg'iz, tojik tarjimalari — oferta-kk.md -> oferta-kk.html va h.k.
 SIGN = {"uz": "Hurmat bilan,<br>TadrisAI jamoasi", "kk": "Құрметпен,<br>TadrisAI командасы",
-        "ky": "Урматтоо менен,<br>TadrisAI командасы", "tg": "Бо эҳтиром,<br>дастаи TadrisAI"}
-for LANG in ("uz", "kk", "ky", "tg"):
+        "ky": "Урматтоо менен,<br>TadrisAI командасы", "tg": "Бо эҳтиром,<br>дастаи TadrisAI",
+        "de": "Mit freundlichen Grüßen,<br>Ihr TadrisAI-Team", "fr": "Cordialement,<br>L’équipe TadrisAI"}   # 2026-11-27
+for LANG in ("uz", "kk", "ky", "tg", "de", "fr"):
     sfx = "" if LANG == "uz" else "-" + LANG
     for name in ("oferta", "privacy"):
         src = HERE / f"{name}{sfx}.md"
