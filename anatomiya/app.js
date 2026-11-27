@@ -10,7 +10,7 @@ const QS = new URLSearchParams(location.search);
 const DEV = QS.get('dev') === '1' && location.hostname !== 'tadris.ai';
 const V = '12';
 // 3D fayllar jsDelivr CDN'dan (Cloudflare, Toshkentda ham bor; 1 yil keshlanadi). Fayl CDN'da bo'lmasa yoki xato bo'lsa — o'z serverimizdan.
-const ZSHA = '72a1ec11a3f5bd201bbb6b5476b68d0e1f86dd2a';
+const ZSHA = 'b88c5c96e724c1b57d1009e10a5c290f8533dbbb';
 const CDN = DEV ? '' : 'https://cdn.jsdelivr.net/gh/slaydaiuz/tadrisai-app@' + ZSHA + '/anatomiya/';
 async function fetchBytes(url, onp, timeoutMs) {
   const ctl = new AbortController(); let tm = timeoutMs ? setTimeout(() => ctl.abort(), timeoutMs) : 0;
