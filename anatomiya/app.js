@@ -8,7 +8,7 @@ const $ = id => document.getElementById(id);
 const API = location.hostname === 'tadris.ai' ? '/api' : 'https://91-107-229-30.sslip.io/api';
 const QS = new URLSearchParams(location.search);
 const DEV = QS.get('dev') === '1' && location.hostname !== 'tadris.ai';
-const V = '11';
+const V = '12';
 // 3D fayllar jsDelivr CDN'dan (Cloudflare, Toshkentda ham bor; 1 yil keshlanadi). Fayl CDN'da bo'lmasa yoki xato bo'lsa — o'z serverimizdan.
 const ZSHA = '72a1ec11a3f5bd201bbb6b5476b68d0e1f86dd2a';
 const CDN = DEV ? '' : 'https://cdn.jsdelivr.net/gh/slaydaiuz/tadrisai-app@' + ZSHA + '/anatomiya/';
