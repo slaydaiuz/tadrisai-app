@@ -1404,6 +1404,10 @@ let lang=store.get('lang')||qs.get('lang')||'uz'; if(!T[lang]) lang='uz';
 let role=store.get('role')||qs.get('role')||'student'; if(role!=='teacher') role='student';
 let userName=qs.get('name')||(tg&&tg.initDataUnsafe&&tg.initDataUnsafe.user&&tg.initDataUnsafe.user.first_name)||'';
 let mode='prez', as='student', size=10;
+// 2026-11-28, egasi: Premium'da nechta 3D model bo'lishi soni bilan ko'rsatiladi (10 → 5, 15 → 7, 20 → 10, 25 → 12)
+(function(){const N={uz:'{n} ta 3D model',ru:'{n} 3D-моделей',en:'{n} 3D models',kaa:'{n} 3D model',kk:'{n} 3D модель',
+  ky:'{n} 3D модель',tg:'{n} модели 3D',de:'{n} 3D-Modelle',fr:'{n} modèles 3D'};for(const k in N) if(T[k]) T[k].n3d=N[k]})();
+const n3dOf=s=>Math.max(2,Math.min(s-(s>=8?5:3),Math.floor(s/2)));   // serverdagi deck3d bilan bir xil hisob
 const t=k=>T[lang][k]??T.uz[k]??k;
 const $=id=>document.getElementById(id);
 
@@ -1924,7 +1928,7 @@ function syncSize(){
   const cur=(size<=6&&isFree(size))?6:[10,15,20,25][bucket(size)];
   $('rngTicks').innerHTML=MARKS.map(m=>`<div class="rng-tick ${m<=size||m===cur?'on':''} ${m===cur?'cur':''}" style="left:${pct(m)}%"><b>${m}</b><i></i><span class="${isFree(m)?'fr':''}">${isFree(m)?'🎁 '+t('free'):money(priceOf(m,img)).replace(/ (so'm|söm|swm|сум|сӯм)$/,'')}</span></div>`).join('');
   const p=totalOf(size,img);
-  $('rngPrice').innerHTML=`${size} ${t('pcsSlides')} · ${discNow()&&!isFree(size)?'<s class="old-p">'+nosum(fullOf(size,img)+(endUse()==='paid'?endCost():0))+'</s>':''}<b>${isFree(size)?'🎁 '+t('free'):money(p)}</b>`;
+  $('rngPrice').innerHTML=`${size} ${t('pcsSlides')} · ${img==='premium'?'💎 '+t('n3d').replace('{n}',n3dOf(size))+' · ':''}${discNow()&&!isFree(size)?'<s class="old-p">'+nosum(fullOf(size,img)+(endUse()==='paid'?endCost():0))+'</s>':''}<b>${isFree(size)?'🎁 '+t('free'):money(p)}</b>`;
   const low=KNOWN&&!UNL&&!isFree(size)&&BALANCE<p;
   $('lowBal').classList.toggle('on',low);
   if(low) $('lowBal').innerHTML=(SRV.nopay?t('lowBalSite'):t('lowBal').replace('{b}',money(BALANCE)).replace('{x}',money(p-BALANCE)))+(FREE>0?'<br>'+t('giftRule'):'');
