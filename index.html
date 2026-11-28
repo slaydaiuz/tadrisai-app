@@ -1876,6 +1876,17 @@ function playEnd(){
   });
   setTimeout(()=>$('endPv').scrollIntoView({behavior:'smooth',block:'center'}),60);
 }
+/* Yakuniy video faqat o'z bo'limi ekranda ko'rinib turganda o'ynaydi: chiqib ketilsa — to'xtaydi, qaytilsa — davom etadi */
+let endSeen=false;
+(function(){
+  const init=()=>{const el=$('endPv'); if(!el||!('IntersectionObserver' in window)) return;
+    new IntersectionObserver(es=>es.forEach(e=>{endSeen=e.isIntersecting&&e.intersectionRatio>=0.35;
+      if(!endSeen) pauseEnd();
+      else if(endOpen&&endUse()!=='none'&&!$('endOv').classList.contains('on')){const v=endVids()[endTpl-1]; if(v&&v.src&&v.paused) v.play().catch(()=>{})}
+    }),{threshold:[0,0.35,0.6]}).observe(el)};
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',init); else init();
+  document.addEventListener('visibilitychange',()=>{if(document.hidden) stopEndAll()});
+})();
 let endFullN=1;
 function openEndFull(n){
   endFullN=n; pauseEnd();
@@ -1962,6 +1973,7 @@ function renderForm(){
 }
 const SAVE=['fUni','fName','fGrp','fTea','fCity','fFak','fYon','fCls'];
 function submitForm(){
+  stopEndAll();
   if(mode==='prez'&&img==='premium'&&!live()){showInfo('💎',t('imgPrem'),t('soonMsg'));return}   // 3D Premium: 17:00 dan hamma uchun
   saveFields();
   if(mode==='prez'&&KNOWN&&!UNL&&!isFree(size)&&BALANCE<totalOf(size,img)){
@@ -1989,7 +2001,7 @@ function submitForm(){
     university:v('fUni'),faculty:v('fFak'),direction:v('fYon'),grade:v('fCls'),group:v('fGrp'),
     student:who==='student'?v('fName'):'',teacher:who==='teacher'?v('fName'):v('fTea'),
     city:(used.has('city')&&$('cityOn').checked)?$('fCity').value.trim():'', plan, extra:optOn, dens:mode==='prez'?dens:'full', ending:mode==='prez'?endUse():'none', end_tpl:endTpl};
-  if(mode==='prez'&&img==='premium'){   // 2026-11-24: to'lovdan oldin 3D modellar haqiqatda qidiriladi
+  if(mode==='prez'&&img==='premium'&&!AI3D){   // 2026-11-24: to'lovdan oldin 3D modellar haqiqatda qidiriladi (faqat Sketchfab rejimida)
     const k=c3dKey(data);
     if(!C3D[k]){check3d(data); return}
     if(C3D[k]==='none'){ask3d(data); return}
@@ -2037,7 +2049,7 @@ function topicKey(){const e=$('fMav');return e?e.value.trim().toLowerCase():''}
 async function checkSuit(){
   // Tuzatish (2026-11-09): pastki tugmadan ochilganda initData bo'sh bo'ladi — oldin SUIT yozilmay qolib, «Yaratish» cheksiz
   // tekshiruvga tushib qolardi. Endi uid+sig bilan ham so'raladi va har qanday holatda natija yoziladi.
-  const k=topicKey(); if(!k) return 'good';
+  const k=topicKey(); if(!k||AI3D) return 'good';   // AI 3D: har mavzuga mos
   if(SUIT[k]) return SUIT[k];
   if(k.length<3||!(authBody().init||authBody().sig)){SUIT[k]='good'; return 'good'}
   try{const d=await Promise.race([api('/suit3d',{topic:k}),new Promise(r=>setTimeout(()=>r(null),15000))]);
@@ -2050,6 +2062,7 @@ function sentAlt(){const f=altFn; altFn=null; $('sentBtn2').style.display='none'
 /* Premium: «Yaratish» bosilganda 3D modellar to'lovdan oldin qidiriladi (server keshlaydi — buyurtmada qayta qidirilmaydi).
    Topilmasa: chizmalar bilan (narx o'sha) / O'rtacha / bekor qilish — bekor qilinsa pul balansda qoladi. */
 var C3D={}, c3dRun=0;
+const AI3D=true;   // 2026-11-28, egasi: Premium 3D endi AI (Runware) bilan yasaladi — har mavzuga, oldindan qidiruv yo'q
 function c3dKey(d){return [String(d.topic||'').trim().toLowerCase(),d.size,d.doc_lang,(d.plan||[]).join('/'),String(d.subject||'').trim().toLowerCase()].join('|')}
 function check3d(data){
   const k=c3dKey(data), my=++c3dRun, t0=Date.now();
@@ -2388,7 +2401,9 @@ const IX=(()=>{
 })();
 
 /* ---------- Navigation ---------- */
+function stopEndAll(){try{pauseEnd(); closeEndFull()}catch(e){}}   // 2026-11-28, egasi: yakuniy video ovozi boshqa sahifada qolib ketardi
 function show(id){
+  stopEndAll();
   if(SRV.closed&&!WEB&&id!=='qz'){document.body.classList.remove('tg-quiz'); document.body.classList.add('tg-closed'); goSiteShow(); return}   // yopiq ilova: faqat test yechish
   document.querySelectorAll('.screen').forEach(s=>s.classList.toggle('on',s.id===id));
   const sub=['topup','invite','paywait','payok'].includes(id);
